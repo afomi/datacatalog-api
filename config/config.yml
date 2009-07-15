@@ -1,0 +1,19 @@
+:development:
+  base_uri: http://localhost:4567/
+  mongo_hostname: localhost
+  mongo_database: natdatcat_dev
+
+:test:
+  base_uri: http://localhost:4567/
+  mongo_hostname: localhost
+  mongo_database: natdatcat_test
+
+:staging:
+  base_uri: http://staging.com/
+  mongo_hostname: localhost
+  mongo_database: natdatcat_sta
+  
+:production:
+  base_uri: http://production.com/
+  mongo_hostname: localhost
+  mongo_database: natdatcat_pro
