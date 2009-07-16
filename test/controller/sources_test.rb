@@ -83,28 +83,30 @@ class SourcesControllerTest < Test::Unit::TestCase
     
     before :all do
       reset_sources_data
-      post '/sources', :url => "http://modify-me.gov"
+      post '/sources', :url => "http://original.gov"
       @original = JSON.parse(last_response.body)
       id = @original["_id"]
-      sleep(1)
-      put "/sources/#{id}", :url => "http://modified.gov"
-      @body = JSON.parse(last_response.body)
+      sleep 1 # ensure different timestamp
+      put "/sources/#{id}", :url => "http://updated.gov"
+      @updated = JSON.parse(last_response.body)
     end
     
-    test "body should have correct url" do
-      assert_equal "http://modified.gov", @body["url"]
+    test "body should have updated url" do
+      assert_equal "http://updated.gov", @updated["url"]
     end
     
     test "body should have an unchanged created_at" do
-      assert_equal @original["created_at"], @body["created_at"]
+      puts @original["created_at"].class
+      puts @updated["created_at"].class
+      assert_equal @original["created_at"], @updated["created_at"]
     end
     
     test "body should have an updated updated_at" do
-      assert_not_equal @original["updated_at"], @body["updated_at"]
+      assert_not_equal @original["updated_at"], @updated["updated_at"]
     end
   
     test "body should have an unchanged _id" do
-      assert_equal @original["_id"], @body["_id"]
+      assert_equal @original["_id"], @updated["_id"]
     end
   end
   
