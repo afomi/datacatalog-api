@@ -19,7 +19,6 @@ end
 put '/sources/:id' do |id|
   content_type :json
   source = Source.update(id, params)
-  # source = Source.create(params)
   source.to_json
 end
 
