@@ -91,21 +91,19 @@ class SourcesControllerTest < Test::Unit::TestCase
       @updated = JSON.parse(last_response.body)
     end
     
-    test "body should have updated url" do
+    test "should update url" do
       assert_equal "http://updated.gov", @updated["url"]
     end
     
-    test "body should have an unchanged created_at" do
-      puts @original["created_at"].class
-      puts @updated["created_at"].class
-      assert_equal @original["created_at"], @updated["created_at"]
+    test "should not change 'created_at'" do
+      assert_equal_times @original["created_at"], @updated["created_at"]
     end
     
-    test "body should have an updated updated_at" do
-      assert_not_equal @original["updated_at"], @updated["updated_at"]
+    test "should update 'updated_at'" do
+      assert_different_times @original["updated_at"], @updated["updated_at"]
     end
   
-    test "body should have an unchanged _id" do
+    test "should not change _id" do
       assert_equal @original["_id"], @updated["_id"]
     end
   end

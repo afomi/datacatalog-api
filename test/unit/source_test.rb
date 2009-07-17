@@ -5,10 +5,13 @@ class SourceUnitTest < Test::Unit::TestCase
   context "updating a Source" do
     
     before :all do
-      @original = Source.create(:url => "http://original.gov")
-      @updated = Source.update(@original._id, {
-        :url => "http://updated.gov"
-      })
+      reset_sources_data
+      doc = Source.create(:url => "http://original.gov")
+      @original = doc.dup
+      
+      doc.url = "http://updated.gov"
+      doc.save
+      @updated = doc
     end
 
     test "should have updated url" do
@@ -30,4 +33,3 @@ class SourceUnitTest < Test::Unit::TestCase
   end
   
 end
-
