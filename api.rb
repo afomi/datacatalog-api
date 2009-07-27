@@ -7,9 +7,6 @@ def require_relative(file)
   require File.expand_path(f)
 end
 
-require_relative 'controllers/root'
-require_relative 'controllers/sources'
-
 configure do
   require_relative 'config/configure'
 end
@@ -17,3 +14,6 @@ end
 helpers do
   require_relative 'helpers/shared'
 end
+
+require_relative 'controllers/root'
+require_relative 'controllers/sources'
