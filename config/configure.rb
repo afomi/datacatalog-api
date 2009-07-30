@@ -1,13 +1,18 @@
-def lookup_config
-  file = File.join(Sinatra::Application.root, "config", "config.yml")
-  env = Sinatra::Application.environment
-  YAML.load_file(file)[env]
+module Config
+  def self.lookup_config
+    file = File.join(File.dirname(__FILE__), "config.yml")
+    env = Sinatra::Application.environment
+    YAML.load_file(file)[env]
+  end
+
+  def self.setup_mongo
+    c = Sinatra::Application.config
+    MongoMapper.connection = XGen::Mongo::Driver::Mongo.new(c['mongo_hostname'])
+    MongoMapper.database = c['mongo_database']
+  end
 end
 
-def setup_mongo
-  MongoMapper.connection = XGen::Mongo::Driver::Mongo.new(APP_CONFIG['mongo_hostname'])
-  MongoMapper.database = APP_CONFIG['mongo_database']
+configure do
+  set :config, Config.lookup_config
+  Config.setup_mongo
 end
-
-APP_CONFIG = lookup_config
-setup_mongo

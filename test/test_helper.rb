@@ -1,15 +1,19 @@
-require File.expand_path(File.dirname(__FILE__) + '/../api')
+def require_relative(file)
+  f = File.dirname(__FILE__) + file
+  require File.expand_path(f)
+end
+
+require_relative '/../app'
+
 require 'test/unit'
 require 'rack/test'
 require 'json'
 require 'context' # jeremymcanally-context
 require 'pending' # jeremymcanally-pending
-require File.expand_path(File.dirname(__FILE__) + '/helpers/assert_not_in_delta')
-require File.expand_path(File.dirname(__FILE__) + '/helpers/shared_tests')
-require File.expand_path(File.dirname(__FILE__) + '/helpers/time_assertions')
+
+require_dir 'test/helpers/test_helpers'
+require_dir 'test/helpers/test_cases'
+require_dir 'test/helpers/assertions'
+require_dir 'test/helpers/shared'
 
 set :environment, :test
-
-def reset_sources_data
-  Source.destroy_all
-end

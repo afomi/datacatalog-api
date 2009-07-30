@@ -1,11 +1,11 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
-class SourceUnitTest < Test::Unit::TestCase
+class SourceUnitTest < ModelTestCase
   
   context "updating a Source" do
     
     before :all do
-      reset_sources_data
+      reset_sources
       doc = Source.create(:url => "http://original.gov")
       @original = doc.dup
       
