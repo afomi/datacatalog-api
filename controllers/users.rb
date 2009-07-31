@@ -10,7 +10,7 @@ get '/users/:id' do
   if user
     user.to_json
   else
-    halt 404, [].to_json
+    error 404, [].to_json
   end
 end
 
