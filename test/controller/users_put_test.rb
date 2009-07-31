@@ -83,7 +83,7 @@ class PutUsersControllerTest < RequestTestCase
     should_give Status400
     should_give UnchangedUserCount
   
-    test "body should that confirmed is an invalid param" do
+    test "body should say confirmed is an invalid param" do
       assert_include "errors", parsed_response_body
       assert_include "invalid_params", parsed_response_body["errors"]
       assert_include "confirmed", parsed_response_body["errors"]["invalid_params"]
@@ -105,7 +105,7 @@ class PutUsersControllerTest < RequestTestCase
     should_give Status400
     should_give UnchangedUserCount
   
-    test "body should that junk is an invalid param" do
+    test "body should say junk is an invalid param" do
       assert_include "errors", parsed_response_body
       assert_include "invalid_params", parsed_response_body["errors"]
       assert_include "junk", parsed_response_body["errors"]["invalid_params"]
@@ -164,7 +164,7 @@ class PutUsersControllerTest < RequestTestCase
     should_give Status400
     should_give UnchangedUserCount
   
-    test "body should that confirm is an invalid param" do
+    test "body should say confirm is an invalid param" do
       assert_include "errors", parsed_response_body
       assert_include "invalid_params", parsed_response_body["errors"]
       assert_include "confirmed", parsed_response_body["errors"]["invalid_params"]
@@ -197,7 +197,7 @@ class PutUsersControllerTest < RequestTestCase
     should_give Status400
     should_give UnchangedUserCount
   
-    test "body should that junk is an invalid param" do
+    test "body should say junk is an invalid param" do
       assert_include "errors", parsed_response_body
       assert_include "invalid_params", parsed_response_body["errors"]
       assert_include "junk", parsed_response_body["errors"]["invalid_params"]
