@@ -37,7 +37,7 @@ class DeleteUsersControllerTest < RequestTestCase
   context "unconfirmed user : delete /users" do
     doing {
       setup_for_deletion
-      delete '/users/51515', :api_key => @unconfirmed.api_key
+      delete '/users/51515', :api_key => @unconfirmed_user.api_key
     }.should_give UnauthorizedApiKey
 
     test "should not change user count" do
@@ -48,7 +48,7 @@ class DeleteUsersControllerTest < RequestTestCase
   context "confirmed user : delete /users" do
     doing {
       setup_for_deletion
-      delete '/users/51515', :api_key => @confirmed.api_key
+      delete '/users/51515', :api_key => @confirmed_user.api_key
     }.should_give UnauthorizedApiKey
 
     test "should not change user count" do
@@ -59,7 +59,7 @@ class DeleteUsersControllerTest < RequestTestCase
   context "admin user : delete /users" do
     doing {
       setup_for_deletion
-      delete '/users/51515', :api_key => @admin.api_key
+      delete '/users/51515', :api_key => @admin_user.api_key
     }
     
     should_give Status200

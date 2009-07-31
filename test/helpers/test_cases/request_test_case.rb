@@ -11,9 +11,9 @@ class RequestTestCase < Test::Unit::TestCase
 
   before :all do
     reset_users
-    @admin       = create_admin_user
-    @confirmed   = create_confirmed_user
-    @unconfirmed = create_unconfirmed_user
+    @admin_user       = create_admin_user
+    @confirmed_user   = create_confirmed_user
+    @unconfirmed_user = create_unconfirmed_user
   end
   
   class << self

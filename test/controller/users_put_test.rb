@@ -16,13 +16,13 @@ class PutUsersControllerTest < RequestTestCase
   
   context "unconfirmed user : put /users" do
     doing {
-      put '/users/2020', :api_key => @unconfirmed.api_key
+      put '/users/2020', :api_key => @unconfirmed_user.api_key
     }.should_give UnauthorizedApiKey
   end
   
   context "confirmed user : put /users" do
     doing {
-      put '/users/2020', :api_key => @confirmed.api_key
+      put '/users/2020', :api_key => @confirmed_user.api_key
     }.should_give UnauthorizedApiKey
   end
   
@@ -30,7 +30,7 @@ class PutUsersControllerTest < RequestTestCase
     before :all do
       @user_count = User.count
       put '/users/2020', {
-        :api_key => @admin.api_key,
+        :api_key => @admin_user.api_key,
         :name    => "New Guy",
         :email   => "new.guy@email.com",
         :purpose => "User account for Web application",
@@ -65,7 +65,7 @@ class PutUsersControllerTest < RequestTestCase
       })
       @user_count = User.count
       put '/users/2020', {
-        :api_key => @admin.api_key,
+        :api_key => @admin_user.api_key,
         :name    => "New Guy",
         :email   => "new.guy@email.com",
         :purpose => "User account for Web application"
@@ -93,7 +93,7 @@ class PutUsersControllerTest < RequestTestCase
   context "admin user : put /users with protected param" do
     before :all do
       put '/users/2020', {
-        :api_key   => @admin.api_key,
+        :api_key   => @admin_user.api_key,
         :name      => "John Doe",
         :email     => "john.doe@email.com",
         :purpose   => "User account for Web application",
@@ -113,7 +113,7 @@ class PutUsersControllerTest < RequestTestCase
   context "admin user : put /users with extra param" do
     before :all do
       put '/users/2020', {
-        :api_key   => @admin.api_key,
+        :api_key   => @admin_user.api_key,
         :name    => "John Doe",
         :email   => "john.doe@email.com",
         :purpose => "User account for Web application",

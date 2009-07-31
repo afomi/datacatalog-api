@@ -30,19 +30,19 @@ class RootControllerTest < RequestTestCase
 
   context "unconfirmed user : get /" do
     doing {
-      get '/', :api_key => @unconfirmed.api_key
+      get '/', :api_key => @unconfirmed_user.api_key
     }.should_give ApiKeyNotAllowed
   end
 
   context "confirmed user : get /" do
     doing {
-      get '/', :api_key => @confirmed.api_key
+      get '/', :api_key => @confirmed_user.api_key
     }.should_give ApiKeyNotAllowed
   end
 
   context "admin user : get /" do
     doing {
-      get '/', :api_key => @admin.api_key
+      get '/', :api_key => @admin_user.api_key
     }.should_give ApiKeyNotAllowed
   end
 

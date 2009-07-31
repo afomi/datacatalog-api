@@ -16,13 +16,13 @@ class PostUsersControllerTest < RequestTestCase
 
   context "unconfirmed user : post /users" do
     doing {
-      post '/users', :api_key => @unconfirmed.api_key
+      post '/users', :api_key => @unconfirmed_user.api_key
     }.should_give UnauthorizedApiKey
   end
 
   context "confirmed user : post /users" do
     doing {
-      post '/users', :api_key => @confirmed.api_key
+      post '/users', :api_key => @confirmed_user.api_key
     }.should_give UnauthorizedApiKey
   end
 
@@ -30,7 +30,7 @@ class PostUsersControllerTest < RequestTestCase
     before :all do
       @user_count = User.count
       post '/users', {
-        :api_key   => @admin.api_key,
+        :api_key   => @admin_user.api_key,
         :name      => "John Doe",
         :email     => "john.doe@email.com",
         :purpose   => "User account for Web application"
@@ -72,7 +72,7 @@ class PostUsersControllerTest < RequestTestCase
   context "admin user : post /users with protected param" do
     before :all do
       post '/users', {
-        :api_key   => @admin.api_key,
+        :api_key   => @admin_user.api_key,
         :name      => "John Doe",
         :email     => "john.doe@email.com",
         :purpose   => "User account for Web application",
@@ -92,7 +92,7 @@ class PostUsersControllerTest < RequestTestCase
   context "admin user : post /users with extra param" do
     before :all do
       post '/users', {
-        :api_key   => @admin.api_key,
+        :api_key   => @admin_user.api_key,
         :name    => "John Doe",
         :email   => "john.doe@email.com",
         :purpose => "User account for Web application",
