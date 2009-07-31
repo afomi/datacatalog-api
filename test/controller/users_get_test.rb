@@ -1,19 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class GetUsersControllerTest < RequestTestCase
-
-  before :all do
-    reset_users
-    @admin       = create_admin_user
-    @confirmed   = create_confirmed_user
-    @unconfirmed = create_unconfirmed_user
-    User.create({
-      :_id     => "999",
-      :name    => "Find Me",
-      :email   => "find.me@email.com",
-      :purpose => "User account for Web application"
-    })
-  end
   
   context "anonymous user : get /users" do
     doing {
@@ -46,8 +33,8 @@ class GetUsersControllerTest < RequestTestCase
     
     should_give Status200
     
-    test "body should have 4 top level elements" do
-      assert_equal parsed_response_body.length, 4
+    test "body should have 3 top level elements" do
+      assert_equal parsed_response_body.length, 3
     end
   
     test "body should have correct name value" do
@@ -85,6 +72,12 @@ class GetUsersControllerTest < RequestTestCase
 
   context "admin user : get /users/999 : found" do
     before :all do
+      User.create({
+        :_id     => "999",
+        :name    => "Find Me",
+        :email   => "find.me@email.com",
+        :purpose => "User account for Web application"
+      })
       get '/users/999', :api_key => @admin.api_key
     end
     

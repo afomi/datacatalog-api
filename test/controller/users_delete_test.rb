@@ -2,11 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class DeleteUsersControllerTest < RequestTestCase
 
-  before :all do
-    reset_users
-    @admin       = create_admin_user
-    @confirmed   = create_confirmed_user
-    @unconfirmed = create_unconfirmed_user
+  def setup_for_deletion
     User.create({
       :_id     => "51515",
       :name    => "Will Not-Last-Long",
@@ -18,6 +14,7 @@ class DeleteUsersControllerTest < RequestTestCase
   
   context "anonymous user : delete /users" do
     doing {
+      setup_for_deletion
       delete '/users/51515'
     }.should_give MissingApiKey
 
@@ -28,6 +25,7 @@ class DeleteUsersControllerTest < RequestTestCase
   
   context "incorrect user : delete /users" do
     doing {
+      setup_for_deletion
       delete '/users/51515', :api_key => "does_not_exist_in_database"
     }.should_give InvalidApiKey
 
@@ -38,6 +36,7 @@ class DeleteUsersControllerTest < RequestTestCase
   
   context "unconfirmed user : delete /users" do
     doing {
+      setup_for_deletion
       delete '/users/51515', :api_key => @unconfirmed.api_key
     }.should_give UnauthorizedApiKey
 
@@ -48,6 +47,7 @@ class DeleteUsersControllerTest < RequestTestCase
   
   context "confirmed user : delete /users" do
     doing {
+      setup_for_deletion
       delete '/users/51515', :api_key => @confirmed.api_key
     }.should_give UnauthorizedApiKey
 
@@ -58,6 +58,7 @@ class DeleteUsersControllerTest < RequestTestCase
   
   context "admin user : delete /users" do
     doing {
+      setup_for_deletion
       delete '/users/51515', :api_key => @admin.api_key
     }
     

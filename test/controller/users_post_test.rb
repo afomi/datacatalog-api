@@ -2,13 +2,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class PostUsersControllerTest < RequestTestCase
 
-  before :all do
-    reset_users
-    @admin       = create_admin_user
-    @confirmed   = create_confirmed_user
-    @unconfirmed = create_unconfirmed_user
-  end
-
   context "anonymous user : post /users" do
     doing {
       post '/users'
