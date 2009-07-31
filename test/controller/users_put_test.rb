@@ -26,7 +26,7 @@ class PutUsersControllerTest < RequestTestCase
     }.should_give UnauthorizedApiKey
   end
   
-  context "admin user : put /users with correct params to create" do
+  context "admin user : put /users : create : correct params" do
     before :all do
       @user_count = User.count
       put '/users/2020', {
@@ -55,7 +55,7 @@ class PutUsersControllerTest < RequestTestCase
     end
   end
 
-  context "admin user : put /users with correct params to update" do
+  context "admin user : put /users : update : correct params" do
     before :all do
       User.create({
         :_id     => "2020",
@@ -90,7 +90,7 @@ class PutUsersControllerTest < RequestTestCase
     end
   end
 
-  context "admin user : put /users with protected param" do
+  context "admin user : put /users : update : protected param" do
     before :all do
       put '/users/2020', {
         :api_key   => @admin_user.api_key,
@@ -110,7 +110,7 @@ class PutUsersControllerTest < RequestTestCase
     end
   end
   
-  context "admin user : put /users with extra param" do
+  context "admin user : put /users : update : extra param" do
     before :all do
       put '/users/2020', {
         :api_key   => @admin_user.api_key,
