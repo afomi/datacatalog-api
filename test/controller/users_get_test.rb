@@ -82,6 +82,7 @@ class GetUsersControllerTest < RequestTestCase
     end
     
     should_give Status200
+    should_give TimestampsAndId
 
     test "body should have correct name value" do
       assert_equal "Find Me", parsed_response_body["name"]
