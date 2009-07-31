@@ -54,12 +54,6 @@ class RootControllerTest < RequestTestCase
       get '/', :api_key => @admin.api_key
     }.should_give ApiKeyNotAllowed
   end
-  
-  # test "body should explain the problem" do
-  #   assert_include "errors", parsed_response_body
-  #   assert_include "invalid_params", parsed_response_body["errors"]
-  #   assert_include "junk", parsed_response_body["errors"]["invalid_params"]
-  # end
 
 end
 
