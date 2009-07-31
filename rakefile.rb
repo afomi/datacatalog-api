@@ -5,10 +5,16 @@ require 'rcov/rcovtask'
 desc "Default: run all tests"
 task :default => :test
 
+task :environment do
+  require File.dirname(__FILE__) + "/config/config"
+  Config.load_config_for_env(:test)
+end
+
 desc "Run tests"
-task :test => %w(test:unit test:controller test:integration)
+task :test => %w(test:reset_db test:unit test:controller test:integration)
 
 namespace :test do
+
   desc "Run unit tests"
   Rake::TestTask.new(:unit) do |t|
     t.test_files = FileList["test/unit/*_test.rb"]
@@ -23,6 +29,15 @@ namespace :test do
   Rake::TestTask.new(:integration) do |t|
     t.test_files = FileList["test/integration/*_test.rb"]
   end
+
+  desc "Reset test database"
+  task :reset_db => :environment do
+    MongoMapper.connection.drop_database MongoMapper.database.name
+    # There is no need to recreate the database -- this will happen
+    # automatically when the first collection is created -- namely,
+    # when a model is defined that mixes in MongoMapper::Document.
+  end
+
 end
 
 # Use rcov for test coverage reports

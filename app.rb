@@ -1,6 +1,5 @@
 require 'rubygems'
 require 'sinatra'
-require 'mongomapper'
 
 def require_dir(dir)
   subdir = File.expand_path(File.join(File.dirname(__FILE__), dir))
@@ -9,7 +8,11 @@ def require_dir(dir)
   end
 end
 
-require File.dirname(__FILE__) + "/config/configure"
+require File.dirname(__FILE__) + "/config/config"
+
+configure do
+  set :config, Config.load_config_for_env(Sinatra::Application.environment)
+end
 
 require_dir 'models'
 require_dir 'controllers'
