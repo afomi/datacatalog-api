@@ -2,14 +2,19 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 module InformationalDataAboutApi end
 
-# Basic information about the API as a whole
+# The root action(s) provide basic information about the API.
 #
-# API key not allowed because accepting it would imply that the web
-# service would actually verify it.
+# Passing an API key as a parameter is not allowed. Why not?
 #
-# But there is nothing about 'get /' that involves authentication,
-# so I prefer not to check for 'api_key'. This also will make the
-# route faster because no API key lookup is needed.
+# * There is nothing about 'get /' that involves authentication. Checking
+#   authentication wouldn't serve any purpose. Not checking means that
+#   this action can be very simple.
+#
+# * On the other hand, accepting an API key parameter would imply that the
+#   web service does some sort of verification. Doing that verification
+#   would make the action more complicated and would also slow it down
+#   (since we would need to lookup the API key.)
+
 class RootControllerTest < RequestTestCase
   
   before :all do
