@@ -13,10 +13,12 @@ class DeleteUsersControllerTest < RequestTestCase
   end
   
   context "anonymous user : delete /users" do
-    doing {
+    before :all do
       setup_for_deletion
       delete '/users/51515'
-    }.should_give MissingApiKey
+    end
+    
+    should_give MissingApiKey
 
     test "should not change user count" do
       assert_equal @user_count, User.count
@@ -24,10 +26,12 @@ class DeleteUsersControllerTest < RequestTestCase
   end
   
   context "incorrect user : delete /users" do
-    doing {
+    before :all do
       setup_for_deletion
       delete '/users/51515', :api_key => "does_not_exist_in_database"
-    }.should_give InvalidApiKey
+    end
+    
+    should_give InvalidApiKey
 
     test "should not change user count" do
       assert_equal @user_count, User.count
@@ -35,10 +39,12 @@ class DeleteUsersControllerTest < RequestTestCase
   end
   
   context "unconfirmed user : delete /users" do
-    doing {
+    before :all do
       setup_for_deletion
       delete '/users/51515', :api_key => @unconfirmed_user.api_key
-    }.should_give UnauthorizedApiKey
+    end
+    
+    should_give UnauthorizedApiKey
 
     test "should not change user count" do
       assert_equal @user_count, User.count
@@ -46,10 +52,12 @@ class DeleteUsersControllerTest < RequestTestCase
   end
   
   context "confirmed user : delete /users" do
-    doing {
+    before :all do
       setup_for_deletion
       delete '/users/51515', :api_key => @confirmed_user.api_key
-    }.should_give UnauthorizedApiKey
+    end
+    
+    should_give UnauthorizedApiKey
 
     test "should not change user count" do
       assert_equal @user_count, User.count
@@ -57,10 +65,10 @@ class DeleteUsersControllerTest < RequestTestCase
   end
   
   context "admin user : delete /users" do
-    doing {
+    before :all do
       setup_for_deletion
       delete '/users/51515', :api_key => @admin_user.api_key
-    }
+    end
     
     should_give Status200
 

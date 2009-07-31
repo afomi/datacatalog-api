@@ -19,31 +19,40 @@ class RootControllerTest < RequestTestCase
     before :all do
       get '/'
     end
+    
     should_give InformationAboutApi
   end
   
   context "incorrect user : get /" do
-    doing {
+    before :all do
       get '/', :api_key => "does_not_exist_in_database"
-    }.should_give ApiKeyNotAllowed
+    end
+    
+    should_give ApiKeyNotAllowed
   end
 
   context "unconfirmed user : get /" do
-    doing {
+    before :all do
       get '/', :api_key => @unconfirmed_user.api_key
-    }.should_give ApiKeyNotAllowed
+    end
+    
+    should_give ApiKeyNotAllowed
   end
 
   context "confirmed user : get /" do
-    doing {
+    before :all do
       get '/', :api_key => @confirmed_user.api_key
-    }.should_give ApiKeyNotAllowed
+    end
+    
+    should_give ApiKeyNotAllowed
   end
 
   context "admin user : get /" do
-    doing {
+    before :all do
       get '/', :api_key => @admin_user.api_key
-    }.should_give ApiKeyNotAllowed
+    end
+    
+    should_give ApiKeyNotAllowed
   end
 
 end

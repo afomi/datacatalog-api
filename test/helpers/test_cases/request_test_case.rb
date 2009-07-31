@@ -27,11 +27,6 @@ class RequestTestCase < Test::Unit::TestCase
         end
       end
     end
-
-    def doing(&block)
-      before(:all, &block)
-      self
-    end
     
     def should_give(mod)
       include mod

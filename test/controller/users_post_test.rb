@@ -3,27 +3,35 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 class PostUsersControllerTest < RequestTestCase
 
   context "anonymous user : post /users" do
-    doing {
+    before :all do
       post '/users'
-    }.should_give MissingApiKey
+    end
+    
+    should_give MissingApiKey
   end
   
   context "incorrect user : post /users" do
-    doing {
+    before :all do
       post '/users', :api_key => "does_not_exist_in_database"
-    }.should_give InvalidApiKey
+    end
+    
+    should_give InvalidApiKey
   end
 
   context "unconfirmed user : post /users" do
-    doing {
+    before :all do
       post '/users', :api_key => @unconfirmed_user.api_key
-    }.should_give UnauthorizedApiKey
+    end
+    
+    should_give UnauthorizedApiKey
   end
 
   context "confirmed user : post /users" do
-    doing {
+    before :all do
       post '/users', :api_key => @confirmed_user.api_key
-    }.should_give UnauthorizedApiKey
+    end
+    
+    should_give UnauthorizedApiKey
   end
 
   context "admin user : post /users with correct params" do
