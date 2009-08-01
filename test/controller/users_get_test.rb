@@ -60,9 +60,13 @@ class GetUsersControllerTest < RequestTestCase
     test "body should have updated_at" do
       assert_include "updated_at", parsed_response_body[0]
     end
+
+    test "body should have id" do
+      assert_include "id", parsed_response_body[0]
+    end
         
-    test "body should have _id" do
-      assert_include "_id", parsed_response_body[0]
+    test "body should not have _id" do
+      assert_not_include "_id", parsed_response_body[0]
     end
   end
 

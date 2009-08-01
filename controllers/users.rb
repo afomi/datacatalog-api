@@ -1,6 +1,7 @@
 get '/users' do
   validate_admin_privileges
-  User.find(:all).to_json
+  users = User.find(:all)
+  jsonify users
 end
 
 get '/users/:id' do
@@ -8,7 +9,7 @@ get '/users/:id' do
   id = params.delete("id")
   user = User.find_by_id(id)
   if user
-    user.to_json
+    jsonify user
   else
     error 404, [].to_json
   end
