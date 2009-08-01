@@ -66,27 +66,25 @@ class GetUsersControllerTest < RequestTestCase
     end
   end
 
-  context "admin user : get /users/7820 : not found" do
+  context "admin user : get /users/:fake_id : not found" do
     before :all do
-      get '/users/7820', :api_key => @admin_user.api_key
+      @fake_id = get_fake_mongo_object_id
+      get "/users/#{@fake_id}", :api_key => @admin_user.api_key
     end
     
     should_give Status404
-
-    test "body should be empty" do
-      assert_equal [], parsed_response_body
-    end
+    should_give EmptyResponseBody
   end
 
-  context "admin user : get /users/999 : found" do
+  context "admin user : get /users/:id : found" do
     before :all do
-      User.create({
-        :_id     => "999",
+      user = User.create({
         :name    => "Find Me",
         :email   => "find.me@email.com",
         :purpose => "User account for Web application"
       })
-      get '/users/999', :api_key => @admin_user.api_key
+      @id = user.id
+      get "/users/#{@id}", :api_key => @admin_user.api_key
     end
     
     should_give Status200
