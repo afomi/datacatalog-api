@@ -19,7 +19,7 @@ post '/users' do
   id = params.delete("id")
   validate_user_params
   user = create_user_from_params
-  user.to_json
+  jsonify user
 end
 
 put '/users/:id' do

@@ -9,8 +9,8 @@ module TimestampsAndId
       assert_include "updated_at", parsed_response_body
     end
 
-    mod.test "body should have _id" do
-      assert_include "_id", parsed_response_body
+    mod.test "body should have id" do
+      assert_include "id", parsed_response_body
     end
   end
 
