@@ -43,8 +43,6 @@ class PostUsersControllerTest < RequestTestCase
         :email     => "john.doe@email.com",
         :purpose   => "User account for Web application"
       }
-      # puts last_response.inspect
-      puts parsed_response_body.inspect
     end
     
     should_give Status201
