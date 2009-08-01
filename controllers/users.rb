@@ -25,14 +25,12 @@ end
 put '/users/:id' do
   validate_admin_privileges
   id = params.delete("id")
-  validate_user_params
   user = User.find_by_id(id)
-  if user
-    user = User.update(id, params)
-  else
-    params["_id"] = id
-    user = create_user_from_params
+  unless user
+    error 404, [].to_json
   end
+  validate_user_params
+  user = User.update(id, params)
   user.to_json
 end
 
