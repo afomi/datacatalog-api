@@ -40,5 +40,5 @@ delete '/users/:id' do
   id = params.delete("id")
   user = User.find(id)
   user.destroy
-  { "_id" => id }.to_json
+  { "id" => id }.to_json
 end

@@ -72,9 +72,9 @@ class DeleteUsersControllerTest < RequestTestCase
     
     should_give Status200
   
-    test "body should have correct name value" do
-      assert_include "_id", parsed_response_body
-      assert_equal @id, parsed_response_body["_id"]
+    test "body should have correct id" do
+      assert_include "id", parsed_response_body
+      assert_equal @id, parsed_response_body["id"]
     end
     
     test "should decrement user count" do
