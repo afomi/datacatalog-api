@@ -7,10 +7,8 @@ class GetSourcesControllerTest < RequestTestCase
       reset_sources
       get '/sources'
     end
-  
-    test "should return []" do
-      assert_equal [], parsed_response_body
-    end
+    
+    should_give EmptyResponseBody
   end
   
   context "get /sources with 1 source" do
