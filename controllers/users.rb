@@ -31,7 +31,7 @@ put '/users/:id' do
   end
   validate_user_params
   user = User.update(id, params)
-  user.to_json
+  jsonify user
 end
 
 delete '/users/:id' do

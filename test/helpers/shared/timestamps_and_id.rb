@@ -12,6 +12,10 @@ module TimestampsAndId
     mod.test "body should have id" do
       assert_include "id", parsed_response_body
     end
+
+    mod.test "body should not have _id" do
+      assert_not_include "_id", parsed_response_body
+    end
   end
 
 end
