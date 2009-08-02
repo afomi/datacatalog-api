@@ -14,6 +14,7 @@ class RequestTestCase < Test::Unit::TestCase
     @admin_user       = create_admin_user
     @confirmed_user   = create_confirmed_user
     @unconfirmed_user = create_unconfirmed_user
+    reset_sources
   end
   
   class << self
@@ -26,10 +27,6 @@ class RequestTestCase < Test::Unit::TestCase
           assert_equal last_response.headers["Content-Type"], "application/json"
         end
       end
-    end
-    
-    def should_give(mod)
-      include mod
     end
   end
 

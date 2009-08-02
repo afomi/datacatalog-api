@@ -21,6 +21,4 @@ before do
   content_type :json
 end
 
-helpers do
-  require_dir 'helpers'
-end
+require_dir 'helpers'

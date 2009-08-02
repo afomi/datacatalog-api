@@ -19,8 +19,8 @@ class PutUsersControllerTest < RequestTestCase
       put "/users/#{@id}"
     end
 
-    should_give MissingApiKey
-    should_give UnchangedUserCount
+    use "return 401 because the API key is missing"
+    use "unchanged user count"
   end
   
   context "incorrect user : put /users" do
@@ -29,8 +29,8 @@ class PutUsersControllerTest < RequestTestCase
       put "/users/#{@id}", :api_key => "does_not_exist_in_database"
     end
 
-    should_give InvalidApiKey
-    should_give UnchangedUserCount
+    use "return 401 because the API key is invalid"
+    use "unchanged user count"
   end
   
   context "unconfirmed user : put /users" do
@@ -39,8 +39,8 @@ class PutUsersControllerTest < RequestTestCase
       put "/users/#{@id}", :api_key => @unconfirmed_user.api_key
     end
 
-    should_give UnauthorizedApiKey
-    should_give UnchangedUserCount
+    use "return 401 because the API key is unauthorized"
+    use "unchanged user count"
   end
   
   context "confirmed user : put /users" do
@@ -49,8 +49,8 @@ class PutUsersControllerTest < RequestTestCase
       put "/users/#{@id}", :api_key => @confirmed_user.api_key
     end
 
-    should_give UnauthorizedApiKey
-    should_give UnchangedUserCount
+    use "return 401 because the API key is unauthorized"
+    use "unchanged user count"
   end
   
   context "admin user : put /users : create : correct params" do
@@ -64,9 +64,9 @@ class PutUsersControllerTest < RequestTestCase
       }
     end
     
-    should_give Status404
-    should_give EmptyResponseBody
-    should_give UnchangedUserCount
+    use "return 404 Not Found"
+    use "return an empty response body"
+    use "unchanged user count"
     
     test "name should be unchanged in database" do
       assert_equal "Original Guy", @original_user.name
@@ -89,16 +89,15 @@ class PutUsersControllerTest < RequestTestCase
       }
     end
     
-    should_give Status404
-    should_give EmptyResponseBody
-    should_give UnchangedUserCount
+    use "return 404 Not Found"
+    use "return an empty response body"
+    use "unchanged user count"
   
     test "name should be unchanged in database" do
       assert_equal "Original Guy", @original_user.name
     end
       
     test "email should be unchanged in database" do
-      user = User.find_by_id(@id)
       assert_equal "original.guy@email.com", @original_user.email
     end
   end
@@ -111,20 +110,19 @@ class PutUsersControllerTest < RequestTestCase
         :name    => "New Guy",
         :email   => "new.guy@email.com",
         :purpose => "User account for Web application",
-        :junk    => "This is junk"
+        :extra   => "This is an extra parameter (junk)"
       }
     end
     
-    should_give Status404
-    should_give EmptyResponseBody
-    should_give UnchangedUserCount
+    use "return 404 Not Found"
+    use "return an empty response body"
+    use "unchanged user count"
   
     test "name should be unchanged in database" do
       assert_equal "Original Guy", @original_user.name
     end
       
     test "email should be unchanged in database" do
-      user = User.find_by_id(@id)
       assert_equal "original.guy@email.com", @original_user.email
     end
   end
@@ -140,9 +138,9 @@ class PutUsersControllerTest < RequestTestCase
       }
     end
     
-    should_give Status200
-    should_give TimestampsAndId
-    should_give UnchangedUserCount
+    use "return 200 Ok"
+    use "return timestamps and id in body"
+    use "unchanged user count"
     
     test "name should be updated in database" do
       user = User.find_by_id(@id)
@@ -167,8 +165,8 @@ class PutUsersControllerTest < RequestTestCase
       }
     end
   
-    should_give Status400
-    should_give UnchangedUserCount
+    use "return 400 Bad Request"
+    use "unchanged user count"
   
     test "body should say confirm is an invalid param" do
       assert_include "errors", parsed_response_body
@@ -177,13 +175,11 @@ class PutUsersControllerTest < RequestTestCase
     end
   
     test "name should be unchanged in database" do
-      user = User.find_by_id(@id)
-      assert_equal "Original Guy", user.name
+      assert_equal "Original Guy", @original_user.name
     end
       
     test "email should be unchanged in database" do
-      user = User.find_by_id(@id)
-      assert_equal "original.guy@email.com", user.email
+      assert_equal "original.guy@email.com", @original_user.email
     end
   end
   
@@ -195,27 +191,25 @@ class PutUsersControllerTest < RequestTestCase
         :name    => "John Doe",
         :email   => "john.doe@email.com",
         :purpose => "User account for Web application",
-        :junk    => "This is junk"
+        :extra   => "This is an extra parameter (junk)"
       }
     end
   
-    should_give Status400
-    should_give UnchangedUserCount
-  
-    test "body should say junk is an invalid param" do
+    use "return 400 Bad Request"
+    use "unchanged user count"
+
+    test "body should say extra is an invalid param" do
       assert_include "errors", parsed_response_body
       assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "junk", parsed_response_body["errors"]["invalid_params"]
+      assert_include "extra", parsed_response_body["errors"]["invalid_params"]
     end
   
     test "name should be unchanged in database" do
-      user = User.find_by_id(@id)
-      assert_equal "Original Guy", user.name
+      assert_equal "Original Guy", @original_user.name
     end
       
     test "email should be unchanged in database" do
-      user = User.find_by_id(@id)
-      assert_equal "original.guy@email.com", user.email
+      assert_equal "original.guy@email.com", @original_user.email
     end
   end
 

@@ -7,7 +7,7 @@ class PostUsersControllerTest < RequestTestCase
       post '/users'
     end
     
-    should_give MissingApiKey
+    use "return 401 because the API key is missing"
   end
   
   context "incorrect user : post /users" do
@@ -15,7 +15,7 @@ class PostUsersControllerTest < RequestTestCase
       post '/users', :api_key => "does_not_exist_in_database"
     end
     
-    should_give InvalidApiKey
+    use "return 401 because the API key is invalid"
   end
   
   context "unconfirmed user : post /users" do
@@ -23,7 +23,7 @@ class PostUsersControllerTest < RequestTestCase
       post '/users', :api_key => @unconfirmed_user.api_key
     end
     
-    should_give UnauthorizedApiKey
+    use "return 401 because the API key is unauthorized"
   end
   
   context "confirmed user : post /users" do
@@ -31,7 +31,7 @@ class PostUsersControllerTest < RequestTestCase
       post '/users', :api_key => @confirmed_user.api_key
     end
     
-    should_give UnauthorizedApiKey
+    use "return 401 because the API key is unauthorized"
   end
   
   context "admin user : post /users with correct params" do
@@ -45,8 +45,9 @@ class PostUsersControllerTest < RequestTestCase
       }
     end
     
-    should_give Status201
-    should_give TimestampsAndId
+    use "return 201 Created"
+    use "return timestamps and id in body" 
+    use "incremented user count"
 
     test "location header should point to new resource" do
       assert_include "Location", last_response.headers
@@ -54,25 +55,21 @@ class PostUsersControllerTest < RequestTestCase
       assert_equal new_user_uri, last_response.headers["Location"]
     end
     
-    test "body should have correct name value" do
+    test "body should have correct name" do
       assert_equal "John Doe", parsed_response_body["name"]
     end
 
-    test "body should have correct email value" do
+    test "body should have correct email" do
       assert_equal "john.doe@email.com", parsed_response_body["email"]
     end
-
-    test "should increment user count" do
-      assert_equal @user_count + 1, User.count
-    end
-
+    
     test "name should be correct in database" do
-      user = User.find(parsed_response_body["id"])
+      user = User.find_by_id(parsed_response_body["id"])
       assert_equal "John Doe", user.name
     end
 
     test "email should be correct in database" do
-      user = User.find(parsed_response_body["id"])
+      user = User.find_by_id(parsed_response_body["id"])
       assert_equal "john.doe@email.com", user.email
     end
   end
@@ -88,7 +85,7 @@ class PostUsersControllerTest < RequestTestCase
       }
     end
   
-    should_give Status400
+    use "return 400 Bad Request"
   
     test "body should explain the problem" do
       assert_include "errors", parsed_response_body
@@ -104,16 +101,16 @@ class PostUsersControllerTest < RequestTestCase
         :name    => "John Doe",
         :email   => "john.doe@email.com",
         :purpose => "User account for Web application",
-        :junk    => "This is junk"
+        :extra   => "This is an extra parameter (junk)"
       }
     end
   
-    should_give Status400
+    use "return 400 Bad Request"
   
     test "body should explain the problem" do
       assert_include "errors", parsed_response_body
       assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "junk", parsed_response_body["errors"]["invalid_params"]
+      assert_include "extra", parsed_response_body["errors"]["invalid_params"]
     end
   end
   

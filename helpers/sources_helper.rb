@@ -1,9 +1,6 @@
-def validate_source_params
-  valid_params = []
-  invalid_params = params.keys - valid_params
-  unless invalid_params.empty?
-    error 400, {
-      "errors" => { "invalid_params" => invalid_params }
-    }.to_json
-  end
+def create_source_from_params
+  source = Source.create(params)
+  response.status = 201
+  response.headers['Location'] = full_uri('/sources/' + source.id)
+  source
 end

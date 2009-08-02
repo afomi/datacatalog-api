@@ -18,11 +18,8 @@ class DeleteUsersControllerTest < RequestTestCase
       delete "/users/#{@id}"
     end
     
-    should_give MissingApiKey
-
-    test "should not change user count" do
-      assert_equal @user_count, User.count
-    end
+    use "return 401 because the API key is missing"
+    use "unchanged user count"
   end
   
   context "incorrect user : delete /users" do
@@ -31,11 +28,8 @@ class DeleteUsersControllerTest < RequestTestCase
       delete "/users/#{@id}", :api_key => "does_not_exist_in_database"
     end
     
-    should_give InvalidApiKey
-  
-    test "should not change user count" do
-      assert_equal @user_count, User.count
-    end
+    use "return 401 because the API key is invalid"
+    use "unchanged user count"
   end
   
   context "unconfirmed user : delete /users" do
@@ -44,11 +38,8 @@ class DeleteUsersControllerTest < RequestTestCase
       delete "/users/#{@id}", :api_key => @unconfirmed_user.api_key
     end
     
-    should_give UnauthorizedApiKey
-  
-    test "should not change user count" do
-      assert_equal @user_count, User.count
-    end
+    use "return 401 because the API key is unauthorized"
+    use "unchanged user count"
   end
   
   context "confirmed user : delete /users" do
@@ -57,11 +48,8 @@ class DeleteUsersControllerTest < RequestTestCase
       delete "/users/#{@id}", :api_key => @confirmed_user.api_key
     end
     
-    should_give UnauthorizedApiKey
-  
-    test "should not change user count" do
-      assert_equal @user_count, User.count
-    end
+    use "return 401 because the API key is unauthorized"
+    use "unchanged user count"
   end
   
   context "admin user : delete /users" do
@@ -70,15 +58,12 @@ class DeleteUsersControllerTest < RequestTestCase
       delete "/users/#{@id}", :api_key => @admin_user.api_key
     end
     
-    should_give Status200
+    use "return 200 Ok"
+    use "decremented user count"
   
     test "body should have correct id" do
       assert_include "id", parsed_response_body
       assert_equal @id, parsed_response_body["id"]
-    end
-    
-    test "should decrement user count" do
-      assert_equal @user_count - 1, User.count
     end
   end
 

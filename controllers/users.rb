@@ -38,7 +38,7 @@ end
 delete '/users/:id' do
   validate_admin_privileges
   id = params.delete("id")
-  user = User.find(id)
+  user = User.find_by_id(id)
   user.destroy
   { "id" => id }.to_json
 end

@@ -1,23 +1,44 @@
 get '/sources' do
-  Source.find(:all).to_json
+  validate_admin_privileges
+  sources = Source.find(:all)
+  jsonify sources
 end
 
 get '/sources/:id' do |id|
-  Source.find(id).to_json
+  validate_admin_privileges
+  id = params.delete("id")
+  source = Source.find_by_id(id)
+  if source
+    jsonify source
+  else
+    error 404, [].to_json
+  end
 end
 
 post '/sources' do
-  source = Source.create(params)
-  source.to_json
+  validate_admin_privileges
+  id = params.delete("id")
+  validate_source_params
+  source = create_source_from_params
+  jsonify source
 end
 
-put '/sources/:id' do |id|
+put '/sources/:id' do
+  validate_admin_privileges
+  id = params.delete("id")
+  source = Source.find_by_id(id)
+  unless source
+    error 404, [].to_json
+  end
+  validate_source_params
   source = Source.update(id, params)
-  source.to_json
+  jsonify source
 end
 
-delete '/sources/:id' do |id|
-  source = Source.find(id)
+delete '/sources/:id' do
+  validate_admin_privileges
+  id = params.delete("id")
+  source = Source.find_by_id(id)
   source.destroy
-  { "_id" => id }.to_json
+  { "id" => id }.to_json
 end
