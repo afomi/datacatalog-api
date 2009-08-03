@@ -63,6 +63,18 @@ class PostUsersControllerTest < RequestTestCase
       assert_equal "john.doe@email.com", parsed_response_body["email"]
     end
     
+    test "body should have API key" do
+      assert parsed_response_body["api_key"]
+    end
+
+    test "API key should be 40 characters" do
+      assert_equal 40, parsed_response_body["api_key"].length
+    end
+    
+    test "API key should be different from admin key" do
+      assert_not_equal @admin_user.api_key, parsed_response_body["api_key"]
+    end
+    
     test "name should be correct in database" do
       user = User.find_by_id(parsed_response_body["id"])
       assert_equal "John Doe", user.name
