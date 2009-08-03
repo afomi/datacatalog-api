@@ -22,7 +22,7 @@ namespace :test do
 
   desc "Run controller tests"
   Rake::TestTask.new(:controller) do |t|
-    t.test_files = FileList["test/controller/*_test.rb"]
+    t.test_files = FileList["test/controller/**/*_test.rb"]
   end
 
   desc "Run integration tests"
