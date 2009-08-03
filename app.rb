@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'sinatra'
+require 'digest/sha1'
 
 def require_dir(dir)
   subdir = File.expand_path(File.join(File.dirname(__FILE__), dir))
