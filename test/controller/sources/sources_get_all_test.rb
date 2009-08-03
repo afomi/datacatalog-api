@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
-class GetSourcesControllerTest < RequestTestCase
+class SourcesGetAllControllerTest < RequestTestCase
   
   context "anonymous user : get /sources" do
     before :all do
@@ -77,32 +77,6 @@ class GetSourcesControllerTest < RequestTestCase
     test "body should not have _id" do
       assert_not_include "_id", parsed_response_body[0]
       assert_not_include "_id", parsed_response_body[1]
-    end
-  end
-
-  context "admin user : get /sources/:fake_id : not found" do
-    before :all do
-      Source.create :url => "http://data.gov/sources/A"
-      @fake_id = get_fake_mongo_object_id
-      get "/sources/#{@fake_id}", :api_key => @admin_user.api_key
-    end
-    
-    use "return 404 Not Found"
-    use "return an empty response body"
-  end
-
-  context "admin user : get /sources/:id : found" do
-    before :all do
-      source = Source.create :url => "http://data.gov/sources/A"
-      @id = source.id
-      get "/sources/#{@id}", :api_key => @admin_user.api_key
-    end
-    
-    use "return 200 Ok"
-    use "return timestamps and id in body"
-  
-    test "body should have correct url" do
-      assert_equal "http://data.gov/sources/A", parsed_response_body["url"]
     end
   end
 
