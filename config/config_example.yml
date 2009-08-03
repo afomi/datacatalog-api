@@ -1,0 +1,23 @@
+:development:
+  base_uri: http://localhost:4567/
+  mongo_hostname: localhost
+  mongo_database: natdatcat_dev
+  api_key_salt: "000000000000000000000000000000000000000000000000000000000"
+
+:test:
+  base_uri: http://localhost:4567/
+  mongo_hostname: localhost
+  mongo_database: natdatcat_test
+  api_key_salt: "000000000000000000000000000000000000000000000000000000000"
+
+:staging:
+  base_uri: http://staging.com/
+  mongo_hostname: localhost
+  mongo_database: natdatcat_sta
+  api_key_salt: "000000000000000000000000000000000000000000000000000000000"
+  
+:production:
+  base_uri: http://production.com/
+  mongo_hostname: localhost
+  mongo_database: natdatcat_pro
+  api_key_salt: "000000000000000000000000000000000000000000000000000000000"
