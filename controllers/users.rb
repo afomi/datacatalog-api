@@ -39,6 +39,9 @@ delete '/users/:id' do
   validate_admin_privileges
   id = params.delete("id")
   user = User.find_by_id(id)
+  unless user
+    error 404, [].to_json
+  end
   user.destroy
   { "id" => id }.to_json
 end

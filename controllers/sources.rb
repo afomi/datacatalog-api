@@ -39,6 +39,9 @@ delete '/sources/:id' do
   validate_admin_privileges
   id = params.delete("id")
   source = Source.find_by_id(id)
+  unless source
+    error 404, [].to_json
+  end
   source.destroy
   { "id" => id }.to_json
 end

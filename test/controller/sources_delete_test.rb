@@ -61,6 +61,26 @@ class DeleteSourcesControllerTest < RequestTestCase
       assert_include "id", parsed_response_body
       assert_equal @id, parsed_response_body["id"]
     end
+
+    test "source should be deleted in database" do
+      assert_equal nil, Source.find_by_id(@id)
+    end
+  end
+
+  context "admin user : double delete /users" do
+    before :all do
+      setup_for_deletion
+      delete "/sources/#{@id}", :api_key => @admin_user.api_key
+      delete "/sources/#{@id}", :api_key => @admin_user.api_key
+    end
+    
+    use "return 404 Not Found"
+    use "decremented source count"
+    use "return an empty response body"
+  
+    test "source should be deleted in database" do
+      assert_equal nil, Source.find_by_id(@id)
+    end
   end
 
 end

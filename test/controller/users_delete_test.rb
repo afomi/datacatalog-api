@@ -65,6 +65,26 @@ class DeleteUsersControllerTest < RequestTestCase
       assert_include "id", parsed_response_body
       assert_equal @id, parsed_response_body["id"]
     end
+    
+    test "user should be deleted in database" do
+      assert_equal nil, User.find_by_id(@id)
+    end
+  end
+
+  context "admin user : double delete /users" do
+    before :all do
+      setup_for_deletion
+      delete "/users/#{@id}", :api_key => @admin_user.api_key
+      delete "/users/#{@id}", :api_key => @admin_user.api_key
+    end
+    
+    use "return 404 Not Found"
+    use "decremented user count"
+    use "return an empty response body"
+  
+    test "user should be deleted in database" do
+      assert_equal nil, User.find_by_id(@id)
+    end
   end
 
 end
