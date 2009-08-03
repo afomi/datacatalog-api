@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
-class DeleteSourcesControllerTest < RequestTestCase
+class SourcesDeleteControllerTest < RequestTestCase
 
   def setup_for_deletion
     source = Source.create :url => "http://dc.gov/busses"

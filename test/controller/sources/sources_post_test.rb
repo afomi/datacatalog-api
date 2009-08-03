@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
-class PostSourcesControllerTest < RequestTestCase
+class SourcesPostControllerTest < RequestTestCase
 
   context "anonymous user : post /sources" do
     before :all do

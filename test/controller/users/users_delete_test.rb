@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
-class DeleteUsersControllerTest < RequestTestCase
+class UsersDeleteControllerTest < RequestTestCase
 
   def setup_for_deletion
     user = User.create({

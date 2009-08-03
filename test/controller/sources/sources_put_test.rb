@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
-class PutSourcesControllerTest < RequestTestCase
+class SourcesPutControllerTest < RequestTestCase
 
   def setup_for_update
     @original_source = Source.create({
