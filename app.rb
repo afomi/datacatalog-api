@@ -20,6 +20,7 @@ configure do
   set :config, Config.load_config_for_env(Sinatra::Application.environment)
 end
 
+require_dir 'util'
 require_dir 'models'
 require_dir 'controllers'
 

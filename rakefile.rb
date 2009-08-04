@@ -32,7 +32,7 @@ namespace :test do
 
   desc "Reset test database"
   task :reset_db => :environment do
-    MongoMapper.connection.drop_database MongoMapper.database.name
+    Util.drop_database
     # There is no need to recreate the database -- this will happen
     # automatically when the first collection is created -- namely,
     # when a model is defined that mixes in MongoMapper::Document.
