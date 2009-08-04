@@ -1,19 +1,12 @@
 require 'rubygems'
+require 'dir_helpers'
+require 'digest/sha1'
 
 gem 'sinatra', '>= 0.9.4'
 require 'sinatra'
 
-require 'digest/sha1'
-
 gem 'djsun-mongomapper', '>= 0.3.1'
 require 'mongomapper'
-
-def require_dir(dir)
-  subdir = File.expand_path(File.join(File.dirname(__FILE__), dir))
-  Dir.glob("#{subdir}/*.rb").each do |f|
-    require f
-  end
-end
 
 require File.dirname(__FILE__) + "/config/config"
 

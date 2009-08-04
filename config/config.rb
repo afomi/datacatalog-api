@@ -1,4 +1,5 @@
 module Config
+  
   def self.load_config_for_env(env)
     config = load_config(env)
     setup_mongomapper(config)
@@ -16,4 +17,5 @@ module Config
     )
     MongoMapper.database = config['mongo_database']
   end
+
 end
