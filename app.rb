@@ -1,8 +1,10 @@
 require 'rubygems'
 require 'sinatra'
+
 require 'digest/sha1'
 
-gem 'djsun-mongomapper', '>= 0.3.1'
+gem 'mongomapper', '>= 0.3.1'
+# gem 'djsun-mongomapper', '>= 0.3.1'
 require 'mongomapper'
 
 def require_dir(dir)

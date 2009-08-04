@@ -6,7 +6,7 @@ desc "Default: run all tests"
 task :default => :test
 
 task :environment do
-  require File.dirname(__FILE__) + "/config/config"
+  require File.dirname(__FILE__) + "/app"
   Config.load_config_for_env(:test)
 end
 
