@@ -1,8 +1,5 @@
-ENV['RACK_ENV'] = "development"
-
 require 'rubygems'
-require 'sinatra'
-require 'app'
 
-disable :run
+ENV['RACK_ENV'] = "development" # Change me to run in staging/production
+require 'app'
 run Sinatra::Application

@@ -1,3 +1,5 @@
 rcov/*
 config/config.yml
+config.ru
+restart.txt
 
