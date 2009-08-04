@@ -2,6 +2,9 @@ require 'rubygems'
 require 'sinatra'
 require 'digest/sha1'
 
+gem 'djsun-mongomapper', '>= 0.3.1'
+require 'mongomapper'
+
 def require_dir(dir)
   subdir = File.expand_path(File.join(File.dirname(__FILE__), dir))
   Dir.glob("#{subdir}/*.rb").each do |f|

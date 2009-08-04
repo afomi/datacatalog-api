@@ -1,5 +1,3 @@
-require 'mongomapper'
-
 module Config
   def self.load_config_for_env(env)
     config = load_config(env)

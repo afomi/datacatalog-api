@@ -8,8 +8,12 @@ require_relative '/../app'
 require 'test/unit'
 require 'rack/test'
 require 'json'
-require 'context' # jeremymcanally-context
-require 'pending' # jeremymcanally-pending
+
+gem 'djsun-context', '>= 0.5.5'
+require 'context'
+
+gem 'jeremymcanally-pending', '>= 0.1'
+require 'pending'
 
 require_dir 'test/helpers/test_helpers'
 require_dir 'test/helpers/test_cases'
