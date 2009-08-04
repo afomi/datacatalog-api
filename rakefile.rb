@@ -63,3 +63,14 @@ Rake::RDocTask.new do |rd|
   rd.options << "--inline-source"
   rd.options << "--all"
 end
+
+desc "Reset dev database"
+task :reset_db => :environment do
+  MongoMapper.connection.drop_database MongoMapper.database.name
+end
+
+desc "Create an admin user"
+task :create_admin => :environment do
+  u = User.create({:name => "National Data Catalog", :email => "ndc@sunlightlabs.com", :confirmed => true, :admin => true})
+  u.generate_api_key!
+end
