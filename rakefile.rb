@@ -5,7 +5,15 @@ require 'rcov/rcovtask'
 desc "Default: run all tests"
 task :default => :test
 
+
 task :environment do
+  ENV['RACK_ENV'] = 'development'
+  require File.dirname(__FILE__) + "/app"
+  Config.load_config_for_env(:development)
+end
+
+task :test_environment => :environment do
+  ENV['RACK_ENV'] = 'test'
   require File.dirname(__FILE__) + "/app"
   Config.load_config_for_env(:test)
 end
@@ -31,7 +39,7 @@ namespace :test do
   end
 
   desc "Reset test database"
-  task :reset_db => :environment do
+  task :reset_db => :test_environment do
     Util.drop_database
     # There is no need to recreate the database -- this will happen
     # automatically when the first collection is created -- namely,
