@@ -13,9 +13,8 @@ end
 
 require_dir 'models'
 require_dir 'controllers'
+require_dir 'controller_helpers'
 
 before do
   content_type :json
 end
-
-require_dir 'helpers'
