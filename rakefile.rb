@@ -1,7 +1,7 @@
 require 'rake/testtask'
 require 'rake/rdoctask'
 require 'rcov/rcovtask'
-require 'require_helpers'
+require File.expand_path(File.dirname(__FILE__) + '/require_helpers')
 
 require_file 'config/config'
 load_dir 'tasks', '*.rake'

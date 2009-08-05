@@ -1,5 +1,5 @@
 require 'rubygems'
-require 'require_helpers'
+require File.expand_path(File.dirname(__FILE__) + '/require_helpers')
 
 gem 'sinatra', '>= 0.9.4'
 require 'sinatra'
