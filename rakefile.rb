@@ -1,16 +1,23 @@
 require 'rake/testtask'
 require 'rake/rdoctask'
 require 'rcov/rcovtask'
-require 'tasks/rake_utility'
-require 'dir_helpers'
+require 'require_helpers'
 
+require_file 'config/config'
 load_dir 'tasks', '*.rake'
 
 desc "Default: run all tests"
 task :default => :test
 
-task :environment do
-  puts "Loading application environment"
-  require File.dirname(__FILE__) + "/app"
-  Config.load_config_for_env RakeUtility.current_environment
+namespace :environment do
+  task :application do
+    puts "Loading application environment..."
+    require_file 'app'
+  end
+  
+  task :models do
+    puts "Loading models..."
+    Config.setup_mongomapper
+    require_dir 'models'
+  end
 end

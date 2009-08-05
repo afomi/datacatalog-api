@@ -1,21 +1,64 @@
+require 'rubygems'
+
 module Config
   
-  def self.load_config_for_env(env)
-    config = load_config(env)
-    setup_mongomapper(config)
-    config
+  def self.setup
+    setup_mongomapper
+    # More application setup can go here...
   end
   
-  def self.load_config(env)
-    file = File.join(File.dirname(__FILE__), "config.yml")
-    YAML.load_file(file)[env]
+  def self.setup_mongomapper
+    gem 'djsun-mongomapper', '>= 0.3.1'
+    require 'mongomapper'
+    MongoMapper.connection = new_mongo_connection
+    MongoMapper.database = environment_config['mongo_database']
+  end
+  
+  def self.new_mongo_connection
+    gem 'mongodb-mongo', ">= 0.10.1"
+    require 'mongo'
+    XGen::Mongo::Driver::Mongo.new environment_config["mongo_hostname"]
   end
 
-  def self.setup_mongomapper(config)
-    MongoMapper.connection = XGen::Mongo::Driver::Mongo.new(
-      config['mongo_hostname']
-    )
-    MongoMapper.database = config['mongo_database']
+  def self.drop_database
+    database_name = environment_config["mongo_database"]
+    new_mongo_connection.drop_database database_name
+    database_name
+  end
+
+  def self.environment_config
+    env_config = config[environment]
+    raise "Environment not found" unless env_config
+    env_config
+  end
+
+  def self.environment
+    if @environment
+      @environment
+    else
+      @environment = if Object.const_defined?("Sinatra")
+        Sinatra::Application.environment
+      else
+        ENV['RACK_ENV'] || :development
+      end
+    end
+  end
+  
+  def self.environment=(env)
+    @environment = env
+  end
+
+  def self.environments
+    config.keys
+  end
+  
+  def self.config
+    if @config
+      @config
+    else
+      file = File.join(File.dirname(__FILE__), "config.yml")
+      @config = YAML.load_file(file)
+    end
   end
 
 end

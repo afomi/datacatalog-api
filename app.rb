@@ -1,20 +1,16 @@
 require 'rubygems'
-require 'dir_helpers'
-require 'digest/sha1'
+require 'require_helpers'
 
 gem 'sinatra', '>= 0.9.4'
 require 'sinatra'
 
-gem 'djsun-mongomapper', '>= 0.3.1'
-require 'mongomapper'
-
-require File.dirname(__FILE__) + "/config/config"
+require_file 'config/config'
 
 configure do
-  set :config, Config.load_config_for_env(Sinatra::Application.environment)
+  set :config, Config.environment_config
+  Config.setup
 end
 
-require_dir 'util'
 require_dir 'models'
 require_dir 'controllers'
 
