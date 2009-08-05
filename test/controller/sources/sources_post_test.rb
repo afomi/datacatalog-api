@@ -20,7 +20,7 @@ class SourcesPostControllerTest < RequestTestCase
   
   context "unconfirmed user : post /sources" do
     before :all do
-      post '/sources', :api_key => @unconfirmed_user.api_key
+      post '/sources', :api_key => @unconfirmed_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
@@ -28,7 +28,7 @@ class SourcesPostControllerTest < RequestTestCase
   
   context "confirmed user : post /sources" do
     before :all do
-      post '/sources', :api_key => @confirmed_user.api_key
+      post '/sources', :api_key => @confirmed_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
@@ -38,7 +38,7 @@ class SourcesPostControllerTest < RequestTestCase
     before :all do
       @source_count = Source.count
       post '/sources', {
-        :api_key   => @admin_user.api_key,
+        :api_key   => @admin_user.primary_api_key,
         :url       => "http://data.gov/sources/A"
       }
     end
@@ -70,7 +70,7 @@ class SourcesPostControllerTest < RequestTestCase
   context "admin user : post /sources with extra param" do
     before :all do
       post '/sources', {
-        :api_key => @admin_user.api_key,
+        :api_key => @admin_user.primary_api_key,
         :url     => "http://data.gov/sources/A",
         :extra   => "This is an extra parameter (junk)"
       }

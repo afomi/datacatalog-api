@@ -14,7 +14,7 @@ namespace :db do
       :confirmed => true,
       :admin     => true
     })
-    user.generate_api_key!
+    user.add_api_key!
   end
   
   desc 'Drop database for current environment (development unless RACK_ENV is set)'

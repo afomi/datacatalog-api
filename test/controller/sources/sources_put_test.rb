@@ -20,7 +20,7 @@ class SourcesPutControllerTest < RequestTestCase
     use "return 401 because the API key is missing"
     use "unchanged source count"
   end
-  
+
   context "incorrect user : put /sources" do
     before :all do
       setup_for_update
@@ -30,11 +30,11 @@ class SourcesPutControllerTest < RequestTestCase
     use "return 401 because the API key is invalid"
     use "unchanged source count"
   end
-  
+
   context "unconfirmed user : put /sources" do
     before :all do
       setup_for_update
-      put "/sources/#{@id}", :api_key => @unconfirmed_user.api_key
+      put "/sources/#{@id}", :api_key => @unconfirmed_user.primary_api_key
     end
   
     use "return 401 because the API key is unauthorized"
@@ -44,7 +44,7 @@ class SourcesPutControllerTest < RequestTestCase
   context "confirmed user : put /sources" do
     before :all do
       setup_for_update
-      put "/sources/#{@id}", :api_key => @confirmed_user.api_key
+      put "/sources/#{@id}", :api_key => @confirmed_user.primary_api_key
     end
   
     use "return 401 because the API key is unauthorized"
@@ -55,7 +55,7 @@ class SourcesPutControllerTest < RequestTestCase
     before :all do
       setup_for_update
       put "/sources/#{@fake_id}", {
-        :api_key => @admin_user.api_key,
+        :api_key => @admin_user.primary_api_key,
         :url     => "http://dc.gov/new"
       }
     end
@@ -73,7 +73,7 @@ class SourcesPutControllerTest < RequestTestCase
     before :all do
       setup_for_update
       put "/sources/#{@fake_id}", {
-        :api_key => @admin_user.api_key,
+        :api_key => @admin_user.primary_api_key,
         :url     => "http://dc.gov/new"
       }
     end
@@ -91,7 +91,7 @@ class SourcesPutControllerTest < RequestTestCase
     before :all do
       setup_for_update
       put "/sources/#{@fake_id}", {
-        :api_key => @admin_user.api_key,
+        :api_key => @admin_user.primary_api_key,
         :url     => "http://dc.gov/new",
         :extra   => "This is an extra parameter (junk)"
       }
@@ -105,12 +105,12 @@ class SourcesPutControllerTest < RequestTestCase
       assert_equal "http://dc.gov/original", @original_source.url
     end
   end
-
+  
   context "admin user : put /sources : update : correct params" do
     before :all do
       setup_for_update
       put "/sources/#{@id}", {
-        :api_key => @admin_user.api_key,
+        :api_key => @admin_user.primary_api_key,
         :url     => "http://dc.gov/new",
       }
     end
@@ -124,30 +124,30 @@ class SourcesPutControllerTest < RequestTestCase
       assert_equal "http://dc.gov/new", source.url
     end
   end
-
+  
   # Not applicable in this case
   # context "admin user : put /sources : update : protected param" do
   # end
-
+  
   context "admin user : put /sources : update : extra param" do
     before :all do
       setup_for_update
       put "/sources/#{@id}", {
-        :api_key => @admin_user.api_key,
+        :api_key => @admin_user.primary_api_key,
         :url     => "http://dc.gov/new",
         :extra   => "This is an extra parameter (junk)"
       }
     end
-
+  
     use "return 400 Bad Request"
     use "unchanged source count"
-
+  
     test "body should say extra is an invalid param" do
       assert_include "errors", parsed_response_body
       assert_include "invalid_params", parsed_response_body["errors"]
       assert_include "extra", parsed_response_body["errors"]["invalid_params"]
     end
-
+  
     test "name should be unchanged in database" do
       assert_equal "http://dc.gov/original", @original_source.url
     end

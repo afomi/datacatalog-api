@@ -17,10 +17,10 @@ class SourcesGetAllControllerTest < RequestTestCase
     
     use "return 401 because the API key is invalid"
   end
-  
+
   context "unconfirmed user : get /sources" do
     before :all do
-      get '/sources', :api_key => @unconfirmed_user.api_key
+      get '/sources', :api_key => @unconfirmed_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
@@ -28,7 +28,7 @@ class SourcesGetAllControllerTest < RequestTestCase
   
   context "confirmed user : get /sources" do
     before :all do
-      get '/sources', :api_key => @confirmed_user.api_key
+      get '/sources', :api_key => @confirmed_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
@@ -36,7 +36,7 @@ class SourcesGetAllControllerTest < RequestTestCase
 
   context "admin user : get /sources : 0" do
     before :all do
-      get '/sources', :api_key => @admin_user.api_key
+      get '/sources', :api_key => @admin_user.primary_api_key
     end
     
     use "return 200 Ok"
@@ -47,7 +47,7 @@ class SourcesGetAllControllerTest < RequestTestCase
     before :all do
       Source.create :url => "http://data.gov/sources/A"
       Source.create :url => "http://data.gov/sources/B"
-      get '/sources', :api_key => @admin_user.api_key
+      get '/sources', :api_key => @admin_user.primary_api_key
     end
     
     test "body should have 2 top level elements" do

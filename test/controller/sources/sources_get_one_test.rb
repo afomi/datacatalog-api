@@ -27,7 +27,7 @@ class SourcesGetOneControllerTest < RequestTestCase
   context "unconfirmed user : get /sources/:id" do
     before :all do
       @id = create_example_source.id
-      get "/sources/#{@id}", :api_key => @unconfirmed_user.api_key
+      get "/sources/#{@id}", :api_key => @unconfirmed_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
@@ -36,28 +36,28 @@ class SourcesGetOneControllerTest < RequestTestCase
   context "confirmed user : get /sources/:id" do
     before :all do
       @id = create_example_source.id
-      get "/sources/#{@id}", :api_key => @confirmed_user.api_key
+      get "/sources/#{@id}", :api_key => @confirmed_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
   end
-
+  
   context "admin user : get /sources/:fake_id : not found" do
     before :all do
       Source.create :url => "http://data.gov/sources/A"
       @fake_id = get_fake_mongo_object_id
-      get "/sources/#{@fake_id}", :api_key => @admin_user.api_key
+      get "/sources/#{@fake_id}", :api_key => @admin_user.primary_api_key
     end
     
     use "return 404 Not Found"
     use "return an empty response body"
   end
-
+  
   context "admin user : get /sources/:id : found" do
     before :all do
       source = Source.create :url => "http://data.gov/sources/A"
       @id = source.id
-      get "/sources/#{@id}", :api_key => @admin_user.api_key
+      get "/sources/#{@id}", :api_key => @admin_user.primary_api_key
     end
     
     use "return 200 Ok"

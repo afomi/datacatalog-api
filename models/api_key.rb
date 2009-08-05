@@ -1,8 +1,9 @@
-class Source
-
-  include MongoMapper::Document
-
-  key :url, String, :index => true
+class ApiKey
+  
+  include MongoMapper::EmbeddedDocument
+  
+  key :api_key, String
+  key :purpose, String
 
   alias original_to_json to_json
   def to_json(options = nil)
@@ -13,3 +14,4 @@ class Source
   end
 
 end
+

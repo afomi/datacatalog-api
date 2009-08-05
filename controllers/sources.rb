@@ -1,7 +1,7 @@
 get '/sources' do
   validate_admin_privileges
   sources = Source.find(:all)
-  jsonify sources
+  sources.to_json
 end
 
 get '/sources/:id' do |id|
@@ -9,7 +9,7 @@ get '/sources/:id' do |id|
   id = params.delete("id")
   source = Source.find_by_id(id)
   if source
-    jsonify source
+    source.to_json
   else
     error 404, [].to_json
   end
@@ -20,7 +20,7 @@ post '/sources' do
   id = params.delete("id")
   validate_source_params
   source = create_source_from_params
-  jsonify source
+  source.to_json
 end
 
 put '/sources/:id' do
@@ -32,7 +32,7 @@ put '/sources/:id' do
   end
   validate_source_params
   source = Source.update(id, params)
-  jsonify source
+  source.to_json
 end
 
 delete '/sources/:id' do

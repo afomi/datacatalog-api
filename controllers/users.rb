@@ -1,7 +1,7 @@
 get '/users' do
   validate_admin_privileges
   users = User.find(:all)
-  jsonify users
+  users.to_json
 end
 
 get '/users/:id' do
@@ -9,7 +9,7 @@ get '/users/:id' do
   id = params.delete("id")
   user = User.find_by_id(id)
   if user
-    jsonify user
+    user.to_json
   else
     error 404, [].to_json
   end
@@ -20,7 +20,7 @@ post '/users' do
   id = params.delete("id")
   validate_user_params
   user = create_user_from_params
-  jsonify user
+  user.to_json
 end
 
 put '/users/:id' do
@@ -32,7 +32,7 @@ put '/users/:id' do
   end
   validate_user_params
   user = User.update(id, params)
-  jsonify user
+  user.to_json
 end
 
 delete '/users/:id' do

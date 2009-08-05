@@ -9,8 +9,9 @@ module ModelHelpers
   end
   
   def create_unconfirmed_user
+    key = ApiKey.new(:api_key => "unconfirmed-2cd9e3e746a36d098181c15ff66d")
     User.create({
-      :api_key   => "unconfirmed-2cd9e3e746a36d098181c15ff66d",
+      :api_keys  => [key],
       :name      => "Mr. Unconfirmed",
       :email     => "mr.unconfirmed@inter.net",
       :confirmed => false,
@@ -19,8 +20,9 @@ module ModelHelpers
   end
 
   def create_confirmed_user
-    @normal = User.create({
-      :api_key   => "confirmed-c52cd9e3e746a36d098181c15ff66d",
+    key = ApiKey.new(:api_key => "confirmed-c52cd9e3e746a36d098181c15ff66d")
+    User.create({
+      :api_keys  => [key],
       :name      => "Dr. Confirmed",
       :email     => "dr.confirmed@inter.net",
       :confirmed => true,
@@ -29,8 +31,9 @@ module ModelHelpers
   end
 
   def create_admin_user
+    key = ApiKey.new(:api_key => "admin-360d4f2e3582b6b87595fbebc0315764a6")
     User.create({
-      :api_key   => "admin-360d4f2e3582b6b87595fbebc0315764a6",
+      :api_keys  => [key],
       :name      => "Admin",
       :email     => "admin@inter.net",
       :confirmed => true,

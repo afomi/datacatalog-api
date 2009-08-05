@@ -31,7 +31,7 @@ class UsersGetOneControllerTest < RequestTestCase
   context "unconfirmed user : get /users/:id" do
     before :all do
       @id = create_example_user.id
-      get "/users/#{@id}", :api_key => @unconfirmed_user.api_key
+      get "/users/#{@id}", :api_key => @unconfirmed_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
@@ -40,7 +40,7 @@ class UsersGetOneControllerTest < RequestTestCase
   context "confirmed user : get /users/:id" do
     before :all do
       @id = create_example_user.id
-      get "/users/#{@id}", :api_key => @confirmed_user.api_key
+      get "/users/#{@id}", :api_key => @confirmed_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
@@ -49,7 +49,7 @@ class UsersGetOneControllerTest < RequestTestCase
   context "admin user : get /users/:fake_id : not found" do
     before :all do
       @fake_id = get_fake_mongo_object_id
-      get "/users/#{@fake_id}", :api_key => @admin_user.api_key
+      get "/users/#{@fake_id}", :api_key => @admin_user.primary_api_key
     end
     
     use "return 404 Not Found"
@@ -64,7 +64,7 @@ class UsersGetOneControllerTest < RequestTestCase
         :purpose => "User account for Web application"
       })
       @id = user.id
-      get "/users/#{@id}", :api_key => @admin_user.api_key
+      get "/users/#{@id}", :api_key => @admin_user.primary_api_key
     end
     
     use "return 200 Ok"

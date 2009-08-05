@@ -20,7 +20,7 @@ class UsersGetAllControllerTest < RequestTestCase
   
   context "unconfirmed user : get /users" do
     before :all do
-      get '/users', :api_key => @unconfirmed_user.api_key
+      get '/users', :api_key => @unconfirmed_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
@@ -28,7 +28,7 @@ class UsersGetAllControllerTest < RequestTestCase
   
   context "confirmed user : get /users" do
     before :all do
-      get '/users', :api_key => @confirmed_user.api_key
+      get '/users', :api_key => @confirmed_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
@@ -36,7 +36,7 @@ class UsersGetAllControllerTest < RequestTestCase
   
   context "admin user : get /users" do
     before :all do
-      get '/users', :api_key => @admin_user.api_key
+      get '/users', :api_key => @admin_user.primary_api_key
     end
     
     use "return 200 Ok"
@@ -68,6 +68,19 @@ class UsersGetAllControllerTest < RequestTestCase
     test "body should not have _id" do
       assert_not_include "_id", parsed_response_body[0]
     end
+
+    test "body should have API key, 40 characters long" do
+      primary_api_key = parsed_response_body[0]["primary_api_key"]
+      assert primary_api_key
+      assert_equal 40, primary_api_key.length
+    end
+    
+    test "body should same API key as admin key" do
+      primary_api_key = parsed_response_body[0]["primary_api_key"]
+      assert primary_api_key
+      assert_equal @admin_user.primary_api_key, primary_api_key
+    end
+
   end
   
 end

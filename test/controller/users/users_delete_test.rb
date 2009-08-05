@@ -35,7 +35,7 @@ class UsersDeleteControllerTest < RequestTestCase
   context "unconfirmed user : delete /users" do
     before :all do
       setup_for_deletion
-      delete "/users/#{@id}", :api_key => @unconfirmed_user.api_key
+      delete "/users/#{@id}", :api_key => @unconfirmed_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
@@ -45,7 +45,7 @@ class UsersDeleteControllerTest < RequestTestCase
   context "confirmed user : delete /users" do
     before :all do
       setup_for_deletion
-      delete "/users/#{@id}", :api_key => @confirmed_user.api_key
+      delete "/users/#{@id}", :api_key => @confirmed_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
@@ -55,7 +55,7 @@ class UsersDeleteControllerTest < RequestTestCase
   context "admin user : delete /users" do
     before :all do
       setup_for_deletion
-      delete "/users/#{@id}", :api_key => @admin_user.api_key
+      delete "/users/#{@id}", :api_key => @admin_user.primary_api_key
     end
     
     use "return 200 Ok"
@@ -74,8 +74,8 @@ class UsersDeleteControllerTest < RequestTestCase
   context "admin user : double delete /users" do
     before :all do
       setup_for_deletion
-      delete "/users/#{@id}", :api_key => @admin_user.api_key
-      delete "/users/#{@id}", :api_key => @admin_user.api_key
+      delete "/users/#{@id}", :api_key => @admin_user.primary_api_key
+      delete "/users/#{@id}", :api_key => @admin_user.primary_api_key
     end
     
     use "return 404 Not Found"

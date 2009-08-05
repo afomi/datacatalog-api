@@ -20,7 +20,7 @@ class UsersPostControllerTest < RequestTestCase
   
   context "unconfirmed user : post /users" do
     before :all do
-      post '/users', :api_key => @unconfirmed_user.api_key
+      post '/users', :api_key => @unconfirmed_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
@@ -28,7 +28,7 @@ class UsersPostControllerTest < RequestTestCase
   
   context "confirmed user : post /users" do
     before :all do
-      post '/users', :api_key => @confirmed_user.api_key
+      post '/users', :api_key => @confirmed_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
@@ -38,7 +38,7 @@ class UsersPostControllerTest < RequestTestCase
     before :all do
       @user_count = User.count
       post '/users', {
-        :api_key   => @admin_user.api_key,
+        :api_key   => @admin_user.primary_api_key,
         :name      => "John Doe",
         :email     => "john.doe@email.com",
         :purpose   => "User account for Web application"
@@ -63,16 +63,14 @@ class UsersPostControllerTest < RequestTestCase
       assert_equal "john.doe@email.com", parsed_response_body["email"]
     end
     
-    test "body should have API key" do
-      assert parsed_response_body["api_key"]
-    end
-
-    test "API key should be 40 characters" do
-      assert_equal 40, parsed_response_body["api_key"].length
+    test "body should have API key, 40 characters long" do
+      assert parsed_response_body["primary_api_key"]
+      assert_equal 40, parsed_response_body["primary_api_key"].length
     end
     
-    test "API key should be different from admin key" do
-      assert_not_equal @admin_user.api_key, parsed_response_body["api_key"]
+    test "body should have API key different from admin key" do
+      assert parsed_response_body["primary_api_key"]
+      assert_not_equal @admin_user.primary_api_key, parsed_response_body["primary_api_key"]
     end
     
     test "name should be correct in database" do
@@ -89,7 +87,7 @@ class UsersPostControllerTest < RequestTestCase
   context "admin user : post /users with protected param" do
     before :all do
       post '/users', {
-        :api_key   => @admin_user.api_key,
+        :api_key   => @admin_user.primary_api_key,
         :name      => "John Doe",
         :email     => "john.doe@email.com",
         :purpose   => "User account for Web application",
@@ -109,7 +107,7 @@ class UsersPostControllerTest < RequestTestCase
   context "admin user : post /users with extra param" do
     before :all do
       post '/users', {
-        :api_key   => @admin_user.api_key,
+        :api_key   => @admin_user.primary_api_key,
         :name    => "John Doe",
         :email   => "john.doe@email.com",
         :purpose => "User account for Web application",

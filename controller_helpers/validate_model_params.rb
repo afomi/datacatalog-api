@@ -4,9 +4,10 @@ end
 
 def validate_user_params
   validate_params User, %w(
-    api_key
-    parent_api_key
+    api_keys
     confirmed
+    admin
+    creator_api_key
   )
 end
 

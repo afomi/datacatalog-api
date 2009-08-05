@@ -33,7 +33,7 @@ class RootControllerTest < RequestTestCase
 
   context "unconfirmed user : get /" do
     before :all do
-      get '/', :api_key => @unconfirmed_user.api_key
+      get '/', :api_key => @unconfirmed_user.primary_api_key
     end
     
     use "return 400 because the API key is not allowed"
@@ -41,7 +41,7 @@ class RootControllerTest < RequestTestCase
   
   context "confirmed user : get /" do
     before :all do
-      get '/', :api_key => @confirmed_user.api_key
+      get '/', :api_key => @confirmed_user.primary_api_key
     end
     
     use "return 400 because the API key is not allowed"
@@ -49,7 +49,7 @@ class RootControllerTest < RequestTestCase
   
   context "admin user : get /" do
     before :all do
-      get '/', :api_key => @admin_user.api_key
+      get '/', :api_key => @admin_user.primary_api_key
     end
     
     use "return 400 because the API key is not allowed"

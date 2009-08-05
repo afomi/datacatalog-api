@@ -8,6 +8,7 @@ class UsersPutControllerTest < RequestTestCase
       :email   => "original.guy@email.com",
       :purpose => "User account for Web application"
     })
+    @original_user.add_api_key!
     @id = @original_user.id
     @fake_id = get_fake_mongo_object_id
     @user_count = User.count
@@ -36,7 +37,7 @@ class UsersPutControllerTest < RequestTestCase
   context "unconfirmed user : put /users" do
     before :all do
       setup_for_update
-      put "/users/#{@id}", :api_key => @unconfirmed_user.api_key
+      put "/users/#{@id}", :api_key => @unconfirmed_user.primary_api_key
     end
 
     use "return 401 because the API key is unauthorized"
@@ -46,7 +47,7 @@ class UsersPutControllerTest < RequestTestCase
   context "confirmed user : put /users" do
     before :all do
       setup_for_update
-      put "/users/#{@id}", :api_key => @confirmed_user.api_key
+      put "/users/#{@id}", :api_key => @confirmed_user.primary_api_key
     end
 
     use "return 401 because the API key is unauthorized"
@@ -57,7 +58,7 @@ class UsersPutControllerTest < RequestTestCase
     before :all do
       setup_for_update
       put "/users/#{@fake_id}", {
-        :api_key => @admin_user.api_key,
+        :api_key => @admin_user.primary_api_key,
         :name    => "New Guy",
         :email   => "new.guy@email.com",
         :purpose => "User account for Web application"
@@ -81,7 +82,7 @@ class UsersPutControllerTest < RequestTestCase
     before :all do
       setup_for_update
       put "/users/#{@fake_id}", {
-        :api_key   => @admin_user.api_key,
+        :api_key   => @admin_user.primary_api_key,
         :name      => "New Guy",
         :email     => "new.guy@email.com",
         :purpose   => "User account for Web application",
@@ -106,7 +107,7 @@ class UsersPutControllerTest < RequestTestCase
     before :all do
       setup_for_update
       put "/users/#{@fake_id}", {
-        :api_key => @admin_user.api_key,
+        :api_key => @admin_user.primary_api_key,
         :name    => "New Guy",
         :email   => "new.guy@email.com",
         :purpose => "User account for Web application",
@@ -131,7 +132,7 @@ class UsersPutControllerTest < RequestTestCase
     before :all do
       setup_for_update
       put "/users/#{@id}", {
-        :api_key => @admin_user.api_key,
+        :api_key => @admin_user.primary_api_key,
         :name    => "New Guy",
         :email   => "new.guy@email.com",
         :purpose => "User account for Web application"
@@ -151,13 +152,23 @@ class UsersPutControllerTest < RequestTestCase
       user = User.find_by_id(@id)
       assert_equal "new.guy@email.com", user.email
     end
+
+    test "body should have API key, 40 characters long" do
+      assert parsed_response_body["primary_api_key"]
+      assert_equal 40, parsed_response_body["primary_api_key"].length
+    end
+    
+    test "body should have API key different from admin key" do
+      assert parsed_response_body["primary_api_key"]
+      assert_not_equal @admin_user.primary_api_key, parsed_response_body["primary_api_key"]
+    end
   end
   
   context "admin user : put /users : update : protected param" do
     before :all do
       setup_for_update
       put "/users/#{@id}", {
-        :api_key   => @admin_user.api_key,
+        :api_key   => @admin_user.primary_api_key,
         :name      => "John Doe",
         :email     => "john.doe@email.com",
         :purpose   => "User account for Web application",
@@ -187,7 +198,7 @@ class UsersPutControllerTest < RequestTestCase
     before :all do
       setup_for_update
       put "/users/#{@id}", {
-        :api_key => @admin_user.api_key,
+        :api_key => @admin_user.primary_api_key,
         :name    => "John Doe",
         :email   => "john.doe@email.com",
         :purpose => "User account for Web application",

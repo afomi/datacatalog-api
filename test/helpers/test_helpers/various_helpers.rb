@@ -19,4 +19,8 @@ module VariousHelpers
     XGen::Mongo::Driver::ObjectID.new.to_s
   end
   
+  def get_fake_api_key(string)
+    Digest::SHA1.hexdigest(string)
+  end
+  
 end
