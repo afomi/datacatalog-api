@@ -24,7 +24,7 @@ class RequestTestCase < Test::Unit::TestCase
       klass = original_context(name, &block)
       klass.class_eval do
         test "should have JSON content type" do
-          assert_equal last_response.headers["Content-Type"], "application/json"
+          assert_equal "application/json", last_response.headers["Content-Type"]
         end
       end
     end
