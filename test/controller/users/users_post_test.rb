@@ -1,42 +1,95 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper')
 
 class UsersPostControllerTest < RequestTestCase
+
+  before do
+    @user_count = User.count
+  end
+  
+  # - - - - - - - - - -
   
   context "anonymous user : post /users" do
-    before :all do
+    before do
       post '/users'
     end
     
     use "return 401 because the API key is missing"
+    use "unchanged user count"
   end
   
   context "incorrect user : post /users" do
-    before :all do
+    before do
       post '/users', :api_key => "does_not_exist_in_database"
     end
     
     use "return 401 because the API key is invalid"
+    use "unchanged user count"
   end
   
   context "unconfirmed user : post /users" do
-    before :all do
+    before do
       post '/users', :api_key => @unconfirmed_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
+    use "unchanged user count"
   end
   
   context "confirmed user : post /users" do
-    before :all do
+    before do
       post '/users', :api_key => @confirmed_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
+    use "unchanged user count"
+  end
+
+  # - - - - - - - - - -
+
+  context "admin user : post /users with protected param" do
+    before do
+      post '/users', {
+        :api_key   => @admin_user.primary_api_key,
+        :name      => "John Doe",
+        :email     => "john.doe@email.com",
+        :purpose   => "User account for Web application",
+        :confirmed => "true"
+      }
+    end
+  
+    use "return 400 Bad Request"
+  
+    test "body should say 'confirmed' is an invalid param" do
+      assert_include "errors", parsed_response_body
+      assert_include "invalid_params", parsed_response_body["errors"]
+      assert_include "confirmed", parsed_response_body["errors"]["invalid_params"]
+    end
   end
   
+  context "admin user : post /users with extra param" do
+    before do
+      post '/users', {
+        :api_key   => @admin_user.primary_api_key,
+        :name    => "John Doe",
+        :email   => "john.doe@email.com",
+        :purpose => "User account for Web application",
+        :extra   => "This is an extra parameter (junk)"
+      }
+    end
+  
+    use "return 400 Bad Request"
+  
+    test "body should say 'extra' is an invalid param" do
+      assert_include "errors", parsed_response_body
+      assert_include "invalid_params", parsed_response_body["errors"]
+      assert_include "extra", parsed_response_body["errors"]["invalid_params"]
+    end
+  end
+
+  # - - - - - - - - - -
+  
   context "admin user : post /users with correct params" do
-    before :all do
-      @user_count = User.count
+    before do
       post '/users', {
         :api_key   => @admin_user.primary_api_key,
         :name      => "John Doe",
@@ -64,13 +117,12 @@ class UsersPostControllerTest < RequestTestCase
     end
     
     test "body should have API key, 40 characters long" do
-      assert parsed_response_body["primary_api_key"]
       assert_equal 40, parsed_response_body["primary_api_key"].length
     end
     
     test "body should have API key different from admin key" do
-      assert parsed_response_body["primary_api_key"]
-      assert_not_equal @admin_user.primary_api_key, parsed_response_body["primary_api_key"]
+      assert_not_equal @admin_user.primary_api_key,
+        parsed_response_body["primary_api_key"]
     end
     
     test "name should be correct in database" do
@@ -81,46 +133,6 @@ class UsersPostControllerTest < RequestTestCase
     test "email should be correct in database" do
       user = User.find_by_id(parsed_response_body["id"])
       assert_equal "john.doe@email.com", user.email
-    end
-  end
-
-  context "admin user : post /users with protected param" do
-    before :all do
-      post '/users', {
-        :api_key   => @admin_user.primary_api_key,
-        :name      => "John Doe",
-        :email     => "john.doe@email.com",
-        :purpose   => "User account for Web application",
-        :confirmed => "true"
-      }
-    end
-  
-    use "return 400 Bad Request"
-  
-    test "body should explain the problem" do
-      assert_include "errors", parsed_response_body
-      assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "confirmed", parsed_response_body["errors"]["invalid_params"]
-    end
-  end
-  
-  context "admin user : post /users with extra param" do
-    before :all do
-      post '/users', {
-        :api_key   => @admin_user.primary_api_key,
-        :name    => "John Doe",
-        :email   => "john.doe@email.com",
-        :purpose => "User account for Web application",
-        :extra   => "This is an extra parameter (junk)"
-      }
-    end
-  
-    use "return 400 Bad Request"
-  
-    test "body should explain the problem" do
-      assert_include "errors", parsed_response_body
-      assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "extra", parsed_response_body["errors"]["invalid_params"]
     end
   end
   

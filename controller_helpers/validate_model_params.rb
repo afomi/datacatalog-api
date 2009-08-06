@@ -11,6 +11,8 @@ def validate_user_params
     confirmed
     admin
     creator_api_key
+    created_at
+    updated_at
   )
 end
 

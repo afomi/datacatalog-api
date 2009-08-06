@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper
 
 class UsersDeleteControllerTest < RequestTestCase
 
-  def setup_for_deletion
+  before do
     user = User.create({
       :name    => "Will Not-Last-Long",
       :email   => "will.not.last.long@email.com",
@@ -11,10 +11,11 @@ class UsersDeleteControllerTest < RequestTestCase
     @id = user.id
     @user_count = User.count
   end
+
+  # - - - - - - - - - -
   
   context "anonymous user : delete /users" do
-    before :all do
-      setup_for_deletion
+    before do
       delete "/users/#{@id}"
     end
     
@@ -23,8 +24,7 @@ class UsersDeleteControllerTest < RequestTestCase
   end
   
   context "incorrect user : delete /users" do
-    before :all do
-      setup_for_deletion
+    before do
       delete "/users/#{@id}", :api_key => "does_not_exist_in_database"
     end
     
@@ -33,8 +33,7 @@ class UsersDeleteControllerTest < RequestTestCase
   end
   
   context "unconfirmed user : delete /users" do
-    before :all do
-      setup_for_deletion
+    before do
       delete "/users/#{@id}", :api_key => @unconfirmed_user.primary_api_key
     end
     
@@ -43,18 +42,18 @@ class UsersDeleteControllerTest < RequestTestCase
   end
   
   context "confirmed user : delete /users" do
-    before :all do
-      setup_for_deletion
+    before do
       delete "/users/#{@id}", :api_key => @confirmed_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
     use "unchanged user count"
   end
-  
+
+  # - - - - - - - - - -
+
   context "admin user : delete /users" do
-    before :all do
-      setup_for_deletion
+    before do
       delete "/users/#{@id}", :api_key => @admin_user.primary_api_key
     end
     
@@ -70,10 +69,11 @@ class UsersDeleteControllerTest < RequestTestCase
       assert_equal nil, User.find_by_id(@id)
     end
   end
+  
+  # - - - - - - - - - -
 
   context "admin user : double delete /users" do
-    before :all do
-      setup_for_deletion
+    before do
       delete "/users/#{@id}", :api_key => @admin_user.primary_api_key
       delete "/users/#{@id}", :api_key => @admin_user.primary_api_key
     end

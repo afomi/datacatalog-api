@@ -2,17 +2,20 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper
 
 class UsersGetOneControllerTest < RequestTestCase
 
-  def create_example_user
-    User.create({
-      :name    => "Example User",
-      :email   => "example.user@email.com",
+  before do
+    user = User.create({
+      :name    => "Find Me",
+      :email   => "find.me@email.com",
       :purpose => "User account for Web application"
     })
+    @id = user.id
+    @fake_id = get_fake_mongo_object_id
   end
+
+  # - - - - - - - - - -
   
   context "anonymous user : get /users/:id" do
-    before :all do
-      @id = create_example_user.id
+    before do
       get "/users/#{@id}"
     end
     
@@ -20,8 +23,7 @@ class UsersGetOneControllerTest < RequestTestCase
   end
   
   context "incorrect user : get /users/:id" do
-    before :all do
-      @id = create_example_user.id
+    before do
       get "/users/#{@id}", :api_key => "does_not_exist_in_database"
     end
     
@@ -29,8 +31,7 @@ class UsersGetOneControllerTest < RequestTestCase
   end
   
   context "unconfirmed user : get /users/:id" do
-    before :all do
-      @id = create_example_user.id
+    before do
       get "/users/#{@id}", :api_key => @unconfirmed_user.primary_api_key
     end
     
@@ -38,17 +39,17 @@ class UsersGetOneControllerTest < RequestTestCase
   end
   
   context "confirmed user : get /users/:id" do
-    before :all do
-      @id = create_example_user.id
+    before do
       get "/users/#{@id}", :api_key => @confirmed_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
   end
 
+  # - - - - - - - - - -
+
   context "admin user : get /users/:fake_id : not found" do
-    before :all do
-      @fake_id = get_fake_mongo_object_id
+    before do
       get "/users/#{@fake_id}", :api_key => @admin_user.primary_api_key
     end
     
@@ -56,14 +57,10 @@ class UsersGetOneControllerTest < RequestTestCase
     use "return an empty response body"
   end
 
+  # - - - - - - - - - -
+
   context "admin user : get /users/:id : found" do
-    before :all do
-      user = User.create({
-        :name    => "Find Me",
-        :email   => "find.me@email.com",
-        :purpose => "User account for Web application"
-      })
-      @id = user.id
+    before do
       get "/users/#{@id}", :api_key => @admin_user.primary_api_key
     end
     
