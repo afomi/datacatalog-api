@@ -2,15 +2,16 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper
 
 class SourcesDeleteControllerTest < RequestTestCase
 
-  def setup_for_deletion
+  before do
     source = Source.create :url => "http://dc.gov/busses"
     @id = source.id
     @source_count = Source.count
   end
 
+  # - - - - - - - - - -
+
   context "anonymous user : delete /sources" do
-    before :all do
-      setup_for_deletion
+    before do
       delete "/sources/#{@id}"
     end
 
@@ -19,8 +20,7 @@ class SourcesDeleteControllerTest < RequestTestCase
   end
 
   context "incorrect user : delete /sources" do
-    before :all do
-      setup_for_deletion
+    before do
       delete "/sources/#{@id}", :api_key => "does_not_exist_in_database"
     end
 
@@ -29,8 +29,7 @@ class SourcesDeleteControllerTest < RequestTestCase
   end
 
   context "unconfirmed user : delete /sources" do
-    before :all do
-      setup_for_deletion
+    before do
       delete "/sources/#{@id}", :api_key => @unconfirmed_user.primary_api_key
     end
 
@@ -39,8 +38,7 @@ class SourcesDeleteControllerTest < RequestTestCase
   end
 
   context "confirmed user : delete /sources" do
-    before :all do
-      setup_for_deletion
+    before do
       delete "/sources/#{@id}", :api_key => @confirmed_user.primary_api_key
     end
 
@@ -48,9 +46,10 @@ class SourcesDeleteControllerTest < RequestTestCase
     use "unchanged source count"
   end
 
+  # - - - - - - - - - -
+
   context "admin user : delete /sources" do
-    before :all do
-      setup_for_deletion
+    before do
       delete "/sources/#{@id}", :api_key => @admin_user.primary_api_key
     end
 
@@ -68,8 +67,7 @@ class SourcesDeleteControllerTest < RequestTestCase
   end
 
   context "admin user : double delete /users" do
-    before :all do
-      setup_for_deletion
+    before do
       delete "/sources/#{@id}", :api_key => @admin_user.primary_api_key
       delete "/sources/#{@id}", :api_key => @admin_user.primary_api_key
     end

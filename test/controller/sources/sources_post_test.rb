@@ -2,41 +2,92 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper
 
 class SourcesPostControllerTest < RequestTestCase
 
+  before do
+    @source_count = Source.count
+  end
+
+  # - - - - - - - - - -
+
   context "anonymous user : post /sources" do
-    before :all do
+    before do
       post '/sources'
     end
     
     use "return 401 because the API key is missing"
+    use "unchanged source count"
   end
   
   context "incorrect user : post /sources" do
-    before :all do
+    before do
       post '/sources', :api_key => "does_not_exist_in_database"
     end
     
     use "return 401 because the API key is invalid"
+    use "unchanged source count"
   end
   
   context "unconfirmed user : post /sources" do
-    before :all do
+    before do
       post '/sources', :api_key => @unconfirmed_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
+    use "unchanged source count"
   end
   
   context "confirmed user : post /sources" do
-    before :all do
+    before do
       post '/sources', :api_key => @confirmed_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
+    use "unchanged source count"
   end
   
+  # - - - - - - - - - -
+
+  context "admin user : post /sources with protected param" do
+    before do
+      post '/sources', {
+        :api_key    => @admin_user.primary_api_key,
+        :url        => "http://data.gov/sources/A",
+        :updated_at => Time.now.to_json
+      }
+    end
+  
+    use "return 400 Bad Request"
+    use "unchanged source count"
+  
+    test "body should say updated_at is an invalid param" do
+      assert_include "errors", parsed_response_body
+      assert_include "invalid_params", parsed_response_body["errors"]
+      assert_include "updated_at", parsed_response_body["errors"]["invalid_params"]
+    end
+  end
+  
+  context "admin user : post /sources with extra param" do
+    before do
+      post '/sources', {
+        :api_key => @admin_user.primary_api_key,
+        :url     => "http://data.gov/sources/A",
+        :extra   => "This is an extra parameter (junk)"
+      }
+    end
+  
+    use "return 400 Bad Request"
+    use "unchanged source count"
+  
+    test "body should explain the problem" do
+      assert_include "errors", parsed_response_body
+      assert_include "invalid_params", parsed_response_body["errors"]
+      assert_include "extra", parsed_response_body["errors"]["invalid_params"]
+    end
+  end
+  
+  # - - - - - - - - - -
+  
   context "admin user : post /sources with correct params" do
-    before :all do
-      @source_count = Source.count
+    before do
       post '/sources', {
         :api_key   => @admin_user.primary_api_key,
         :url       => "http://data.gov/sources/A"
@@ -60,28 +111,6 @@ class SourcesPostControllerTest < RequestTestCase
     test "url should be correct in database" do
       source = Source.find_by_id(parsed_response_body["id"])
       assert_equal "http://data.gov/sources/A", source.url
-    end
-  end
-  
-  # Not applicable at present
-  # context "admin user : post /sources with protected param" do
-  # end
-
-  context "admin user : post /sources with extra param" do
-    before :all do
-      post '/sources', {
-        :api_key => @admin_user.primary_api_key,
-        :url     => "http://data.gov/sources/A",
-        :extra   => "This is an extra parameter (junk)"
-      }
-    end
-  
-    use "return 400 Bad Request"
-  
-    test "body should explain the problem" do
-      assert_include "errors", parsed_response_body
-      assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "extra", parsed_response_body["errors"]["invalid_params"]
     end
   end
 

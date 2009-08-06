@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper
 class SourcesGetAllControllerTest < RequestTestCase
   
   context "anonymous user : get /sources" do
-    before :all do
+    before do
       get '/sources'
     end
     
@@ -11,7 +11,7 @@ class SourcesGetAllControllerTest < RequestTestCase
   end
   
   context "incorrect user : get /sources" do
-    before :all do
+    before do
       get '/sources', :api_key => "does_not_exist_in_database"
     end
     
@@ -19,7 +19,7 @@ class SourcesGetAllControllerTest < RequestTestCase
   end
 
   context "unconfirmed user : get /sources" do
-    before :all do
+    before do
       get '/sources', :api_key => @unconfirmed_user.primary_api_key
     end
     
@@ -27,15 +27,17 @@ class SourcesGetAllControllerTest < RequestTestCase
   end
   
   context "confirmed user : get /sources" do
-    before :all do
+    before do
       get '/sources', :api_key => @confirmed_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
   end
 
+  # - - - - - - - - - -
+
   context "admin user : get /sources : 0" do
-    before :all do
+    before do
       get '/sources', :api_key => @admin_user.primary_api_key
     end
     
@@ -44,7 +46,7 @@ class SourcesGetAllControllerTest < RequestTestCase
   end
   
   context "admin user : get /sources : 2" do
-    before :all do
+    before do
       Source.create :url => "http://data.gov/sources/A"
       Source.create :url => "http://data.gov/sources/B"
       get '/sources', :api_key => @admin_user.primary_api_key
@@ -58,25 +60,23 @@ class SourcesGetAllControllerTest < RequestTestCase
       assert_equal "http://data.gov/sources/A", parsed_response_body[0]["url"]
       assert_equal "http://data.gov/sources/B", parsed_response_body[1]["url"]
     end
+    
+    2.times do |n|
+      test "element #{n} should have created_at" do
+        assert_include "created_at", parsed_response_body[n]
+      end
         
-    test "body should have created_at" do
-      assert_include "created_at", parsed_response_body[0]
-      assert_include "created_at", parsed_response_body[1]
-    end
-        
-    test "body should have updated_at" do
-      assert_include "updated_at", parsed_response_body[0]
-      assert_include "updated_at", parsed_response_body[1]
-    end
+      test "element #{n} should have updated_at" do
+        assert_include "updated_at", parsed_response_body[n]
+      end
   
-    test "body should have id" do
-      assert_include "id", parsed_response_body[0]
-      assert_include "id", parsed_response_body[1]
-    end
+      test "element #{n} should have id" do
+        assert_include "id", parsed_response_body[n]
+      end
         
-    test "body should not have _id" do
-      assert_not_include "_id", parsed_response_body[0]
-      assert_not_include "_id", parsed_response_body[1]
+      test "element #{n} should not have _id" do
+        assert_not_include "_id", parsed_response_body[n]
+      end
     end
   end
 

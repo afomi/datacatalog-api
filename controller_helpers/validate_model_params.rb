@@ -1,5 +1,8 @@
 def validate_source_params
-  validate_params Source, []
+  validate_params Source, %w(
+    created_at
+    updated_at
+  )
 end
 
 def validate_user_params
