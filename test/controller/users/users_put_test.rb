@@ -16,6 +16,14 @@ class UsersPutControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
+  shared "unchanged email in database" do
+    test "email should be unchanged in database" do
+      assert_equal "original.guy@email.com", @user.email
+    end
+  end
+
+  # - - - - - - - - - -
+  
   context "anonymous user : put /users" do
     before do
       put "/users/#{@id}"
@@ -68,17 +76,14 @@ class UsersPutControllerTest < RequestTestCase
     use "return 404 Not Found"
     use "return an empty response body"
     use "unchanged user count"
+    use "unchanged email in database"
   
     test "name should be unchanged in database" do
       assert_equal "Original Guy", @user.name
     end
-      
-    test "email should be unchanged in database" do
-      assert_equal "original.guy@email.com", @user.email
-    end
   end
 
-  context "admin user : put /users : create : extra params" do
+  context "admin user : put /users : create : extra param" do
     before do
       put "/users/#{@fake_id}", {
         :api_key => @admin_user.primary_api_key,
@@ -92,13 +97,10 @@ class UsersPutControllerTest < RequestTestCase
     use "return 404 Not Found"
     use "return an empty response body"
     use "unchanged user count"
+    use "unchanged email in database"
   
     test "name should be unchanged in database" do
       assert_equal "Original Guy", @user.name
-    end
-      
-    test "email should be unchanged in database" do
-      assert_equal "original.guy@email.com", @user.email
     end
   end
   
@@ -117,8 +119,9 @@ class UsersPutControllerTest < RequestTestCase
   
     use "return 400 Bad Request"
     use "unchanged user count"
+    use "unchanged email in database"
   
-    test "body should say confirm is an invalid param" do
+    test "body should say 'confirmed' is an invalid param" do
       assert_include "errors", parsed_response_body
       assert_include "invalid_params", parsed_response_body["errors"]
       assert_include "confirmed", parsed_response_body["errors"]["invalid_params"]
@@ -126,10 +129,6 @@ class UsersPutControllerTest < RequestTestCase
   
     test "name should be unchanged in database" do
       assert_equal "Original Guy", @user.name
-    end
-      
-    test "email should be unchanged in database" do
-      assert_equal "original.guy@email.com", @user.email
     end
   end
   
@@ -146,8 +145,9 @@ class UsersPutControllerTest < RequestTestCase
   
     use "return 400 Bad Request"
     use "unchanged user count"
+    use "unchanged email in database"
 
-    test "body should say extra is an invalid param" do
+    test "body should say 'extra' is an invalid param" do
       assert_include "errors", parsed_response_body
       assert_include "invalid_params", parsed_response_body["errors"]
       assert_include "extra", parsed_response_body["errors"]["invalid_params"]
@@ -155,10 +155,6 @@ class UsersPutControllerTest < RequestTestCase
   
     test "name should be unchanged in database" do
       assert_equal "Original Guy", @user.name
-    end
-      
-    test "email should be unchanged in database" do
-      assert_equal "original.guy@email.com", @user.email
     end
   end
   
@@ -177,13 +173,10 @@ class UsersPutControllerTest < RequestTestCase
     use "return 404 Not Found"
     use "return an empty response body"
     use "unchanged user count"
+    use "unchanged email in database"
     
     test "name should be unchanged in database" do
       assert_equal "Original Guy", @user.name
-    end
-      
-    test "email should be unchanged in database" do
-      assert_equal "original.guy@email.com", @user.email
     end
   end
 

@@ -12,6 +12,14 @@ class SourcesPutControllerTest < RequestTestCase
   end
 
   # - - - - - - - - - -
+  
+  shared "unchanged url in database" do
+    test "url should be unchanged in database" do
+      assert_equal "http://dc.gov/original", @source.url
+    end
+  end
+
+  # - - - - - - - - - -
 
   context "anonymous user : put /sources" do
     before do
@@ -54,21 +62,19 @@ class SourcesPutControllerTest < RequestTestCase
   context "admin user : put /sources : attempt to create : protected param" do
     before do
       put "/sources/#{@fake_id}", {
-        :api_key => @admin_user.primary_api_key,
-        :url     => "http://dc.gov/new"
+        :api_key    => @admin_user.primary_api_key,
+        :url        => "http://dc.gov/new",
+        :created_at => Time.now.to_json
       }
     end
   
     use "return 404 Not Found"
     use "return an empty response body"
     use "unchanged source count"
-  
-    test "name should be unchanged in database" do
-      assert_equal "http://dc.gov/original", @source.url
-    end
+    use "unchanged url in database"
   end
 
-  context "admin user : put /sources : attempt to create : extra params" do
+  context "admin user : put /sources : attempt to create : extra param" do
     before do
       put "/sources/#{@fake_id}", {
         :api_key => @admin_user.primary_api_key,
@@ -80,10 +86,7 @@ class SourcesPutControllerTest < RequestTestCase
     use "return 404 Not Found"
     use "return an empty response body"
     use "unchanged source count"
-  
-    test "name should be unchanged in database" do
-      assert_equal "http://dc.gov/original", @source.url
-    end
+    use "unchanged url in database"
   end
   
   context "admin user : put /sources : attempt to create : correct params" do
@@ -97,10 +100,7 @@ class SourcesPutControllerTest < RequestTestCase
     use "return 404 Not Found"
     use "return an empty response body"
     use "unchanged source count"
-  
-    test "name should be unchanged in database" do
-      assert_equal "http://dc.gov/original", @source.url
-    end
+    use "unchanged url in database"
   end
   
   # - - - - - - - - - -
@@ -116,15 +116,12 @@ class SourcesPutControllerTest < RequestTestCase
   
     use "return 400 Bad Request"
     use "unchanged source count"
+    use "unchanged url in database"
   
-    test "body should say updated_at is an invalid param" do
+    test "body should say 'updated_at' is an invalid param" do
       assert_include "errors", parsed_response_body
       assert_include "invalid_params", parsed_response_body["errors"]
       assert_include "updated_at", parsed_response_body["errors"]["invalid_params"]
-    end
-  
-    test "name should be unchanged in database" do
-      assert_equal "http://dc.gov/original", @source.url
     end
   end
   
@@ -139,15 +136,12 @@ class SourcesPutControllerTest < RequestTestCase
   
     use "return 400 Bad Request"
     use "unchanged source count"
+    use "unchanged url in database"
   
-    test "body should say extra is an invalid param" do
+    test "body should say 'extra' is an invalid param" do
       assert_include "errors", parsed_response_body
       assert_include "invalid_params", parsed_response_body["errors"]
       assert_include "extra", parsed_response_body["errors"]["invalid_params"]
-    end
-  
-    test "name should be unchanged in database" do
-      assert_equal "http://dc.gov/original", @source.url
     end
   end
 
@@ -165,7 +159,7 @@ class SourcesPutControllerTest < RequestTestCase
     use "return timestamps and id in body"
     use "unchanged source count"
   
-    test "name should be updated in database" do
+    test "url should be updated in database" do
       source = Source.find_by_id(@id)
       assert_equal "http://dc.gov/new", source.url
     end
