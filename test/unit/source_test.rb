@@ -4,11 +4,14 @@ class SourceUnitTest < ModelTestCase
   
   context "updating a Source" do
     
-    before :all do
+    before do
       reset_sources
       doc = Source.create(:url => "http://original.gov")
-      @original = doc.dup
-      
+      @original_id = doc._id
+      @original_created_at = doc.created_at
+      @original_updated_at = doc.updated_at
+
+      sleep_enough_for_mongo_timestamps_to_differ
       doc.url = "http://updated.gov"
       doc.save
       @updated = doc
@@ -19,15 +22,15 @@ class SourceUnitTest < ModelTestCase
     end
 
     test "should have an unchanged created_at" do
-      assert_equal @original.created_at, @updated.created_at
+      assert_equal_mongo_times @original_created_at, @updated.created_at
     end
 
     test "body should have an updated updated_at" do
-      assert_not_equal @original.updated_at, @updated.updated_at
+      assert_different_mongo_times @original_updated_at, @updated.updated_at
     end
     
     test "body should have an unchanged _id" do
-      assert_equal @original._id, @updated._id
+      assert_equal @original_id, @updated._id
     end
 
   end

@@ -1,7 +1,13 @@
 module VariousHelpers
   
-  def wait_long_enough_to_change_timestamp
-    sleep 1.0
+  def sleep_enough_for_mongo_timestamps_to_differ
+    delay = Test::Unit::Assertions::MONGODB_TIME_GRANULARITY
+    sleep delay
+  end
+
+  def sleep_enough_for_json_timestamps_to_differ
+    delay = Test::Unit::Assertions::JSON_TIME_GRANULARITY
+    sleep delay
   end
 
   # Returns a well-formed document id that does not correspond to
