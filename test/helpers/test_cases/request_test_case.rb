@@ -14,21 +14,20 @@ class RequestTestCase < Test::Unit::TestCase
     @admin_user       = create_admin_user
     @confirmed_user   = create_confirmed_user
     @unconfirmed_user = create_unconfirmed_user
-
     reset_sources
   end
-  
+
   class << self
-    alias original_context context
     
+    alias context_ context
+
     def context(name, &block)
-      klass = original_context(name, &block)
+      klass = context_(name, &block)
       klass.class_eval do
-        test "should have JSON content type" do
-          assert_equal "application/json", last_response.headers["Content-Type"]
-        end
+        use "return JSON"
       end
     end
+    
   end
 
 end
