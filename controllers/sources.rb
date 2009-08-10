@@ -8,11 +8,8 @@ get '/sources/:id' do |id|
   validate_admin_privileges
   id = params.delete("id")
   source = Source.find_by_id(id)
-  if source
-    source.to_json
-  else
-    error 404, [].to_json
-  end
+  error 404, [].to_json unless source
+  source.to_json
 end
 
 post '/sources' do
@@ -27,9 +24,7 @@ put '/sources/:id' do
   validate_admin_privileges
   id = params.delete("id")
   source = Source.find_by_id(id)
-  unless source
-    error 404, [].to_json
-  end
+  error 404, [].to_json unless source
   validate_source_params
   source = Source.update(id, params)
   source.to_json
@@ -39,9 +34,7 @@ delete '/sources/:id' do
   validate_admin_privileges
   id = params.delete("id")
   source = Source.find_by_id(id)
-  unless source
-    error 404, [].to_json
-  end
+  error 404, [].to_json unless source
   source.destroy
   { "id" => id }.to_json
 end
