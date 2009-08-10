@@ -10,6 +10,7 @@ class UsersDeleteControllerTest < RequestTestCase
     })
     @id = user.id
     @user_count = User.count
+    @fake_id = get_fake_mongo_object_id
   end
 
   # - - - - - - - - - -
@@ -52,7 +53,19 @@ class UsersDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : delete /users" do
+  context "admin user : delete /users/:fake_id" do
+    before do
+      delete "/users/#{@fake_id}", :api_key => @admin_user.primary_api_key
+    end
+
+    use "return 404 Not Found"
+    use "unchanged user count"
+    use "return an empty response body"
+  end
+
+  # - - - - - - - - - -
+
+  context "admin user : delete /users/:id" do
     before do
       delete "/users/#{@id}", :api_key => @admin_user.primary_api_key
     end
@@ -72,7 +85,7 @@ class UsersDeleteControllerTest < RequestTestCase
   
   # - - - - - - - - - -
 
-  context "admin user : double delete /users" do
+  context "admin user : double delete /users/:id" do
     before do
       delete "/users/#{@id}", :api_key => @admin_user.primary_api_key
       delete "/users/#{@id}", :api_key => @admin_user.primary_api_key
