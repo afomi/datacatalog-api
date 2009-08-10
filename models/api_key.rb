@@ -4,6 +4,12 @@ class ApiKey
   
   key :api_key, String
   key :purpose, String
+  key :created_at, Time
+
+  def initialize(attrs={})
+    super
+    write_attribute('created_at', Time.now.utc)
+  end
 
   alias original_to_json to_json
   def to_json(options = nil)

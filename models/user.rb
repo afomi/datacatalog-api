@@ -4,7 +4,8 @@ class User
   
   include MongoMapper::Document
 
-  many :api_keys #, :index => true
+  many :api_keys
+  ensure_index 'api_keys.api_key' # not tested
 
   key :name,            String
   key :email,           String,  :index => true

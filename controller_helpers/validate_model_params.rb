@@ -16,6 +16,13 @@ def validate_user_params
   )
 end
 
+def validate_api_key_params
+  validate_params ApiKey, %w(
+    api_key
+    created_at
+  )
+end
+
 def validate_params(model, invalid_keys)
   all_keys = model.keys.keys
   valid_params = all_keys - invalid_keys
