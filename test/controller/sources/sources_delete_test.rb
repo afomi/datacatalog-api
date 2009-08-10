@@ -6,6 +6,7 @@ class SourcesDeleteControllerTest < RequestTestCase
     source = Source.create :url => "http://dc.gov/busses"
     @id = source.id
     @source_count = Source.count
+    @fake_id = get_fake_mongo_object_id
   end
 
   # - - - - - - - - - -
@@ -48,7 +49,19 @@ class SourcesDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : delete /sources" do
+  context "admin user : delete /sources/:fake_id" do
+    before do
+      delete "/sources/#{@fake_id}", :api_key => @admin_user.primary_api_key
+    end
+
+    use "return 404 Not Found"
+    use "return an empty response body"
+    use "unchanged source count"
+  end
+
+  # - - - - - - - - - -
+
+  context "admin user : delete /sources/:id" do
     before do
       delete "/sources/#{@id}", :api_key => @admin_user.primary_api_key
     end
@@ -73,8 +86,8 @@ class SourcesDeleteControllerTest < RequestTestCase
     end
     
     use "return 404 Not Found"
-    use "decremented source count"
     use "return an empty response body"
+    use "decremented source count"
   
     test "source should be deleted in database" do
       assert_equal nil, Source.find_by_id(@id)
