@@ -1,11 +1,11 @@
 class RequestTestCase
 
-  # Please note that this is intentionally *not* an authentication
-  # error. It is the result of passing an API key when it is not
-  # allowed. In order words, some actions can only be done
-  # anonymously.
   shared "return 400 because the API key is not allowed" do
     use "return 400 Bad Request"
+    # Please note that this is intentionally *not* an authentication
+    # error. It is the result of passing an API key when it is not
+    # allowed. In order words, some actions can only be done
+    # anonymously.
     
     test "body should say the API key is an invalid param" do
       assert_include "errors", parsed_response_body
