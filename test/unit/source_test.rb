@@ -5,7 +5,7 @@ class SourceUnitTest < ModelTestCase
   context "updating a Source" do
     
     before do
-      reset_sources
+      Source.destroy_all
       doc = Source.create(:url => "http://original.gov")
       @original_id = doc._id
       @original_created_at = doc.created_at

@@ -1,13 +1,5 @@
 module ModelHelpers
   
-  def reset_sources
-    Source.destroy_all
-  end
-
-  def reset_users
-    User.destroy_all
-  end
-  
   def create_unconfirmed_user
     key = ApiKey.new(:api_key => "unconfirmed-2cd9e3e746a36d098181c15ff66d")
     User.create({
