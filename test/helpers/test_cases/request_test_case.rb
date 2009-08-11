@@ -10,8 +10,9 @@ class RequestTestCase < Test::Unit::TestCase
   include RequestHelpers
 
   before :all do
-    Source.destroy_all
+    Comment.destroy_all
     Document.destroy_all
+    Source.destroy_all
     User.destroy_all
     @admin_user       = create_admin_user
     @confirmed_user   = create_confirmed_user
