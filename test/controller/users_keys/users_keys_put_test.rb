@@ -142,6 +142,8 @@ class UsersKeysPutControllerTest < RequestTestCase
         
         context "admin user : put /users/:id/keys/:id : update : extra param" do
           before do
+            stubbed_time = Time.now + 10
+            stub(Time).now {stubbed_time}
             @original_created_at = @user.api_keys[n].created_at.dup
             put "/users/#{@user.id}/keys/#{@keys[n].id}", {
               :api_key => @admin_user.primary_api_key,

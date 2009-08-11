@@ -2,6 +2,7 @@ require 'rubygems'
 require 'test/unit'
 require 'rack/test'
 require 'json'
+require 'rr'
 
 gem 'djsun-context', '>= 0.5.5'
 require 'context'
@@ -16,6 +17,10 @@ require_dir 'test/helpers/shared'
 
 require_file 'config/config'
 Config.environment = :test
+
+class Test::Unit::TestCase
+  include RR::Adapters::TestUnit
+end
 
 # If you use `rake test` the database will automatically get dropped.
 # If you are running tests outside of rake (e.g. in TextMate), you
