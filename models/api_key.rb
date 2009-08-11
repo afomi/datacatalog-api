@@ -8,7 +8,7 @@ class ApiKey
 
   def initialize(attrs={})
     super
-    write_attribute('created_at', Time.now.utc)
+    write_attribute('created_at', Time.now.utc) unless read_attribute('created_at')
   end
 
   alias original_to_json to_json
