@@ -125,8 +125,8 @@ class UsersKeysPostControllerTest < RequestTestCase
   
     test "location header should point to new resource" do
       assert_include "Location", last_response.headers
-      new_user_uri = "http://localhost:4567/users/#{@id}/keys/#{parsed_response_body["id"]}"
-      assert_equal new_user_uri, last_response.headers["Location"]
+      new_uri = "http://localhost:4567/users/#{@id}/keys/#{parsed_response_body["id"]}"
+      assert_equal new_uri, last_response.headers["Location"]
     end
     
     test "body should have correct purpose" do
