@@ -11,6 +11,7 @@ class RequestTestCase < Test::Unit::TestCase
 
   before :all do
     Source.destroy_all
+    Document.destroy_all
     User.destroy_all
     @admin_user       = create_admin_user
     @confirmed_user   = create_confirmed_user
