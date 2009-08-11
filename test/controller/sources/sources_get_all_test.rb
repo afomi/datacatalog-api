@@ -45,23 +45,24 @@ class SourcesGetAllControllerTest < RequestTestCase
     use "return an empty response body"
   end
   
-  context "admin user : get /sources : 2" do
+  context "admin user : get /sources : 3" do
     before do
-      Source.create :url => "http://data.gov/sources/A"
-      Source.create :url => "http://data.gov/sources/B"
+      3.times do |n|
+        Source.create :url => "http://data.gov/#{n}"
+      end
       get '/sources', :api_key => @admin_user.primary_api_key
     end
     
-    test "body should have 2 top level elements" do
-      assert_equal 2, parsed_response_body.length
+    test "body should have 3 top level elements" do
+      assert_equal 3, parsed_response_body.length
     end
   
     test "body should have correct urls" do
-      assert_equal "http://data.gov/sources/A", parsed_response_body[0]["url"]
-      assert_equal "http://data.gov/sources/B", parsed_response_body[1]["url"]
+      actual = (0 ... 3).map { |n| parsed_response_body[n]["url"] }
+      3.times { |n| assert_include "http://data.gov/#{n}", actual }
     end
     
-    2.times do |n|
+    3.times do |n|
       test "element #{n} should have created_at" do
         assert_include "created_at", parsed_response_body[n]
       end

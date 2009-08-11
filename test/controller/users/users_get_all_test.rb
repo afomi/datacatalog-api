@@ -48,30 +48,21 @@ class UsersGetAllControllerTest < RequestTestCase
     end
 
     test "elements should have correct names" do
-      names = []
-      names << parsed_response_body[0]["name"]
-      names << parsed_response_body[1]["name"]
-      names << parsed_response_body[2]["name"]
+      names = (0 ... 3).map { |n| parsed_response_body[n]["name"] }
       assert_include "Mr. Unconfirmed", names
       assert_include "Dr. Confirmed",   names
       assert_include "Admin",           names
     end
 
     test "elements should have correct emails" do
-      emails = []
-      emails << parsed_response_body[0]["email"]
-      emails << parsed_response_body[1]["email"]
-      emails << parsed_response_body[2]["email"]
+      emails = (0 ... 3).map { |n| parsed_response_body[n]["email"] }
       assert_include "mr.unconfirmed@inter.net", emails
       assert_include "dr.confirmed@inter.net",   emails
       assert_include "admin@inter.net",          emails
     end
     
     test "element should have different API keys" do
-      keys = []
-      keys << parsed_response_body[0]["primary_api_key"]
-      keys << parsed_response_body[1]["primary_api_key"]
-      keys << parsed_response_body[2]["primary_api_key"]
+      keys = (0 ... 3).map { |n| parsed_response_body[n]["primary_api_key"] }
       assert_equal 3, keys.uniq.length
     end
 
