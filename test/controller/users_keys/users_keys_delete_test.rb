@@ -32,9 +32,7 @@ class UsersKeysDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  1.times do |n|
-  # 
-  # 3.times do |n|
+  3.times do |n|
     context_ "API key #{n}" do
       context "anonymous user : delete /users/:id/keys/:id" do
         before do
