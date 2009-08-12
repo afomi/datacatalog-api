@@ -20,7 +20,35 @@ class RootControllerTest < RequestTestCase
       get '/'
     end
 
-    use "return information about the API"
+    use "return 200 Ok"
+
+    test "body has name" do
+      assert_equal "National Data Catalog API", parsed_response_body["name"]
+    end
+    
+    test "body has correct creator" do
+      assert_equal "The Sunlight Labs", parsed_response_body["creator"]
+    end
+    
+    test "body has correct version" do
+      assert_equal "0.10", parsed_response_body["version"]
+    end
+    
+    test "body has list of resources" do
+      assert_include "resources", parsed_response_body
+      resources = parsed_response_body["resources"]
+      assert_include "/"             , resources
+      assert_include "checkup"       , resources
+    end
+    
+    test "body contains only the expected keys" do
+      assert_equal [], parsed_response_body.keys - %w(
+        name
+        creator
+        version
+        resources
+      )
+    end
   end
   
   context "incorrect user : get /" do

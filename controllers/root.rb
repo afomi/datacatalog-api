@@ -4,8 +4,9 @@ get '/' do
     "name"      => "National Data Catalog API",
     "creator"   => "The Sunlight Labs",
     "version"   => "0.10",
-    "resources" => [
-      { "sources" => full_uri("sources") }
-    ]
+    "resources" => {
+      "/"       => full_uri("/"),
+      "checkup" => full_uri("checkup"),
+    }
   }.to_json
 end
