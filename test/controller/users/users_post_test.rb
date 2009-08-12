@@ -46,34 +46,55 @@ class UsersPostControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : post /users with protected param" do
+  context "admin user : post /users : protected param 'admin'" do
     before do
       post '/users', {
         :api_key   => @admin_user.primary_api_key,
         :name      => "John Doe",
         :email     => "john.doe@email.com",
         :purpose   => "User account for Web application",
-        :confirmed => "true"
+        :admin     => true
       }
     end
   
     use "return 400 Bad Request"
   
-    test "body should say 'confirmed' is an invalid param" do
+    test "body should say 'admin' is an invalid param" do
       assert_include "errors", parsed_response_body
       assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "confirmed", parsed_response_body["errors"]["invalid_params"]
+      assert_include "admin", parsed_response_body["errors"]["invalid_params"]
+    end
+  end
+
+  context "admin user : post /users : protected param 'creator_api_key'" do
+    before do
+      post '/users', {
+        :api_key         => @admin_user.primary_api_key,
+        :name            => "John Doe",
+        :email           => "john.doe@email.com",
+        :purpose         => "User account for Web application",
+        :admin           => true,
+        :creator_api_key => get_fake_api_key("John Doe")
+      }
+    end
+  
+    use "return 400 Bad Request"
+  
+    test "body should say 'creator_api_key' is an invalid param" do
+      assert_include "errors", parsed_response_body
+      assert_include "invalid_params", parsed_response_body["errors"]
+      assert_include "creator_api_key", parsed_response_body["errors"]["invalid_params"]
     end
   end
   
-  context "admin user : post /users with extra param" do
+  context "admin user : post /users : extra param 'junk'" do
     before do
       post '/users', {
         :api_key   => @admin_user.primary_api_key,
         :name    => "John Doe",
         :email   => "john.doe@email.com",
         :purpose => "User account for Web application",
-        :extra   => "This is an extra parameter (junk)"
+        :junk    => "This is an extra parameter (junk)"
       }
     end
   
@@ -82,13 +103,13 @@ class UsersPostControllerTest < RequestTestCase
     test "body should say 'extra' is an invalid param" do
       assert_include "errors", parsed_response_body
       assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "extra", parsed_response_body["errors"]["invalid_params"]
+      assert_include "junk", parsed_response_body["errors"]["invalid_params"]
     end
   end
 
   # - - - - - - - - - -
   
-  context "admin user : post /users with correct params" do
+  context "admin user : post /users : correct params" do
     before do
       post '/users', {
         :api_key   => @admin_user.primary_api_key,

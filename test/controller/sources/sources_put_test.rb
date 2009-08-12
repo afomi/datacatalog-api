@@ -74,12 +74,12 @@ class SourcesPutControllerTest < RequestTestCase
     use "unchanged url in database"
   end
 
-  context "admin user : put /sources : attempt to create : extra param" do
+  context "admin user : put /sources : attempt to create : extra param 'junk'" do
     before do
       put "/sources/#{@fake_id}", {
         :api_key => @admin_user.primary_api_key,
         :url     => "http://dc.gov/new",
-        :extra   => "This is an extra parameter (junk)"
+        :junk    => "This is an extra parameter (junk)"
       }
     end
   
@@ -125,12 +125,12 @@ class SourcesPutControllerTest < RequestTestCase
     end
   end
   
-  context "admin user : put /sources : update : extra param" do
+  context "admin user : put /sources : update : extra param 'junk'" do
     before do
       put "/sources/#{@id}", {
         :api_key => @admin_user.primary_api_key,
         :url     => "http://dc.gov/new",
-        :extra   => "This is an extra parameter (junk)"
+        :junk    => "This is an extra parameter (junk)"
       }
     end
   
@@ -138,10 +138,10 @@ class SourcesPutControllerTest < RequestTestCase
     use "unchanged source count"
     use "unchanged url in database"
   
-    test "body should say 'extra' is an invalid param" do
+    test "body should say 'junk' is an invalid param" do
       assert_include "errors", parsed_response_body
       assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "extra", parsed_response_body["errors"]["invalid_params"]
+      assert_include "junk", parsed_response_body["errors"]["invalid_params"]
     end
   end
 

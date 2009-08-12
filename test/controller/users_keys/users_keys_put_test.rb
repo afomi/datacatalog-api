@@ -140,7 +140,7 @@ class UsersKeysPutControllerTest < RequestTestCase
           end
         end
         
-        context "admin user : put /users/:id/keys/:id : update : extra param" do
+        context "admin user : put /users/:id/keys/:id : update : extra param 'junk'" do
           before do
             stubbed_time = Time.now + 10
             stub(Time).now {stubbed_time}
@@ -148,7 +148,7 @@ class UsersKeysPutControllerTest < RequestTestCase
             put "/users/#{@user.id}/keys/#{@keys[n].id}", {
               :api_key => @admin_user.primary_api_key,
               :purpose => "Updated purpose",
-              :extra   => "This is an extra parameter (junk)"
+              :junk    => "This is an extra parameter (junk)"
             }
           end
         
@@ -158,7 +158,7 @@ class UsersKeysPutControllerTest < RequestTestCase
           test "body should say 'extra' is an invalid param" do
             assert_include "errors", parsed_response_body
             assert_include "invalid_params", parsed_response_body["errors"]
-            assert_include "extra", parsed_response_body["errors"]["invalid_params"]
+            assert_include "junk", parsed_response_body["errors"]["invalid_params"]
           end
 
           test "created_at should be unchanged in database" do

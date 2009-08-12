@@ -46,7 +46,7 @@ class CommentsPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
 
-  context "admin user : post /comments with protected param" do
+  context "admin user : post /comments : protected param 'updated_at'" do
     before do
       post '/comments', {
         :api_key    => @admin_user.primary_api_key,
@@ -65,28 +65,28 @@ class CommentsPostControllerTest < RequestTestCase
     end
   end
   
-  context "admin user : post /comments with extra param" do
+  context "admin user : post /comments : extra param 'junk'" do
     before do
       post '/comments', {
         :api_key => @admin_user.primary_api_key,
         :text    => "Comment A",
-        :extra   => "This is an extra parameter (junk)"
+        :junk    => "This is an extra parameter (junk)"
       }
     end
   
     use "return 400 Bad Request"
     use "unchanged comment count"
   
-    test "body should say 'extra' is an invalid param" do
+    test "body should say 'junk' is an invalid param" do
       assert_include "errors", parsed_response_body
       assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "extra", parsed_response_body["errors"]["invalid_params"]
+      assert_include "junk", parsed_response_body["errors"]["invalid_params"]
     end
   end
   
   # - - - - - - - - - -
   
-  context "admin user : post /comments with correct params" do
+  context "admin user : post /comments : correct params" do
     before do
       post '/comments', {
         :api_key => @admin_user.primary_api_key,

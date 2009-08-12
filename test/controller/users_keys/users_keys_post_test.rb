@@ -97,7 +97,7 @@ class UsersKeysPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "admin user : post /users/:fake_id/keys with correct params" do
+  context "admin user : post /users/:fake_id/keys : correct params" do
     before do
       post "/users/#{@fake_id}/keys", {
         :api_key => @admin_user.primary_api_key,
@@ -112,7 +112,7 @@ class UsersKeysPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
 
-  context "admin user : post /users/:id/keys with correct params" do
+  context "admin user : post /users/:id/keys : correct params" do
     before do
       post "/users/#{@id}/keys", {
         :api_key => @admin_user.primary_api_key,
@@ -147,7 +147,7 @@ class UsersKeysPostControllerTest < RequestTestCase
     end
   end
 
-  # context "admin user : post /users/:id/keys with protected param" do
+  # context "admin user : post /users/:id/keys : protected param ''" do
   #
   #   Not applicable...
   #
@@ -156,21 +156,21 @@ class UsersKeysPostControllerTest < RequestTestCase
   # 
   # end
 
-  context "admin user : post /users/:id/keys with extra param" do
+  context "admin user : post /users/:id/keys : extra param 'junk'" do
     before do
       post "/users/#{@id}/keys", {
         :api_key => @admin_user.primary_api_key,
         :purpose => "My special purpose!",
-        :extra   => "This is an extra parameter (junk)"
+        :junk   => "This is an extra parameter (junk)"
       }
     end
     
     use "return 400 Bad Request"
 
-    test "body should say 'extra' is an invalid param" do
+    test "body should say 'junk' is an invalid param" do
       assert_include "errors", parsed_response_body
       assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "extra", parsed_response_body["errors"]["invalid_params"]
+      assert_include "junk", parsed_response_body["errors"]["invalid_params"]
     end
   end
 
