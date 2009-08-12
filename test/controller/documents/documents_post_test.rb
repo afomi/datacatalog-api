@@ -26,18 +26,9 @@ class DocumentsPostControllerTest < RequestTestCase
     use "unchanged document count"
   end
   
-  context "unconfirmed user : post /documents" do
+  context "normal user : post /documents" do
     before do
-      post '/documents', :api_key => @unconfirmed_user.primary_api_key
-    end
-    
-    use "return 401 because the API key is unauthorized"
-    use "unchanged document count"
-  end
-  
-  context "confirmed user : post /documents" do
-    before do
-      post '/documents', :api_key => @confirmed_user.primary_api_key
+      post '/documents', :api_key => @normal_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"

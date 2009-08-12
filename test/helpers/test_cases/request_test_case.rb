@@ -14,9 +14,8 @@ class RequestTestCase < Test::Unit::TestCase
     Document.destroy_all
     Source.destroy_all
     User.destroy_all
-    @admin_user       = create_admin_user
-    @confirmed_user   = create_confirmed_user
-    @unconfirmed_user = create_unconfirmed_user
+    @normal_user = create_normal_user
+    @admin_user = create_admin_user
   end
 
   class << self

@@ -1,7 +1,6 @@
 def validate_user_params
   validate_params User, %w(
     api_keys
-    confirmed
     admin
     creator_api_key
     created_at

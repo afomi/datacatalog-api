@@ -10,7 +10,6 @@ class User
   key :name,            String
   key :email,           String,  :index => true
   key :purpose,         String
-  key :confirmed,       Boolean, :default => false
   key :admin,           Boolean, :default => false
   key :creator_api_key, String
   

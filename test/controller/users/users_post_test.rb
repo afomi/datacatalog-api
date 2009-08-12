@@ -26,18 +26,9 @@ class UsersPostControllerTest < RequestTestCase
     use "unchanged user count"
   end
   
-  context "unconfirmed user : post /users" do
+  context "normal user : post /users" do
     before do
-      post '/users', :api_key => @unconfirmed_user.primary_api_key
-    end
-    
-    use "return 401 because the API key is unauthorized"
-    use "unchanged user count"
-  end
-  
-  context "confirmed user : post /users" do
-    before do
-      post '/users', :api_key => @confirmed_user.primary_api_key
+      post '/users', :api_key => @normal_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"

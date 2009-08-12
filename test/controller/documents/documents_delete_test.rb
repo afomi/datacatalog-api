@@ -29,18 +29,9 @@ class DocumentsDeleteControllerTest < RequestTestCase
     use "unchanged document count"
   end
 
-  context "unconfirmed user : delete /documents" do
+  context "normal user : delete /documents" do
     before do
-      delete "/documents/#{@id}", :api_key => @unconfirmed_user.primary_api_key
-    end
-
-    use "return 401 because the API key is unauthorized"
-    use "unchanged document count"
-  end
-
-  context "confirmed user : delete /documents" do
-    before do
-      delete "/documents/#{@id}", :api_key => @confirmed_user.primary_api_key
+      delete "/documents/#{@id}", :api_key => @normal_user.primary_api_key
     end
 
     use "return 401 because the API key is unauthorized"

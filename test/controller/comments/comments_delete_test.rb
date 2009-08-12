@@ -29,18 +29,9 @@ class CommentsDeleteControllerTest < RequestTestCase
     use "unchanged comment count"
   end
 
-  context "unconfirmed user : delete /comments" do
+  context "normal user : delete /comments" do
     before do
-      delete "/comments/#{@id}", :api_key => @unconfirmed_user.primary_api_key
-    end
-
-    use "return 401 because the API key is unauthorized"
-    use "unchanged comment count"
-  end
-
-  context "confirmed user : delete /comments" do
-    before do
-      delete "/comments/#{@id}", :api_key => @confirmed_user.primary_api_key
+      delete "/comments/#{@id}", :api_key => @normal_user.primary_api_key
     end
 
     use "return 401 because the API key is unauthorized"

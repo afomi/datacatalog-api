@@ -55,20 +55,10 @@ class UsersKeysDeleteControllerTest < RequestTestCase
         use "unchanged api_key count"
       end
 
-      context "unconfirmed user : delete /users/:id/keys/:id" do
+      context "normal user : delete /users/:id/keys/:id" do
         before do
           delete "/users/#{@user.id}/keys/#{@keys[n].id}",
-            :api_key => @unconfirmed_user.primary_api_key
-        end
-    
-        use "return 401 because the API key is unauthorized"
-        use "unchanged api_key count"
-      end
-      
-      context "unconfirmed user : delete /users/:id/keys/:id" do
-        before do
-          delete "/users/#{@user.id}/keys/#{@keys[n].id}",
-            :api_key => @unconfirmed_user.primary_api_key
+            :api_key => @normal_user.primary_api_key
         end
     
         use "return 401 because the API key is unauthorized"

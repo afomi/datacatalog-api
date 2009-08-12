@@ -9,7 +9,6 @@ namespace :db do
     user = User.create({
       :name      => "National Data Catalog",
       :email     => "ndc@sunlightlabs.com",
-      :confirmed => true,
       :admin     => true
     })
     user.add_api_key!

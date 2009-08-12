@@ -29,18 +29,9 @@ class SourcesDeleteControllerTest < RequestTestCase
     use "unchanged source count"
   end
 
-  context "unconfirmed user : delete /sources" do
+  context "normal user : delete /sources" do
     before do
-      delete "/sources/#{@id}", :api_key => @unconfirmed_user.primary_api_key
-    end
-
-    use "return 401 because the API key is unauthorized"
-    use "unchanged source count"
-  end
-
-  context "confirmed user : delete /sources" do
-    before do
-      delete "/sources/#{@id}", :api_key => @confirmed_user.primary_api_key
+      delete "/sources/#{@id}", :api_key => @normal_user.primary_api_key
     end
 
     use "return 401 because the API key is unauthorized"

@@ -18,17 +18,9 @@ class UsersGetAllControllerTest < RequestTestCase
     use "return 401 because the API key is invalid"
   end
   
-  context "unconfirmed user : get /users" do
+  context "normal user : get /users" do
     before do
-      get '/users', :api_key => @unconfirmed_user.primary_api_key
-    end
-    
-    use "return 401 because the API key is unauthorized"
-  end
-  
-  context "confirmed user : get /users" do
-    before do
-      get '/users', :api_key => @confirmed_user.primary_api_key
+      get '/users', :api_key => @normal_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
@@ -43,30 +35,28 @@ class UsersGetAllControllerTest < RequestTestCase
     
     use "return 200 Ok"
     
-    test "body should have 3 top level elements" do
-      assert_equal 3, parsed_response_body.length
+    test "body should have 2 top level elements" do
+      assert_equal 2, parsed_response_body.length
     end
 
     test "elements should have correct names" do
-      names = (0 ... 3).map { |n| parsed_response_body[n]["name"] }
-      assert_include "Mr. Unconfirmed", names
-      assert_include "Dr. Confirmed",   names
-      assert_include "Admin",           names
+      names = (0 ... 2).map { |n| parsed_response_body[n]["name"] }
+      assert_include "Normal User", names
+      assert_include "Admin User", names
     end
 
     test "elements should have correct emails" do
-      emails = (0 ... 3).map { |n| parsed_response_body[n]["email"] }
-      assert_include "mr.unconfirmed@inter.net", emails
-      assert_include "dr.confirmed@inter.net",   emails
-      assert_include "admin@inter.net",          emails
+      emails = (0 ... 2).map { |n| parsed_response_body[n]["email"] }
+      assert_include "normal.user@inter.net", emails
+      assert_include "admin.user@inter.net", emails
     end
     
     test "element should have different API keys" do
-      keys = (0 ... 3).map { |n| parsed_response_body[n]["primary_api_key"] }
-      assert_equal 3, keys.uniq.length
+      keys = (0 ... 2).map { |n| parsed_response_body[n]["primary_api_key"] }
+      assert_equal 2, keys.uniq.length
     end
 
-    3.times do |n|
+    2.times do |n|
       test "element #{n} should have created_at" do
         assert_include "created_at", parsed_response_body[n]
       end

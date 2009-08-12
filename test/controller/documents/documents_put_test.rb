@@ -38,19 +38,10 @@ class DocumentsPutControllerTest < RequestTestCase
     use "return 401 because the API key is invalid"
     use "unchanged document count"
   end
-
-  context "unconfirmed user : put /documents" do
-    before do
-      put "/documents/#{@id}", :api_key => @unconfirmed_user.primary_api_key
-    end
   
-    use "return 401 because the API key is unauthorized"
-    use "unchanged document count"
-  end
-  
-  context "confirmed user : put /documents" do
+  context "normal user : put /documents" do
     before do
-      put "/documents/#{@id}", :api_key => @confirmed_user.primary_api_key
+      put "/documents/#{@id}", :api_key => @normal_user.primary_api_key
     end
   
     use "return 401 because the API key is unauthorized"

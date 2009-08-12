@@ -42,18 +42,9 @@ class UsersPutControllerTest < RequestTestCase
     use "unchanged user count"
   end
   
-  context "unconfirmed user : put /users" do
+  context "normal user : put /users" do
     before do
-      put "/users/#{@id}", :api_key => @unconfirmed_user.primary_api_key
-    end
-
-    use "return 401 because the API key is unauthorized"
-    use "unchanged user count"
-  end
-  
-  context "confirmed user : put /users" do
-    before do
-      put "/users/#{@id}", :api_key => @confirmed_user.primary_api_key
+      put "/users/#{@id}", :api_key => @normal_user.primary_api_key
     end
 
     use "return 401 because the API key is unauthorized"
@@ -69,7 +60,6 @@ class UsersPutControllerTest < RequestTestCase
         :name      => "New Guy",
         :email     => "new.guy@email.com",
         :purpose   => "User account for Web application",
-        :confirmed => "true"
       }
     end
     

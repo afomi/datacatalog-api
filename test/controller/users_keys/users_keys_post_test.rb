@@ -34,20 +34,10 @@ class UsersKeysPostControllerTest < RequestTestCase
     use "unchanged api_key count"
   end
   
-  context "unconfirmed user : post /users/:id/keys" do
+  context "normal user : post /users/:id/keys" do
     before do
       post "/users/#{@id}/keys",
-        :api_key => @unconfirmed_user.primary_api_key
-    end
-    
-    use "return 401 because the API key is unauthorized"
-    use "unchanged api_key count"
-  end
-  
-  context "confirmed user : post /users/:id/keys" do
-    before do
-      post "/users/#{@id}/keys",
-        :api_key => @confirmed_user.primary_api_key
+        :api_key => @normal_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"
@@ -75,20 +65,10 @@ class UsersKeysPostControllerTest < RequestTestCase
     use "unchanged api_key count"
   end
   
-  context "unconfirmed user : post /users/:fake_id/keys" do
+  context "normal user : post /users/:fake_id/keys" do
     before do
       post "/users/#{@fake_id}/keys",
-        :api_key => @unconfirmed_user.primary_api_key
-    end
-    
-    use "return 401 because the API key is unauthorized"
-    use "unchanged api_key count"
-  end
-  
-  context "confirmed user : post /users/:fake_id/keys" do
-    before do
-      post "/users/#{@fake_id}/keys",
-        :api_key => @confirmed_user.primary_api_key
+        :api_key => @normal_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"

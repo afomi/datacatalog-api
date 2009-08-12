@@ -31,17 +31,9 @@ class RootControllerTest < RequestTestCase
     use "return 400 because the API key is not allowed"
   end
 
-  context "unconfirmed user : get /" do
+  context "normal user : get /" do
     before :all do
-      get '/', :api_key => @unconfirmed_user.primary_api_key
-    end
-    
-    use "return 400 because the API key is not allowed"
-  end
-  
-  context "confirmed user : get /" do
-    before :all do
-      get '/', :api_key => @confirmed_user.primary_api_key
+      get '/', :api_key => @normal_user.primary_api_key
     end
     
     use "return 400 because the API key is not allowed"

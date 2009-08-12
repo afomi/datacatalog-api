@@ -26,17 +26,9 @@ class SourcesGetOneControllerTest < RequestTestCase
     use "return 401 because the API key is invalid"
   end
   
-  context "unconfirmed user : get /sources/:id" do
+  context "normal user : get /sources/:id" do
     before do
-      get "/sources/#{@id}", :api_key => @unconfirmed_user.primary_api_key
-    end
-    
-    use "return 401 because the API key is unauthorized"
-  end
-  
-  context "confirmed user : get /sources/:id" do
-    before do
-      get "/sources/#{@id}", :api_key => @confirmed_user.primary_api_key
+      get "/sources/#{@id}", :api_key => @normal_user.primary_api_key
     end
     
     use "return 401 because the API key is unauthorized"

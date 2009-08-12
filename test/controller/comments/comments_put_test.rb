@@ -38,19 +38,10 @@ class CommentsPutControllerTest < RequestTestCase
     use "return 401 because the API key is invalid"
     use "unchanged comment count"
   end
-
-  context "unconfirmed user : put /comments" do
-    before do
-      put "/comments/#{@id}", :api_key => @unconfirmed_user.primary_api_key
-    end
   
-    use "return 401 because the API key is unauthorized"
-    use "unchanged comment count"
-  end
-  
-  context "confirmed user : put /comments" do
+  context "normal user : put /comments" do
     before do
-      put "/comments/#{@id}", :api_key => @confirmed_user.primary_api_key
+      put "/comments/#{@id}", :api_key => @normal_user.primary_api_key
     end
   
     use "return 401 because the API key is unauthorized"
