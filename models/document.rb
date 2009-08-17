@@ -4,9 +4,9 @@ class Document
   include MongoMapper::Document
 
   key :text,            String
-  key :source_id,       MongoID
-  key :user_id,         MongoID
-  key :previous_doc_id, MongoID
+  key :source_id,       String
+  key :user_id,         String
+  key :previous_doc_id, String
 
   alias original_to_json to_json
   def to_json(options = nil)
