@@ -13,7 +13,7 @@ class CommentsPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
   
-  shared "unchanged text in database" do
+  shared "unchanged comment text in database" do
     test "text should be unchanged in database" do
       assert_equal "Original Comment", @comment.text
     end
@@ -62,7 +62,7 @@ class CommentsPutControllerTest < RequestTestCase
     use "return 404 Not Found"
     use "return an empty response body"
     use "unchanged comment count"
-    use "unchanged text in database"
+    use "unchanged comment text in database"
   end
 
   context "admin user : put /comments : attempt to create : extra param 'junk'" do
@@ -77,7 +77,7 @@ class CommentsPutControllerTest < RequestTestCase
     use "return 404 Not Found"
     use "return an empty response body"
     use "unchanged comment count"
-    use "unchanged text in database"
+    use "unchanged comment text in database"
   end
   
   context "admin user : put /comments : attempt to create : correct params" do
@@ -91,7 +91,7 @@ class CommentsPutControllerTest < RequestTestCase
     use "return 404 Not Found"
     use "return an empty response body"
     use "unchanged comment count"
-    use "unchanged text in database"
+    use "unchanged comment text in database"
   end
   
   # - - - - - - - - - -
@@ -107,7 +107,7 @@ class CommentsPutControllerTest < RequestTestCase
   
     use "return 400 Bad Request"
     use "unchanged comment count"
-    use "unchanged text in database"
+    use "unchanged comment text in database"
   
     test "body should say 'updated_at' is an invalid param" do
       assert_include "errors", parsed_response_body
@@ -127,7 +127,7 @@ class CommentsPutControllerTest < RequestTestCase
   
     use "return 400 Bad Request"
     use "unchanged comment count"
-    use "unchanged text in database"
+    use "unchanged comment text in database"
   
     test "body should say 'junk' is an invalid param" do
       assert_include "errors", parsed_response_body
