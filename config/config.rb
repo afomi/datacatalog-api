@@ -8,14 +8,14 @@ module Config
   end
   
   def self.setup_mongomapper
-    gem 'jnunemaker-mongomapper', '>= 0.3.2'
+    gem 'jnunemaker-mongomapper', '>= 0.3.3'
     require 'mongomapper'
     MongoMapper.connection = new_mongo_connection
     MongoMapper.database = environment_config['mongo_database']
   end
   
   def self.new_mongo_connection
-    gem 'mongodb-mongo', ">= 0.10.1"
+    gem 'mongodb-mongo', ">= 0.11.1"
     require 'mongo'
     XGen::Mongo::Driver::Mongo.new environment_config["mongo_hostname"]
   end
