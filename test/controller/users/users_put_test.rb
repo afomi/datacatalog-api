@@ -53,13 +53,14 @@ class UsersPutControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "admin user : put /users : create : protected param" do
+  context "admin user : put /users : create : protected param 'admin'" do
     before do
       put "/users/#{@fake_id}", {
         :api_key   => @admin_user.primary_api_key,
         :name      => "New Guy",
         :email     => "new.guy@email.com",
         :purpose   => "User account for Web application",
+        :admin     => true
       }
     end
     

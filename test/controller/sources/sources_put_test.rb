@@ -50,7 +50,7 @@ class SourcesPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : put /sources : attempt to create : protected param" do
+  context "admin user : put /sources : attempt to create : protected param 'created_at'" do
     before do
       put "/sources/#{@fake_id}", {
         :api_key    => @admin_user.primary_api_key,
@@ -96,7 +96,7 @@ class SourcesPutControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "admin user : put /sources : update : protected param" do
+  context "admin user : put /sources : update : protected param 'updated_at'" do
     before do
       put "/sources/#{@id}", {
         :api_key    => @admin_user.primary_api_key,

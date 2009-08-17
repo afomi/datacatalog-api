@@ -99,7 +99,7 @@ class UsersKeysPutControllerTest < RequestTestCase
         
         # - - - - - - - - - -
         
-        context "admin user : put /users/:id/keys/:id : update : protected param" do
+        context "admin user : put /users/:id/keys/:id : update : protected param 'created_at'" do
           before do
             @original_created_at = @user.api_keys[n].created_at.dup
             put "/users/#{@user.id}/keys/#{@keys[n].id}", {

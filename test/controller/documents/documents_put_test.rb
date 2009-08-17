@@ -50,7 +50,7 @@ class DocumentsPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : put /documents : attempt to create : protected param" do
+  context "admin user : put /documents : attempt to create : protected param 'create_at'" do
     before do
       put "/documents/#{@fake_id}", {
         :api_key    => @admin_user.primary_api_key,
@@ -96,7 +96,7 @@ class DocumentsPutControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "admin user : put /documents : update : protected param" do
+  context "admin user : put /documents : update : protected param 'updated_at'" do
     before do
       put "/documents/#{@id}", {
         :api_key    => @admin_user.primary_api_key,
