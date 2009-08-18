@@ -12,9 +12,10 @@ class RequestTestCase < Test::Unit::TestCase
   before :all do
     Comment.destroy_all
     Document.destroy_all
-    Source.destroy_all
-    User.destroy_all
     Note.destroy_all
+    Source.destroy_all
+    Tag.destroy_all
+    User.destroy_all
     @normal_user = create_normal_user
     @admin_user = create_admin_user
   end
