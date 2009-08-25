@@ -80,8 +80,9 @@ class UsersKeysPostControllerTest < RequestTestCase
   context "admin user : post /users/:fake_id/keys : correct params" do
     before do
       post "/users/#{@fake_id}/keys", {
-        :api_key => @admin_user.primary_api_key,
-        :purpose => "My special purpose!"
+        :api_key  => @admin_user.primary_api_key,
+        :key_type => "application",
+        :purpose  => "My special purpose!"
       }
     end
     
@@ -91,18 +92,39 @@ class UsersKeysPostControllerTest < RequestTestCase
   end
   
   # - - - - - - - - - -
+  
+  context "admin user : post /users/:id/keys : missing params" do
+    before do
+      post "/users/#{@id}/keys", {
+        :api_key  => @admin_user.primary_api_key,
+        :purpose  => "My special purpose!"
+      }
+    end
+    
+    use "return 400 Bad Request"
+    use "unchanged api_key count"
+    
+    test "body should say 'key_type' is missing" do
+      assert_include "errors", parsed_response_body
+      assert_include "missing_params", parsed_response_body["errors"]
+      assert_include "key_type", parsed_response_body["errors"]["missing_params"]
+    end
+  end
 
+  # - - - - - - - - - -
+  
   context "admin user : post /users/:id/keys : correct params" do
     before do
       post "/users/#{@id}/keys", {
-        :api_key => @admin_user.primary_api_key,
-        :purpose => "My special purpose!"
+        :api_key  => @admin_user.primary_api_key,
+        :key_type => "application",
+        :purpose  => "My special purpose!"
       }
     end
     
     use "return 201 Created"
     use "incremented api_key count"
-  
+      
     test "location header should point to new resource" do
       assert_include "Location", last_response.headers
       new_uri = "http://localhost:4567/users/#{@id}/keys/#{parsed_response_body["id"]}"
@@ -112,7 +134,7 @@ class UsersKeysPostControllerTest < RequestTestCase
     test "body should have correct purpose" do
       assert_equal "My special purpose!", parsed_response_body["purpose"]
     end
-
+      
     test "API key should be 40 characters long" do
       assert_equal 40, parsed_response_body["api_key"].length
     end
@@ -139,14 +161,15 @@ class UsersKeysPostControllerTest < RequestTestCase
   context "admin user : post /users/:id/keys : extra param 'junk'" do
     before do
       post "/users/#{@id}/keys", {
-        :api_key => @admin_user.primary_api_key,
-        :purpose => "My special purpose!",
-        :junk   => "This is an extra parameter (junk)"
+        :api_key  => @admin_user.primary_api_key,
+        :key_type => "application",
+        :purpose  => "My special purpose!",
+        :junk     => "This is an extra parameter (junk)"
       }
     end
     
     use "return 400 Bad Request"
-
+  
     test "body should say 'junk' is an invalid param" do
       assert_include "errors", parsed_response_body
       assert_include "invalid_params", parsed_response_body["errors"]

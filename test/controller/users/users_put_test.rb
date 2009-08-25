@@ -8,7 +8,7 @@ class UsersPutControllerTest < RequestTestCase
       :email   => "original.guy@email.com",
       :purpose => "User account for Web application"
     })
-    @user.add_api_key!
+    @user.add_api_key!({ :key_type => "primary" })
     @id = @user.id
     @fake_id = get_fake_mongo_object_id
     @user_count = User.count

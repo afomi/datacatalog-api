@@ -24,6 +24,20 @@ post '/users/:user_id/keys' do
   error 404, [].to_json unless user
   validate_api_key_params
   params["api_key"] = user.generate_api_key
+  unless params["key_type"]
+    error 400, {
+      "errors" => { "missing_params" => ["key_type"] }
+    }.to_json
+  end
+  # This needs to be cleaned up
+  unless %w(application valet).include?(params["key_type"])
+    error 400, {
+      "errors" => {
+        "invalid_values_for_params" => ["key_type"],
+      },
+      "help_text" => "valid values for key_type are 'application' or 'valet'"
+    }.to_json
+  end
   api_key = ApiKey.new(params)
   user.api_keys << api_key
   error 500, [].to_json unless user.save

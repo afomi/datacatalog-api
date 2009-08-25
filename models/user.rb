@@ -2,6 +2,8 @@ require 'digest/sha1'
 
 class User
   
+  class InconsistentState < RuntimeError; end
+  
   include MongoMapper::Document
 
   many :api_keys
@@ -14,16 +16,22 @@ class User
   key :creator_api_key, String
   
   def primary_api_key
-    return nil if api_keys.empty?
-    api_keys[0][:api_key]
+    keys = api_keys.select { |k| k.key_type == "primary" }
+    case keys.length
+    when 0 then nil
+    when 1 then api_keys[0][:api_key]
+    else raise InconsistentState, "More than one primary API key found"
+    end
   end
   
-  def secondary_api_keys
-    if api_keys && api_keys.length > 1
-      api_keys[1 .. -1]
-    else
-      []
-    end
+  def application_api_keys
+    objects = api_keys.select { |k| k.key_type == "application" }
+    objects.map { |k| k.api_key }
+  end
+  
+  def valet_api_keys
+    objects = api_keys.select { |k| k.key_type == "valet" }
+    objects.map { |k| k.api_key }
   end
 
   def generate_api_key
@@ -33,8 +41,9 @@ class User
     Digest::SHA1.hexdigest(p1 + p2)
   end
 
-  def add_api_key!
-    key = ApiKey.new(:api_key => generate_api_key)
+  def add_api_key!(params = {})
+    params.merge!({ :api_key => generate_api_key })
+    key = ApiKey.new(params)
     self.api_keys << key
     self.save!
   end
@@ -42,7 +51,12 @@ class User
   alias original_to_json to_json
   def to_json(options = nil)
     original_to_json({
-      :methods => [:id, :primary_api_key, :secondary_api_keys],
+      :methods => [
+        :id,
+        :primary_api_key,
+        :application_api_keys,
+        :valet_api_keys
+      ],
       :except  => :_id
     })
   end

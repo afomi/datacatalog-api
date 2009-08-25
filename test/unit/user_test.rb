@@ -11,7 +11,7 @@ class UserUnitTest < ModelTestCase
 
   def create_user_with_api_key
     user = create_user
-    user.add_api_key!
+    user.add_api_key!({ :key_type => "primary" })
     user
   end
   
@@ -20,6 +20,22 @@ class UserUnitTest < ModelTestCase
   shared "well formed primary API key" do
     test "primary API key should be 40 characters long" do
       assert_equal 40, @user.primary_api_key.length
+    end
+  end
+  
+  shared "well formed application API keys" do
+    test "application API keys should be 40 characters long" do
+      @user.application_api_keys.each do |api_key|
+        assert_equal 40, api_key.length
+      end
+    end
+  end
+  
+  shared "well formed valet API keys" do
+    test "valet API keys should be 40 characters long" do
+      @user.valet_api_keys.each do |api_key|
+        assert_equal 40, api_key.length
+      end
     end
   end
 
@@ -45,16 +61,31 @@ class UserUnitTest < ModelTestCase
     use "well formed primary API key"
   end
 
-  context "creating a user with 2 API keys" do
+  context "creating a user with 6 API keys" do
     before do
       @user = create_user_with_api_key
-      @user.add_api_key!
+      2.times do
+        @user.add_api_key!({ :key_type => "application" })
+      end
+      3.times do
+        @user.add_api_key!({ :key_type => "valet" })
+      end
     end
 
     use "well formed primary API key"
+    use "well formed application API keys"
+    use "well formed valet API keys"
     
-    test "should have 2 API keys" do
-      assert_equal 2, @user.api_keys.length
+    test "should have 6 API keys" do
+      assert_equal 6, @user.api_keys.length
+    end
+    
+    test "should have 2 application API keys" do
+      assert_equal 2, @user.application_api_keys.length
+    end
+    
+    test "should have 3 valet API keys" do
+      assert_equal 3, @user.valet_api_keys.length
     end
   end
   

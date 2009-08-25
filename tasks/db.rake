@@ -11,7 +11,7 @@ namespace :db do
       :email     => "ndc@sunlightlabs.com",
       :admin     => true
     })
-    user.add_api_key!
+    user.add_api_key!({ :key_type => "primary" })
     puts "Created an admin user:"
     verbosely_display_users [user]
   end

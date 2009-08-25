@@ -128,7 +128,7 @@ class UsersPostControllerTest < RequestTestCase
       assert_equal "john.doe@email.com", parsed_response_body["email"]
     end
     
-    test "body should have API key, 40 characters long" do
+    test "body should have primary API key, 40 characters long" do
       assert_equal 40, parsed_response_body["primary_api_key"].length
     end
     
