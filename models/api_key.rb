@@ -3,6 +3,7 @@ class ApiKey
   include MongoMapper::EmbeddedDocument
   
   key :api_key, String
+  key :key_type, String
   key :purpose, String
   key :created_at, Time
 

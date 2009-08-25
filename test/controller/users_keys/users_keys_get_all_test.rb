@@ -70,6 +70,10 @@ class UsersKeysGetAllControllerTest < RequestTestCase
         assert_include "api_key", parsed_response_body[n]
       end
 
+      test "element #{n} should have key_type" do
+        assert_include "key_type", parsed_response_body[n]
+      end
+
       test "element #{n} should not have _id" do
         assert_not_include "_id", parsed_response_body[n]
       end
