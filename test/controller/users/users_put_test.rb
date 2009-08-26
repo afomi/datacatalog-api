@@ -6,7 +6,6 @@ class UsersPutControllerTest < RequestTestCase
     @user = User.create({
       :name    => "Original Guy",
       :email   => "original.guy@email.com",
-      :purpose => "User account for Web application"
     })
     @user.add_api_key!({ :key_type => "primary" })
     @id = @user.id
@@ -59,7 +58,6 @@ class UsersPutControllerTest < RequestTestCase
         :api_key   => @admin_user.primary_api_key,
         :name      => "New Guy",
         :email     => "new.guy@email.com",
-        :purpose   => "User account for Web application",
         :admin     => true
       }
     end
@@ -80,7 +78,6 @@ class UsersPutControllerTest < RequestTestCase
         :api_key => @admin_user.primary_api_key,
         :name    => "New Guy",
         :email   => "new.guy@email.com",
-        :purpose => "User account for Web application",
         :junk    => "This is an extra parameter (junk)"
       }
     end
@@ -103,7 +100,6 @@ class UsersPutControllerTest < RequestTestCase
         :api_key   => @admin_user.primary_api_key,
         :name      => "John Doe",
         :email     => "john.doe@email.com",
-        :purpose   => "User account for Web application",
         :admin     => true
       }
     end
@@ -129,7 +125,6 @@ class UsersPutControllerTest < RequestTestCase
         :api_key => @admin_user.primary_api_key,
         :name    => "John Doe",
         :email   => "john.doe@email.com",
-        :purpose => "User account for Web application",
         :junk    => "This is an extra parameter (junk)"
       }
     end
@@ -157,7 +152,6 @@ class UsersPutControllerTest < RequestTestCase
         :api_key => @admin_user.primary_api_key,
         :name    => "New Guy",
         :email   => "new.guy@email.com",
-        :purpose => "User account for Web application"
       }
     end
     
@@ -179,7 +173,6 @@ class UsersPutControllerTest < RequestTestCase
         :api_key => @admin_user.primary_api_key,
         :name    => "New Guy",
         :email   => "new.guy@email.com",
-        :purpose => "User account for Web application"
       }
     end
     

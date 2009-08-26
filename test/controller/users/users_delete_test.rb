@@ -6,7 +6,6 @@ class UsersDeleteControllerTest < RequestTestCase
     user = User.create({
       :name    => "Will Not-Last-Long",
       :email   => "will.not.last.long@email.com",
-      :purpose => "User account for Web application"
     })
     @id = user.id
     @user_count = User.count

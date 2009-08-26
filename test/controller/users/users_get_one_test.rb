@@ -6,7 +6,6 @@ class UsersGetOneControllerTest < RequestTestCase
     user = User.create({
       :name    => "Find Me",
       :email   => "find.me@email.com",
-      :purpose => "User account for Web application"
     })
     @id = user.id
     @fake_id = get_fake_mongo_object_id

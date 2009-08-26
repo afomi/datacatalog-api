@@ -43,7 +43,6 @@ class UsersPostControllerTest < RequestTestCase
         :api_key   => @admin_user.primary_api_key,
         :name      => "John Doe",
         :email     => "john.doe@email.com",
-        :purpose   => "User account for Web application",
         :admin     => true
       }
     end
@@ -63,7 +62,6 @@ class UsersPostControllerTest < RequestTestCase
         :api_key         => @admin_user.primary_api_key,
         :name            => "John Doe",
         :email           => "john.doe@email.com",
-        :purpose         => "User account for Web application",
         :admin           => true,
         :creator_api_key => get_fake_api_key("John Doe")
       }
@@ -84,7 +82,6 @@ class UsersPostControllerTest < RequestTestCase
         :api_key   => @admin_user.primary_api_key,
         :name    => "John Doe",
         :email   => "john.doe@email.com",
-        :purpose => "User account for Web application",
         :junk    => "This is an extra parameter (junk)"
       }
     end
@@ -106,7 +103,6 @@ class UsersPostControllerTest < RequestTestCase
         :api_key   => @admin_user.primary_api_key,
         :name      => "John Doe",
         :email     => "john.doe@email.com",
-        :purpose   => "User account for Web application"
       }
     end
     
