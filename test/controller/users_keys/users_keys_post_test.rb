@@ -145,14 +145,10 @@ class UsersKeysPostControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  # context "admin API key : post /users/:id/keys : protected param ''" do
+  # This section is a placeholder for handling protected parameters.
   #
-  #   Not applicable...
-  #
-  #   Since api_key is already screened out by admin validation, it will
-  #   not be passed through to the ApiKey params.
-  # 
-  # end
+  # Not currently needed since api_key is already screened out by admin
+  # validation, it will not be passed through to the ApiKey params.
 
   # - - - - - - - - - -
   
