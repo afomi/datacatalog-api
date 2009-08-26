@@ -7,9 +7,9 @@ get '/users/:user_id/keys' do
 end
 
 get '/users/:user_id/keys/:api_key_id' do
-  require_admin_privileges
   user_id = params.delete("user_id")
   api_key_id = params.delete("api_key_id")
+  require_admin_or_owner(user_id)
   user = User.find_by_id(user_id)
   error 404, [].to_json unless user
   api_key = user.api_keys.find { |x| x.id == api_key_id }
