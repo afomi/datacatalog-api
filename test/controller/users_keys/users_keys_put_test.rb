@@ -33,7 +33,7 @@ class UsersKeysPutControllerTest < RequestTestCase
 
     3.times do |n|
       context_ "API key #{n}" do
-        context "anonymous user : put /users/:id/keys/:id" do
+        context "anonymous : put /users/:id/keys/:id" do
           before do
             put "/users/#{@user.id}/keys/#{@keys[n].id}"
           end
@@ -42,7 +42,7 @@ class UsersKeysPutControllerTest < RequestTestCase
           use "unchanged api_key count"
         end
         
-        context "incorrect user : put /users/:id/keys/:id" do
+        context "incorrect API key : put /users/:id/keys/:id" do
           before do
             put "/users/#{@user.id}/keys/#{@keys[n].id}",
               :api_key => "does_not_exist_in_database"
@@ -52,7 +52,7 @@ class UsersKeysPutControllerTest < RequestTestCase
           use "unchanged api_key count"
         end
         
-        context "normal user : put /users/:id/keys/:id" do
+        context "normal API key : put /users/:id/keys/:id" do
           before do
             put "/users/#{@user.id}/keys/#{@keys[n].id}",
               :api_key => @normal_user.primary_api_key
@@ -64,7 +64,7 @@ class UsersKeysPutControllerTest < RequestTestCase
         
         # - - - - - - - - - -
         
-        context "admin user : put /users/:fake_id/keys/:id : attempt to create : not found" do
+        context "admin API key : put /users/:fake_id/keys/:id : attempt to create : not found" do
           before do
             put "/users/#{@fake_id}/keys/#{@keys[n].id}",
               :api_key => @admin_user.primary_api_key
@@ -75,7 +75,7 @@ class UsersKeysPutControllerTest < RequestTestCase
           use "unchanged api_key count"
         end
         
-        context "admin user : put /users/:id/keys/:fake_id : attempt to create : not found" do
+        context "admin API key : put /users/:id/keys/:fake_id : attempt to create : not found" do
           before do
             put "/users/#{@user.id}/keys/#{@fake_id}",
               :api_key => @admin_user.primary_api_key
@@ -86,7 +86,7 @@ class UsersKeysPutControllerTest < RequestTestCase
           use "unchanged api_key count"
         end
         
-        context "admin user : put /users/:fake_id/keys/:fake_id : attempt to create : not found" do
+        context "admin API key : put /users/:fake_id/keys/:fake_id : attempt to create : not found" do
           before do
             put "/users/#{@fake_id}/keys/#{@fake_id}",
               :api_key => @admin_user.primary_api_key
@@ -99,7 +99,7 @@ class UsersKeysPutControllerTest < RequestTestCase
         
         # - - - - - - - - - -
         
-        context "admin user : put /users/:id/keys/:id : update : protected param 'created_at'" do
+        context "admin API key : put /users/:id/keys/:id : update : protected param 'created_at'" do
           before do
             @original_created_at = @user.api_keys[n].created_at.dup
             put "/users/#{@user.id}/keys/#{@keys[n].id}", {
@@ -130,7 +130,7 @@ class UsersKeysPutControllerTest < RequestTestCase
           end
         end
         
-        context "admin user : put /users/:id/keys/:id : update : extra param 'junk'" do
+        context "admin API key : put /users/:id/keys/:id : update : extra param 'junk'" do
           before do
             stubbed_time = Time.now + 10
             stub(Time).now {stubbed_time}
@@ -165,7 +165,7 @@ class UsersKeysPutControllerTest < RequestTestCase
 
         # - - - - - - - - - -
 
-        context "admin user : put /users/:id/keys/:id : update : correct param" do
+        context "admin API key : put /users/:id/keys/:id : update : correct param" do
           before do
             @original_created_at = @user.api_keys[n].created_at.dup
             put "/users/#{@user.id}/keys/#{@keys[n].id}", {

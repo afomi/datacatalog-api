@@ -15,7 +15,7 @@ class UsersKeysPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "anonymous user : post /users/:id/keys" do
+  context "anonymous : post /users/:id/keys" do
     before do
       post "/users/#{@id}/keys"
     end
@@ -24,7 +24,7 @@ class UsersKeysPostControllerTest < RequestTestCase
     use "unchanged api_key count"
   end
   
-  context "incorrect user : post /users/:id/keys" do
+  context "incorrect API key : post /users/:id/keys" do
     before do
       post "/users/#{@id}/keys",
         :api_key => "does_not_exist_in_database"
@@ -34,7 +34,7 @@ class UsersKeysPostControllerTest < RequestTestCase
     use "unchanged api_key count"
   end
   
-  context "normal user : post /users/:id/keys" do
+  context "normal API key : post /users/:id/keys" do
     before do
       post "/users/#{@id}/keys",
         :api_key => @normal_user.primary_api_key
@@ -46,7 +46,7 @@ class UsersKeysPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "anonymous user : post /users/:fake_id/keys" do
+  context "anonymous API key : post /users/:fake_id/keys" do
     before do
       post "/users/#{@fake_id}/keys"
     end
@@ -55,7 +55,7 @@ class UsersKeysPostControllerTest < RequestTestCase
     use "unchanged api_key count"
   end
   
-  context "incorrect user : post /users/:fake_id/keys" do
+  context "incorrect API key : post /users/:fake_id/keys" do
     before do
       post "/users/#{@fake_id}/keys",
         :api_key => "does_not_exist_in_database"
@@ -65,7 +65,7 @@ class UsersKeysPostControllerTest < RequestTestCase
     use "unchanged api_key count"
   end
   
-  context "normal user : post /users/:fake_id/keys" do
+  context "normal API key : post /users/:fake_id/keys" do
     before do
       post "/users/#{@fake_id}/keys",
         :api_key => @normal_user.primary_api_key
@@ -77,7 +77,7 @@ class UsersKeysPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "admin user : post /users/:fake_id/keys : correct params" do
+  context "admin API key : post /users/:fake_id/keys : correct params" do
     before do
       post "/users/#{@fake_id}/keys", {
         :api_key  => @admin_user.primary_api_key,
@@ -93,7 +93,7 @@ class UsersKeysPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "admin user : post /users/:id/keys : missing params" do
+  context "admin API key : post /users/:id/keys : missing params" do
     before do
       post "/users/#{@id}/keys", {
         :api_key  => @admin_user.primary_api_key,
@@ -113,7 +113,7 @@ class UsersKeysPostControllerTest < RequestTestCase
 
   # - - - - - - - - - -
   
-  context "admin user : post /users/:id/keys : correct params" do
+  context "admin API key : post /users/:id/keys : correct params" do
     before do
       post "/users/#{@id}/keys", {
         :api_key  => @admin_user.primary_api_key,
@@ -149,7 +149,7 @@ class UsersKeysPostControllerTest < RequestTestCase
     end
   end
 
-  # context "admin user : post /users/:id/keys : protected param ''" do
+  # context "admin API key : post /users/:id/keys : protected param ''" do
   #
   #   Not applicable...
   #
@@ -158,7 +158,7 @@ class UsersKeysPostControllerTest < RequestTestCase
   # 
   # end
 
-  context "admin user : post /users/:id/keys : extra param 'junk'" do
+  context "admin API key : post /users/:id/keys : extra param 'junk'" do
     before do
       post "/users/#{@id}/keys", {
         :api_key  => @admin_user.primary_api_key,

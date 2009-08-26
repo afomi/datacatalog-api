@@ -20,7 +20,7 @@ class UsersKeysGetOneControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous user : get /users/:id/keys/:id" do
+  context "anonymous : get /users/:id/keys/:id" do
     before do
       get "/users/#{@user.id}/keys/#{@api_key_id}"
     end
@@ -28,7 +28,7 @@ class UsersKeysGetOneControllerTest < RequestTestCase
     use "return 401 because the API key is missing"
   end
   
-  context "incorrect user : get /users/:id/keys/:id" do
+  context "incorrect API key : get /users/:id/keys/:id" do
     before do
       get "/users/#{@user.id}/keys/#{@api_key_id}",
         :api_key => "does_not_exist_in_database"
@@ -37,7 +37,7 @@ class UsersKeysGetOneControllerTest < RequestTestCase
     use "return 401 because the API key is invalid"
   end
   
-  context "normal user : get /users/:id/keys/:id" do
+  context "normal API key : get /users/:id/keys/:id" do
     before do
       get "/users/#{@user.id}/keys/#{@api_key_id}",
         :api_key => @normal_user.primary_api_key
@@ -48,7 +48,7 @@ class UsersKeysGetOneControllerTest < RequestTestCase
   
   # - - - - - - - - - -
 
-  context "admin user : get /users/:fake_id/keys/:id : not found" do
+  context "admin API key : get /users/:fake_id/keys/:id : not found" do
     before do
       get "/users/#{@fake_id}/keys/#{@api_key_id}",
         :api_key => @admin_user.primary_api_key
@@ -58,7 +58,7 @@ class UsersKeysGetOneControllerTest < RequestTestCase
     use "return an empty response body"
   end
   
-  context "admin user : get /users/:id/keys/:fake_id : not found" do
+  context "admin API key : get /users/:id/keys/:fake_id : not found" do
     before do
       get "/users/#{@user.id}/keys/#{@fake_id}",
         :api_key => @admin_user.primary_api_key
@@ -68,7 +68,7 @@ class UsersKeysGetOneControllerTest < RequestTestCase
     use "return an empty response body"
   end
   
-  context "admin user : get /users/:fake_id/keys/:fake_id : not found" do
+  context "admin API key : get /users/:fake_id/keys/:fake_id : not found" do
     before do
       get "/users/#{@fake_id}/keys/#{@fake_id}",
         :api_key => @admin_user.primary_api_key
@@ -80,7 +80,7 @@ class UsersKeysGetOneControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : get /users/:id/keys/:id : found" do
+  context "admin API key : get /users/:id/keys/:id : found" do
     before do
       get "/users/#{@user.id}/keys/#{@api_key_id}",
         :api_key => @admin_user.primary_api_key
