@@ -56,7 +56,6 @@ put '/users/:user_id/keys/:api_key_id' do
   api_key = user.api_keys.find { |x| x.id == api_key_id }
   error 404, [].to_json unless api_key
   api_key_index = user.api_keys.index(api_key)
-  validate_api_key_params
   api_key.attributes = params
   user.api_keys[api_key_index] = api_key
   error 500, [].to_json unless user.save
