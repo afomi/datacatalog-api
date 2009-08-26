@@ -30,6 +30,12 @@ class RequestTestCase
     end
   end
 
+  shared "return 403 Forbidden" do
+    test "status should be 403 Forbidden" do
+      assert_equal 403, last_response.status
+    end
+  end
+
   shared "return 404 Not Found" do
     test "status should be 404 Not Found" do
       assert_equal 404, last_response.status

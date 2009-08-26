@@ -1,11 +1,11 @@
 get '/sources' do
-  validate_admin_privileges
+  require_admin_privileges
   sources = Source.find(:all)
   sources.to_json
 end
 
 get '/sources/:id' do |id|
-  validate_admin_privileges
+  require_admin_privileges
   id = params.delete("id")
   source = Source.find_by_id(id)
   error 404, [].to_json unless source
@@ -13,7 +13,7 @@ get '/sources/:id' do |id|
 end
 
 post '/sources' do
-  validate_admin_privileges
+  require_admin_privileges
   id = params.delete("id")
   validate_source_params
   source = create_source_from_params
@@ -21,7 +21,7 @@ post '/sources' do
 end
 
 put '/sources/:id' do
-  validate_admin_privileges
+  require_admin_privileges
   id = params.delete("id")
   source = Source.find_by_id(id)
   error 404, [].to_json unless source
@@ -31,7 +31,7 @@ put '/sources/:id' do
 end
 
 delete '/sources/:id' do
-  validate_admin_privileges
+  require_admin_privileges
   id = params.delete("id")
   source = Source.find_by_id(id)
   error 404, [].to_json unless source

@@ -1,11 +1,11 @@
 get '/tags' do
-  validate_admin_privileges
+  require_admin_privileges
   tags = Tag.find(:all)
   tags.to_json
 end
 
 get '/tags/:id' do |id|
-  validate_admin_privileges
+  require_admin_privileges
   id = params.delete("id")
   tag = Tag.find_by_id(id)
   error 404, [].to_json unless tag
@@ -13,7 +13,7 @@ get '/tags/:id' do |id|
 end
 
 post '/tags' do
-  validate_admin_privileges
+  require_admin_privileges
   id = params.delete("id")
   validate_tag_params
   tag = create_tag_from_params
@@ -21,7 +21,7 @@ post '/tags' do
 end
 
 put '/tags/:id' do
-  validate_admin_privileges
+  require_admin_privileges
   id = params.delete("id")
   tag = Tag.find_by_id(id)
   error 404, [].to_json unless tag
@@ -31,7 +31,7 @@ put '/tags/:id' do
 end
 
 delete '/tags/:id' do
-  validate_admin_privileges
+  require_admin_privileges
   id = params.delete("id")
   tag = Tag.find_by_id(id)
   error 404, [].to_json unless tag

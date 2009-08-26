@@ -1,5 +1,5 @@
 get '/users/:user_id/keys' do
-  validate_admin_privileges
+  require_admin_privileges
   user_id = params.delete("user_id")
   user = User.find_by_id(user_id)
   error 404, [].to_json unless user
@@ -7,7 +7,7 @@ get '/users/:user_id/keys' do
 end
 
 get '/users/:user_id/keys/:api_key_id' do
-  validate_admin_privileges
+  require_admin_privileges
   user_id = params.delete("user_id")
   api_key_id = params.delete("api_key_id")
   user = User.find_by_id(user_id)
@@ -18,7 +18,7 @@ get '/users/:user_id/keys/:api_key_id' do
 end
 
 post '/users/:user_id/keys' do
-  validate_admin_privileges
+  require_admin_privileges
   user_id = params.delete("user_id")
   user = User.find_by_id(user_id)
   error 404, [].to_json unless user
@@ -47,7 +47,7 @@ post '/users/:user_id/keys' do
 end
 
 put '/users/:user_id/keys/:api_key_id' do
-  validate_admin_privileges
+  require_admin_privileges
   user_id = params.delete("user_id")
   api_key_id = params.delete("api_key_id")
   user = User.find_by_id(user_id)
@@ -64,14 +64,17 @@ put '/users/:user_id/keys/:api_key_id' do
 end
 
 delete '/users/:user_id/keys/:api_key_id' do
-  validate_admin_privileges
   user_id = params.delete("user_id")
   api_key_id = params.delete("api_key_id")
+  require_admin_or_owner(user_id)
   user = User.find_by_id(user_id)
   error 404, [].to_json unless user
   keys = user.api_keys
   api_key = user.api_keys.find { |x| x.id == api_key_id }
   error 404, [].to_json unless api_key
+  if api_key.key_type == "primary"
+    error 403, { "errors" => ["cannot_delete_primary_api_key"] }.to_json
+  end
   user.api_keys.delete(api_key)
   user.save!
   { "id" => api_key_id }.to_json
