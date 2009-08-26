@@ -18,8 +18,8 @@ get '/users/:user_id/keys/:api_key_id' do
 end
 
 post '/users/:user_id/keys' do
-  require_admin_privileges
   user_id = params.delete("user_id")
+  require_admin_or_owner(user_id)
   user = User.find_by_id(user_id)
   error 404, [].to_json unless user
   validate_api_key_params
