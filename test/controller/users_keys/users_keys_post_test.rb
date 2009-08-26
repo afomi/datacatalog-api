@@ -109,7 +109,7 @@ class UsersKeysPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  shared "return errors hash saying key_type is invalid" do
+  shared "return errors hash saying key_type is missing" do
     test "body should say 'key_type' is missing" do
       assert_include "errors", parsed_response_body
       assert_include "missing_params", parsed_response_body["errors"]
@@ -127,7 +127,7 @@ class UsersKeysPostControllerTest < RequestTestCase
     
     use "return 400 Bad Request"
     use "unchanged api_key count"
-    use "return errors hash saying key_type is invalid"
+    use "return errors hash saying key_type is missing"
   end
   
   context "admin API key : post /users/:id/keys : missing params" do
@@ -140,7 +140,7 @@ class UsersKeysPostControllerTest < RequestTestCase
     
     use "return 400 Bad Request"
     use "unchanged api_key count"
-    use "return errors hash saying key_type is invalid"
+    use "return errors hash saying key_type is missing"
   end
 
   # - - - - - - - - - -
