@@ -50,6 +50,24 @@ class UsersKeysPutControllerTest < RequestTestCase
         assert_equal @keys[@n].purpose, api_key.purpose
       end
     end
+    
+    shared "shared tests for successful users_keys_put_test" do
+      use "return 200 Ok"
+      use "unchanged api_key count"
+  
+      test "created_at should be unchanged in database" do
+        raise "@n must be defined" unless @n
+        user = User.find_by_id(@user.id)
+        assert_equal_json_times @original_created_at, user.api_keys[@n].created_at
+      end
+  
+      test "purpose should be updated in database" do
+        raise "@n must be defined" unless @n
+        user = User.find_by_id(@user.id)
+        api_key = user.api_keys.find { |x| x.id == @keys[@n].id }
+        assert_equal "Updated purpose", api_key.purpose
+      end
+    end
 
     # - - - - - - - - - -
 
@@ -123,6 +141,19 @@ class UsersKeysPutControllerTest < RequestTestCase
 
         # - - - - - - - - - -
 
+        context "owner API key : put /users/:id/keys/:fake_id" do
+          before do
+            put "/users/#{@user.id}/keys/#{@fake_id}", {
+              :api_key  => @user.api_keys[n].api_key,
+              :key_type => "application"
+            }
+          end
+        
+          use "return 404 Not Found"
+          use "return an empty response body"
+          use "unchanged api_key count"
+        end
+
         context "admin API key : put /users/:id/keys/:fake_id : attempt to create : not found" do
           before do
             put "/users/#{@user.id}/keys/#{@fake_id}", {
@@ -165,6 +196,20 @@ class UsersKeysPutControllerTest < RequestTestCase
         
         # - - - - - - - - - -
         
+        context "owner API key : put /users/:id/keys/:id : update : protected param 'created_at'" do
+          before do
+            @original_created_at = @user.api_keys[n].created_at.dup
+            put "/users/#{@user.id}/keys/#{@keys[n].id}", {
+              :api_key    => @user.api_keys[n].api_key,
+              :purpose    => "Updated purpose",
+              :created_at => (Time.now + 10).to_json
+            }
+            @n = n
+          end
+          
+          use "shared tests for trying to update users_keys with protected parameter"
+        end
+        
         context "admin API key : put /users/:id/keys/:id : update : protected param 'created_at'" do
           before do
             @original_created_at = @user.api_keys[n].created_at.dup
@@ -181,6 +226,23 @@ class UsersKeysPutControllerTest < RequestTestCase
         end
 
         # - - - - - - - - - -
+        
+        context "owner API key : put /users/:id/keys/:id : update : extra param 'junk'" do
+          before do
+            stubbed_time = Time.now + 10
+            stub(Time).now {stubbed_time}
+            @original_created_at = @user.api_keys[n].created_at.dup
+            put "/users/#{@user.id}/keys/#{@keys[n].id}", {
+              :api_key  => @user.api_keys[n].api_key,
+              :key_type => "application",
+              :purpose  => "Updated purpose",
+              :junk     => "This is an extra parameter (junk)"
+            }
+            @n = n
+          end
+          
+          use "shared tests for trying to update users_keys with invalid parameter"
+        end
         
         context "admin API key : put /users/:id/keys/:id : update : extra param 'junk'" do
           before do
@@ -200,6 +262,20 @@ class UsersKeysPutControllerTest < RequestTestCase
         end
 
         # - - - - - - - - - -
+        
+        context "owner API key : put /users/:id/keys/:id : update : correct param" do
+          before do
+            @original_created_at = @user.api_keys[n].created_at.dup
+            put "/users/#{@user.id}/keys/#{@keys[n].id}", {
+              :api_key  => @admin_user.primary_api_key,
+              :key_type => "application",
+              :purpose  => "Updated purpose"
+            }
+            @n = n
+          end
+          
+          use "shared tests for successful users_keys_put_test"
+        end
 
         context "admin API key : put /users/:id/keys/:id : update : correct param" do
           before do
@@ -209,23 +285,11 @@ class UsersKeysPutControllerTest < RequestTestCase
               :key_type => "application",
               :purpose  => "Updated purpose"
             }
+            @n = n
           end
-        
-          use "return 200 Ok"
-          use "unchanged api_key count"
-        
-          test "created_at should be unchanged in database" do
-            user = User.find_by_id(@user.id)
-            assert_equal_json_times @original_created_at, user.api_keys[n].created_at
-          end
-        
-          test "purpose should be updated in database" do
-            user = User.find_by_id(@user.id)
-            api_key = user.api_keys.find { |x| x.id == @keys[n].id }
-            assert_equal "Updated purpose", api_key.purpose
-          end
-        end
 
+          use "shared tests for successful users_keys_put_test"
+        end
       end
     end
   end
