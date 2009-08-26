@@ -8,6 +8,15 @@ class UsersKeysDeleteControllerTest < RequestTestCase
       assert_include "cannot_delete_primary_api_key", parsed_response_body["errors"]
     end
   end
+  
+  shared "API key deleted from database" do
+    test "API key should be deleted in database" do
+      raise "@n must be defined" unless @n
+      user = User.find_by_id(@user.id)
+      api_key = user.api_keys.find { |x| x.id == @keys[@n].id }
+      assert_equal nil, api_key
+    end
+  end
 
   # - - - - - - - - - -
 
@@ -79,10 +88,10 @@ class UsersKeysDeleteControllerTest < RequestTestCase
         use "return 401 because the API key is unauthorized"
         use "unchanged api_key count"
       end
-        
+
       # - - - - - - - - - -
       
-      context "admin user : delete /users/:fake_id/keys/:id" do
+      context "admin API key : delete /users/:fake_id/keys/:id" do
         before do
           delete "/users/#{@fake_id}/keys/#{@keys[n].id}",
             :api_key => @admin_user.primary_api_key
@@ -92,44 +101,58 @@ class UsersKeysDeleteControllerTest < RequestTestCase
         use "return an empty response body"
         use "unchanged api_key count"
       end
-        
-      context "admin user : delete /users/:fake_id/keys/:fake_id" do
-        before do
-          delete "/users/#{@fake_id}/keys/#{@fake_id}",
-            :api_key => @admin_user.primary_api_key
-        end
-        
-        use "return 404 Not Found"
-        use "return an empty response body"
-        use "unchanged api_key count"
-      end
-        
-      context "admin user : delete /users/:id/keys/:fake_id" do
-        before do
-          delete "/users/#{@user.id}/keys/#{@fake_id}",
-            :api_key => @admin_user.primary_api_key
-        end
-        
-        use "return 404 Not Found"
-        use "return an empty response body"
-        use "unchanged api_key count"
-      end
-
     end
+  end
+
+  # - - - - - - - - - -
+
+  context "admin API key : delete /users/:fake_id/keys/:fake_id" do
+    before do
+      delete "/users/#{@fake_id}/keys/#{@fake_id}",
+        :api_key => @admin_user.primary_api_key
+    end
+    
+    use "return 404 Not Found"
+    use "return an empty response body"
+    use "unchanged api_key count"
+  end
+    
+  context "admin API key : delete /users/:id/keys/:fake_id" do
+    before do
+      delete "/users/#{@user.id}/keys/#{@fake_id}",
+        :api_key => @admin_user.primary_api_key
+    end
+    
+    use "return 404 Not Found"
+    use "return an empty response body"
+    use "unchanged api_key count"
   end
   
   # - - - - - - - - - -
   
-  context_ "Primary API key" do
-    context "admin user : delete /sources" do
-      before do
-        delete "/users/#{@user.id}/keys/#{@keys[0].id}",
-          :api_key => @admin_user.primary_api_key
+  [0].each do |n|
+    context_ "Primary API key" do
+      context "owner API key : delete /users/:id/keys/:id" do
+        before do
+          delete "/users/#{@user.id}/keys/#{@keys[n].id}",
+            :api_key => @user.api_keys[n].api_key
+        end
+
+        use "return 403 Forbidden"
+        use "return error about attempt to delete primary API key"
+        use "unchanged api_key count"
       end
+
+      context "admin API key : delete /users/:id/keys/:id" do
+        before do
+          delete "/users/#{@user.id}/keys/#{@keys[n].id}",
+            :api_key => @admin_user.primary_api_key
+        end
       
-      use "return 403 Forbidden"
-      use "return error about attempt to delete primary API key"
-      use "unchanged api_key count"
+        use "return 403 Forbidden"
+        use "return error about attempt to delete primary API key"
+        use "unchanged api_key count"
+      end
     end
   end
   
@@ -137,29 +160,55 @@ class UsersKeysDeleteControllerTest < RequestTestCase
   
   (1 ... 3).each do |n|
     context_ "API key #{n}" do
-      context "admin user : delete /sources" do
+      context "owner API key : delete /users/:id/keys/:id" do
         before do
+          @n = n
+          delete "/users/#{@user.id}/keys/#{@keys[n].id}",
+            :api_key => @user.api_keys[n].api_key
+        end
+
+        use "return 200 Ok"
+        use "decremented api_key count"
+        use "API key deleted from database"
+      end
+
+      context "owner API key : double delete /users/:id/keys/:id" do
+        before do
+          @n = n
+          delete "/users/#{@user.id}/keys/#{@keys[n].id}",
+            :api_key => @user.api_keys[n].api_key
+          # Since @user.api_keys[n].api_key is now deleted (and thus invalid),
+          # we must use a different API key.
+          delete "/users/#{@user.id}/keys/#{@keys[n].id}",
+            :api_key => @user.api_keys[n - 1].api_key
+        end
+      
+        use "return 404 Not Found"
+        use "return an empty response body"
+        use "decremented api_key count"
+        use "API key deleted from database"
+      end
+
+      context "admin API key : delete /users/:id/keys/:id" do
+        before do
+          @n = n
           delete "/users/#{@user.id}/keys/#{@keys[n].id}",
             :api_key => @admin_user.primary_api_key
         end
-    
+          
         use "return 200 Ok"
         use "decremented api_key count"
-    
+        use "API key deleted from database"
+          
         test "body should have correct id" do
           assert_include "id", parsed_response_body
           assert_equal @keys[n].id, parsed_response_body["id"]
         end
-    
-        test "API key should be deleted in database" do
-          user = User.find_by_id(@user.id)
-          api_key = user.api_keys.find { |x| x.id == @keys[n].id }
-          assert_equal nil, api_key
-        end
       end
 
-      context "admin user : double delete /users" do
+      context "admin API key : double delete /users/:id/keys/:id" do
         before do
+          @n = n
           delete "/users/#{@user.id}/keys/#{@keys[n].id}",
             :api_key => @admin_user.primary_api_key
           delete "/users/#{@user.id}/keys/#{@keys[n].id}",
@@ -169,62 +218,8 @@ class UsersKeysDeleteControllerTest < RequestTestCase
         use "return 404 Not Found"
         use "return an empty response body"
         use "decremented api_key count"
-    
-        test "API key should be deleted in database" do
-          user = User.find_by_id(@user.id)
-          api_key = user.api_keys.find { |x| x.id == @keys[n].id }
-          assert_equal nil, api_key
-        end
+        use "API key deleted from database"
       end
-    end
-  end
-  
-  # - - - - - - - - - -
-  
-  context_ "authorized user : delete /users/:id/keys/:id" do
-    context "should not be able to delete primary API key" do
-      before do
-        n = 0
-        delete "/users/#{@user.id}/keys/#{@keys[n].id}",
-          :api_key => @user.api_keys[n].api_key
-      end
-
-      use "return 403 Forbidden"
-      use "return error about attempt to delete primary API key"
-      use "unchanged api_key count"
-    end
-  
-    context "should delete application API key #1" do
-      before do
-        n = 1
-        delete "/users/#{@user.id}/keys/#{@keys[n].id}",
-          :api_key => @user.api_keys[n].api_key
-      end
-    
-      use "return 200 Ok"
-      use "decremented api_key count"
-    end
-    
-    context "should delete application API key #2" do
-      before do
-        n = 2
-        delete "/users/#{@user.id}/keys/#{@keys[n].id}",
-          :api_key => @user.api_keys[n].api_key
-      end
-    
-      use "return 200 Ok"
-      use "decremented api_key count"
-    end
-
-    context "should delete valet API key" do
-      before do
-        n = 3
-        delete "/users/#{@user.id}/keys/#{@keys[n].id}",
-          :api_key => @user.api_keys[n].api_key
-      end
-    
-      use "return 200 Ok"
-      use "decremented api_key count"
     end
   end
 
