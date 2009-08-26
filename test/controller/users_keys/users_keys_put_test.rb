@@ -12,16 +12,19 @@ class UsersKeysPutControllerTest < RequestTestCase
 
       @keys = [
         ApiKey.new({
-          :api_key => @user.generate_api_key,
-          :purpose => "The primary key"
+          :api_key  => @user.generate_api_key,
+          :key_type => "primary",
+          :purpose  => "The primary key"
         }),
         ApiKey.new({
-          :api_key => @user.generate_api_key,
-          :purpose => "A secondary key"
+          :api_key  => @user.generate_api_key,
+          :key_type => "valet",
+          :purpose  => "Valet key #1"
         }),
         ApiKey.new({
-          :api_key => @user.generate_api_key,
-          :purpose => "A secondary key"
+          :api_key  => @user.generate_api_key,
+          :key_type => "valet",
+          :purpose  => "Valet key #2"
         })
       ]
       @user.api_keys = @keys
