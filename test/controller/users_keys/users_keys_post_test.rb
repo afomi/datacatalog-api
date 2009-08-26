@@ -52,16 +52,6 @@ class UsersKeysPostControllerTest < RequestTestCase
     use "unchanged api_key count"
   end
 
-  context "owner API key : post /users/:fake_id/keys" do
-    before do
-      post "/users/#{@fake_id}/keys",
-        :api_key => @user.api_keys[0].api_key
-    end
-    
-    use "return 401 because the API key is unauthorized"
-    use "unchanged api_key count"
-  end
-  
   # - - - - - - - - - -
   
   context "anonymous API key : post /users/:fake_id/keys" do
@@ -83,7 +73,7 @@ class UsersKeysPostControllerTest < RequestTestCase
     use "unchanged api_key count"
   end
   
-  context "normal API key : post /users/:fake_id/keys" do
+  context "non owner API key : post /users/:fake_id/keys" do
     before do
       post "/users/#{@fake_id}/keys",
         :api_key => @normal_user.primary_api_key
@@ -93,8 +83,16 @@ class UsersKeysPostControllerTest < RequestTestCase
     use "unchanged api_key count"
   end
   
-  # - - - - - - - - - -
-  
+  context "owner API key : post /users/:fake_id/keys" do
+    before do
+      post "/users/#{@fake_id}/keys",
+        :api_key => @user.api_keys[0].api_key
+    end
+
+    use "return 401 because the API key is unauthorized"
+    use "unchanged api_key count"
+  end
+
   context "admin API key : post /users/:fake_id/keys : correct params" do
     before do
       post "/users/#{@fake_id}/keys", {
@@ -111,6 +109,27 @@ class UsersKeysPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
+  shared "return errors hash saying key_type is invalid" do
+    test "body should say 'key_type' is missing" do
+      assert_include "errors", parsed_response_body
+      assert_include "missing_params", parsed_response_body["errors"]
+      assert_include "key_type", parsed_response_body["errors"]["missing_params"]
+    end
+  end
+
+  context "owner API key : post /users/:id/keys : missing params" do
+    before do
+      post "/users/#{@id}/keys", {
+        :api_key  => @user.api_keys[0].api_key,
+        :purpose  => "My special purpose!"
+      }
+    end
+    
+    use "return 400 Bad Request"
+    use "unchanged api_key count"
+    use "return errors hash saying key_type is invalid"
+  end
+  
   context "admin API key : post /users/:id/keys : missing params" do
     before do
       post "/users/#{@id}/keys", {
@@ -121,12 +140,7 @@ class UsersKeysPostControllerTest < RequestTestCase
     
     use "return 400 Bad Request"
     use "unchanged api_key count"
-    
-    test "body should say 'key_type' is missing" do
-      assert_include "errors", parsed_response_body
-      assert_include "missing_params", parsed_response_body["errors"]
-      assert_include "key_type", parsed_response_body["errors"]["missing_params"]
-    end
+    use "return errors hash saying key_type is invalid"
   end
 
   # - - - - - - - - - -
@@ -140,6 +154,30 @@ class UsersKeysPostControllerTest < RequestTestCase
   # 
   # end
 
+  # - - - - - - - - - -
+  
+  shared "return errors hash saying junk is invalid" do
+    test "body should say 'junk' is an invalid param" do
+      assert_include "errors", parsed_response_body
+      assert_include "invalid_params", parsed_response_body["errors"]
+      assert_include "junk", parsed_response_body["errors"]["invalid_params"]
+    end
+  end
+
+  context "owner API key : post /users/:id/keys : extra param 'junk'" do
+    before do
+      post "/users/#{@id}/keys", {
+        :api_key  => @user.api_keys[0].api_key,
+        :key_type => "application",
+        :purpose  => "My special purpose!",
+        :junk     => "This is an extra parameter (junk)"
+      }
+    end
+    
+    use "return 400 Bad Request"
+    use "return errors hash saying junk is invalid"
+  end
+
   context "admin API key : post /users/:id/keys : extra param 'junk'" do
     before do
       post "/users/#{@id}/keys", {
@@ -151,12 +189,7 @@ class UsersKeysPostControllerTest < RequestTestCase
     end
     
     use "return 400 Bad Request"
-  
-    test "body should say 'junk' is an invalid param" do
-      assert_include "errors", parsed_response_body
-      assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "junk", parsed_response_body["errors"]["invalid_params"]
-    end
+    use "return errors hash saying junk is invalid"
   end
 
   # - - - - - - - - - -
