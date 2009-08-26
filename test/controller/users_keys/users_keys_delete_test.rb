@@ -162,9 +162,9 @@ class UsersKeysDeleteControllerTest < RequestTestCase
     context_ "API key #{n}" do
       context "owner API key : delete /users/:id/keys/:id" do
         before do
-          @n = n
           delete "/users/#{@user.id}/keys/#{@keys[n].id}",
             :api_key => @user.api_keys[n].api_key
+          @n = n
         end
 
         use "return 200 Ok"
@@ -174,13 +174,13 @@ class UsersKeysDeleteControllerTest < RequestTestCase
 
       context "owner API key : double delete /users/:id/keys/:id" do
         before do
-          @n = n
           delete "/users/#{@user.id}/keys/#{@keys[n].id}",
             :api_key => @user.api_keys[n].api_key
           # Since @user.api_keys[n].api_key is now deleted (and thus invalid),
           # we must use a different API key.
           delete "/users/#{@user.id}/keys/#{@keys[n].id}",
             :api_key => @user.api_keys[n - 1].api_key
+          @n = n
         end
       
         use "return 404 Not Found"
@@ -191,9 +191,9 @@ class UsersKeysDeleteControllerTest < RequestTestCase
 
       context "admin API key : delete /users/:id/keys/:id" do
         before do
-          @n = n
           delete "/users/#{@user.id}/keys/#{@keys[n].id}",
             :api_key => @admin_user.primary_api_key
+          @n = n
         end
           
         use "return 200 Ok"
@@ -208,11 +208,11 @@ class UsersKeysDeleteControllerTest < RequestTestCase
 
       context "admin API key : double delete /users/:id/keys/:id" do
         before do
+          delete "/users/#{@user.id}/keys/#{@keys[n].id}",
+            :api_key => @admin_user.primary_api_key
+          delete "/users/#{@user.id}/keys/#{@keys[n].id}",
+            :api_key => @admin_user.primary_api_key
           @n = n
-          delete "/users/#{@user.id}/keys/#{@keys[n].id}",
-            :api_key => @admin_user.primary_api_key
-          delete "/users/#{@user.id}/keys/#{@keys[n].id}",
-            :api_key => @admin_user.primary_api_key
         end
       
         use "return 404 Not Found"
