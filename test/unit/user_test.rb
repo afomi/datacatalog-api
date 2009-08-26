@@ -63,10 +63,11 @@ class UserUnitTest < ModelTestCase
 
   context "creating a user with 6 API keys" do
     before do
-      @user = create_user_with_api_key
+      @user = create_user
       2.times do
         @user.add_api_key!({ :key_type => "application" })
       end
+      @user.add_api_key!({ :key_type => "primary" })
       3.times do
         @user.add_api_key!({ :key_type => "valet" })
       end
@@ -75,6 +76,12 @@ class UserUnitTest < ModelTestCase
     use "well formed primary API key"
     use "well formed application API keys"
     use "well formed valet API keys"
+    
+    test "#primary_api_key works properly" do
+      expected = @user.api_keys.select { |k| k.key_type == "primary" }[0].api_key
+      actual = @user.primary_api_key
+      assert_equal expected, actual
+    end
     
     test "should have 6 API keys" do
       assert_equal 6, @user.api_keys.length

@@ -19,7 +19,7 @@ class User
     keys = api_keys.select { |k| k.key_type == "primary" }
     case keys.length
     when 0 then nil
-    when 1 then api_keys[0][:api_key]
+    when 1 then keys[0][:api_key]
     else raise InconsistentState, "More than one primary API key found"
     end
   end
