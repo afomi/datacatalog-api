@@ -41,6 +41,12 @@ class User
     Digest::SHA1.hexdigest(p1 + p2)
   end
 
+  # Example usage:
+  #   user = User.new
+  #   user.add_api_key!({ :key_type => "primary" })
+  #   user.add_api_key!({ :key_type => "application" })
+  #   user.add_api_key!({ :key_type => "valet" })
+  #   user.save
   def add_api_key!(params = {})
     params.merge!({ :api_key => generate_api_key })
     key = ApiKey.new(params)
