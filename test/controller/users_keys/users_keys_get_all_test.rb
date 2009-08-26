@@ -8,9 +8,24 @@ class UsersKeysGetAllControllerTest < RequestTestCase
       :email   => "example.user@email.com",
       :purpose => "User account for Web application"
     })
-    user.api_keys << ApiKey.new(:api_key => get_fake_api_key("1"))
-    user.api_keys << ApiKey.new(:api_key => get_fake_api_key("2"))
-    user.api_keys << ApiKey.new(:api_key => get_fake_api_key("3"))
+    @keys = [
+      ApiKey.new({
+        :api_key  => get_fake_api_key("1"),
+        :key_type => "primary",
+        :purpose  => "The primary key"
+      }),
+      ApiKey.new({
+        :api_key  => get_fake_api_key("2"),
+        :key_type => "valet",
+        :purpose  => "Valet key #1"
+      }),
+      ApiKey.new({
+        :api_key  => get_fake_api_key("3"),
+        :key_type => "valet",
+        :purpose  => "Valet key #2"
+      })
+    ]
+    user.api_keys = @keys
     user.save!
     @id = user.id
   end

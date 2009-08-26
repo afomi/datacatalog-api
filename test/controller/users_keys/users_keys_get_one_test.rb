@@ -9,8 +9,9 @@ class UsersKeysGetOneControllerTest < RequestTestCase
       :purpose => "User account for Web application"
     })
     api_key = ApiKey.new({
-      :api_key => @user.generate_api_key,
-      :purpose => "Important!"
+      :api_key  => @user.generate_api_key,
+      :key_type => "primary",
+      :purpose  => "Primary API key"
     })
     @user.api_keys << api_key
     @user.save!
