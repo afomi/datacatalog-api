@@ -160,19 +160,11 @@ class UsersKeysPostControllerTest < RequestTestCase
   end
 
   # - - - - - - - - - -
-  
-  context "owner API key : post /users/:id/keys : correct params" do
-    before do
-      post "/users/#{@id}/keys", {
-        :api_key  => @user.api_keys[0].api_key,
-        :key_type => "application",
-        :purpose  => "My special purpose!"
-      }
-    end
-    
+
+  shared "shared tests for successful users_keys_post_test" do
     use "return 201 Created"
     use "incremented api_key count"
-      
+
     test "location header should point to new resource" do
       assert_include "Location", last_response.headers
       new_uri = "http://localhost:4567/users/#{@id}/keys/#{parsed_response_body["id"]}"
@@ -206,6 +198,18 @@ class UsersKeysPostControllerTest < RequestTestCase
       assert_equal "application", user.api_keys[1]["key_type"]
     end
   end
+  
+  context "owner API key : post /users/:id/keys : correct params" do
+    before do
+      post "/users/#{@id}/keys", {
+        :api_key  => @user.api_keys[0].api_key,
+        :key_type => "application",
+        :purpose  => "My special purpose!"
+      }
+    end
+    
+    use "shared tests for successful users_keys_post_test"
+  end
 
   context "admin API key : post /users/:id/keys : correct params" do
     before do
@@ -215,42 +219,8 @@ class UsersKeysPostControllerTest < RequestTestCase
         :purpose  => "My special purpose!"
       }
     end
-    
-    use "return 201 Created"
-    use "incremented api_key count"
-      
-    test "location header should point to new resource" do
-      assert_include "Location", last_response.headers
-      new_uri = "http://localhost:4567/users/#{@id}/keys/#{parsed_response_body["id"]}"
-      assert_equal new_uri, last_response.headers["Location"]
-    end
-    
-    test "body should have correct purpose" do
-      assert_equal "My special purpose!", parsed_response_body["purpose"]
-    end
-      
-    test "API key should be 40 characters long" do
-      assert_equal 40, parsed_response_body["api_key"].length
-    end
-    
-    test "API key should be different from admin key" do
-      assert_not_equal @admin_user.primary_api_key, parsed_response_body["api_key"]
-    end
 
-    test "API key should be different from primary key" do
-      user = User.find_by_id(@id)
-      assert_not_equal user.api_keys[0].api_key, parsed_response_body["api_key"]
-    end
-    
-    test "purpose should be correct in database" do
-      user = User.find_by_id(@id)
-      assert_equal "My special purpose!", user.api_keys[1]["purpose"]
-    end
-
-    test "key_type should be correct in database" do
-      user = User.find_by_id(@id)
-      assert_equal "application", user.api_keys[1]["key_type"]
-    end
+    use "shared tests for successful users_keys_post_test"
   end
 
 end

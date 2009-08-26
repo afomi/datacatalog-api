@@ -107,13 +107,8 @@ class UsersKeysGetOneControllerTest < RequestTestCase
   end
 
   # - - - - - - - - - -
-
-  context "owner API key : get /users/:id/keys/:id : found" do
-    before do
-      get "/users/#{@user.id}/keys/#{@api_key_id}",
-        :api_key => @user.api_keys[0].api_key
-    end
-    
+  
+  shared "shared tests for successful users_keys_get_one_test" do
     use "return 200 Ok"
 
     test "body should have correct purpose" do
@@ -137,33 +132,22 @@ class UsersKeysGetOneControllerTest < RequestTestCase
     end
   end
 
+  context "owner API key : get /users/:id/keys/:id : found" do
+    before do
+      get "/users/#{@user.id}/keys/#{@api_key_id}",
+        :api_key => @user.api_keys[0].api_key
+    end
+    
+    use "shared tests for successful users_keys_get_one_test"
+  end
+
   context "admin API key : get /users/:id/keys/:id : found" do
     before do
       get "/users/#{@user.id}/keys/#{@api_key_id}",
         :api_key => @admin_user.primary_api_key
     end
-    
-    use "return 200 Ok"
 
-    test "body should have correct purpose" do
-      assert_equal "Primary API key", parsed_response_body["purpose"]
-    end
-
-    test "body should have well formed API key" do
-      assert_equal 40, parsed_response_body["api_key"].length
-    end
-
-    test "body should not have _id" do
-      assert_not_include "_id", parsed_response_body
-    end
-
-    test "body should have created_at" do
-      assert_include "created_at", parsed_response_body
-    end
-
-    test "body should not have updated_at" do
-      assert_not_include "updated_at", parsed_response_body
-    end
+    use "shared tests for successful users_keys_get_one_test"
   end
 
 end
