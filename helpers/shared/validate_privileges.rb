@@ -9,7 +9,7 @@ def require_valid_api_key
   })
 end
 
-def require_admin_or_owner(user_id)
+def require_owner_or_higher(user_id)
   check_api_key({
     :missing   => lambda { error 401, { "errors" => ["missing_api_key"] }.to_json },
     :invalid   => lambda { error 401, { "errors" => ["invalid_api_key"] }.to_json },

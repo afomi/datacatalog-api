@@ -9,7 +9,7 @@ end
 get '/users/:user_id/keys/:api_key_id' do
   user_id = params.delete("user_id")
   api_key_id = params.delete("api_key_id")
-  require_admin_or_owner(user_id)
+  require_owner_or_higher(user_id)
   user = User.find_by_id(user_id)
   error 404, [].to_json unless user
   api_key = user.api_keys.find { |x| x.id == api_key_id }
@@ -19,7 +19,7 @@ end
 
 post '/users/:user_id/keys' do
   user_id = params.delete("user_id")
-  require_admin_or_owner(user_id)
+  require_owner_or_higher(user_id)
   user = User.find_by_id(user_id)
   error 404, [].to_json unless user
   validate_api_key_params :on_create
@@ -35,7 +35,7 @@ end
 put '/users/:user_id/keys/:api_key_id' do
   user_id = params.delete("user_id")
   api_key_id = params.delete("api_key_id")
-  require_admin_or_owner(user_id)
+  require_owner_or_higher(user_id)
   user = User.find_by_id(user_id)
   error 404, [].to_json unless user
   validate_api_key_params :on_update
@@ -51,7 +51,7 @@ end
 delete '/users/:user_id/keys/:api_key_id' do
   user_id = params.delete("user_id")
   api_key_id = params.delete("api_key_id")
-  require_admin_or_owner(user_id)
+  require_owner_or_higher(user_id)
   user = User.find_by_id(user_id)
   error 404, [].to_json unless user
   keys = user.api_keys
