@@ -1,5 +1,5 @@
 get '/sources/:source_id/ratings' do
-  require_admin_privileges
+  require_admin
   source_id = params.delete("source_id")
   source = Source.find_by_id(source_id)
   error 404, [].to_json unless source
@@ -7,7 +7,7 @@ get '/sources/:source_id/ratings' do
 end
 
 get '/sources/:source_id/ratings/:rating_id' do
-  require_admin_privileges
+  require_admin
   source_id = params.delete("source_id")
   rating_id = params.delete("rating_id")
   source = Source.find_by_id(source_id)
@@ -18,7 +18,7 @@ get '/sources/:source_id/ratings/:rating_id' do
 end
 
 post '/sources/:source_id/ratings' do
-  require_admin_privileges
+  require_admin
   source_id = params.delete("source_id")
   source = Source.find_by_id(source_id)
   error 404, [].to_json unless source
@@ -32,7 +32,7 @@ post '/sources/:source_id/ratings' do
 end
 
 put '/sources/:source_id/ratings/:rating_id' do
-  require_admin_privileges
+  require_admin
   source_id = params.delete("source_id")
   rating_id = params.delete("rating_id")
   source = Source.find_by_id(source_id)
@@ -49,7 +49,7 @@ put '/sources/:source_id/ratings/:rating_id' do
 end
 
 delete '/sources/:source_id/ratings/:rating_id' do
-  require_admin_privileges
+  require_admin
   source_id = params.delete("source_id")
   rating_id = params.delete("rating_id")
   source = Source.find_by_id(source_id)

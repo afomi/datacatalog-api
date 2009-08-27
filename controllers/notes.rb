@@ -1,11 +1,11 @@
 get '/notes' do
-  require_admin_privileges
+  require_admin
   notes = Note.find(:all)
   notes.to_json
 end
 
 get '/notes/:id' do |id|
-  require_admin_privileges
+  require_admin
   id = params.delete("id")
   note = Note.find_by_id(id)
   error 404, [].to_json unless note
@@ -13,7 +13,7 @@ get '/notes/:id' do |id|
 end
 
 post '/notes' do
-  require_admin_privileges
+  require_admin
   id = params.delete("id")
   validate_note_params
   note = create_note_from_params
@@ -21,7 +21,7 @@ post '/notes' do
 end
 
 put '/notes/:id' do
-  require_admin_privileges
+  require_admin
   id = params.delete("id")
   note = Note.find_by_id(id)
   error 404, [].to_json unless note
@@ -31,7 +31,7 @@ put '/notes/:id' do
 end
 
 delete '/notes/:id' do
-  require_admin_privileges
+  require_admin
   id = params.delete("id")
   note = Note.find_by_id(id)
   error 404, [].to_json unless note

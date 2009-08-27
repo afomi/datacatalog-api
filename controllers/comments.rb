@@ -1,11 +1,11 @@
 get '/comments' do
-  require_admin_privileges
+  require_admin
   comments = Comment.find(:all)
   comments.to_json
 end
 
 get '/comments/:id' do |id|
-  require_admin_privileges
+  require_admin
   id = params.delete("id")
   comment = Comment.find_by_id(id)
   error 404, [].to_json unless comment
@@ -13,7 +13,7 @@ get '/comments/:id' do |id|
 end
 
 post '/comments' do
-  require_admin_privileges
+  require_admin
   id = params.delete("id")
   validate_comment_params
   comment = create_comment_from_params
@@ -21,7 +21,7 @@ post '/comments' do
 end
 
 put '/comments/:id' do
-  require_admin_privileges
+  require_admin
   id = params.delete("id")
   comment = Comment.find_by_id(id)
   error 404, [].to_json unless comment
@@ -31,7 +31,7 @@ put '/comments/:id' do
 end
 
 delete '/comments/:id' do
-  require_admin_privileges
+  require_admin
   id = params.delete("id")
   comment = Comment.find_by_id(id)
   error 404, [].to_json unless comment

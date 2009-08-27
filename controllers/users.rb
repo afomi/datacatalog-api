@@ -1,11 +1,11 @@
 get '/users' do
-  require_admin_privileges
+  require_admin
   users = User.find(:all)
   users.to_json
 end
 
 get '/users/:id' do
-  require_admin_privileges
+  require_admin
   id = params.delete("id")
   user = User.find_by_id(id)
   error 404, [].to_json unless user
@@ -13,7 +13,7 @@ get '/users/:id' do
 end
 
 post '/users' do
-  require_admin_privileges
+  require_admin
   id = params.delete("id")
   validate_user_params
   user = create_user_from_params
@@ -21,7 +21,7 @@ post '/users' do
 end
 
 put '/users/:id' do
-  require_admin_privileges
+  require_admin
   id = params.delete("id")
   user = User.find_by_id(id)
   error 404, [].to_json unless user
@@ -31,7 +31,7 @@ put '/users/:id' do
 end
 
 delete '/users/:id' do
-  require_admin_privileges
+  require_admin
   id = params.delete("id")
   user = User.find_by_id(id)
   error 404, [].to_json unless user

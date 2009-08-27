@@ -13,7 +13,7 @@ get '/organizations/:id' do |id|
 end
 
 post '/organizations' do
-  require_admin_privileges
+  require_admin
   id = params.delete("id")
   validate_organization_params
   organization = create_organization_from_params
@@ -21,7 +21,7 @@ post '/organizations' do
 end
 
 put '/organizations/:id' do
-  require_admin_privileges
+  require_admin
   id = params.delete("id")
   organization = Organization.find_by_id(id)
   error 404, [].to_json unless organization
@@ -31,7 +31,7 @@ put '/organizations/:id' do
 end
 
 delete '/organizations/:id' do
-  require_admin_privileges
+  require_admin
   id = params.delete("id")
   organization = Organization.find_by_id(id)
   error 404, [].to_json unless organization

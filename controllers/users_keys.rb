@@ -1,5 +1,5 @@
 get '/users/:user_id/keys' do
-  require_admin_privileges
+  require_admin
   user_id = params.delete("user_id")
   user = User.find_by_id(user_id)
   error 404, [].to_json unless user
