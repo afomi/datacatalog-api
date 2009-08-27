@@ -30,6 +30,24 @@ class UsersKeysPutControllerTest < RequestTestCase
       end
     end
     
+    shared "unchanged key_type in database" do
+      test "key_type should be unchanged in database" do
+        raise "@n must be defined" unless @n
+        user = User.find_by_id(@user.id)
+        api_key = user.api_keys.find { |x| x.id == @keys[@n].id }
+        assert_equal "valet", api_key.key_type
+      end
+    end
+
+    shared "updated key_type in database" do
+      test "key_type should be updated in database" do
+        raise "@n must be defined" unless @n
+        user = User.find_by_id(@user.id)
+        api_key = user.api_keys.find { |x| x.id == @keys[@n].id }
+        assert_equal "application", api_key.key_type
+      end
+    end
+    
     shared "shared tests for trying to update users_keys with protected parameter" do
       use "return 400 Bad Request"
       use "unchanged api_key count"
@@ -56,18 +74,33 @@ class UsersKeysPutControllerTest < RequestTestCase
       end
     end
     
-    shared "shared tests for successful partial update of users' key" do
+    shared "shared tests for trying to update users_keys with invalid key_type" do
+      use "return 400 Bad Request"
+      use "unchanged api_key count"
+      use "unchanged created_at in database"
+      use "unchanged purpose in database"
+
+      test "body should say 'extra' is an invalid param" do
+        assert_include "errors", parsed_response_body
+        assert_include "invalid_values_for_params", parsed_response_body["errors"]
+        assert_include "key_type", parsed_response_body["errors"]["invalid_values_for_params"]
+      end
+    end
+    
+    shared "shared tests for successful partial update of purpose of user key" do
       use "return 200 Ok"
       use "unchanged api_key count"
       use "unchanged created_at in database"
       use "updated purpose in database"
+      use "unchanged key_type in database"
+    end
 
-      test "key_type should be unchanged in database" do
-        raise "@n must be defined" unless @n
-        user = User.find_by_id(@user.id)
-        api_key = user.api_keys.find { |x| x.id == @keys[@n].id }
-        assert_equal "valet", api_key.key_type
-      end
+    shared "shared tests for successful partial update of key_type of user key" do
+      use "return 200 Ok"
+      use "unchanged api_key count"
+      use "unchanged created_at in database"
+      use "unchanged purpose in database"
+      use "updated key_type in database"
     end
     
     shared "shared tests for successful full update of users' key" do
@@ -75,13 +108,7 @@ class UsersKeysPutControllerTest < RequestTestCase
       use "unchanged api_key count"
       use "unchanged created_at in database"
       use "updated purpose in database"
-      
-      test "key_type should be updated in database" do
-        raise "@n must be defined" unless @n
-        user = User.find_by_id(@user.id)
-        api_key = user.api_keys.find { |x| x.id == @keys[@n].id }
-        assert_equal "application", api_key.key_type
-      end
+      use "updated key_type in database"
     end
 
     # - - - - - - - - - -
@@ -285,30 +312,86 @@ class UsersKeysPutControllerTest < RequestTestCase
 
     # Tests that apply to valet keys
     (1 ... 3).each do |n|
-      context "owner API key : put /users/:id/keys : partial update : correct params" do
+      context "owner API key : put /users/:id/keys : update key_type : invalid params" do
         before do
           @original_created_at = @user.api_keys[n].created_at.dup
           put "/users/#{@user.id}/keys/#{@keys[n].id}", {
             :api_key  => @user.api_keys[n].api_key,
-            :purpose  => "Updated purpose"
+            :key_type => "wrong"
           }
           @n = n
         end
       
-        use "shared tests for successful partial update of users' key"
+        use "shared tests for trying to update users_keys with invalid key_type"
       end
       
-      context "admin API key : put /users/:id/keys : partial update : correct params" do
+      context "admin API key : put /users/:id/keys : update key_type : invalid params" do
         before do
           @original_created_at = @user.api_keys[n].created_at.dup
           put "/users/#{@user.id}/keys/#{@keys[n].id}", {
             :api_key  => @admin_user.primary_api_key,
-            :purpose  => "Updated purpose"
+            :key_type => "wrong"
           }
           @n = n
         end
       
-        use "shared tests for successful partial update of users' key"
+        use "shared tests for trying to update users_keys with invalid key_type"
+      end
+      
+      # - - - - - - - - - -
+
+      context "owner API key : put /users/:id/keys : update purpose : correct params" do
+        before do
+          @original_created_at = @user.api_keys[n].created_at.dup
+          put "/users/#{@user.id}/keys/#{@keys[n].id}", {
+            :api_key => @user.api_keys[n].api_key,
+            :purpose => "Updated purpose"
+          }
+          @n = n
+        end
+      
+        use "shared tests for successful partial update of purpose of user key"
+      end
+      
+      context "admin API key : put /users/:id/keys : update purpose : correct params" do
+        before do
+          @original_created_at = @user.api_keys[n].created_at.dup
+          put "/users/#{@user.id}/keys/#{@keys[n].id}", {
+            :api_key => @admin_user.primary_api_key,
+            :purpose => "Updated purpose"
+          }
+          @n = n
+        end
+      
+        use "shared tests for successful partial update of purpose of user key"
+      end
+      
+      # - - - - - - - - - -
+
+      context "owner API key : put /users/:id/keys : update key_type : correct params" do
+        before do
+          @original_created_at = @user.api_keys[n].created_at.dup
+          put "/users/#{@user.id}/keys/#{@keys[n].id}", {
+            :api_key  => @user.api_keys[n].api_key,
+            :key_type => "application"
+          }
+          @n = n
+        end
+      
+        use "shared tests for successful partial update of key_type of user key"
+      end
+      
+      context "admin API key : put /users/:id/keys : update key_type : correct params" do
+        before do
+          @original_created_at = @user.api_keys[n].created_at.dup
+          put "/users/#{@user.id}/keys/#{@keys[n].id}", {
+            :api_key  => @admin_user.primary_api_key,
+            :key_type => "application"
+          }
+          @n = n
+        end
+      
+        use "shared tests for successful partial update of key_type of user key"
       end
       
       # - - - - - - - - - -

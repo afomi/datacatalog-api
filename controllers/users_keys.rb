@@ -22,22 +22,8 @@ post '/users/:user_id/keys' do
   require_admin_or_owner(user_id)
   user = User.find_by_id(user_id)
   error 404, [].to_json unless user
-  validate_api_key_params
+  validate_api_key_params :on_create
   params["api_key"] = user.generate_api_key
-  unless params["key_type"]
-    error 400, {
-      "errors" => { "missing_params" => ["key_type"] }
-    }.to_json
-  end
-  # This needs to be cleaned up
-  unless %w(application valet).include?(params["key_type"])
-    error 400, {
-      "errors" => {
-        "invalid_values_for_params" => ["key_type"],
-      },
-      "help_text" => "valid values for key_type are 'application' or 'valet'"
-    }.to_json
-  end
   api_key = ApiKey.new(params)
   user.api_keys << api_key
   error 500, [].to_json unless user.save
@@ -52,7 +38,7 @@ put '/users/:user_id/keys/:api_key_id' do
   require_admin_or_owner(user_id)
   user = User.find_by_id(user_id)
   error 404, [].to_json unless user
-  validate_api_key_params
+  validate_api_key_params :on_update
   api_key = user.api_keys.find { |x| x.id == api_key_id }
   error 404, [].to_json unless api_key
   api_key_index = user.api_keys.index(api_key)
