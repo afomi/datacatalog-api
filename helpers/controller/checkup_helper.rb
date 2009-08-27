@@ -25,6 +25,7 @@ module CheckupHelper
         "checkup"       => full_uri("checkup"),
         "comments"      => full_uri("comments"),
         "documents"     => full_uri("documents"),
+        "organizations" => full_uri("organizations"),
         "sources"       => full_uri("sources"),
         "users"         => full_uri("users"),
       }
@@ -41,6 +42,7 @@ module CheckupHelper
         "checkup"       => full_uri("checkup"),
         "comments"      => full_uri("comments"),
         "documents"     => full_uri("documents"),
+        "organizations" => full_uri("organizations"),
         "sources"       => full_uri("sources"),
         "users"         => full_uri("users"),
       }
