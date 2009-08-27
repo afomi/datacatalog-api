@@ -44,13 +44,59 @@ end
 
 def check_api_key(hooks, user_id=nil)
   api_key = params.delete("api_key")
-  return hooks[:missing].call unless api_key
+  unless api_key
+    @privileges = {
+      :normal  => false,
+      :owner   => false,
+      :curator => false,
+      :admin   => false
+    }
+    return hooks[:missing].call
+  end
   user = User.find(:first, :conditions => {
     'api_keys.api_key' => api_key
   })
-  return hooks[:invalid].call unless user
-  return hooks[:admin].call if user.admin
-  return hooks[:curator].call if user.curator
-  return hooks[:owner].call if user_id && user_id == user.id
+  unless user
+    @privileges = {
+      :normal  => false,
+      :owner   => false,
+      :curator => false,
+      :admin   => false
+    }
+    return hooks[:invalid].call
+  end
+  if user.admin
+    @privileges = {
+      :normal  => true,
+      :owner   => true,
+      :curator => true,
+      :admin   => true
+    }
+    return hooks[:admin].call
+  end
+  if user.curator
+    @privileges = {
+      :normal  => true,
+      :owner   => true,
+      :curator => true,
+      :admin   => false
+    }
+    return hooks[:curator].call
+  end
+  if user_id && user_id == user.id
+    @privileges = {
+      :normal  => true,
+      :owner   => true,
+      :curator => true,
+      :admin   => false
+    }
+    return hooks[:owner].call
+  end
+  @privileges = {
+    :normal  => true,
+    :owner   => false,
+    :curator => false,
+    :admin   => false
+  }
   return hooks[:non_owner].call
 end

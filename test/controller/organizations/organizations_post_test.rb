@@ -26,18 +26,37 @@ class OrganizationsPostControllerTest < RequestTestCase
     use "unchanged organization count"
   end
 
-  context "normal user : post /organizations" do
+  # - - - - - - - - - -
+  
+  context "normal API key : post /organizations : protected param 'updated_at'" do
     before do
-      post '/organizations', :api_key => @normal_user.primary_api_key
+      post '/organizations', {
+        :api_key    => @normal_user.primary_api_key,
+        :text       => "Organization A",
+        :updated_at => Time.now.to_json
+      }
     end
-    
-    use "return 401 because the API key is unauthorized"
+  
+    use "return 400 Bad Request"
     use "unchanged organization count"
+    use "return errors hash saying updated_at is invalid"
   end
 
-  # - - - - - - - - - -
+  context "curator API key : post /organizations : protected param 'updated_at'" do
+    before do
+      post '/organizations', {
+        :api_key    => @curator_user.primary_api_key,
+        :text       => "Organization A",
+        :updated_at => Time.now.to_json
+      }
+    end
+  
+    use "return 400 Bad Request"
+    use "unchanged organization count"
+    use "return errors hash saying updated_at is invalid"
+  end
 
-  context "admin user : post /organizations : protected param 'updated_at'" do
+  context "admin API key : post /organizations : protected param 'updated_at'" do
     before do
       post '/organizations', {
         :api_key    => @admin_user.primary_api_key,
@@ -48,15 +67,40 @@ class OrganizationsPostControllerTest < RequestTestCase
   
     use "return 400 Bad Request"
     use "unchanged organization count"
-  
-    test "body should say 'updated_at' is an invalid param" do
-      assert_include "errors", parsed_response_body
-      assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "updated_at", parsed_response_body["errors"]["invalid_params"]
-    end
+    use "return errors hash saying updated_at is invalid"
   end
+
+  # - - - - - - - - - -
+
+  context "normal API key : post /organizations : extra param 'junk'" do
+    before do
+      post '/organizations', {
+        :api_key => @normal_user.primary_api_key,
+        :text    => "Organization A",
+        :junk    => "This is an extra parameter (junk)"
+      }
+    end
   
-  context "admin user : post /organizations : extra param 'junk'" do
+    use "return 400 Bad Request"
+    use "unchanged organization count"
+    use "return errors hash saying junk is invalid"
+  end
+
+  context "curator API key : post /organizations : extra param 'junk'" do
+    before do
+      post '/organizations', {
+        :api_key => @curator_user.primary_api_key,
+        :text    => "Organization A",
+        :junk    => "This is an extra parameter (junk)"
+      }
+    end
+  
+    use "return 400 Bad Request"
+    use "unchanged organization count"
+    use "return errors hash saying junk is invalid"
+  end
+
+  context "admin API key : post /organizations : extra param 'junk'" do
     before do
       post '/organizations', {
         :api_key => @admin_user.primary_api_key,
@@ -67,17 +111,66 @@ class OrganizationsPostControllerTest < RequestTestCase
   
     use "return 400 Bad Request"
     use "unchanged organization count"
-  
-    test "body should say 'junk' is an invalid param" do
-      assert_include "errors", parsed_response_body
-      assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "junk", parsed_response_body["errors"]["invalid_params"]
-    end
+    use "return errors hash saying junk is invalid"
   end
   
   # - - - - - - - - - -
   
-  context "admin user : post /organizations : correct params" do
+  shared "shared tests for successful update of organizations" do
+    test "location header should point to new reorganization" do
+      assert_include "Location", last_response.headers
+      new_uri = "http://localhost:4567/organizations/" + parsed_response_body["id"]
+      assert_equal new_uri, last_response.headers["Location"]
+    end
+
+    test "body should have correct text" do
+      assert_equal "Organization A", parsed_response_body["text"]
+    end
+
+    test "text should be correct in database" do
+      organization = Organization.find_by_id(parsed_response_body["id"])
+      assert_equal "Organization A", organization.text
+    end
+  end
+  
+  shared "needs_curation should be false" do
+    test "body should have needs_curation set to false" do
+      assert_equal false, parsed_response_body["needs_curation"]
+    end
+
+    test "needs_curation should be false in database" do
+      organization = Organization.find_by_id(parsed_response_body["id"])
+      assert_equal false, organization.needs_curation
+    end
+  end
+
+  shared "needs_curation should be true" do
+    test "body should have needs_curation set to true" do
+      assert_equal true, parsed_response_body["needs_curation"]
+    end
+
+    test "needs_curation should be true in database" do
+      organization = Organization.find_by_id(parsed_response_body["id"])
+      assert_equal true, organization.needs_curation
+    end
+  end
+
+  context "normal API key : post /organizations : correct params" do
+    before do
+      post '/organizations', {
+        :api_key => @normal_user.primary_api_key,
+        :text    => "Organization A",
+      }
+    end
+    
+    use "return 201 Created"
+    use "return timestamps and id in body" 
+    use "incremented organization count"
+    use "shared tests for successful update of organizations"
+    use "needs_curation should be true"
+  end
+
+  context "curator API key : post /organizations : correct params" do
     before do
       post '/organizations', {
         :api_key => @admin_user.primary_api_key,
@@ -88,21 +181,23 @@ class OrganizationsPostControllerTest < RequestTestCase
     use "return 201 Created"
     use "return timestamps and id in body" 
     use "incremented organization count"
-      
-    test "location header should point to new reorganization" do
-      assert_include "Location", last_response.headers
-      new_uri = "http://localhost:4567/organizations/" + parsed_response_body["id"]
-      assert_equal new_uri, last_response.headers["Location"]
+    use "shared tests for successful update of organizations"
+    use "needs_curation should be false"
+  end
+  
+  context "admin API key : post /organizations : correct params" do
+    before do
+      post '/organizations', {
+        :api_key => @admin_user.primary_api_key,
+        :text    => "Organization A",
+      }
     end
     
-    test "body should have correct text" do
-      assert_equal "Organization A", parsed_response_body["text"]
-    end
-    
-    test "text should be correct in database" do
-      organization = Organization.find_by_id(parsed_response_body["id"])
-      assert_equal "Organization A", organization.text
-    end
+    use "return 201 Created"
+    use "return timestamps and id in body" 
+    use "incremented organization count"
+    use "shared tests for successful update of organizations"
+    use "needs_curation should be false"
   end
 
 end
