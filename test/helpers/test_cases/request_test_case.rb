@@ -13,6 +13,7 @@ class RequestTestCase < Test::Unit::TestCase
     Comment.destroy_all
     Document.destroy_all
     Note.destroy_all
+    Organization.destroy_all
     Source.destroy_all
     Tag.destroy_all
     User.destroy_all
