@@ -20,6 +20,17 @@ def require_owner_or_higher(user_id)
   }, user_id)
 end
 
+def require_curator_or_higher
+  check_api_key({
+    :missing   => lambda { error 401, { "errors" => ["missing_api_key"] }.to_json },
+    :invalid   => lambda { error 401, { "errors" => ["invalid_api_key"] }.to_json },
+    :non_owner => lambda { error 401, { "errors" => ["unauthorized_api_key"] }.to_json },
+    :owner     => lambda { error 401, { "errors" => ["unauthorized_api_key"] }.to_json },
+    :curator   => lambda {},
+    :admin     => lambda {}
+  })
+end
+
 def require_admin
   check_api_key({
     :missing   => lambda { error 401, { "errors" => ["missing_api_key"] }.to_json },
