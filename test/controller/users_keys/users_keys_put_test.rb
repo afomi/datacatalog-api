@@ -53,12 +53,7 @@ class UsersKeysPutControllerTest < RequestTestCase
       use "unchanged api_key count"
       use "unchanged created_at in database"
       use "unchanged purpose in database"
-      
-      test "body should say 'created_at' is an invalid param" do
-        assert_include "errors", parsed_response_body
-        assert_include "invalid_params", parsed_response_body["errors"]
-        assert_include "created_at", parsed_response_body["errors"]["invalid_params"]
-      end
+      use "return errors hash saying created_at is invalid"
     end
     
     shared "shared tests for trying to update users_keys with invalid parameter" do
@@ -66,12 +61,7 @@ class UsersKeysPutControllerTest < RequestTestCase
       use "unchanged api_key count"
       use "unchanged created_at in database"
       use "unchanged purpose in database"
-  
-      test "body should say 'extra' is an invalid param" do
-        assert_include "errors", parsed_response_body
-        assert_include "invalid_params", parsed_response_body["errors"]
-        assert_include "junk", parsed_response_body["errors"]["invalid_params"]
-      end
+      use "return errors hash saying junk is invalid"
     end
     
     shared "shared tests for trying to update users_keys with invalid key_type" do
@@ -79,12 +69,7 @@ class UsersKeysPutControllerTest < RequestTestCase
       use "unchanged api_key count"
       use "unchanged created_at in database"
       use "unchanged purpose in database"
-
-      test "body should say 'extra' is an invalid param" do
-        assert_include "errors", parsed_response_body
-        assert_include "invalid_values_for_params", parsed_response_body["errors"]
-        assert_include "key_type", parsed_response_body["errors"]["invalid_values_for_params"]
-      end
+      use "return errors hash saying key_type has invalid value"
     end
     
     shared "shared tests for successful partial update of purpose of user key" do

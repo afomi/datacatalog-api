@@ -48,12 +48,7 @@ class UsersPostControllerTest < RequestTestCase
     end
   
     use "return 400 Bad Request"
-  
-    test "body should say 'admin' is an invalid param" do
-      assert_include "errors", parsed_response_body
-      assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "admin", parsed_response_body["errors"]["invalid_params"]
-    end
+    use "return errors hash saying admin is invalid"
   end
 
   context "admin user : post /users : protected param 'creator_api_key'" do
@@ -68,12 +63,7 @@ class UsersPostControllerTest < RequestTestCase
     end
   
     use "return 400 Bad Request"
-  
-    test "body should say 'creator_api_key' is an invalid param" do
-      assert_include "errors", parsed_response_body
-      assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "creator_api_key", parsed_response_body["errors"]["invalid_params"]
-    end
+    use "return errors hash saying creator_api_key is invalid"
   end
   
   context "admin user : post /users : extra param 'junk'" do
@@ -87,12 +77,7 @@ class UsersPostControllerTest < RequestTestCase
     end
   
     use "return 400 Bad Request"
-  
-    test "body should say 'extra' is an invalid param" do
-      assert_include "errors", parsed_response_body
-      assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "junk", parsed_response_body["errors"]["invalid_params"]
-    end
+    use "return errors hash saying junk is invalid"
   end
 
   # - - - - - - - - - -

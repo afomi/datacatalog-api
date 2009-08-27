@@ -109,14 +109,6 @@ class UsersKeysPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  shared "return errors hash saying key_type is missing" do
-    test "body should say 'key_type' is missing" do
-      assert_include "errors", parsed_response_body
-      assert_include "missing_params", parsed_response_body["errors"]
-      assert_include "key_type", parsed_response_body["errors"]["missing_params"]
-    end
-  end
-
   context "owner API key : post /users/:id/keys : missing params" do
     before do
       post "/users/#{@id}/keys", {
@@ -152,14 +144,6 @@ class UsersKeysPostControllerTest < RequestTestCase
 
   # - - - - - - - - - -
   
-  shared "return errors hash saying junk is invalid" do
-    test "body should say 'junk' is an invalid param" do
-      assert_include "errors", parsed_response_body
-      assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "junk", parsed_response_body["errors"]["invalid_params"]
-    end
-  end
-
   context "owner API key : post /users/:id/keys : extra param 'junk'" do
     before do
       post "/users/#{@id}/keys", {

@@ -7,11 +7,7 @@ class RequestTestCase
     # allowed. In order words, some actions can only be done
     # anonymously.
     
-    test "body should say the API key is an invalid param" do
-      assert_include "errors", parsed_response_body
-      assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "api_key", parsed_response_body["errors"]["invalid_params"]
-    end
+    use "return errors hash saying api_key is invalid"
   end
   
   shared "return 401 because the API key is invalid" do

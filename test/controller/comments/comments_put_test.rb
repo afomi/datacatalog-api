@@ -108,12 +108,7 @@ class CommentsPutControllerTest < RequestTestCase
     use "return 400 Bad Request"
     use "unchanged comment count"
     use "unchanged comment text in database"
-  
-    test "body should say 'updated_at' is an invalid param" do
-      assert_include "errors", parsed_response_body
-      assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "updated_at", parsed_response_body["errors"]["invalid_params"]
-    end
+    use "return errors hash saying updated_at is invalid"
   end
   
   context "admin user : put /comments : update : extra param" do
@@ -128,12 +123,7 @@ class CommentsPutControllerTest < RequestTestCase
     use "return 400 Bad Request"
     use "unchanged comment count"
     use "unchanged comment text in database"
-  
-    test "body should say 'junk' is an invalid param" do
-      assert_include "errors", parsed_response_body
-      assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "junk", parsed_response_body["errors"]["invalid_params"]
-    end
+    use "return errors hash saying junk is invalid"
   end
 
   # - - - - - - - - - -

@@ -110,12 +110,7 @@ class SourcesRatingsPutControllerTest < RequestTestCase
         
           use "return 400 Bad Request"
           use "unchanged rating count"
-                  
-          test "body should say 'created_at' is an invalid param" do
-            assert_include "errors", parsed_response_body
-            assert_include "invalid_params", parsed_response_body["errors"]
-            assert_include "created_at", parsed_response_body["errors"]["invalid_params"]
-          end
+          use "return errors hash saying created_at is invalid"
         
           test "created_at should be unchanged in database" do
             source = Source.find_by_id @source.id
@@ -150,12 +145,7 @@ class SourcesRatingsPutControllerTest < RequestTestCase
         
           use "return 400 Bad Request"
           use "unchanged rating count"
-        
-          test "body should say 'extra' is an invalid param" do
-            assert_include "errors", parsed_response_body
-            assert_include "invalid_params", parsed_response_body["errors"]
-            assert_include "junk", parsed_response_body["errors"]["invalid_params"]
-          end
+          use "return errors hash saying junk is invalid"
 
           test "created_at should be unchanged in database" do
             source = Source.find_by_id @source.id

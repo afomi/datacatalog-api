@@ -107,12 +107,7 @@ class UsersPutControllerTest < RequestTestCase
     use "return 400 Bad Request"
     use "unchanged user count"
     use "unchanged email in database"
-  
-    test "body should say 'admin' is an invalid param" do
-      assert_include "errors", parsed_response_body
-      assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "admin", parsed_response_body["errors"]["invalid_params"]
-    end
+    use "return errors hash saying admin is invalid"
   
     test "name should be unchanged in database" do
       assert_equal "Original Guy", @user.name
@@ -132,12 +127,7 @@ class UsersPutControllerTest < RequestTestCase
     use "return 400 Bad Request"
     use "unchanged user count"
     use "unchanged email in database"
-
-    test "body should say 'junk' is an invalid param" do
-      assert_include "errors", parsed_response_body
-      assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "junk", parsed_response_body["errors"]["invalid_params"]
-    end
+    use "return errors hash saying junk is invalid"
   
     test "name should be unchanged in database" do
       assert_equal "Original Guy", @user.name
