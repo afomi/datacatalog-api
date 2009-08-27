@@ -35,28 +35,30 @@ class UsersGetAllControllerTest < RequestTestCase
     
     use "return 200 Ok"
     
-    test "body should have 2 top level elements" do
-      assert_equal 2, parsed_response_body.length
+    test "body should have 3 top level elements" do
+      assert_equal 3, parsed_response_body.length
     end
 
     test "elements should have correct names" do
-      names = (0 ... 2).map { |n| parsed_response_body[n]["name"] }
+      names = (0 ... 3).map { |n| parsed_response_body[n]["name"] }
       assert_include "Normal User", names
+      assert_include "Curator User", names
       assert_include "Admin User", names
     end
 
     test "elements should have correct emails" do
-      emails = (0 ... 2).map { |n| parsed_response_body[n]["email"] }
+      emails = (0 ... 3).map { |n| parsed_response_body[n]["email"] }
       assert_include "normal.user@inter.net", emails
+      assert_include "curator.user@inter.net", emails
       assert_include "admin.user@inter.net", emails
     end
     
     test "element should have different API keys" do
-      keys = (0 ... 2).map { |n| parsed_response_body[n]["primary_api_key"] }
-      assert_equal 2, keys.uniq.length
+      keys = (0 ... 3).map { |n| parsed_response_body[n]["primary_api_key"] }
+      assert_equal 3, keys.uniq.length
     end
 
-    2.times do |n|
+    3.times do |n|
       test "element #{n} should have created_at" do
         assert_include "created_at", parsed_response_body[n]
       end

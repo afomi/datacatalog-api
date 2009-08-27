@@ -18,6 +18,7 @@ class RequestTestCase < Test::Unit::TestCase
     Tag.destroy_all
     User.destroy_all
     @normal_user = create_normal_user
+    @curator_user = create_curator_user
     @admin_user = create_admin_user
   end
 

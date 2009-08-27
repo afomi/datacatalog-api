@@ -31,6 +31,23 @@ module CheckupHelper
       }
     }.to_json
   end
+  
+  def self.curator_api_key
+    {
+      "anonymous"     => false,
+      "valid_api_key" => true,
+      "curator"       => true,
+      "resources" => {
+        "/"             => full_uri("/"),
+        "checkup"       => full_uri("checkup"),
+        "comments"      => full_uri("comments"),
+        "documents"     => full_uri("documents"),
+        "organizations" => full_uri("organizations"),
+        "sources"       => full_uri("sources"),
+        "users"         => full_uri("users"),
+      }
+    }.to_json
+  end
 
   def self.admin_api_key
     {

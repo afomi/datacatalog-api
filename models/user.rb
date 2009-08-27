@@ -11,6 +11,7 @@ class User
 
   key :name,            String
   key :email,           String,  :index => true
+  key :curator,         Boolean, :default => false
   key :admin,           Boolean, :default => false
   key :creator_api_key, String
   

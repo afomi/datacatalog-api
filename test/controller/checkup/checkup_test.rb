@@ -34,7 +34,7 @@ class CheckupTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous user : get /checkup" do
+  context "anonymous : get /checkup" do
     before do
       get '/checkup'
     end
@@ -44,12 +44,13 @@ class CheckupTest < RequestTestCase
     
     test "should reveal resources available" do
       assert_include "resources", parsed_response_body
-      assert_include "/",       parsed_response_body["resources"]
-      assert_include "checkup", parsed_response_body["resources"]
+      resources = parsed_response_body["resources"]
+      assert_include "/"         , resources
+      assert_include "checkup"   , resources
     end
   end
   
-  context "incorrect user : get /checkup" do
+  context "incorrect API key : get /checkup" do
     before do
       get '/checkup', :api_key => "does_not_exist_in_database"
     end
@@ -58,7 +59,7 @@ class CheckupTest < RequestTestCase
     use "invalid API key"
   end
   
-  context "normal user : get /checkup" do
+  context "normal API key : get /checkup" do
     before do
       get '/checkup', :api_key => @normal_user.primary_api_key
     end
@@ -74,12 +75,40 @@ class CheckupTest < RequestTestCase
       assert_include "checkup"       , resources
       assert_include "comments"      , resources
       assert_include "documents"     , resources
+      assert_include "organizations" , resources
       assert_include "sources"       , resources
       assert_include "users"         , resources
     end
   end
 
-  context "admin user : get /checkup" do
+  context "curator API key : get /checkup" do
+    before do
+      get '/checkup', :api_key => @curator_user.primary_api_key
+    end
+    
+    use "return 200 OK"
+    use "not anonymous"
+    use "valid API key"
+
+    test "should indicate curator permissions" do
+      assert_include "curator", parsed_response_body
+      assert_equal true, parsed_response_body["curator"]
+    end
+
+    test "should reveal resources available" do
+      assert_include "resources", parsed_response_body
+      resources = parsed_response_body["resources"]
+      assert_include "/"             , resources
+      assert_include "checkup"       , resources
+      assert_include "comments"      , resources
+      assert_include "documents"     , resources
+      assert_include "organizations" , resources
+      assert_include "sources"       , resources
+      assert_include "users"         , resources
+    end
+  end
+
+  context "admin API key : get /checkup" do
     before do
       get '/checkup', :api_key => @admin_user.primary_api_key
     end
@@ -100,6 +129,7 @@ class CheckupTest < RequestTestCase
       assert_include "checkup"       , resources
       assert_include "comments"      , resources
       assert_include "documents"     , resources
+      assert_include "organizations" , resources
       assert_include "sources"       , resources
       assert_include "users"         , resources
     end

@@ -8,8 +8,20 @@ module ModelHelpers
     User.create({
       :api_keys  => [key],
       :name      => "Normal User",
-      :email     => "normal.user@inter.net",
-      :admin     => false
+      :email     => "normal.user@inter.net"
+    })
+  end
+
+  def create_curator_user
+    key = ApiKey.new(
+      :api_key  => "curator-11112e3582b6b87595fbebc0315764a6",
+      :key_type => "primary"
+    )
+    User.create({
+      :api_keys  => [key],
+      :name      => "Curator User",
+      :email     => "curator.user@inter.net",
+      :curator   => true
     })
   end
 
