@@ -8,7 +8,7 @@ class CommentsPostControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous user : post /comments" do
+  context "anonymous : post /comments" do
     before do
       post '/comments'
     end
@@ -17,7 +17,7 @@ class CommentsPostControllerTest < RequestTestCase
     use "unchanged comment count"
   end
   
-  context "incorrect user : post /comments" do
+  context "incorrect API key : post /comments" do
     before do
       post '/comments', :api_key => "does_not_exist_in_database"
     end
@@ -26,7 +26,7 @@ class CommentsPostControllerTest < RequestTestCase
     use "unchanged comment count"
   end
   
-  context "normal user : post /comments" do
+  context "normal API key : post /comments" do
     before do
       post '/comments', :api_key => @normal_user.primary_api_key
     end
@@ -37,7 +37,7 @@ class CommentsPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
 
-  context "admin user : post /comments : protected param 'updated_at'" do
+  context "admin API key : post /comments : protected param 'updated_at'" do
     before do
       post '/comments', {
         :api_key    => @admin_user.primary_api_key,
@@ -51,7 +51,7 @@ class CommentsPostControllerTest < RequestTestCase
     use "return errors hash saying updated_at is invalid"
   end
   
-  context "admin user : post /comments : extra param 'junk'" do
+  context "admin API key : post /comments : extra param 'junk'" do
     before do
       post '/comments', {
         :api_key => @admin_user.primary_api_key,
@@ -67,7 +67,7 @@ class CommentsPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "admin user : post /comments : correct params" do
+  context "admin API key : post /comments : correct params" do
     before do
       post '/comments', {
         :api_key => @admin_user.primary_api_key,

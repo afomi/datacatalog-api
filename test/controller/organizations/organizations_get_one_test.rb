@@ -10,7 +10,7 @@ class OrganizationsGetOneControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous user : get /organizations/:id" do
+  context "anonymous : get /organizations/:id" do
     before do
       get "/organizations/#{@id}"
     end
@@ -18,7 +18,7 @@ class OrganizationsGetOneControllerTest < RequestTestCase
     use "return 401 because the API key is missing"
   end
   
-  context "incorrect user : get /organizations/:id" do
+  context "incorrect API key : get /organizations/:id" do
     before do
       get "/organizations/#{@id}", :api_key => "does_not_exist_in_database"
     end
@@ -28,7 +28,7 @@ class OrganizationsGetOneControllerTest < RequestTestCase
 
   # - - - - - - - - - -
   
-  context "normal user : get /organizations/:fake_id : not found" do
+  context "normal API key : get /organizations/:fake_id : not found" do
     before do
       get "/organizations/#{@fake_id}", :api_key => @normal_user.primary_api_key
     end
@@ -37,7 +37,7 @@ class OrganizationsGetOneControllerTest < RequestTestCase
     use "return an empty response body"
   end
   
-  context "admin user : get /organizations/:fake_id : not found" do
+  context "admin API key : get /organizations/:fake_id : not found" do
     before do
       get "/organizations/#{@fake_id}", :api_key => @admin_user.primary_api_key
     end
@@ -48,7 +48,7 @@ class OrganizationsGetOneControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "normal user : get /organizations/:id : found" do
+  context "normal API key : get /organizations/:id : found" do
     before do
       get "/organizations/#{@id}", :api_key => @normal_user.primary_api_key
     end
@@ -61,7 +61,7 @@ class OrganizationsGetOneControllerTest < RequestTestCase
     end
   end
   
-  context "admin user : get /organizations/:id : found" do
+  context "admin API key : get /organizations/:id : found" do
     before do
       get "/organizations/#{@id}", :api_key => @admin_user.primary_api_key
     end

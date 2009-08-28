@@ -11,7 +11,7 @@ class SourcesDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous user : delete /sources" do
+  context "anonymous : delete /sources" do
     before do
       delete "/sources/#{@id}"
     end
@@ -20,7 +20,7 @@ class SourcesDeleteControllerTest < RequestTestCase
     use "unchanged source count"
   end
 
-  context "incorrect user : delete /sources" do
+  context "incorrect API key : delete /sources" do
     before do
       delete "/sources/#{@id}", :api_key => "does_not_exist_in_database"
     end
@@ -29,7 +29,7 @@ class SourcesDeleteControllerTest < RequestTestCase
     use "unchanged source count"
   end
 
-  context "normal user : delete /sources" do
+  context "normal API key : delete /sources" do
     before do
       delete "/sources/#{@id}", :api_key => @normal_user.primary_api_key
     end
@@ -40,7 +40,7 @@ class SourcesDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : delete /sources/:fake_id" do
+  context "admin API key : delete /sources/:fake_id" do
     before do
       delete "/sources/#{@fake_id}", :api_key => @admin_user.primary_api_key
     end
@@ -52,7 +52,7 @@ class SourcesDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : delete /sources/:id" do
+  context "admin API key : delete /sources/:id" do
     before do
       delete "/sources/#{@id}", :api_key => @admin_user.primary_api_key
     end
@@ -70,7 +70,7 @@ class SourcesDeleteControllerTest < RequestTestCase
     end
   end
 
-  context "admin user : double delete /users" do
+  context "admin API key : double delete /users" do
     before do
       delete "/sources/#{@id}", :api_key => @admin_user.primary_api_key
       delete "/sources/#{@id}", :api_key => @admin_user.primary_api_key

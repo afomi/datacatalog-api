@@ -11,7 +11,7 @@ class DocumentsDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous user : delete /documents" do
+  context "anonymous : delete /documents" do
     before do
       delete "/documents/#{@id}"
     end
@@ -20,7 +20,7 @@ class DocumentsDeleteControllerTest < RequestTestCase
     use "unchanged document count"
   end
 
-  context "incorrect user : delete /documents" do
+  context "incorrect API key : delete /documents" do
     before do
       delete "/documents/#{@id}", :api_key => "does_not_exist_in_database"
     end
@@ -29,7 +29,7 @@ class DocumentsDeleteControllerTest < RequestTestCase
     use "unchanged document count"
   end
 
-  context "normal user : delete /documents" do
+  context "normal API key : delete /documents" do
     before do
       delete "/documents/#{@id}", :api_key => @normal_user.primary_api_key
     end
@@ -40,7 +40,7 @@ class DocumentsDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : delete /documents/:fake_id" do
+  context "admin API key : delete /documents/:fake_id" do
     before do
       delete "/documents/#{@fake_id}", :api_key => @admin_user.primary_api_key
     end
@@ -52,7 +52,7 @@ class DocumentsDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : delete /documents/:id" do
+  context "admin API key : delete /documents/:id" do
     before do
       delete "/documents/#{@id}", :api_key => @admin_user.primary_api_key
     end
@@ -70,7 +70,7 @@ class DocumentsDeleteControllerTest < RequestTestCase
     end
   end
 
-  context "admin user : double delete /users" do
+  context "admin API key : double delete /users" do
     before do
       delete "/documents/#{@id}", :api_key => @admin_user.primary_api_key
       delete "/documents/#{@id}", :api_key => @admin_user.primary_api_key

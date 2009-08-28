@@ -21,7 +21,7 @@ class TagsPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous user : put /tags" do
+  context "anonymous : put /tags" do
     before do
       put "/tags/#{@id}"
     end
@@ -30,7 +30,7 @@ class TagsPutControllerTest < RequestTestCase
     use "unchanged tag count"
   end
 
-  context "incorrect user : put /tags" do
+  context "incorrect API key : put /tags" do
     before do
       put "/tags/#{@id}", :api_key => "does_not_exist_in_database"
     end
@@ -39,7 +39,7 @@ class TagsPutControllerTest < RequestTestCase
     use "unchanged tag count"
   end
   
-  context "normal user : put /tags" do
+  context "normal API key : put /tags" do
     before do
       put "/tags/#{@id}", :api_key => @normal_user.primary_api_key
     end
@@ -50,7 +50,7 @@ class TagsPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : put /tags : attempt to create : protected param 'create_at'" do
+  context "admin API key : put /tags : attempt to create : protected param 'create_at'" do
     before do
       put "/tags/#{@fake_id}", {
         :api_key    => @admin_user.primary_api_key,
@@ -65,7 +65,7 @@ class TagsPutControllerTest < RequestTestCase
     use "unchanged tag text in database"
   end
 
-  context "admin user : put /tags : attempt to create : extra param 'junk'" do
+  context "admin API key : put /tags : attempt to create : extra param 'junk'" do
     before do
       put "/tags/#{@fake_id}", {
         :api_key => @admin_user.primary_api_key,
@@ -80,7 +80,7 @@ class TagsPutControllerTest < RequestTestCase
     use "unchanged tag text in database"
   end
   
-  context "admin user : put /tags : attempt to create : correct params" do
+  context "admin API key : put /tags : attempt to create : correct params" do
     before do
       put "/tags/#{@fake_id}", {
         :api_key => @admin_user.primary_api_key,
@@ -96,7 +96,7 @@ class TagsPutControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "admin user : put /tags : update : protected param 'updated_at'" do
+  context "admin API key : put /tags : update : protected param 'updated_at'" do
     before do
       put "/tags/#{@id}", {
         :api_key    => @admin_user.primary_api_key,
@@ -111,7 +111,7 @@ class TagsPutControllerTest < RequestTestCase
     use "return errors hash saying updated_at is invalid"
   end
   
-  context "admin user : put /tags : update : extra param 'junk'" do
+  context "admin API key : put /tags : update : extra param 'junk'" do
     before do
       put "/tags/#{@id}", {
         :api_key => @admin_user.primary_api_key,
@@ -128,7 +128,7 @@ class TagsPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
   
-  context "admin user : put /tags : update : correct params" do
+  context "admin API key : put /tags : update : correct params" do
     before do
       put "/tags/#{@id}", {
         :api_key => @admin_user.primary_api_key,

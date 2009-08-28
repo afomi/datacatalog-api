@@ -15,7 +15,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper
 
 class RootControllerTest < RequestTestCase
 
-  context "anonymous user : get /" do
+  context "anonymous : get /" do
     before :all do
       get '/'
     end
@@ -51,7 +51,7 @@ class RootControllerTest < RequestTestCase
     end
   end
   
-  context "incorrect user : get /" do
+  context "incorrect API key : get /" do
     before :all do
       get '/', :api_key => "does_not_exist_in_database"
     end
@@ -59,7 +59,7 @@ class RootControllerTest < RequestTestCase
     use "return 400 because the API key is not allowed"
   end
 
-  context "normal user : get /" do
+  context "normal API key : get /" do
     before :all do
       get '/', :api_key => @normal_user.primary_api_key
     end
@@ -67,7 +67,7 @@ class RootControllerTest < RequestTestCase
     use "return 400 because the API key is not allowed"
   end
   
-  context "admin user : get /" do
+  context "admin API key : get /" do
     before :all do
       get '/', :api_key => @admin_user.primary_api_key
     end

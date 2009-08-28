@@ -11,7 +11,7 @@ class TagsDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous user : delete /tags" do
+  context "anonymous : delete /tags" do
     before do
       delete "/tags/#{@id}"
     end
@@ -20,7 +20,7 @@ class TagsDeleteControllerTest < RequestTestCase
     use "unchanged tag count"
   end
 
-  context "incorrect user : delete /tags" do
+  context "incorrect API key : delete /tags" do
     before do
       delete "/tags/#{@id}", :api_key => "does_not_exist_in_database"
     end
@@ -29,7 +29,7 @@ class TagsDeleteControllerTest < RequestTestCase
     use "unchanged tag count"
   end
 
-  context "normal user : delete /tags" do
+  context "normal API key : delete /tags" do
     before do
       delete "/tags/#{@id}", :api_key => @normal_user.primary_api_key
     end
@@ -40,7 +40,7 @@ class TagsDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : delete /tags/:fake_id" do
+  context "admin API key : delete /tags/:fake_id" do
     before do
       delete "/tags/#{@fake_id}", :api_key => @admin_user.primary_api_key
     end
@@ -52,7 +52,7 @@ class TagsDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : delete /tags/:id" do
+  context "admin API key : delete /tags/:id" do
     before do
       delete "/tags/#{@id}", :api_key => @admin_user.primary_api_key
     end
@@ -70,7 +70,7 @@ class TagsDeleteControllerTest < RequestTestCase
     end
   end
 
-  context "admin user : double delete /users" do
+  context "admin API key : double delete /users" do
     before do
       delete "/tags/#{@id}", :api_key => @admin_user.primary_api_key
       delete "/tags/#{@id}", :api_key => @admin_user.primary_api_key

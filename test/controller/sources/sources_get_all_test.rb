@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper
 
 class SourcesGetAllControllerTest < RequestTestCase
   
-  context "anonymous user : get /sources" do
+  context "anonymous : get /sources" do
     before do
       get '/sources'
     end
@@ -10,7 +10,7 @@ class SourcesGetAllControllerTest < RequestTestCase
     use "return 401 because the API key is missing"
   end
   
-  context "incorrect user : get /sources" do
+  context "incorrect API key : get /sources" do
     before do
       get '/sources', :api_key => "does_not_exist_in_database"
     end
@@ -18,7 +18,7 @@ class SourcesGetAllControllerTest < RequestTestCase
     use "return 401 because the API key is invalid"
   end
   
-  context "normal user : get /sources" do
+  context "normal API key : get /sources" do
     before do
       get '/sources', :api_key => @normal_user.primary_api_key
     end
@@ -28,7 +28,7 @@ class SourcesGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : get /sources : 0" do
+  context "admin API key : get /sources : 0" do
     before do
       get '/sources', :api_key => @admin_user.primary_api_key
     end
@@ -37,7 +37,7 @@ class SourcesGetAllControllerTest < RequestTestCase
     use "return an empty response body"
   end
   
-  context "admin user : get /sources : 3" do
+  context "admin API key : get /sources : 3" do
     before do
       3.times do |n|
         Source.create :url => "http://data.gov/#{n}"

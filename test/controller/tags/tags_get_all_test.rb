@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper
 
 class TagsGetAllControllerTest < RequestTestCase
   
-  context "anonymous user : get /tags" do
+  context "anonymous : get /tags" do
     before do
       get '/tags'
     end
@@ -10,7 +10,7 @@ class TagsGetAllControllerTest < RequestTestCase
     use "return 401 because the API key is missing"
   end
   
-  context "incorrect user : get /tags" do
+  context "incorrect API key : get /tags" do
     before do
       get '/tags', :api_key => "does_not_exist_in_database"
     end
@@ -18,7 +18,7 @@ class TagsGetAllControllerTest < RequestTestCase
     use "return 401 because the API key is invalid"
   end
 
-  context "normal user : get /tags" do
+  context "normal API key : get /tags" do
     before do
       get '/tags', :api_key => @normal_user.primary_api_key
     end
@@ -28,7 +28,7 @@ class TagsGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : get /tags : 0" do
+  context "admin API key : get /tags : 0" do
     before do
       get '/tags', :api_key => @admin_user.primary_api_key
     end
@@ -37,7 +37,7 @@ class TagsGetAllControllerTest < RequestTestCase
     use "return an empty response body"
   end
   
-  context "admin user : get /tags : 3" do
+  context "admin API key : get /tags : 3" do
     before do
       3.times do |n|
         Tag.create :text => "Tag #{n}"

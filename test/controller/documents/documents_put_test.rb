@@ -21,7 +21,7 @@ class DocumentsPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous user : put /documents" do
+  context "anonymous : put /documents" do
     before do
       put "/documents/#{@id}"
     end
@@ -30,7 +30,7 @@ class DocumentsPutControllerTest < RequestTestCase
     use "unchanged document count"
   end
 
-  context "incorrect user : put /documents" do
+  context "incorrect API key : put /documents" do
     before do
       put "/documents/#{@id}", :api_key => "does_not_exist_in_database"
     end
@@ -39,7 +39,7 @@ class DocumentsPutControllerTest < RequestTestCase
     use "unchanged document count"
   end
   
-  context "normal user : put /documents" do
+  context "normal API key : put /documents" do
     before do
       put "/documents/#{@id}", :api_key => @normal_user.primary_api_key
     end
@@ -50,7 +50,7 @@ class DocumentsPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : put /documents : attempt to create : protected param 'create_at'" do
+  context "admin API key : put /documents : attempt to create : protected param 'create_at'" do
     before do
       put "/documents/#{@fake_id}", {
         :api_key    => @admin_user.primary_api_key,
@@ -65,7 +65,7 @@ class DocumentsPutControllerTest < RequestTestCase
     use "unchanged document text in database"
   end
 
-  context "admin user : put /documents : attempt to create : extra param 'junk'" do
+  context "admin API key : put /documents : attempt to create : extra param 'junk'" do
     before do
       put "/documents/#{@fake_id}", {
         :api_key => @admin_user.primary_api_key,
@@ -80,7 +80,7 @@ class DocumentsPutControllerTest < RequestTestCase
     use "unchanged document text in database"
   end
   
-  context "admin user : put /documents : attempt to create : correct params" do
+  context "admin API key : put /documents : attempt to create : correct params" do
     before do
       put "/documents/#{@fake_id}", {
         :api_key => @admin_user.primary_api_key,
@@ -96,7 +96,7 @@ class DocumentsPutControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "admin user : put /documents : update : protected param 'updated_at'" do
+  context "admin API key : put /documents : update : protected param 'updated_at'" do
     before do
       put "/documents/#{@id}", {
         :api_key    => @admin_user.primary_api_key,
@@ -111,7 +111,7 @@ class DocumentsPutControllerTest < RequestTestCase
     use "return errors hash saying updated_at is invalid"
   end
   
-  context "admin user : put /documents : update : extra param 'junk'" do
+  context "admin API key : put /documents : update : extra param 'junk'" do
     before do
       put "/documents/#{@id}", {
         :api_key => @admin_user.primary_api_key,
@@ -128,7 +128,7 @@ class DocumentsPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
   
-  context "admin user : put /documents : update : correct params" do
+  context "admin API key : put /documents : update : correct params" do
     before do
       put "/documents/#{@id}", {
         :api_key => @admin_user.primary_api_key,

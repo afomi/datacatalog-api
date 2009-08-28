@@ -8,7 +8,7 @@ class DocumentsPostControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous user : post /documents" do
+  context "anonymous : post /documents" do
     before do
       post '/documents'
     end
@@ -17,7 +17,7 @@ class DocumentsPostControllerTest < RequestTestCase
     use "unchanged document count"
   end
   
-  context "incorrect user : post /documents" do
+  context "incorrect API key : post /documents" do
     before do
       post '/documents', :api_key => "does_not_exist_in_database"
     end
@@ -26,7 +26,7 @@ class DocumentsPostControllerTest < RequestTestCase
     use "unchanged document count"
   end
   
-  context "normal user : post /documents" do
+  context "normal API key : post /documents" do
     before do
       post '/documents', :api_key => @normal_user.primary_api_key
     end
@@ -37,7 +37,7 @@ class DocumentsPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
 
-  context "admin user : post /documents : protected param 'updated_at'" do
+  context "admin API key : post /documents : protected param 'updated_at'" do
     before do
       post '/documents', {
         :api_key    => @admin_user.primary_api_key,
@@ -51,7 +51,7 @@ class DocumentsPostControllerTest < RequestTestCase
     use "return errors hash saying updated_at is invalid"
   end
   
-  context "admin user : post /documents : extra param 'junk'" do
+  context "admin API key : post /documents : extra param 'junk'" do
     before do
       post '/documents', {
         :api_key => @admin_user.primary_api_key,
@@ -67,7 +67,7 @@ class DocumentsPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "admin user : post /documents : correct params" do
+  context "admin API key : post /documents : correct params" do
     before do
       post '/documents', {
         :api_key => @admin_user.primary_api_key,

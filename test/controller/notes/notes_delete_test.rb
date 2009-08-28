@@ -11,7 +11,7 @@ class NotesDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous user : delete /notes" do
+  context "anonymous : delete /notes" do
     before do
       delete "/notes/#{@id}"
     end
@@ -20,7 +20,7 @@ class NotesDeleteControllerTest < RequestTestCase
     use "unchanged note count"
   end
 
-  context "incorrect user : delete /notes" do
+  context "incorrect API key : delete /notes" do
     before do
       delete "/notes/#{@id}", :api_key => "does_not_exist_in_database"
     end
@@ -29,7 +29,7 @@ class NotesDeleteControllerTest < RequestTestCase
     use "unchanged note count"
   end
 
-  context "normal user : delete /notes" do
+  context "normal API key : delete /notes" do
     before do
       delete "/notes/#{@id}", :api_key => @normal_user.primary_api_key
     end
@@ -40,7 +40,7 @@ class NotesDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : delete /notes/:fake_id" do
+  context "admin API key : delete /notes/:fake_id" do
     before do
       delete "/notes/#{@fake_id}", :api_key => @admin_user.primary_api_key
     end
@@ -52,7 +52,7 @@ class NotesDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : delete /notes/:id" do
+  context "admin API key : delete /notes/:id" do
     before do
       delete "/notes/#{@id}", :api_key => @admin_user.primary_api_key
     end
@@ -70,7 +70,7 @@ class NotesDeleteControllerTest < RequestTestCase
     end
   end
 
-  context "admin user : double delete /users" do
+  context "admin API key : double delete /users" do
     before do
       delete "/notes/#{@id}", :api_key => @admin_user.primary_api_key
       delete "/notes/#{@id}", :api_key => @admin_user.primary_api_key

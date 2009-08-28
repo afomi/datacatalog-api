@@ -8,7 +8,7 @@ class OrganizationsPostControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous user : post /organizations" do
+  context "anonymous : post /organizations" do
     before do
       post '/organizations'
     end
@@ -17,7 +17,7 @@ class OrganizationsPostControllerTest < RequestTestCase
     use "unchanged organization count"
   end
   
-  context "incorrect user : post /organizations" do
+  context "incorrect API key : post /organizations" do
     before do
       post '/organizations', :api_key => "does_not_exist_in_database"
     end

@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper
 
 class NotesGetAllControllerTest < RequestTestCase
   
-  context "anonymous user : get /notes" do
+  context "anonymous : get /notes" do
     before do
       get '/notes'
     end
@@ -10,7 +10,7 @@ class NotesGetAllControllerTest < RequestTestCase
     use "return 401 because the API key is missing"
   end
   
-  context "incorrect user : get /notes" do
+  context "incorrect API key : get /notes" do
     before do
       get '/notes', :api_key => "does_not_exist_in_database"
     end
@@ -18,7 +18,7 @@ class NotesGetAllControllerTest < RequestTestCase
     use "return 401 because the API key is invalid"
   end
 
-  context "normal user : get /notes" do
+  context "normal API key : get /notes" do
     before do
       get '/notes', :api_key => @normal_user.primary_api_key
     end
@@ -28,7 +28,7 @@ class NotesGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : get /notes : 0" do
+  context "admin API key : get /notes : 0" do
     before do
       get '/notes', :api_key => @admin_user.primary_api_key
     end
@@ -37,7 +37,7 @@ class NotesGetAllControllerTest < RequestTestCase
     use "return an empty response body"
   end
   
-  context "admin user : get /notes : 3" do
+  context "admin API key : get /notes : 3" do
     before do
       3.times do |n|
         Note.create :text => "Note #{n}"

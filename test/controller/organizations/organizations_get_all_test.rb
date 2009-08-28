@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper
 
 class OrganizationsGetAllControllerTest < RequestTestCase
   
-  context "anonymous user : get /organizations" do
+  context "anonymous : get /organizations" do
     before do
       get '/organizations'
     end
@@ -10,7 +10,7 @@ class OrganizationsGetAllControllerTest < RequestTestCase
     use "return 401 because the API key is missing"
   end
   
-  context "incorrect user : get /organizations" do
+  context "incorrect API key : get /organizations" do
     before do
       get '/organizations', :api_key => "does_not_exist_in_database"
     end
@@ -20,7 +20,7 @@ class OrganizationsGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "normal user : get /organizations : 0" do
+  context "normal API key : get /organizations : 0" do
     before do
       get '/organizations', :api_key => @normal_user.primary_api_key
     end
@@ -29,7 +29,7 @@ class OrganizationsGetAllControllerTest < RequestTestCase
     use "return an empty response body"
   end
 
-  context "admin user : get /organizations : 0" do
+  context "admin API key : get /organizations : 0" do
     before do
       get '/organizations', :api_key => @admin_user.primary_api_key
     end
@@ -69,7 +69,7 @@ class OrganizationsGetAllControllerTest < RequestTestCase
     end
   end
 
-  context "normal user : get /organizations : 3" do
+  context "normal API key : get /organizations : 3" do
     before do
       3.times { |n| Organization.create :text => "Organization #{n}" }
       get '/organizations', :api_key => @normal_user.primary_api_key
@@ -78,7 +78,7 @@ class OrganizationsGetAllControllerTest < RequestTestCase
     use "shared tests for successfully getting 3 organizations"
   end
   
-  context "admin user : get /organizations : 3" do
+  context "admin API key : get /organizations : 3" do
     before do
       3.times { |n| Organization.create :text => "Organization #{n}" }
       get '/organizations', :api_key => @admin_user.primary_api_key

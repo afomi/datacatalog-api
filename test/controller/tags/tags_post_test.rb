@@ -8,7 +8,7 @@ class TagsPostControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous user : post /tags" do
+  context "anonymous : post /tags" do
     before do
       post '/tags'
     end
@@ -17,7 +17,7 @@ class TagsPostControllerTest < RequestTestCase
     use "unchanged tag count"
   end
   
-  context "incorrect user : post /tags" do
+  context "incorrect API key : post /tags" do
     before do
       post '/tags', :api_key => "does_not_exist_in_database"
     end
@@ -26,7 +26,7 @@ class TagsPostControllerTest < RequestTestCase
     use "unchanged tag count"
   end
   
-  context "normal user : post /tags" do
+  context "normal API key : post /tags" do
     before do
       post '/tags', :api_key => @normal_user.primary_api_key
     end
@@ -37,7 +37,7 @@ class TagsPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
 
-  context "admin user : post /tags : protected param 'updated_at'" do
+  context "admin API key : post /tags : protected param 'updated_at'" do
     before do
       post '/tags', {
         :api_key    => @admin_user.primary_api_key,
@@ -51,7 +51,7 @@ class TagsPostControllerTest < RequestTestCase
     use "return errors hash saying updated_at is invalid"
   end
   
-  context "admin user : post /tags : extra param 'junk'" do
+  context "admin API key : post /tags : extra param 'junk'" do
     before do
       post '/tags', {
         :api_key => @admin_user.primary_api_key,
@@ -67,7 +67,7 @@ class TagsPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "admin user : post /tags : correct params" do
+  context "admin API key : post /tags : correct params" do
     before do
       post '/tags', {
         :api_key => @admin_user.primary_api_key,

@@ -11,7 +11,7 @@ class CommentsDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous user : delete /comments" do
+  context "anonymous : delete /comments" do
     before do
       delete "/comments/#{@id}"
     end
@@ -20,7 +20,7 @@ class CommentsDeleteControllerTest < RequestTestCase
     use "unchanged comment count"
   end
 
-  context "incorrect user : delete /comments" do
+  context "incorrect API key : delete /comments" do
     before do
       delete "/comments/#{@id}", :api_key => "does_not_exist_in_database"
     end
@@ -29,7 +29,7 @@ class CommentsDeleteControllerTest < RequestTestCase
     use "unchanged comment count"
   end
 
-  context "normal user : delete /comments" do
+  context "normal API key : delete /comments" do
     before do
       delete "/comments/#{@id}", :api_key => @normal_user.primary_api_key
     end
@@ -40,7 +40,7 @@ class CommentsDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : delete /comments/:fake_id" do
+  context "admin API key : delete /comments/:fake_id" do
     before do
       delete "/comments/#{@fake_id}", :api_key => @admin_user.primary_api_key
     end
@@ -52,7 +52,7 @@ class CommentsDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : delete /comments/:id" do
+  context "admin API key : delete /comments/:id" do
     before do
       delete "/comments/#{@id}", :api_key => @admin_user.primary_api_key
     end
@@ -70,7 +70,7 @@ class CommentsDeleteControllerTest < RequestTestCase
     end
   end
 
-  context "admin user : double delete /users" do
+  context "admin API key : double delete /users" do
     before do
       delete "/comments/#{@id}", :api_key => @admin_user.primary_api_key
       delete "/comments/#{@id}", :api_key => @admin_user.primary_api_key

@@ -21,7 +21,7 @@ class SourcesPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous user : put /sources" do
+  context "anonymous : put /sources" do
     before do
       put "/sources/#{@id}"
     end
@@ -30,7 +30,7 @@ class SourcesPutControllerTest < RequestTestCase
     use "unchanged source count"
   end
 
-  context "incorrect user : put /sources" do
+  context "incorrect API key : put /sources" do
     before do
       put "/sources/#{@id}", :api_key => "does_not_exist_in_database"
     end
@@ -39,7 +39,7 @@ class SourcesPutControllerTest < RequestTestCase
     use "unchanged source count"
   end
 
-  context "normal user : put /sources" do
+  context "normal API key : put /sources" do
     before do
       put "/sources/#{@id}", :api_key => @normal_user.primary_api_key
     end
@@ -50,7 +50,7 @@ class SourcesPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : put /sources : attempt to create : protected param 'created_at'" do
+  context "admin API key : put /sources : attempt to create : protected param 'created_at'" do
     before do
       put "/sources/#{@fake_id}", {
         :api_key    => @admin_user.primary_api_key,
@@ -65,7 +65,7 @@ class SourcesPutControllerTest < RequestTestCase
     use "unchanged url in database"
   end
 
-  context "admin user : put /sources : attempt to create : extra param 'junk'" do
+  context "admin API key : put /sources : attempt to create : extra param 'junk'" do
     before do
       put "/sources/#{@fake_id}", {
         :api_key => @admin_user.primary_api_key,
@@ -80,7 +80,7 @@ class SourcesPutControllerTest < RequestTestCase
     use "unchanged url in database"
   end
   
-  context "admin user : put /sources : attempt to create : correct params" do
+  context "admin API key : put /sources : attempt to create : correct params" do
     before do
       put "/sources/#{@fake_id}", {
         :api_key => @admin_user.primary_api_key,
@@ -96,7 +96,7 @@ class SourcesPutControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "admin user : put /sources : update : protected param 'updated_at'" do
+  context "admin API key : put /sources : update : protected param 'updated_at'" do
     before do
       put "/sources/#{@id}", {
         :api_key    => @admin_user.primary_api_key,
@@ -111,7 +111,7 @@ class SourcesPutControllerTest < RequestTestCase
     use "return errors hash saying updated_at is invalid"
   end
   
-  context "admin user : put /sources : update : extra param 'junk'" do
+  context "admin API key : put /sources : update : extra param 'junk'" do
     before do
       put "/sources/#{@id}", {
         :api_key => @admin_user.primary_api_key,
@@ -128,7 +128,7 @@ class SourcesPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
   
-  context "admin user : put /sources : update : correct params" do
+  context "admin API key : put /sources : update : correct params" do
     before do
       put "/sources/#{@id}", {
         :api_key => @admin_user.primary_api_key,

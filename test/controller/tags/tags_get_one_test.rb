@@ -10,7 +10,7 @@ class TagsGetOneControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous user : get /tags/:id" do
+  context "anonymous : get /tags/:id" do
     before do
       get "/tags/#{@id}"
     end
@@ -18,7 +18,7 @@ class TagsGetOneControllerTest < RequestTestCase
     use "return 401 because the API key is missing"
   end
   
-  context "incorrect user : get /tags/:id" do
+  context "incorrect API key : get /tags/:id" do
     before do
       get "/tags/#{@id}", :api_key => "does_not_exist_in_database"
     end
@@ -26,7 +26,7 @@ class TagsGetOneControllerTest < RequestTestCase
     use "return 401 because the API key is invalid"
   end
   
-  context "normal user : get /tags/:id" do
+  context "normal API key : get /tags/:id" do
     before do
       get "/tags/#{@id}", :api_key => @normal_user.primary_api_key
     end
@@ -36,7 +36,7 @@ class TagsGetOneControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "admin user : get /tags/:fake_id : not found" do
+  context "admin API key : get /tags/:fake_id : not found" do
     before do
       get "/tags/#{@fake_id}", :api_key => @admin_user.primary_api_key
     end
@@ -45,7 +45,7 @@ class TagsGetOneControllerTest < RequestTestCase
     use "return an empty response body"
   end
   
-  context "admin user : get /tags/:id : found" do
+  context "admin API key : get /tags/:id : found" do
     before do
       get "/tags/#{@id}", :api_key => @admin_user.primary_api_key
     end

@@ -23,7 +23,7 @@ class UsersPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
   
-  context "anonymous user : put /users" do
+  context "anonymous : put /users" do
     before do
       put "/users/#{@id}"
     end
@@ -32,7 +32,7 @@ class UsersPutControllerTest < RequestTestCase
     use "unchanged user count"
   end
   
-  context "incorrect user : put /users" do
+  context "incorrect API key : put /users" do
     before do
       put "/users/#{@id}", :api_key => "does_not_exist_in_database"
     end
@@ -41,7 +41,7 @@ class UsersPutControllerTest < RequestTestCase
     use "unchanged user count"
   end
   
-  context "normal user : put /users" do
+  context "normal API key : put /users" do
     before do
       put "/users/#{@id}", :api_key => @normal_user.primary_api_key
     end
@@ -52,7 +52,7 @@ class UsersPutControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "admin user : put /users : create : protected param 'admin'" do
+  context "admin API key : put /users : create : protected param 'admin'" do
     before do
       put "/users/#{@fake_id}", {
         :api_key   => @admin_user.primary_api_key,
@@ -72,7 +72,7 @@ class UsersPutControllerTest < RequestTestCase
     end
   end
 
-  context "admin user : put /users : create : extra param 'junk'" do
+  context "admin API key : put /users : create : extra param 'junk'" do
     before do
       put "/users/#{@fake_id}", {
         :api_key => @admin_user.primary_api_key,
@@ -94,7 +94,7 @@ class UsersPutControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "admin user : put /users : update : protected param 'admin'" do
+  context "admin API key : put /users : update : protected param 'admin'" do
     before do
       put "/users/#{@id}", {
         :api_key   => @admin_user.primary_api_key,
@@ -114,7 +114,7 @@ class UsersPutControllerTest < RequestTestCase
     end
   end
   
-  context "admin user : put /users : update : extra param 'junk'" do
+  context "admin API key : put /users : update : extra param 'junk'" do
     before do
       put "/users/#{@id}", {
         :api_key => @admin_user.primary_api_key,
@@ -136,7 +136,7 @@ class UsersPutControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "admin user : put /users : create : correct params" do
+  context "admin API key : put /users : create : correct params" do
     before do
       put "/users/#{@fake_id}", {
         :api_key => @admin_user.primary_api_key,
@@ -157,7 +157,7 @@ class UsersPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : put /users : update : correct params" do
+  context "admin API key : put /users : update : correct params" do
     before do
       put "/users/#{@id}", {
         :api_key => @admin_user.primary_api_key,

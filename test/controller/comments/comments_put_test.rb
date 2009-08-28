@@ -21,7 +21,7 @@ class CommentsPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous user : put /comments" do
+  context "anonymous : put /comments" do
     before do
       put "/comments/#{@id}"
     end
@@ -30,7 +30,7 @@ class CommentsPutControllerTest < RequestTestCase
     use "unchanged comment count"
   end
 
-  context "incorrect user : put /comments" do
+  context "incorrect API key : put /comments" do
     before do
       put "/comments/#{@id}", :api_key => "does_not_exist_in_database"
     end
@@ -39,7 +39,7 @@ class CommentsPutControllerTest < RequestTestCase
     use "unchanged comment count"
   end
   
-  context "normal user : put /comments" do
+  context "normal API key : put /comments" do
     before do
       put "/comments/#{@id}", :api_key => @normal_user.primary_api_key
     end
@@ -50,7 +50,7 @@ class CommentsPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : put /comments : attempt to create : protected param 'created_at'" do
+  context "admin API key : put /comments : attempt to create : protected param 'created_at'" do
     before do
       put "/comments/#{@fake_id}", {
         :api_key    => @admin_user.primary_api_key,
@@ -65,7 +65,7 @@ class CommentsPutControllerTest < RequestTestCase
     use "unchanged comment text in database"
   end
 
-  context "admin user : put /comments : attempt to create : extra param 'junk'" do
+  context "admin API key : put /comments : attempt to create : extra param 'junk'" do
     before do
       put "/comments/#{@fake_id}", {
         :api_key => @admin_user.primary_api_key,
@@ -80,7 +80,7 @@ class CommentsPutControllerTest < RequestTestCase
     use "unchanged comment text in database"
   end
   
-  context "admin user : put /comments : attempt to create : correct params" do
+  context "admin API key : put /comments : attempt to create : correct params" do
     before do
       put "/comments/#{@fake_id}", {
         :api_key => @admin_user.primary_api_key,
@@ -96,7 +96,7 @@ class CommentsPutControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "admin user : put /comments : update : protected param 'updated_at'" do
+  context "admin API key : put /comments : update : protected param 'updated_at'" do
     before do
       put "/comments/#{@id}", {
         :api_key    => @admin_user.primary_api_key,
@@ -111,7 +111,7 @@ class CommentsPutControllerTest < RequestTestCase
     use "return errors hash saying updated_at is invalid"
   end
   
-  context "admin user : put /comments : update : extra param" do
+  context "admin API key : put /comments : update : extra param" do
     before do
       put "/comments/#{@id}", {
         :api_key => @admin_user.primary_api_key,
@@ -128,7 +128,7 @@ class CommentsPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
   
-  context "admin user : put /comments : update : correct params" do
+  context "admin API key : put /comments : update : correct params" do
     before do
       put "/comments/#{@id}", {
         :api_key => @admin_user.primary_api_key,

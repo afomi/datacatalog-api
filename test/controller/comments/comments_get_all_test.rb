@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper
 
 class CommentsGetAllControllerTest < RequestTestCase
   
-  context "anonymous user : get /comments" do
+  context "anonymous : get /comments" do
     before do
       get '/comments'
     end
@@ -10,7 +10,7 @@ class CommentsGetAllControllerTest < RequestTestCase
     use "return 401 because the API key is missing"
   end
   
-  context "incorrect user : get /comments" do
+  context "incorrect API key : get /comments" do
     before do
       get '/comments', :api_key => "does_not_exist_in_database"
     end
@@ -18,7 +18,7 @@ class CommentsGetAllControllerTest < RequestTestCase
     use "return 401 because the API key is invalid"
   end
 
-  context "normal user : get /comments" do
+  context "normal API key : get /comments" do
     before do
       get '/comments', :api_key => @normal_user.primary_api_key
     end
@@ -28,7 +28,7 @@ class CommentsGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : get /comments : 0" do
+  context "admin API key : get /comments : 0" do
     before do
       get '/comments', :api_key => @admin_user.primary_api_key
     end
@@ -37,7 +37,7 @@ class CommentsGetAllControllerTest < RequestTestCase
     use "return an empty response body"
   end
   
-  context "admin user : get /comments : 3" do
+  context "admin API key : get /comments : 3" do
     before do
       3.times do |n|
         Comment.create :text => "Comment #{n}"

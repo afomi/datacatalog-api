@@ -13,7 +13,7 @@ class UsersGetOneControllerTest < RequestTestCase
 
   # - - - - - - - - - -
   
-  context "anonymous user : get /users/:id" do
+  context "anonymous : get /users/:id" do
     before do
       get "/users/#{@id}"
     end
@@ -21,7 +21,7 @@ class UsersGetOneControllerTest < RequestTestCase
     use "return 401 because the API key is missing"
   end
   
-  context "incorrect user : get /users/:id" do
+  context "incorrect API key : get /users/:id" do
     before do
       get "/users/#{@id}", :api_key => "does_not_exist_in_database"
     end
@@ -29,7 +29,7 @@ class UsersGetOneControllerTest < RequestTestCase
     use "return 401 because the API key is invalid"
   end
   
-  context "normal user : get /users/:id" do
+  context "normal API key : get /users/:id" do
     before do
       get "/users/#{@id}", :api_key => @normal_user.primary_api_key
     end
@@ -39,7 +39,7 @@ class UsersGetOneControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : get /users/:fake_id : not found" do
+  context "admin API key : get /users/:fake_id : not found" do
     before do
       get "/users/#{@fake_id}", :api_key => @admin_user.primary_api_key
     end
@@ -50,7 +50,7 @@ class UsersGetOneControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : get /users/:id : found" do
+  context "admin API key : get /users/:id : found" do
     before do
       get "/users/#{@id}", :api_key => @admin_user.primary_api_key
     end

@@ -8,7 +8,7 @@ class UsersPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "anonymous user : post /users" do
+  context "anonymous : post /users" do
     before do
       post '/users'
     end
@@ -17,7 +17,7 @@ class UsersPostControllerTest < RequestTestCase
     use "unchanged user count"
   end
   
-  context "incorrect user : post /users" do
+  context "incorrect API key : post /users" do
     before do
       post '/users', :api_key => "does_not_exist_in_database"
     end
@@ -26,7 +26,7 @@ class UsersPostControllerTest < RequestTestCase
     use "unchanged user count"
   end
   
-  context "normal user : post /users" do
+  context "normal API key : post /users" do
     before do
       post '/users', :api_key => @normal_user.primary_api_key
     end
@@ -37,7 +37,7 @@ class UsersPostControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : post /users : protected param 'admin'" do
+  context "admin API key : post /users : protected param 'admin'" do
     before do
       post '/users', {
         :api_key   => @admin_user.primary_api_key,
@@ -51,7 +51,7 @@ class UsersPostControllerTest < RequestTestCase
     use "return errors hash saying admin is invalid"
   end
 
-  context "admin user : post /users : protected param 'creator_api_key'" do
+  context "admin API key : post /users : protected param 'creator_api_key'" do
     before do
       post '/users', {
         :api_key         => @admin_user.primary_api_key,
@@ -66,7 +66,7 @@ class UsersPostControllerTest < RequestTestCase
     use "return errors hash saying creator_api_key is invalid"
   end
   
-  context "admin user : post /users : extra param 'junk'" do
+  context "admin API key : post /users : extra param 'junk'" do
     before do
       post '/users', {
         :api_key   => @admin_user.primary_api_key,
@@ -82,7 +82,7 @@ class UsersPostControllerTest < RequestTestCase
 
   # - - - - - - - - - -
   
-  context "admin user : post /users : correct params" do
+  context "admin API key : post /users : correct params" do
     before do
       post '/users', {
         :api_key   => @admin_user.primary_api_key,

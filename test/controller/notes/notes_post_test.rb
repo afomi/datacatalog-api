@@ -8,7 +8,7 @@ class NotesPostControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous user : post /notes" do
+  context "anonymous : post /notes" do
     before do
       post '/notes'
     end
@@ -17,7 +17,7 @@ class NotesPostControllerTest < RequestTestCase
     use "unchanged note count"
   end
   
-  context "incorrect user : post /notes" do
+  context "incorrect API key : post /notes" do
     before do
       post '/notes', :api_key => "does_not_exist_in_database"
     end
@@ -26,7 +26,7 @@ class NotesPostControllerTest < RequestTestCase
     use "unchanged note count"
   end
   
-  context "normal user : post /notes" do
+  context "normal API key : post /notes" do
     before do
       post '/notes', :api_key => @normal_user.primary_api_key
     end
@@ -37,7 +37,7 @@ class NotesPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
 
-  context "admin user : post /notes : protected param 'updated_at'" do
+  context "admin API key : post /notes : protected param 'updated_at'" do
     before do
       post '/notes', {
         :api_key    => @admin_user.primary_api_key,
@@ -51,7 +51,7 @@ class NotesPostControllerTest < RequestTestCase
     use "return errors hash saying updated_at is invalid"
   end
   
-  context "admin user : post /notes : extra param 'junk'" do
+  context "admin API key : post /notes : extra param 'junk'" do
     before do
       post '/notes', {
         :api_key => @admin_user.primary_api_key,
@@ -67,7 +67,7 @@ class NotesPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "admin user : post /notes : correct params" do
+  context "admin API key : post /notes : correct params" do
     before do
       post '/notes', {
         :api_key => @admin_user.primary_api_key,

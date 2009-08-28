@@ -11,7 +11,7 @@ class OrganizationsDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous user : delete /organizations" do
+  context "anonymous : delete /organizations" do
     before do
       delete "/organizations/#{@id}"
     end
@@ -20,7 +20,7 @@ class OrganizationsDeleteControllerTest < RequestTestCase
     use "unchanged organization count"
   end
 
-  context "incorrect user : delete /organizations" do
+  context "incorrect API key : delete /organizations" do
     before do
       delete "/organizations/#{@id}", :api_key => "does_not_exist_in_database"
     end
@@ -29,7 +29,7 @@ class OrganizationsDeleteControllerTest < RequestTestCase
     use "unchanged organization count"
   end
 
-  context "normal user : delete /organizations" do
+  context "normal API key : delete /organizations" do
     before do
       delete "/organizations/#{@id}", :api_key => @normal_user.primary_api_key
     end
@@ -40,7 +40,7 @@ class OrganizationsDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : delete /organizations/:fake_id" do
+  context "admin API key : delete /organizations/:fake_id" do
     before do
       delete "/organizations/#{@fake_id}", :api_key => @admin_user.primary_api_key
     end
@@ -52,7 +52,7 @@ class OrganizationsDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin user : delete /organizations/:id" do
+  context "admin API key : delete /organizations/:id" do
     before do
       delete "/organizations/#{@id}", :api_key => @admin_user.primary_api_key
     end
@@ -70,7 +70,7 @@ class OrganizationsDeleteControllerTest < RequestTestCase
     end
   end
 
-  context "admin user : double delete /users" do
+  context "admin API key : double delete /users" do
     before do
       delete "/organizations/#{@id}", :api_key => @admin_user.primary_api_key
       delete "/organizations/#{@id}", :api_key => @admin_user.primary_api_key

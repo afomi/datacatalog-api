@@ -10,7 +10,7 @@ class SourcesGetOneControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous user : get /sources/:id" do
+  context "anonymous : get /sources/:id" do
     before do
       get "/sources/#{@id}"
     end
@@ -18,7 +18,7 @@ class SourcesGetOneControllerTest < RequestTestCase
     use "return 401 because the API key is missing"
   end
   
-  context "incorrect user : get /sources/:id" do
+  context "incorrect API key : get /sources/:id" do
     before do
       get "/sources/#{@id}", :api_key => "does_not_exist_in_database"
     end
@@ -26,7 +26,7 @@ class SourcesGetOneControllerTest < RequestTestCase
     use "return 401 because the API key is invalid"
   end
   
-  context "normal user : get /sources/:id" do
+  context "normal API key : get /sources/:id" do
     before do
       get "/sources/#{@id}", :api_key => @normal_user.primary_api_key
     end
@@ -36,7 +36,7 @@ class SourcesGetOneControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "admin user : get /sources/:fake_id : not found" do
+  context "admin API key : get /sources/:fake_id : not found" do
     before do
       get "/sources/#{@fake_id}", :api_key => @admin_user.primary_api_key
     end
@@ -45,7 +45,7 @@ class SourcesGetOneControllerTest < RequestTestCase
     use "return an empty response body"
   end
   
-  context "admin user : get /sources/:id : found" do
+  context "admin API key : get /sources/:id : found" do
     before do
       get "/sources/#{@id}", :api_key => @admin_user.primary_api_key
     end

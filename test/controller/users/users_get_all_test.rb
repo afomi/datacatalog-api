@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper
 
 class UsersGetAllControllerTest < RequestTestCase
   
-  context "anonymous user : get /users" do
+  context "anonymous : get /users" do
     before do
       get '/users'
     end
@@ -10,7 +10,7 @@ class UsersGetAllControllerTest < RequestTestCase
     use "return 401 because the API key is missing"
   end
   
-  context "incorrect user : get /users" do
+  context "incorrect API key : get /users" do
     before do
       get '/users', :api_key => "does_not_exist_in_database"
     end
@@ -18,7 +18,7 @@ class UsersGetAllControllerTest < RequestTestCase
     use "return 401 because the API key is invalid"
   end
   
-  context "normal user : get /users" do
+  context "normal API key : get /users" do
     before do
       get '/users', :api_key => @normal_user.primary_api_key
     end
@@ -28,7 +28,7 @@ class UsersGetAllControllerTest < RequestTestCase
   
   # - - - - - - - - - -
 
-  context "admin user : get /users" do
+  context "admin API key : get /users" do
     before do
       get '/users', :api_key => @admin_user.primary_api_key
     end
