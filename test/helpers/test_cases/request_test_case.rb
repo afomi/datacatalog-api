@@ -14,6 +14,7 @@ class RequestTestCase < Test::Unit::TestCase
     Document.destroy_all
     Note.destroy_all
     Organization.destroy_all
+    Rating.destroy_all
     Source.destroy_all
     Tag.destroy_all
     User.destroy_all
