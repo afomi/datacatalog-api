@@ -80,8 +80,7 @@ class CommentsDeleteControllerTest < RequestTestCase
     use "return an empty response body"
     use "decremented comment count"
   
-    test "
-     should be deleted in database" do
+    test "should be deleted in database" do
       assert_equal nil, Comment.find_by_id(@id)
     end
   end
