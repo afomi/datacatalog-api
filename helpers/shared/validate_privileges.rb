@@ -1,102 +1,76 @@
 def require_valid_api_key
-  check_api_key({
-    :missing   => lambda { error 401, { "errors" => ["missing_api_key"] }.to_json },
-    :invalid   => lambda { error 401, { "errors" => ["invalid_api_key"] }.to_json },
-    :non_owner => lambda {},
-    :owner     => lambda {},
-    :curator   => lambda {},
-    :admin     => lambda {}
-  })
+  @privileges = privileges_for_api_key
+  if @privileges[:anonymous]
+    error 401, { "errors" => ["missing_api_key"] }.to_json
+  end
+  unless @privileges[:basic]
+    error 401, { "errors" => ["invalid_api_key"] }.to_json
+  end
 end
 
 def require_owner_or_higher(user_id)
-  check_api_key({
-    :missing   => lambda { error 401, { "errors" => ["missing_api_key"] }.to_json },
-    :invalid   => lambda { error 401, { "errors" => ["invalid_api_key"] }.to_json },
-    :non_owner => lambda { error 401, { "errors" => ["unauthorized_api_key"] }.to_json },
-    :owner     => lambda {},
-    :curator   => lambda {},
-    :admin     => lambda {}
-  }, user_id)
+  @privileges = privileges_for_api_key(user_id)
+  if @privileges[:anonymous]
+    error 401, { "errors" => ["missing_api_key"] }.to_json
+  end
+  unless @privileges[:basic]
+    error 401, { "errors" => ["invalid_api_key"] }.to_json
+  end
+  unless @privileges[:owner]
+    error 401, { "errors" => ["unauthorized_api_key"] }.to_json
+  end
 end
 
 def require_curator_or_higher
-  check_api_key({
-    :missing   => lambda { error 401, { "errors" => ["missing_api_key"] }.to_json },
-    :invalid   => lambda { error 401, { "errors" => ["invalid_api_key"] }.to_json },
-    :non_owner => lambda { error 401, { "errors" => ["unauthorized_api_key"] }.to_json },
-    :owner     => lambda { error 401, { "errors" => ["unauthorized_api_key"] }.to_json },
-    :curator   => lambda {},
-    :admin     => lambda {}
-  })
+  @privileges = privileges_for_api_key
+  if @privileges[:anonymous]
+    error 401, { "errors" => ["missing_api_key"] }.to_json
+  end
+  unless @privileges[:basic]
+    error 401, { "errors" => ["invalid_api_key"] }.to_json
+  end
+  unless @privileges[:curator]
+    error 401, { "errors" => ["unauthorized_api_key"] }.to_json
+  end
 end
 
 def require_admin
-  check_api_key({
-    :missing   => lambda { error 401, { "errors" => ["missing_api_key"] }.to_json },
-    :invalid   => lambda { error 401, { "errors" => ["invalid_api_key"] }.to_json },
-    :non_owner => lambda { error 401, { "errors" => ["unauthorized_api_key"] }.to_json },
-    :owner     => lambda { error 401, { "errors" => ["unauthorized_api_key"] }.to_json },
-    :curator   => lambda { error 401, { "errors" => ["unauthorized_api_key"] }.to_json },
-    :admin     => lambda {}
-  })
+  @privileges = privileges_for_api_key
+  if @privileges[:anonymous]
+    error 401, { "errors" => ["missing_api_key"] }.to_json
+  end
+  unless @privileges[:basic]
+    error 401, { "errors" => ["invalid_api_key"] }.to_json
+  end
+  unless @privileges[:admin]
+    error 401, { "errors" => ["unauthorized_api_key"] }.to_json
+  end
 end
 
-def check_api_key(hooks, user_id=nil)
+def privileges_for_api_key(user_id=nil)
+  default = {
+    :anonymous => false,
+    :basic     => false,
+    :owner     => false,
+    :curator   => false,
+    :admin     => false
+  }
   api_key = params.delete("api_key")
   unless api_key
-    @privileges = {
-      :normal  => false,
-      :owner   => false,
-      :curator => false,
-      :admin   => false
-    }
-    return hooks[:missing].call
+    return default.merge(:anonymous => true)
   end
-  user = User.find(:first, :conditions => {
-    'api_keys.api_key' => api_key
-  })
+  user = User.find(:first, :conditions => { 'api_keys.api_key' => api_key })
   unless user
-    @privileges = {
-      :normal  => false,
-      :owner   => false,
-      :curator => false,
-      :admin   => false
-    }
-    return hooks[:invalid].call
+    return default
   end
   if user.admin
-    @privileges = {
-      :normal  => true,
-      :owner   => true,
-      :curator => true,
-      :admin   => true
-    }
-    return hooks[:admin].call
+    return default.merge(:admin => true, :curator => true, :owner => true, :basic => true)
   end
   if user.curator
-    @privileges = {
-      :normal  => true,
-      :owner   => true,
-      :curator => true,
-      :admin   => false
-    }
-    return hooks[:curator].call
+    return default.merge(:curator => true, :owner => true, :basic => true)
   end
   if user_id && user_id == user.id
-    @privileges = {
-      :normal  => true,
-      :owner   => true,
-      :curator => true,
-      :admin   => false
-    }
-    return hooks[:owner].call
+    return default.merge(:owner => true, :basic => true)
   end
-  @privileges = {
-    :normal  => true,
-    :owner   => false,
-    :curator => false,
-    :admin   => false
-  }
-  return hooks[:non_owner].call
+  default.merge(:basic => true)
 end
