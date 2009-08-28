@@ -155,6 +155,8 @@ class OrganizationsPostControllerTest < RequestTestCase
     end
   end
 
+  # - - - - - - - - - -
+
   context "normal API key : post /organizations : correct params" do
     before do
       post '/organizations', {
@@ -173,7 +175,7 @@ class OrganizationsPostControllerTest < RequestTestCase
   context "curator API key : post /organizations : correct params" do
     before do
       post '/organizations', {
-        :api_key => @admin_user.primary_api_key,
+        :api_key => @curator_user.primary_api_key,
         :text    => "Organization A",
       }
     end
