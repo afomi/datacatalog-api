@@ -1,6 +1,8 @@
 def validate_rating_params
   validate_params Rating, %w(
+    user_id
     created_at
+    updated_at
   )
 end
 

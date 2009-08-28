@@ -7,12 +7,6 @@ class Rating
   key :text,       String
   key :user_id,    String
   key :source_id,  String
-  key :created_at, Time
-
-  def initialize(attrs={})
-    super
-    write_attribute('created_at', Time.now.utc) unless read_attribute('created_at')
-  end
 
   alias original_to_json to_json
   def to_json(options = nil)
