@@ -148,6 +148,15 @@ class RatingsPostControllerTest < RequestTestCase
     end
     
     use "successful POST to ratings"
+
+    test "body should have user_id matching the normal user" do
+      assert_equal @normal_user.id, parsed_response_body["user_id"]
+    end
+    
+    test "user_id should match normal user in database" do
+      rating = Rating.find_by_id(parsed_response_body["id"])
+      assert_equal @normal_user.id, rating.user_id
+    end
   end
 
   context "curator API key : post /ratings : correct params" do
@@ -159,6 +168,15 @@ class RatingsPostControllerTest < RequestTestCase
     end
     
     use "successful POST to ratings"
+
+    test "body should have user_id matching the curator user" do
+      assert_equal @curator_user.id, parsed_response_body["user_id"]
+    end
+    
+    test "user_id should match normal user in database" do
+      rating = Rating.find_by_id(parsed_response_body["id"])
+      assert_equal @curator_user.id, rating.user_id
+    end
   end
 
   context "admin API key : post /ratings : correct params" do
@@ -170,6 +188,15 @@ class RatingsPostControllerTest < RequestTestCase
     end
     
     use "successful POST to ratings"
+
+    test "body should have user_id matching the admin user" do
+      assert_equal @admin_user.id, parsed_response_body["user_id"]
+    end
+    
+    test "user_id should match admin user in database" do
+      rating = Rating.find_by_id(parsed_response_body["id"])
+      assert_equal @admin_user.id, rating.user_id
+    end
   end
 
 end
