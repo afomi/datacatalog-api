@@ -170,6 +170,15 @@ class OrganizationsPostControllerTest < RequestTestCase
     use "incremented organization count"
     use "shared tests for successful update of organizations"
     use "needs_curation should be true"
+
+    test "body should have user_id matching the normal user" do
+      assert_equal @normal_user.id, parsed_response_body["user_id"]
+    end
+    
+    test "user_id should match normal user in database" do
+      organization = Organization.find_by_id(parsed_response_body["id"])
+      assert_equal @normal_user.id, organization.user_id
+    end
   end
 
   context "curator API key : post /organizations : correct params" do
@@ -185,6 +194,15 @@ class OrganizationsPostControllerTest < RequestTestCase
     use "incremented organization count"
     use "shared tests for successful update of organizations"
     use "needs_curation should be false"
+
+    test "body should have user_id matching the curator user" do
+      assert_equal @curator_user.id, parsed_response_body["user_id"]
+    end
+    
+    test "user_id should match curator user in database" do
+      organization = Organization.find_by_id(parsed_response_body["id"])
+      assert_equal @curator_user.id, organization.user_id
+    end
   end
   
   context "admin API key : post /organizations : correct params" do
@@ -200,6 +218,15 @@ class OrganizationsPostControllerTest < RequestTestCase
     use "incremented organization count"
     use "shared tests for successful update of organizations"
     use "needs_curation should be false"
+
+    test "body should have user_id matching the admin user" do
+      assert_equal @admin_user.id, parsed_response_body["user_id"]
+    end
+    
+    test "user_id should match admin user in database" do
+      organization = Organization.find_by_id(parsed_response_body["id"])
+      assert_equal @admin_user.id, organization.user_id
+    end
   end
 
 end

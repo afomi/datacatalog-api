@@ -8,6 +8,7 @@ def validate_organization_params
 end
 
 def create_organization_from_params
+  params["user_id"] = @current_user.id
   params["needs_curation"] = true unless @privileges[:curator]
   document = Organization.create(params)
   response.status = 201

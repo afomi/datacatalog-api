@@ -59,17 +59,17 @@ def privileges_for_api_key(user_id=nil)
   unless api_key
     return default.merge(:anonymous => true)
   end
-  user = User.find(:first, :conditions => { 'api_keys.api_key' => api_key })
-  unless user
+  @current_user = User.find(:first, :conditions => { 'api_keys.api_key' => api_key })
+  unless @current_user
     return default
   end
-  if user.admin
+  if @current_user.admin
     return default.merge(:admin => true, :curator => true, :owner => true, :basic => true)
   end
-  if user.curator
+  if @current_user.curator
     return default.merge(:curator => true, :owner => true, :basic => true)
   end
-  if user_id && user_id == user.id
+  if user_id && user_id == @current_user.id
     return default.merge(:owner => true, :basic => true)
   end
   default.merge(:basic => true)
