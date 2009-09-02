@@ -34,40 +34,7 @@ class UsersKeysGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
   
-  context "anonymous : get /:id/keys" do
-    before do
-      get "/#{@id}/keys"
-    end
-    
-    use "return 401 because the API key is missing"
-  end
-  
-  context "incorrect API key : get /:id/keys" do
-    before do
-      get "/#{@id}/keys",
-        :api_key => "does_not_exist_in_database"
-    end
-    
-    use "return 401 because the API key is invalid"
-  end
-  
-  context "normal API key : get /:id/keys" do
-    before do
-      get "/#{@id}/keys",
-        :api_key => @normal_user.primary_api_key
-    end
-    
-    use "return 401 because the API key is unauthorized"
-  end
-
-  # - - - - - - - - - -
-  
-  context "admin API key : get /:id/keys" do
-    before do
-      get "/#{@id}/keys",
-        :api_key => @admin_user.primary_api_key
-    end
-
+  shared "successful GET of 3 api_keys" do
     
     use "return 200 Ok"
     
@@ -104,6 +71,54 @@ class UsersKeysGetAllControllerTest < RequestTestCase
         assert_not_include "updated_at", parsed_response_body[n]
       end
     end
+  end
+  
+  # - - - - - - - - - -
+  
+  context "anonymous : get /:id/keys" do
+    before do
+      get "/#{@id}/keys"
+    end
+    
+    use "return 401 because the API key is missing"
+  end
+  
+  context "incorrect API key : get /:id/keys" do
+    before do
+      get "/#{@id}/keys",
+        :api_key => "does_not_exist_in_database"
+    end
+    
+    use "return 401 because the API key is invalid"
+  end
+  
+  context "normal API key : get /:id/keys" do
+    before do
+      get "/#{@id}/keys",
+        :api_key => @normal_user.primary_api_key
+    end
+    
+    use "return 401 because the API key is unauthorized"
+  end
+
+  # - - - - - - - - - -
+
+  context "curator API key : get /:id/keys" do
+    before do
+      get "/#{@id}/keys",
+        :api_key => @curator_user.primary_api_key
+    end
+    
+    use "successful GET of 3 api_keys"
+  end
+
+  context "admin API key : get /:id/keys" do
+    before do
+      get "/#{@id}/keys",
+        :api_key => @admin_user.primary_api_key
+    end
+    
+    use "successful GET of 3 api_keys"
   end
   
 end
