@@ -15,7 +15,7 @@ class CommentsGetAllControllerTest < RequestTestCase
     test "body should have 3 top level elements" do
       assert_equal 3, parsed_response_body.length
     end
-
+    
     test "body should have correct text" do
       actual = (0 ... 3).map { |n| parsed_response_body[n]["text"] }
       3.times { |n| assert_include "Comment #{n}", actual }
@@ -61,47 +61,55 @@ class CommentsGetAllControllerTest < RequestTestCase
     
     use "return 401 because the API key is invalid"
   end
-
+  
   # - - - - - - - - - -
 
-  context "normal API key : get / : 0" do
-    before do
-      get "/", :api_key => @normal_user.primary_api_key
-    end
-    
-    use "successful GET of 0 comments"
-  end
-
-  context "admin API key : get / : 0" do
-    before do
-      get "/", :api_key => @admin_user.primary_api_key
-    end
-    
-    use "successful GET of 0 comments"
-  end
-
-  # - - - - - - - - - -
-
-  context "normal API key : get / : 3" do
-    before do
-      3.times do |n|
-        Comment.create :text => "Comment #{n}"
+  context_ "0 comments" do
+    context "normal API key : get /" do
+      before do
+        get "/", :api_key => @normal_user.primary_api_key
       end
-      get "/", :api_key => @normal_user.primary_api_key
+    
+      use "successful GET of 0 comments"
     end
-
-    use "successful GET of 3 comments"
+  
+    context "admin API key : get /" do
+      before do
+        get "/", :api_key => @admin_user.primary_api_key
+      end
+    
+      use "successful GET of 0 comments"
+    end
   end
   
-  context "admin API key : get / : 3" do
+  # - - - - - - - - - -
+
+  context_ "3 comments" do
     before do
       3.times do |n|
-        Comment.create :text => "Comment #{n}"
+        Comment.create(
+          :text      => "Comment #{n}",
+          :user_id   => get_fake_mongo_object_id,
+          :source_id => get_fake_mongo_object_id
+        )
       end
-      get "/", :api_key => @admin_user.primary_api_key
-    end
 
-    use "successful GET of 3 comments"
+      context "normal API key : get /" do
+        before do
+          get "/", :api_key => @normal_user.primary_api_key
+        end
+
+        use "successful GET of 3 comments"
+      end
+
+      context "admin API key : get /" do
+        before do
+          get "/", :api_key => @admin_user.primary_api_key
+        end
+
+        use "successful GET of 3 comments"
+      end
+    end
   end
 
 end

@@ -5,7 +5,11 @@ class TagsGetOneControllerTest < RequestTestCase
   def app; DataCatalog::Tags end
 
   before do
-    tag = Tag.create :text => "Tag A"
+    tag = Tag.create(
+      :text      => "Tag A",
+      :source_id => get_fake_mongo_object_id,
+      :user_id   => get_fake_mongo_object_id
+    )
     @id = tag.id
     @fake_id = get_fake_mongo_object_id
   end

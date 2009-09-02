@@ -68,44 +68,52 @@ class DocumentsGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "normal API key : get / : 0" do
-    before do
-      get "/", :api_key => @normal_user.primary_api_key
-    end
+  context_ "0 documents" do
+    context "normal API key : get /" do
+      before do
+        get "/", :api_key => @normal_user.primary_api_key
+      end
     
-    use "successful GET of 0 documents"
-  end
+      use "successful GET of 0 documents"
+    end
 
-  context "admin API key : get / : 0" do
-    before do
-      get "/", :api_key => @admin_user.primary_api_key
-    end
+    context "admin API key : get /" do
+      before do
+        get "/", :api_key => @admin_user.primary_api_key
+      end
     
-    use "successful GET of 0 documents"
+      use "successful GET of 0 documents"
+    end
   end
 
   # - - - - - - - - - -
 
-  context "normal API key : get / : 3" do
+  context_ "3 documents" do
     before do
       3.times do |n|
-        Document.create :text => "Document #{n}"
+        Document.create(
+          :text        => "Document #{n}",
+          :user_id     => get_fake_mongo_object_id,
+          :previous_id => get_fake_mongo_object_id
+        )
       end
-      get "/", :api_key => @normal_user.primary_api_key
     end
 
-    use "successful GET of 3 documents"
-  end
+    context "normal API key : get /" do
+      before do
+        get "/", :api_key => @normal_user.primary_api_key
+      end
+
+      use "successful GET of 3 documents"
+    end
   
-  context "admin API key : get / : 3" do
-    before do
-      3.times do |n|
-        Document.create :text => "Document #{n}"
+    context "admin API key : get /" do
+      before do
+        get "/", :api_key => @admin_user.primary_api_key
       end
-      get "/", :api_key => @admin_user.primary_api_key
-    end
 
-    use "successful GET of 3 documents"
+      use "successful GET of 3 documents"
+    end
   end
 
 end

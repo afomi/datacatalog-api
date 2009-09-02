@@ -12,6 +12,7 @@ class User
   key :curator,         Boolean, :default => false
   key :admin,           Boolean, :default => false
   key :creator_api_key, String
+  timestamps!
 
   class InconsistentState < RuntimeError; end
   

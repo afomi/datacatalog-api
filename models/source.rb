@@ -4,5 +4,6 @@ class Source
 
   key :url, String, :index => true
   many :ratings
+  timestamps!
 
 end

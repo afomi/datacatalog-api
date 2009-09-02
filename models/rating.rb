@@ -7,5 +7,6 @@ class Rating
   key :text,       String
   key :user_id,    String
   key :source_id,  String
+  timestamps!
 
 end

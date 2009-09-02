@@ -7,5 +7,6 @@ class Document
   key :source_id,   String
   key :user_id,     String
   key :previous_id, String
+  timestamps!
 
 end

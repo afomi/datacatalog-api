@@ -5,7 +5,11 @@ class DocumentsGetOneControllerTest < RequestTestCase
   def app; DataCatalog::Documents end
 
   before do
-    document = Document.create :text => "Document A"
+    document = Document.create(
+      :text        => "Document A",
+      :user_id     => get_fake_mongo_object_id,
+      :previous_id => get_fake_mongo_object_id
+    )
     @id = document.id
     @fake_id = get_fake_mongo_object_id
   end

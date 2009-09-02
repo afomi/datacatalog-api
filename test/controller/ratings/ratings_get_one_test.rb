@@ -5,7 +5,11 @@ class RatingsGetOneControllerTest < RequestTestCase
   def app; DataCatalog::Ratings end
 
   before do
-    rating = Rating.create :text => "Rating A"
+    rating = Rating.create(
+      :text      => "Rating A",
+      :source_id => get_fake_mongo_object_id,
+      :user_id   => get_fake_mongo_object_id
+    )
     @id = rating.id
     @fake_id = get_fake_mongo_object_id
   end

@@ -68,44 +68,52 @@ class NotesGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "normal API key : get / : 0" do
-    before do
-      get "/", :api_key => @normal_user.primary_api_key
-    end
+  context_ "0 notes" do
+    context "normal API key : get /" do
+      before do
+        get "/", :api_key => @normal_user.primary_api_key
+      end
     
-    use "successful GET of 0 notes"
-  end
+      use "successful GET of 0 notes"
+    end
 
-  context "admin API key : get / : 0" do
-    before do
-      get "/", :api_key => @admin_user.primary_api_key
-    end
+    context "admin API key : get /" do
+      before do
+        get "/", :api_key => @admin_user.primary_api_key
+      end
     
-    use "successful GET of 0 notes"
+      use "successful GET of 0 notes"
+    end
   end
 
   # - - - - - - - - - -
 
-  context "normal API key : get / : 3" do
+  context_ "3 notes" do
     before do
       3.times do |n|
-        Note.create :text => "Note #{n}"
+        Note.create(
+          :text      => "Note #{n}",
+          :user_id   => get_fake_mongo_object_id,
+          :source_id => get_fake_mongo_object_id
+        )
       end
-      get "/", :api_key => @normal_user.primary_api_key
     end
 
-    use "successful GET of 3 notes"
-  end
+    context "normal API key : get /" do
+      before do
+        get "/", :api_key => @normal_user.primary_api_key
+      end
+
+      use "successful GET of 3 notes"
+    end
   
-  context "admin API key : get / : 3" do
-    before do
-      3.times do |n|
-        Note.create :text => "Note #{n}"
+    context "admin API key : get /" do
+      before do
+        get "/", :api_key => @admin_user.primary_api_key
       end
-      get "/", :api_key => @admin_user.primary_api_key
-    end
 
-    use "successful GET of 3 notes"
+      use "successful GET of 3 notes"
+    end
   end
 
 end

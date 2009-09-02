@@ -5,7 +5,9 @@ class UsersGetOneControllerTest < RequestTestCase
   def app; DataCatalog::Users end
 
   before do
-    user = User.create :text => "User A"
+    user = User.create(
+      :text => "User A"
+    )
     @id = user.id
     @fake_id = get_fake_mongo_object_id
   end

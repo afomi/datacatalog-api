@@ -5,7 +5,9 @@ class SourcesGetOneControllerTest < RequestTestCase
   def app; DataCatalog::Sources end
 
   before do
-    source = Source.create :url => "http://data.gov/original"
+    source = Source.create(
+      :url => "http://data.gov/original"
+    )
     @id = source.id
     @fake_id = get_fake_mongo_object_id
   end

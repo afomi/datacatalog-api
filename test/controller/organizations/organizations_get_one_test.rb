@@ -5,7 +5,11 @@ class OrganizationsGetOneControllerTest < RequestTestCase
   def app; DataCatalog::Organizations end
 
   before do
-    organization = Organization.create :text => "Organization A"
+    organization = Organization.create(
+      :text      => "Organization A",
+      :user_id   => get_fake_mongo_object_id,
+      :source_id => get_fake_mongo_object_id
+    )
     @id = organization.id
     @fake_id = get_fake_mongo_object_id
   end

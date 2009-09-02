@@ -104,44 +104,50 @@ class UsersGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "normal API key : get / : 0" do
-    before do
-      get "/", :api_key => @normal_user.primary_api_key
-    end
+  context_ "0 added users" do
+    context "normal API key : get /" do
+      before do
+        get "/", :api_key => @normal_user.primary_api_key
+      end
     
-    use "successful GET of 0 added users"
-  end
+      use "successful GET of 0 added users"
+    end
   
-  context "admin API key : get / : 0" do
-    before do
-      get "/", :api_key => @admin_user.primary_api_key
-    end
+    context "admin API key : get /" do
+      before do
+        get "/", :api_key => @admin_user.primary_api_key
+      end
     
-    use "successful GET of 0 added users"
+      use "successful GET of 0 added users"
+    end
   end
   
   # - - - - - - - - - -
   
-  context "normal API key : get / : 3" do
+  context_ "3 added users" do
     before do
       3.times do |n|
-        User.create :text => "User #{n + 3}"
+        User.create(
+          :text => "User #{n + 3}"
+        )
       end
-      get "/", :api_key => @normal_user.primary_api_key
     end
   
-    use "successful GET of 3 added users"
-  end
+    context "normal API key : get /" do
+      before do
+        get "/", :api_key => @normal_user.primary_api_key
+      end
+  
+      use "successful GET of 3 added users"
+    end
 
-  context "admin API key : get / : 3" do
-    before do
-      3.times do |n|
-        User.create :text => "User #{n + 3}"
+    context "admin API key : get /" do
+      before do
+        get "/", :api_key => @admin_user.primary_api_key
       end
-      get "/", :api_key => @admin_user.primary_api_key
-    end
   
-    use "successful GET of 3 added users"
+      use "successful GET of 3 added users"
+    end
   end
 
 end

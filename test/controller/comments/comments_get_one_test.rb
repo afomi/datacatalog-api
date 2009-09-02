@@ -5,7 +5,11 @@ class CommentsGetOneControllerTest < RequestTestCase
   def app; DataCatalog::Comments end
 
   before do
-    comment = Comment.create :text => "Comment A"
+    comment = Comment.create(
+      :text      => "Comment A",
+      :user_id   => get_fake_mongo_object_id,
+      :source_id => get_fake_mongo_object_id
+    )
     @id = comment.id
     @fake_id = get_fake_mongo_object_id
   end

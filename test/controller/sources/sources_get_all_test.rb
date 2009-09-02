@@ -60,44 +60,50 @@ class SourcesGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "normal API key : get / : 0" do
-    before do
-      get "/", :api_key => @normal_user.primary_api_key
-    end
+  context_ "0 sources" do
+    context "normal API key : get /" do
+      before do
+        get "/", :api_key => @normal_user.primary_api_key
+      end
     
-    use "successful GET of 0 sources"
-  end
+      use "successful GET of 0 sources"
+    end
 
-  context "admin API key : get / : 0" do
-    before do
-      get "/", :api_key => @admin_user.primary_api_key
-    end
+    context "admin API key : get /" do
+      before do
+        get "/", :api_key => @admin_user.primary_api_key
+      end
     
-    use "successful GET of 0 sources"
+      use "successful GET of 0 sources"
+    end
   end
 
   # - - - - - - - - - -
 
-  context "normal API key : get / : 3" do
+  context_ "3 sources" do
     before do
       3.times do |n|
-        Source.create :url => "http://data.gov/sources/#{n}"
+        Source.create(
+          :url => "http://data.gov/sources/#{n}"
+        )
       end
-      get "/", :api_key => @normal_user.primary_api_key
     end
 
-    use "successful GET of 3 sources"
-  end
+    context "normal API key : get /" do
+      before do
+        get "/", :api_key => @normal_user.primary_api_key
+      end
+
+      use "successful GET of 3 sources"
+    end
   
-  context "admin API key : get / : 3" do
-    before do
-      3.times do |n|
-        Source.create :url => "http://data.gov/sources/#{n}"
+    context "admin API key : get /" do
+      before do
+        get "/", :api_key => @admin_user.primary_api_key
       end
-      get "/", :api_key => @admin_user.primary_api_key
-    end
 
-    use "successful GET of 3 sources"
+      use "successful GET of 3 sources"
+    end
   end
 
 end

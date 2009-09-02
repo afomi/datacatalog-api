@@ -20,6 +20,11 @@ class RatingsGetAllControllerTest < RequestTestCase
       actual = (0 ... 3).map { |n| parsed_response_body[n]["text"] }
       3.times { |n| assert_include "Rating #{n}", actual }
     end
+
+    test "body should have correct value" do
+      actual = (0 ... 3).map { |n| parsed_response_body[n]["value"] }
+      3.times { |n| assert_include n, actual }
+    end
   
     3.times do |n|
       test "element #{n} should have source_id" do
@@ -68,44 +73,53 @@ class RatingsGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "normal API key : get / : 0" do
-    before do
-      get "/", :api_key => @normal_user.primary_api_key
-    end
+  context_ "0 ratings" do
+    context "normal API key : get /" do
+      before do
+        get "/", :api_key => @normal_user.primary_api_key
+      end
     
-    use "successful GET of 0 ratings"
-  end
+      use "successful GET of 0 ratings"
+    end
 
-  context "admin API key : get / : 0" do
-    before do
-      get "/", :api_key => @admin_user.primary_api_key
-    end
+    context "admin API key : get /" do
+      before do
+        get "/", :api_key => @admin_user.primary_api_key
+      end
     
-    use "successful GET of 0 ratings"
+      use "successful GET of 0 ratings"
+    end
   end
 
   # - - - - - - - - - -
 
-  context "normal API key : get / : 3" do
+  context_ "3 ratings" do
     before do
       3.times do |n|
-        Rating.create :text => "Rating #{n}"
+        Rating.create(
+          :text      => "Rating #{n}",
+          :value     => n,
+          :user_id   => get_fake_mongo_object_id,
+          :source_id => get_fake_mongo_object_id
+        )
       end
-      get "/", :api_key => @normal_user.primary_api_key
     end
+    
+    context "normal API key : get /" do
+      before do
+        get "/", :api_key => @normal_user.primary_api_key
+      end
 
-    use "successful GET of 3 ratings"
-  end
+      use "successful GET of 3 ratings"
+    end
   
-  context "admin API key : get / : 3" do
-    before do
-      3.times do |n|
-        Rating.create :text => "Rating #{n}"
+    context "admin API key : get /" do
+      before do
+        get "/", :api_key => @admin_user.primary_api_key
       end
-      get "/", :api_key => @admin_user.primary_api_key
-    end
 
-    use "successful GET of 3 ratings"
+      use "successful GET of 3 ratings"
+    end
   end
 
 end

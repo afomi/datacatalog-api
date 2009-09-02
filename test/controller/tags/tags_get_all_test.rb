@@ -68,44 +68,52 @@ class TagsGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "normal API key : get / : 0" do
-    before do
-      get "/", :api_key => @normal_user.primary_api_key
-    end
+  context_ "0 tags" do
+    context "normal API key : get /" do
+      before do
+        get "/", :api_key => @normal_user.primary_api_key
+      end
     
-    use "successful GET of 0 tags"
-  end
+      use "successful GET of 0 tags"
+    end
 
-  context "admin API key : get / : 0" do
-    before do
-      get "/", :api_key => @admin_user.primary_api_key
-    end
+    context "admin API key : get /" do
+      before do
+        get "/", :api_key => @admin_user.primary_api_key
+      end
     
-    use "successful GET of 0 tags"
+      use "successful GET of 0 tags"
+    end
   end
 
   # - - - - - - - - - -
 
-  context "normal API key : get / : 3" do
+  context_ "3 tags" do
     before do
       3.times do |n|
-        Tag.create :text => "Tag #{n}"
+        Tag.create(
+          :text      => "Tag #{n}",
+          :user_id   => get_fake_mongo_object_id,
+          :source_id => get_fake_mongo_object_id
+        )
       end
-      get "/", :api_key => @normal_user.primary_api_key
     end
+    
+    context "normal API key : get /" do
+      before do
+        get "/", :api_key => @normal_user.primary_api_key
+      end
 
-    use "successful GET of 3 tags"
-  end
+      use "successful GET of 3 tags"
+    end
   
-  context "admin API key : get / : 3" do
-    before do
-      3.times do |n|
-        Tag.create :text => "Tag #{n}"
+    context "admin API key : get /" do
+      before do
+        get "/", :api_key => @admin_user.primary_api_key
       end
-      get "/", :api_key => @admin_user.primary_api_key
-    end
 
-    use "successful GET of 3 tags"
+      use "successful GET of 3 tags"
+    end
   end
 
 end
