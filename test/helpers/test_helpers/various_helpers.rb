@@ -12,7 +12,7 @@ module VariousHelpers
 
   # Returns a document id that does not correspond to an existing document.
   def get_fake_mongo_object_id
-    XGen::Mongo::Driver::ObjectID.new.to_s
+    Mongo::ObjectID.new.to_s
   end
   
   def get_fake_api_key(string)
