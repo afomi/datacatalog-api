@@ -52,6 +52,10 @@ class CheckupTest < RequestTestCase
       assert_include "/"         , resources
       assert_include "checkup"   , resources
     end
+    
+    test "should not have a user_id" do
+      assert_not_include "user_id", parsed_response_body
+    end
   end
   
   context "incorrect API key : get /" do
@@ -83,6 +87,10 @@ class CheckupTest < RequestTestCase
       assert_include "sources"       , resources
       assert_include "users"         , resources
     end
+
+    test "should have correct user_id" do
+      assert_equal @normal_user.id, parsed_response_body["user_id"]
+    end
   end
   
   context "curator API key : get /" do
@@ -110,6 +118,10 @@ class CheckupTest < RequestTestCase
       assert_include "sources"       , resources
       assert_include "users"         , resources
     end
+
+    test "should have correct user_id" do
+      assert_equal @curator_user.id, parsed_response_body["user_id"]
+    end
   end
   
   context "admin API key : get /" do
@@ -136,6 +148,10 @@ class CheckupTest < RequestTestCase
       assert_include "organizations" , resources
       assert_include "sources"       , resources
       assert_include "users"         , resources
+    end
+
+    test "should have correct user_id" do
+      assert_equal @admin_user.id, parsed_response_body["user_id"]
     end
   end
 

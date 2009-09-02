@@ -13,23 +13,23 @@ module DataCatalog
     end
 
     def require_at_least(level, user_id=nil)
-      @privileges = privileges_for_api_key(user_id)
+      privileges = privileges_for_api_key(user_id)
       case level
       when :basic
-        missing_api_key! if @privileges[:anonymous]
-        invalid_api_key! unless @privileges[:basic]
+        missing_api_key! if privileges[:anonymous]
+        invalid_api_key! unless privileges[:basic]
       when :owner
-        missing_api_key! if @privileges[:anonymous]
-        invalid_api_key! unless @privileges[:basic]
-        unauthorized_api_key! unless @privileges[:owner]
+        missing_api_key! if privileges[:anonymous]
+        invalid_api_key! unless privileges[:basic]
+        unauthorized_api_key! unless privileges[:owner]
       when :curator
-        missing_api_key! if @privileges[:anonymous]
-        invalid_api_key! unless @privileges[:basic]
-        unauthorized_api_key! unless @privileges[:curator]
+        missing_api_key! if privileges[:anonymous]
+        invalid_api_key! unless privileges[:basic]
+        unauthorized_api_key! unless privileges[:curator]
       when :admin
-        missing_api_key! if @privileges[:anonymous]
-        invalid_api_key! unless @privileges[:basic]
-        unauthorized_api_key! unless @privileges[:admin]
+        missing_api_key! if privileges[:anonymous]
+        invalid_api_key! unless privileges[:basic]
+        unauthorized_api_key! unless privileges[:admin]
       else
         raise "Unexpected parameter"
       end
@@ -48,7 +48,7 @@ module DataCatalog
       unless api_key
         return default.merge(:anonymous => true)
       end
-      @current_user = User.find(:first, :conditions => { 'api_keys.api_key' => api_key })
+      @current_user = User.find_by_api_key(api_key)
       unless @current_user
         return default
       end

@@ -57,6 +57,11 @@ class User
     self.save!
   end
   
+  def self.find_by_api_key(api_key)
+    find(:first, :conditions => { 'api_keys.api_key' => api_key })
+    # TODO: find :all and raise exception if more than 1 result
+  end
+  
   alias original_to_json to_json
   def to_json(options = nil)
     original_to_json({
