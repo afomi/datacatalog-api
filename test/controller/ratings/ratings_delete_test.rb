@@ -2,6 +2,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper
 
 class RatingsDeleteControllerTest < RequestTestCase
 
+  def app; DataCatalog::Ratings end
+
   before do
     rating = Rating.create :text => "Original Rating"
     @id = rating.id
@@ -11,7 +13,13 @@ class RatingsDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  shared "successful DELETE of a rating" do
+  shared "attempted DELETE rating with :fake_id" do
+    use "return 404 Not Found"
+    use "return an empty response body"
+    use "unchanged rating count"
+  end
+
+  shared "successful DELETE rating with :id" do
     use "return 200 Ok"
     use "decremented rating count"
 
@@ -25,39 +33,39 @@ class RatingsDeleteControllerTest < RequestTestCase
     end
   end
 
-  shared "double DELETE of a rating" do
+  shared "attempted double DELETE rating with :id" do
     use "return 404 Not Found"
     use "return an empty response body"
     use "decremented rating count"
-  
-    test "rating should be deleted in database" do
+
+    test "should be deleted in database" do
       assert_equal nil, Rating.find_by_id(@id)
     end
   end
 
   # - - - - - - - - - -
 
-  context "anonymous : delete /ratings/:id" do
+  context "anonymous : delete /" do
     before do
-      delete "/ratings/#{@id}"
+      delete "/#{@id}"
     end
 
     use "return 401 because the API key is missing"
     use "unchanged rating count"
   end
 
-  context "incorrect API key : delete /ratings/:id" do
+  context "incorrect API key : delete /" do
     before do
-      delete "/ratings/#{@id}", :api_key => "does_not_exist_in_database"
+      delete "/#{@id}", :api_key => "does_not_exist_in_database"
     end
 
     use "return 401 because the API key is invalid"
     use "unchanged rating count"
   end
 
-  context "normal API key : delete /ratings/:id" do
+  context "normal API key : delete /" do
     before do
-      delete "/ratings/#{@id}", :api_key => @normal_user.primary_api_key
+      delete "/#{@id}", :api_key => @normal_user.primary_api_key
     end
 
     use "return 401 because the API key is unauthorized"
@@ -66,62 +74,58 @@ class RatingsDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "curator API key : delete /ratings/:fake_id" do
+  context "curator API key : delete /:fake_id" do
     before do
-      delete "/ratings/#{@fake_id}", :api_key => @curator_user.primary_api_key
-    end
-
-    use "return 404 Not Found"
-    use "return an empty response body"
-    use "unchanged rating count"
-  end
-
-  context "admin API key : delete /ratings/:fake_id" do
-    before do
-      delete "/ratings/#{@fake_id}", :api_key => @admin_user.primary_api_key
-    end
-
-    use "return 404 Not Found"
-    use "return an empty response body"
-    use "unchanged rating count"
-  end
-
-  # - - - - - - - - - -
-
-  context "curator API key : delete /ratings/:id" do
-    before do
-      delete "/ratings/#{@id}", :api_key => @curator_user.primary_api_key
-    end
-
-    use "successful DELETE of a rating"
-  end
-
-  context "admin API key : delete /ratings/:id" do
-    before do
-      delete "/ratings/#{@id}", :api_key => @admin_user.primary_api_key
-    end
-
-    use "successful DELETE of a rating"
-  end
-
-  # - - - - - - - - - -
-  
-  context "curator API key : double delete /ratings" do
-    before do
-      delete "/ratings/#{@id}", :api_key => @curator_user.primary_api_key
-      delete "/ratings/#{@id}", :api_key => @curator_user.primary_api_key
+      delete "/#{@fake_id}", :api_key => @curator_user.primary_api_key
     end
     
-    use "double DELETE of a rating"
+    use "attempted DELETE rating with :fake_id"
   end
 
-  context "admin API key : double delete /ratings" do
+  context "admin API key : delete /:fake_id" do
     before do
-      delete "/ratings/#{@id}", :api_key => @admin_user.primary_api_key
-      delete "/ratings/#{@id}", :api_key => @admin_user.primary_api_key
+      delete "/#{@fake_id}", :api_key => @admin_user.primary_api_key
     end
 
-    use "double DELETE of a rating"
+    use "attempted DELETE rating with :fake_id"
+  end
+
+  # - - - - - - - - - -
+
+  context "curator API key : delete /:id" do
+    before do
+      delete "/#{@id}", :api_key => @curator_user.primary_api_key
+    end
+    
+    use "successful DELETE rating with :id"
+  end
+  
+  context "admin API key : delete /:id" do
+    before do
+      delete "/#{@id}", :api_key => @admin_user.primary_api_key
+    end
+    
+    use "successful DELETE rating with :id"
+  end
+
+  # - - - - - - - - - -
+
+  context "admin API key : double delete /users" do
+    before do
+      delete "/#{@id}", :api_key => @curator_user.primary_api_key
+      delete "/#{@id}", :api_key => @curator_user.primary_api_key
+    end
+    
+    use "attempted double DELETE rating with :id"
+  end
+
+  context "admin API key : double delete /users" do
+    before do
+      delete "/#{@id}", :api_key => @admin_user.primary_api_key
+      delete "/#{@id}", :api_key => @admin_user.primary_api_key
+    end
+    
+    use "attempted double DELETE rating with :id"
   end
 
 end

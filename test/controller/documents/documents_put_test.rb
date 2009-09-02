@@ -2,6 +2,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper
 
 class DocumentsPutControllerTest < RequestTestCase
 
+  def app; DataCatalog::Documents end
+
   before do
     @document = Document.create({
       :text => "Original Document"
@@ -12,36 +14,82 @@ class DocumentsPutControllerTest < RequestTestCase
   end
 
   # - - - - - - - - - -
-  
+
   shared "unchanged document text in database" do
     test "text should be unchanged in database" do
       assert_equal "Original Document", @document.text
     end
   end
 
+  shared "attempted PUT document with :fake_id with protected param" do
+    use "return 404 Not Found"
+    use "return an empty response body"
+    use "unchanged document count"
+    use "unchanged document text in database"
+  end
+
+  shared "attempted PUT document with :fake_id with invalid param" do
+    use "return 404 Not Found"
+    use "return an empty response body"
+    use "unchanged document count"
+    use "unchanged document text in database"
+  end
+
+  shared "attempted PUT document with :fake_id with correct params" do
+    use "return 404 Not Found"
+    use "return an empty response body"
+    use "unchanged document count"
+    use "unchanged document text in database"
+  end
+
+  shared "attempted PUT document with :id with protected param" do
+    use "return 400 Bad Request"
+    use "unchanged document count"
+    use "unchanged document text in database"
+    use "return errors hash saying updated_at is invalid"
+  end
+
+  shared "attempted PUT document with :id with invalid param" do
+    use "return 400 Bad Request"
+    use "unchanged document count"
+    use "unchanged document text in database"
+    use "return errors hash saying junk is invalid"
+  end
+
+  shared "successful PUT document with :id" do
+    use "return 200 Ok"
+    use "return timestamps and id in body"
+    use "unchanged document count"
+
+    test "text should be updated in database" do
+      document = Document.find_by_id(@id)
+      assert_equal "New Document", document.text
+    end
+  end
+
   # - - - - - - - - - -
 
-  context "anonymous : put /documents" do
+  context "anonymous : put /" do
     before do
-      put "/documents/#{@id}"
+      put "/#{@id}"
     end
   
     use "return 401 because the API key is missing"
     use "unchanged document count"
   end
 
-  context "incorrect API key : put /documents" do
+  context "incorrect API key : put /" do
     before do
-      put "/documents/#{@id}", :api_key => "does_not_exist_in_database"
+      put "/#{@id}", :api_key => "does_not_exist_in_database"
     end
   
     use "return 401 because the API key is invalid"
     use "unchanged document count"
   end
-  
-  context "normal API key : put /documents" do
+
+  context "normal API key : put /" do
     before do
-      put "/documents/#{@id}", :api_key => @normal_user.primary_api_key
+      put "/#{@id}", :api_key => @normal_user.primary_api_key
     end
   
     use "return 401 because the API key is unauthorized"
@@ -50,100 +98,154 @@ class DocumentsPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin API key : put /documents : attempt to create : protected param 'create_at'" do
+  context "curator API key : put /:fake_id with protected param" do
     before do
-      put "/documents/#{@fake_id}", {
+      put "/#{@fake_id}", {
+        :api_key    => @curator_user.primary_api_key,
+        :text       => "New Document",
+        :created_at => Time.now.to_json
+      }
+    end
+    
+    use "attempted PUT document with :fake_id with protected param"
+  end
+
+  context "admin API key : put /:fake_id with protected param" do
+    before do
+      put "/#{@fake_id}", {
         :api_key    => @admin_user.primary_api_key,
         :text       => "New Document",
         :created_at => Time.now.to_json
       }
     end
   
-    use "return 404 Not Found"
-    use "return an empty response body"
-    use "unchanged document count"
-    use "unchanged document text in database"
+    use "attempted PUT document with :fake_id with protected param"
   end
 
-  context "admin API key : put /documents : attempt to create : extra param 'junk'" do
+  # - - - - - - - - - -
+
+  context "curator API key : put /:fake_id with invalid param" do
     before do
-      put "/documents/#{@fake_id}", {
+      put "/#{@fake_id}", {
+        :api_key => @curator_user.primary_api_key,
+        :text    => "New Document",
+        :junk    => "This is an extra param (junk)"
+      }
+    end
+    
+    use "attempted PUT document with :fake_id with invalid param"
+  end
+  
+  context "admin API key : put /:fake_id with invalid param" do
+    before do
+      put "/#{@fake_id}", {
         :api_key => @admin_user.primary_api_key,
         :text    => "New Document",
-        :junk    => "This is an extra parameter (junk)"
+        :junk    => "This is an extra param (junk)"
       }
     end
   
-    use "return 404 Not Found"
-    use "return an empty response body"
-    use "unchanged document count"
-    use "unchanged document text in database"
+    use "attempted PUT document with :fake_id with invalid param"
   end
   
-  context "admin API key : put /documents : attempt to create : correct params" do
+  # - - - - - - - - - -
+
+  context "curator API key : put /:fake_id with correct params" do
     before do
-      put "/documents/#{@fake_id}", {
+      put "/#{@fake_id}", {
+        :api_key => @curator_user.primary_api_key,
+        :text    => "New Document"
+      }
+    end
+    
+    use "attempted PUT document with :fake_id with correct params"
+  end
+    
+  context "admin API key : put /:fake_id with correct params" do
+    before do
+      put "/#{@fake_id}", {
         :api_key => @admin_user.primary_api_key,
         :text    => "New Document"
       }
     end
   
-    use "return 404 Not Found"
-    use "return an empty response body"
-    use "unchanged document count"
-    use "unchanged document text in database"
+    use "attempted PUT document with :fake_id with correct params"
   end
-  
+
   # - - - - - - - - - -
-  
-  context "admin API key : put /documents : update : protected param 'updated_at'" do
+
+  context "curator API key : put /:id with protected param" do
     before do
-      put "/documents/#{@id}", {
+      put "/#{@id}", {
+        :api_key    => @curator_user.primary_api_key,
+        :text       => "New Document",
+        :updated_at => Time.now.to_json
+      }
+    end
+    
+    use "attempted PUT document with :id with protected param"
+  end
+
+  context "admin API key : put /:id with protected param" do
+    before do
+      put "/#{@id}", {
         :api_key    => @admin_user.primary_api_key,
         :text       => "New Document",
         :updated_at => Time.now.to_json
       }
     end
-  
-    use "return 400 Bad Request"
-    use "unchanged document count"
-    use "unchanged document text in database"
-    use "return errors hash saying updated_at is invalid"
+    
+    use "attempted PUT document with :id with protected param"
   end
   
-  context "admin API key : put /documents : update : extra param 'junk'" do
+  # - - - - - - - - - -
+  
+  context "curator API key : put /:id with invalid param" do
     before do
-      put "/documents/#{@id}", {
-        :api_key => @admin_user.primary_api_key,
+      put "/#{@id}", {
+        :api_key => @curator_user.primary_api_key,
         :text    => "New Document",
-        :junk    => "This is an extra parameter (junk)"
+        :junk    => "This is an extra param (junk)"
       }
     end
   
-    use "return 400 Bad Request"
-    use "unchanged document count"
-    use "unchanged document text in database"
-    use "return errors hash saying junk is invalid"
+    use "attempted PUT document with :id with invalid param"
   end
 
+  context "admin API key : put /:id with invalid param" do
+    before do
+      put "/#{@id}", {
+        :api_key => @admin_user.primary_api_key,
+        :text    => "New Document",
+        :junk    => "This is an extra param (junk)"
+      }
+    end
+  
+    use "attempted PUT document with :id with invalid param"
+  end
+  
   # - - - - - - - - - -
   
-  context "admin API key : put /documents : update : correct params" do
+  context "curator API key : put /:id with correct param" do
     before do
-      put "/documents/#{@id}", {
+      put "/#{@id}", {
+        :api_key => @curator_user.primary_api_key,
+        :text    => "New Document"
+      }
+    end
+    
+    use "successful PUT document with :id"
+  end
+  
+  context "admin API key : put /:id with correct param" do
+    before do
+      put "/#{@id}", {
         :api_key => @admin_user.primary_api_key,
         :text    => "New Document"
       }
     end
-  
-    use "return 200 Ok"
-    use "return timestamps and id in body"
-    use "unchanged document count"
-  
-    test "text should be updated in database" do
-      document = Document.find_by_id(@id)
-      assert_equal "New Document", document.text
-    end
+    
+    use "successful PUT document with :id"
   end
 
 end

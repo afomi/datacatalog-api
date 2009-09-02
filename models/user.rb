@@ -2,8 +2,6 @@ require 'digest/sha1'
 
 class User
   
-  class InconsistentState < RuntimeError; end
-  
   include MongoMapper::Document
 
   many :api_keys
@@ -14,6 +12,8 @@ class User
   key :curator,         Boolean, :default => false
   key :admin,           Boolean, :default => false
   key :creator_api_key, String
+
+  class InconsistentState < RuntimeError; end
   
   def primary_api_key
     keys = api_keys.select { |k| k.key_type == "primary" }
@@ -42,11 +42,13 @@ class User
   end
 
   # Example usage:
+  #
   #   user = User.new
   #   user.add_api_key!({ :key_type => "primary" })
   #   user.add_api_key!({ :key_type => "application" })
   #   user.add_api_key!({ :key_type => "valet" })
   #   user.save
+  #
   def add_api_key!(params = {})
     params.merge!({ :api_key => generate_api_key })
     key = ApiKey.new(params)

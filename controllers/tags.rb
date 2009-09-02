@@ -1,40 +1,15 @@
-get '/tags' do
-  require_admin
-  tags = Tag.find(:all)
-  tags.to_json
-end
+module DataCatalog
 
-get '/tags/:id' do |id|
-  require_admin
-  id = params.delete("id")
-  tag = Tag.find_by_id(id)
-  error 404, [].to_json unless tag
-  tag.to_json
-end
+  class Tags < Base
 
-post '/tags' do
-  require_admin
-  id = params.delete("id")
-  validate_tag_params
-  tag = create_tag_from_params
-  tag.to_json
-end
+    restful_routes do
+      name "tags"
+      model Tag, :read_only => [
+        :created_at,
+        :updated_at
+      ]
+    end
 
-put '/tags/:id' do
-  require_admin
-  id = params.delete("id")
-  tag = Tag.find_by_id(id)
-  error 404, [].to_json unless tag
-  validate_tag_params
-  tag = Tag.update(id, params)
-  tag.to_json
-end
+  end
 
-delete '/tags/:id' do
-  require_admin
-  id = params.delete("id")
-  tag = Tag.find_by_id(id)
-  error 404, [].to_json unless tag
-  tag.destroy
-  { "id" => id }.to_json
 end

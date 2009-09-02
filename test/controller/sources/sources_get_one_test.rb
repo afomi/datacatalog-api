@@ -2,60 +2,82 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper
 
 class SourcesGetOneControllerTest < RequestTestCase
 
+  def app; DataCatalog::Sources end
+
   before do
-    source = Source.create :url => "http://data.gov/sources/A"
+    source = Source.create :url => "http://data.gov/original"
     @id = source.id
     @fake_id = get_fake_mongo_object_id
   end
 
   # - - - - - - - - - -
 
-  context "anonymous : get /sources/:id" do
+  shared "attempted GET source with :fake_id" do
+    use "return 404 Not Found"
+    use "return an empty response body"
+  end
+
+  shared "successful GET source with :id" do
+    use "return 200 Ok"
+    use "return timestamps and id in body"
+  
+    test "body should have correct text" do
+      assert_equal "http://data.gov/original", parsed_response_body["url"]
+    end
+  end
+
+  # - - - - - - - - - -
+
+  context "anonymous : get /:id" do
     before do
-      get "/sources/#{@id}"
+      get "/#{@id}"
     end
     
     use "return 401 because the API key is missing"
   end
   
-  context "incorrect API key : get /sources/:id" do
+  context "incorrect API key : get /:id" do
     before do
-      get "/sources/#{@id}", :api_key => "does_not_exist_in_database"
+      get "/#{@id}", :api_key => "does_not_exist_in_database"
     end
     
     use "return 401 because the API key is invalid"
   end
-  
-  context "normal API key : get /sources/:id" do
+
+  # - - - - - - - - - -
+
+  context "normal API key : get /:fake_id" do
     before do
-      get "/sources/#{@id}", :api_key => @normal_user.primary_api_key
+      get "/#{@fake_id}", :api_key => @normal_user.primary_api_key
     end
     
-    use "return 401 because the API key is unauthorized"
+    use "attempted GET source with :fake_id"
   end
-  
+
+  context "admin API key : get /:fake_id" do
+    before do
+      get "/#{@fake_id}", :api_key => @admin_user.primary_api_key
+    end
+    
+    use "attempted GET source with :fake_id"
+  end
+
   # - - - - - - - - - -
   
-  context "admin API key : get /sources/:fake_id : not found" do
+  context "normal API key : get /:id" do
     before do
-      get "/sources/#{@fake_id}", :api_key => @admin_user.primary_api_key
+      get "/#{@id}", :api_key => @normal_user.primary_api_key
     end
     
-    use "return 404 Not Found"
-    use "return an empty response body"
+    use "successful GET source with :id"
   end
-  
-  context "admin API key : get /sources/:id : found" do
+
+  context "admin API key : get /:id" do
     before do
-      get "/sources/#{@id}", :api_key => @admin_user.primary_api_key
+      get "/#{@id}", :api_key => @admin_user.primary_api_key
     end
     
-    use "return 200 Ok"
-    use "return timestamps and id in body"
-  
-    test "body should have correct url" do
-      assert_equal "http://data.gov/sources/A", parsed_response_body["url"]
-    end
+    use "successful GET source with :id"
   end
 
 end

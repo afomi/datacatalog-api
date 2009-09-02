@@ -2,6 +2,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper
 
 class UsersPutControllerTest < RequestTestCase
 
+  def app; DataCatalog::Users end
+
   before do
     @user = User.create({
       :name    => "Original Guy",
@@ -14,6 +16,12 @@ class UsersPutControllerTest < RequestTestCase
   end
   
   # - - - - - - - - - -
+
+  shared "unchanged name in database" do
+    test "name should be unchanged in database" do
+      assert_equal "Original Guy", @user.name
+    end
+  end
   
   shared "unchanged email in database" do
     test "email should be unchanged in database" do
@@ -21,151 +29,47 @@ class UsersPutControllerTest < RequestTestCase
     end
   end
 
-  # - - - - - - - - - -
-  
-  context "anonymous : put /users" do
-    before do
-      put "/users/#{@id}"
-    end
-
-    use "return 401 because the API key is missing"
-    use "unchanged user count"
-  end
-  
-  context "incorrect API key : put /users" do
-    before do
-      put "/users/#{@id}", :api_key => "does_not_exist_in_database"
-    end
-
-    use "return 401 because the API key is invalid"
-    use "unchanged user count"
-  end
-  
-  context "normal API key : put /users" do
-    before do
-      put "/users/#{@id}", :api_key => @normal_user.primary_api_key
-    end
-
-    use "return 401 because the API key is unauthorized"
-    use "unchanged user count"
-  end
-  
-  # - - - - - - - - - -
-  
-  context "admin API key : put /users : create : protected param 'admin'" do
-    before do
-      put "/users/#{@fake_id}", {
-        :api_key   => @admin_user.primary_api_key,
-        :name      => "New Guy",
-        :email     => "new.guy@email.com",
-        :admin     => true
-      }
-    end
-    
+  shared "attempted PUT user with :fake_id with protected param 'admin'" do
     use "return 404 Not Found"
     use "return an empty response body"
     use "unchanged user count"
+    use "unchanged name in database"
     use "unchanged email in database"
-  
-    test "name should be unchanged in database" do
-      assert_equal "Original Guy", @user.name
-    end
   end
 
-  context "admin API key : put /users : create : extra param 'junk'" do
-    before do
-      put "/users/#{@fake_id}", {
-        :api_key => @admin_user.primary_api_key,
-        :name    => "New Guy",
-        :email   => "new.guy@email.com",
-        :junk    => "This is an extra parameter (junk)"
-      }
-    end
-    
+  shared "attempted PUT user with :fake_id with invalid param 'junk'" do
     use "return 404 Not Found"
     use "return an empty response body"
     use "unchanged user count"
+    use "unchanged name in database"
     use "unchanged email in database"
-  
-    test "name should be unchanged in database" do
-      assert_equal "Original Guy", @user.name
-    end
   end
-  
-  # - - - - - - - - - -
-  
-  context "admin API key : put /users : update : protected param 'admin'" do
-    before do
-      put "/users/#{@id}", {
-        :api_key   => @admin_user.primary_api_key,
-        :name      => "John Doe",
-        :email     => "john.doe@email.com",
-        :admin     => true
-      }
-    end
-  
+
+  shared "attempted PUT user with :id with protected param 'admin'" do
     use "return 400 Bad Request"
     use "unchanged user count"
+    use "unchanged name in database"
     use "unchanged email in database"
     use "return errors hash saying admin is invalid"
-  
-    test "name should be unchanged in database" do
-      assert_equal "Original Guy", @user.name
-    end
   end
   
-  context "admin API key : put /users : update : extra param 'junk'" do
-    before do
-      put "/users/#{@id}", {
-        :api_key => @admin_user.primary_api_key,
-        :name    => "John Doe",
-        :email   => "john.doe@email.com",
-        :junk    => "This is an extra parameter (junk)"
-      }
-    end
-  
+  shared "attempted PUT user with :id with invalid param 'junk'" do
     use "return 400 Bad Request"
     use "unchanged user count"
+    use "unchanged name in database"
     use "unchanged email in database"
     use "return errors hash saying junk is invalid"
-  
-    test "name should be unchanged in database" do
-      assert_equal "Original Guy", @user.name
-    end
   end
   
-  # - - - - - - - - - -
-  
-  context "admin API key : put /users : create : correct params" do
-    before do
-      put "/users/#{@fake_id}", {
-        :api_key => @admin_user.primary_api_key,
-        :name    => "New Guy",
-        :email   => "new.guy@email.com",
-      }
-    end
-    
+  shared "attempted PUT user with :fake_id with correct params" do
     use "return 404 Not Found"
     use "return an empty response body"
     use "unchanged user count"
+    use "unchanged name in database"
     use "unchanged email in database"
-    
-    test "name should be unchanged in database" do
-      assert_equal "Original Guy", @user.name
-    end
   end
 
-  # - - - - - - - - - -
-
-  context "admin API key : put /users : update : correct params" do
-    before do
-      put "/users/#{@id}", {
-        :api_key => @admin_user.primary_api_key,
-        :name    => "New Guy",
-        :email   => "new.guy@email.com",
-      }
-    end
-    
+  shared "successful PUT user with :id" do
     use "return 200 Ok"
     use "return timestamps and id in body"
     use "unchanged user count"
@@ -187,6 +91,199 @@ class UsersPutControllerTest < RequestTestCase
     test "body should have API key different from admin key" do
       assert_not_equal @admin_user.primary_api_key, parsed_response_body["primary_api_key"]
     end
+  end
+
+  # - - - - - - - - - -
+  
+  context "anonymous : put /:id" do
+    before do
+      put "/#{@id}"
+    end
+
+    use "return 401 because the API key is missing"
+    use "unchanged user count"
+  end
+  
+  context "incorrect API key : put /:id" do
+    before do
+      put "/#{@id}", :api_key => "does_not_exist_in_database"
+    end
+
+    use "return 401 because the API key is invalid"
+    use "unchanged user count"
+  end
+  
+  context "normal API key : put /:id" do
+    before do
+      put "/#{@id}", :api_key => @normal_user.primary_api_key
+    end
+
+    use "return 401 because the API key is unauthorized"
+    use "unchanged user count"
+  end
+  
+  # - - - - - - - - - -
+
+  context "curator API key : put /:fake_id with protected param 'admin'" do
+    before do
+      put "/#{@fake_id}", {
+        :api_key   => @curator_user.primary_api_key,
+        :name      => "New Guy",
+        :email     => "new.guy@email.com",
+        :admin     => true
+      }
+    end
+    
+    use "attempted PUT user with :fake_id with protected param 'admin'"
+  end
+  
+  context "admin API key : put /:fake_id with protected param 'admin'" do
+    before do
+      put "/#{@fake_id}", {
+        :api_key   => @admin_user.primary_api_key,
+        :name      => "New Guy",
+        :email     => "new.guy@email.com",
+        :admin     => true
+      }
+    end
+    
+    use "attempted PUT user with :fake_id with protected param 'admin'"
+  end
+  
+  # - - - - - - - - - -
+
+  context "curator API key : put /:fake_id with invalid param 'junk'" do
+    before do
+      put "/#{@fake_id}", {
+        :api_key => @curator_user.primary_api_key,
+        :name    => "New Guy",
+        :email   => "new.guy@email.com",
+        :junk    => "This is an extra parameter (junk)"
+      }
+    end
+    
+    use "attempted PUT user with :fake_id with invalid param 'junk'"
+  end
+
+  context "admin API key : put /:fake_id with invalid param 'junk'" do
+    before do
+      put "/#{@fake_id}", {
+        :api_key => @admin_user.primary_api_key,
+        :name    => "New Guy",
+        :email   => "new.guy@email.com",
+        :junk    => "This is an extra parameter (junk)"
+      }
+    end
+
+    use "attempted PUT user with :fake_id with invalid param 'junk'"
+  end
+  
+  # - - - - - - - - - -
+
+  context "curator API key : put /:id with protected param 'admin'" do
+    before do
+      put "/#{@id}", {
+        :api_key   => @curator_user.primary_api_key,
+        :name      => "John Doe",
+        :email     => "john.doe@email.com",
+        :admin     => true
+      }
+    end
+    
+    use "attempted PUT user with :id with protected param 'admin'"
+  end
+  
+  context "admin API key : put /:id with protected param 'admin'" do
+    before do
+      put "/#{@id}", {
+        :api_key   => @admin_user.primary_api_key,
+        :name      => "John Doe",
+        :email     => "john.doe@email.com",
+        :admin     => true
+      }
+    end
+    
+    use "attempted PUT user with :id with protected param 'admin'"
+  end
+
+  # - - - - - - - - - -
+
+  context "curator API key : put /:id with invalid param 'junk'" do
+    before do
+      put "/#{@id}", {
+        :api_key => @curator_user.primary_api_key,
+        :name    => "John Doe",
+        :email   => "john.doe@email.com",
+        :junk    => "This is an extra parameter (junk)"
+      }
+    end
+    
+    use "attempted PUT user with :id with invalid param 'junk'"
+  end
+  
+  context "admin API key : put /:id with invalid param 'junk'" do
+    before do
+      put "/#{@id}", {
+        :api_key => @admin_user.primary_api_key,
+        :name    => "John Doe",
+        :email   => "john.doe@email.com",
+        :junk    => "This is an extra parameter (junk)"
+      }
+    end
+
+    use "attempted PUT user with :id with invalid param 'junk'"
+  end
+  
+  # - - - - - - - - - -
+
+  context "curator API key : put /:fake_id : create : correct params" do
+    before do
+      put "/#{@fake_id}", {
+        :api_key => @curator_user.primary_api_key,
+        :name    => "New Guy",
+        :email   => "new.guy@email.com",
+      }
+    end
+    
+    use "attempted PUT user with :fake_id with correct params"
+  end
+  
+  context "admin API key : put /:fake_id : create : correct params" do
+    before do
+      put "/#{@fake_id}", {
+        :api_key => @admin_user.primary_api_key,
+        :name    => "New Guy",
+        :email   => "new.guy@email.com",
+      }
+    end
+
+    use "attempted PUT user with :fake_id with correct params"
+  end
+
+  # - - - - - - - - - -
+
+  context "curator API key : put /:id with correct params" do
+    before do
+      put "/#{@id}", {
+        :api_key => @curator_user.primary_api_key,
+        :name    => "New Guy",
+        :email   => "new.guy@email.com",
+      }
+    end
+    
+    use "successful PUT user with :id"
+  end
+
+  context "admin API key : put /:id with correct params" do
+    before do
+      put "/#{@id}", {
+        :api_key => @admin_user.primary_api_key,
+        :name    => "New Guy",
+        :email   => "new.guy@email.com",
+      }
+    end
+
+    use "successful PUT user with :id"
   end
 
 end

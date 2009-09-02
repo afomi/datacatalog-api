@@ -15,6 +15,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper
 
 class RootControllerTest < RequestTestCase
 
+  def app; DataCatalog::Root end
+
   context "anonymous : get /" do
     before :all do
       get '/'

@@ -1,6 +1,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper')
 
 class UsersKeysGetAllControllerTest < RequestTestCase
+
+  def app; DataCatalog::Users end
   
   before do
     user = User.create({
@@ -32,26 +34,26 @@ class UsersKeysGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
   
-  context "anonymous : get /users/:id/keys" do
+  context "anonymous : get /:id/keys" do
     before do
-      get "/users/#{@id}/keys"
+      get "/#{@id}/keys"
     end
     
     use "return 401 because the API key is missing"
   end
   
-  context "incorrect API key : get /users/:id/keys" do
+  context "incorrect API key : get /:id/keys" do
     before do
-      get "/users/#{@id}/keys",
+      get "/#{@id}/keys",
         :api_key => "does_not_exist_in_database"
     end
     
     use "return 401 because the API key is invalid"
   end
   
-  context "normal API key : get /users/:id/keys" do
+  context "normal API key : get /:id/keys" do
     before do
-      get "/users/#{@id}/keys",
+      get "/#{@id}/keys",
         :api_key => @normal_user.primary_api_key
     end
     
@@ -59,12 +61,13 @@ class UsersKeysGetAllControllerTest < RequestTestCase
   end
 
   # - - - - - - - - - -
-
-  context "admin API key : get /users/:id/keys" do
+  
+  context "admin API key : get /:id/keys" do
     before do
-      get "/users/#{@id}/keys",
+      get "/#{@id}/keys",
         :api_key => @admin_user.primary_api_key
     end
+
     
     use "return 200 Ok"
     
@@ -84,15 +87,15 @@ class UsersKeysGetAllControllerTest < RequestTestCase
       test "element #{n} should have api_key" do
         assert_include "api_key", parsed_response_body[n]
       end
-
+  
       test "element #{n} should have key_type" do
         assert_include "key_type", parsed_response_body[n]
       end
-
+  
       test "element #{n} should not have _id" do
         assert_not_include "_id", parsed_response_body[n]
       end
-
+  
       test "element #{n} should have created_at" do
         assert_include "created_at", parsed_response_body[n]
       end

@@ -2,6 +2,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper
 
 class UsersKeysPostControllerTest < RequestTestCase
 
+  def app; DataCatalog::Users end
+
   before do
     @user = User.create({
       :name    => "Example User",
@@ -22,162 +24,22 @@ class UsersKeysPostControllerTest < RequestTestCase
   end
   
   # - - - - - - - - - -
-  
-  context "anonymous : post /users/:id/keys" do
-    before do
-      post "/users/#{@id}/keys"
-    end
-    
-    use "return 401 because the API key is missing"
-    use "unchanged api_key count"
-  end
-  
-  context "incorrect API key : post /users/:id/keys" do
-    before do
-      post "/users/#{@id}/keys",
-        :api_key => "does_not_exist_in_database"
-    end
-    
-    use "return 401 because the API key is invalid"
-    use "unchanged api_key count"
-  end
-  
-  context "non owner API key : post /users/:id/keys" do
-    before do
-      post "/users/#{@id}/keys",
-        :api_key => @normal_user.primary_api_key
-    end
-    
-    use "return 401 because the API key is unauthorized"
-    use "unchanged api_key count"
-  end
 
-  # - - - - - - - - - -
-  
-  context "anonymous API key : post /users/:fake_id/keys" do
-    before do
-      post "/users/#{@fake_id}/keys"
-    end
-    
-    use "return 401 because the API key is missing"
-    use "unchanged api_key count"
-  end
-  
-  context "incorrect API key : post /users/:fake_id/keys" do
-    before do
-      post "/users/#{@fake_id}/keys",
-        :api_key => "does_not_exist_in_database"
-    end
-    
-    use "return 401 because the API key is invalid"
-    use "unchanged api_key count"
-  end
-  
-  context "non owner API key : post /users/:fake_id/keys" do
-    before do
-      post "/users/#{@fake_id}/keys",
-        :api_key => @normal_user.primary_api_key
-    end
-    
-    use "return 401 because the API key is unauthorized"
-    use "unchanged api_key count"
-  end
-  
-  context "owner API key : post /users/:fake_id/keys" do
-    before do
-      post "/users/#{@fake_id}/keys",
-        :api_key => @user.api_keys[0].api_key
-    end
-
-    use "return 401 because the API key is unauthorized"
-    use "unchanged api_key count"
-  end
-
-  context "admin API key : post /users/:fake_id/keys : correct params" do
-    before do
-      post "/users/#{@fake_id}/keys", {
-        :api_key  => @admin_user.primary_api_key,
-        :key_type => "application",
-        :purpose  => "My special purpose!"
-      }
-    end
-    
-    use "return 404 Not Found"
-    use "return an empty response body"
-    use "unchanged api_key count"
-  end
-  
-  # - - - - - - - - - -
-  
-  context "owner API key : post /users/:id/keys : missing params" do
-    before do
-      post "/users/#{@id}/keys", {
-        :api_key  => @user.api_keys[0].api_key,
-        :purpose  => "My special purpose!"
-      }
-    end
-    
+  shared "attempted POST api_key with missing params" do
     use "return 400 Bad Request"
     use "unchanged api_key count"
     use "return errors hash saying key_type is missing"
   end
   
-  context "admin API key : post /users/:id/keys : missing params" do
-    before do
-      post "/users/#{@id}/keys", {
-        :api_key  => @admin_user.primary_api_key,
-        :purpose  => "My special purpose!"
-      }
-    end
-    
-    use "return 400 Bad Request"
-    use "unchanged api_key count"
-    use "return errors hash saying key_type is missing"
-  end
-
-  # - - - - - - - - - -
-
-  # This section is a placeholder for handling protected parameters.
-  #
-  # Not currently needed since api_key is already screened out by admin
-  # validation, it will not be passed through to the ApiKey params.
-
-  # - - - - - - - - - -
-  
-  context "owner API key : post /users/:id/keys : extra param 'junk'" do
-    before do
-      post "/users/#{@id}/keys", {
-        :api_key  => @user.api_keys[0].api_key,
-        :key_type => "application",
-        :purpose  => "My special purpose!",
-        :junk     => "This is an extra parameter (junk)"
-      }
-    end
-    
+  shared "attempted POST api_key with invalid param" do
     use "return 400 Bad Request"
     use "return errors hash saying junk is invalid"
   end
 
-  context "admin API key : post /users/:id/keys : extra param 'junk'" do
-    before do
-      post "/users/#{@id}/keys", {
-        :api_key  => @admin_user.primary_api_key,
-        :key_type => "application",
-        :purpose  => "My special purpose!",
-        :junk     => "This is an extra parameter (junk)"
-      }
-    end
-    
-    use "return 400 Bad Request"
-    use "return errors hash saying junk is invalid"
-  end
-
-  # - - - - - - - - - -
-
-  shared "shared tests for successful users_keys_post_test" do
+  shared "successful POST api_key" do
     use "return 201 Created"
     use "incremented api_key count"
-
+  
     test "location header should point to new resource" do
       assert_include "Location", last_response.headers
       new_uri = "http://localhost:4567/users/#{@id}/keys/#{parsed_response_body["id"]}"
@@ -211,29 +73,175 @@ class UsersKeysPostControllerTest < RequestTestCase
       assert_equal "application", user.api_keys[1]["key_type"]
     end
   end
+  # - - - - - - - - - -
   
-  context "owner API key : post /users/:id/keys : correct params" do
+  context "anonymous : post /:id/keys" do
     before do
-      post "/users/#{@id}/keys", {
+      post "/#{@id}/keys"
+    end
+    
+    use "return 401 because the API key is missing"
+    use "unchanged api_key count"
+  end
+  
+  context "incorrect API key : post /:id/keys" do
+    before do
+      post "/#{@id}/keys",
+        :api_key => "does_not_exist_in_database"
+    end
+    
+    use "return 401 because the API key is invalid"
+    use "unchanged api_key count"
+  end
+  
+  context "non owner API key : post /:id/keys" do
+    before do
+      post "/#{@id}/keys",
+        :api_key => @normal_user.primary_api_key
+    end
+    
+    use "return 401 because the API key is unauthorized"
+    use "unchanged api_key count"
+  end
+  
+  # - - - - - - - - - -
+  
+  context "anonymous API key : post /:fake_id/keys" do
+    before do
+      post "/#{@fake_id}/keys"
+    end
+    
+    use "return 401 because the API key is missing"
+    use "unchanged api_key count"
+  end
+  
+  context "incorrect API key : post /:fake_id/keys" do
+    before do
+      post "/#{@fake_id}/keys",
+        :api_key => "does_not_exist_in_database"
+    end
+    
+    use "return 401 because the API key is invalid"
+    use "unchanged api_key count"
+  end
+  
+  context "non owner API key : post /:fake_id/keys" do
+    before do
+      post "/#{@fake_id}/keys",
+        :api_key => @normal_user.primary_api_key
+    end
+    
+    use "return 401 because the API key is unauthorized"
+    use "unchanged api_key count"
+  end
+  
+  context "owner API key : post /:fake_id/keys" do
+    before do
+      post "/#{@fake_id}/keys",
+        :api_key => @user.api_keys[0].api_key
+    end
+  
+    use "return 401 because the API key is unauthorized"
+    use "unchanged api_key count"
+  end
+  
+  context "admin API key : post /:fake_id/keys : correct params" do
+    before do
+      post "/#{@fake_id}/keys", {
+        :api_key  => @admin_user.primary_api_key,
+        :key_type => "application",
+        :purpose  => "My special purpose!"
+      }
+    end
+    
+    use "return 404 Not Found"
+    use "return an empty response body"
+    use "unchanged api_key count"
+  end
+  
+  # - - - - - - - - - -
+  
+  context "owner API key : post /:id/keys : missing params" do
+    before do
+      post "/#{@id}/keys", {
+        :api_key  => @user.api_keys[0].api_key,
+        :purpose  => "My special purpose!"
+      }
+    end
+    
+    use "attempted POST api_key with missing params"
+  end
+  
+  context "admin API key : post /:id/keys : missing params" do
+    before do
+      post "/#{@id}/keys", {
+        :api_key  => @admin_user.primary_api_key,
+        :purpose  => "My special purpose!"
+      }
+    end
+
+    use "attempted POST api_key with missing params"
+  end
+  
+  # - - - - - - - - - -
+  
+  # This section is a placeholder for handling protected parameters.
+  #
+  # Not currently needed since api_key is already screened out by admin
+  # validation, it will not be passed through to the ApiKey params.
+  
+  # - - - - - - - - - -
+  
+  context "owner API key : post /:id/keys : extra param 'junk'" do
+    before do
+      post "/#{@id}/keys", {
+        :api_key  => @user.api_keys[0].api_key,
+        :key_type => "application",
+        :purpose  => "My special purpose!",
+        :junk     => "This is an extra parameter (junk)"
+      }
+    end
+
+    use "attempted POST api_key with invalid param"
+  end
+
+  context "admin API key : post /:id/keys : extra param 'junk'" do
+    before do
+      post "/#{@id}/keys", {
+        :api_key  => @admin_user.primary_api_key,
+        :key_type => "application",
+        :purpose  => "My special purpose!",
+        :junk     => "This is an extra parameter (junk)"
+      }
+    end
+
+    use "attempted POST api_key with invalid param"
+  end
+  
+  # - - - - - - - - - -
+  
+  context "owner API key : post /:id/keys : correct params" do
+    before do
+      post "/#{@id}/keys", {
         :api_key  => @user.api_keys[0].api_key,
         :key_type => "application",
         :purpose  => "My special purpose!"
       }
     end
     
-    use "shared tests for successful users_keys_post_test"
+    use "successful POST api_key"
   end
-
-  context "admin API key : post /users/:id/keys : correct params" do
+  
+  context "admin API key : post /:id/keys : correct params" do
     before do
-      post "/users/#{@id}/keys", {
+      post "/#{@id}/keys", {
         :api_key  => @admin_user.primary_api_key,
         :key_type => "application",
         :purpose  => "My special purpose!"
       }
     end
-
-    use "shared tests for successful users_keys_post_test"
+  
+    use "successful POST api_key"
   end
 
 end

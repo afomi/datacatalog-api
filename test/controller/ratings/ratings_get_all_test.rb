@@ -2,8 +2,16 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper
 
 class RatingsGetAllControllerTest < RequestTestCase
 
+  def app; DataCatalog::Ratings end
+
+  # - - - - - - - - - -
+  
+  shared "successful GET of 0 ratings" do
+    use "return 200 Ok"
+    use "return an empty response body"
+  end
+  
   shared "successful GET of 3 ratings" do
-    
     test "body should have 3 top level elements" do
       assert_equal 3, parsed_response_body.length
     end
@@ -14,6 +22,14 @@ class RatingsGetAllControllerTest < RequestTestCase
     end
   
     3.times do |n|
+      test "element #{n} should have source_id" do
+        assert_include "source_id", parsed_response_body[n]
+      end
+
+      test "element #{n} should have user_id" do
+        assert_include "user_id", parsed_response_body[n]
+      end
+
       test "element #{n} should have created_at" do
         assert_include "created_at", parsed_response_body[n]
       end
@@ -31,20 +47,20 @@ class RatingsGetAllControllerTest < RequestTestCase
       end
     end
   end
-
+  
   # - - - - - - - - - -
-
-  context "anonymous : get /ratings" do
+  
+  context "anonymous : get /" do
     before do
-      get '/ratings'
+      get "/"
     end
     
     use "return 401 because the API key is missing"
   end
   
-  context "incorrect API key : get /ratings" do
+  context "incorrect API key : get /" do
     before do
-      get '/ratings', :api_key => "does_not_exist_in_database"
+      get "/", :api_key => "does_not_exist_in_database"
     end
     
     use "return 401 because the API key is invalid"
@@ -52,65 +68,44 @@ class RatingsGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "normal API key : get /ratings : 0" do
+  context "normal API key : get / : 0" do
     before do
-      get '/ratings', :api_key => @normal_user.primary_api_key
+      get "/", :api_key => @normal_user.primary_api_key
     end
     
-    use "return 200 Ok"
-    use "return an empty response body"
+    use "successful GET of 0 ratings"
   end
 
-  context "curator API key : get /ratings : 0" do
+  context "admin API key : get / : 0" do
     before do
-      get '/ratings', :api_key => @curator_user.primary_api_key
+      get "/", :api_key => @admin_user.primary_api_key
     end
     
-    use "return 200 Ok"
-    use "return an empty response body"
-  end
-
-  context "admin API key : get /ratings : 0" do
-    before do
-      get '/ratings', :api_key => @admin_user.primary_api_key
-    end
-    
-    use "return 200 Ok"
-    use "return an empty response body"
+    use "successful GET of 0 ratings"
   end
 
   # - - - - - - - - - -
+
+  context "normal API key : get / : 3" do
+    before do
+      3.times do |n|
+        Rating.create :text => "Rating #{n}"
+      end
+      get "/", :api_key => @normal_user.primary_api_key
+    end
+
+    use "successful GET of 3 ratings"
+  end
   
-  context "normal API key : get /ratings : 3" do
+  context "admin API key : get / : 3" do
     before do
       3.times do |n|
         Rating.create :text => "Rating #{n}"
       end
-      get '/ratings', :api_key => @normal_user.primary_api_key
+      get "/", :api_key => @admin_user.primary_api_key
     end
-    
+
     use "successful GET of 3 ratings"
   end
 
-  context "curator API key : get /ratings : 3" do
-    before do
-      3.times do |n|
-        Rating.create :text => "Rating #{n}"
-      end
-      get '/ratings', :api_key => @curator_user.primary_api_key
-    end
-    
-    use "successful GET of 3 ratings"
-  end
-
-  context "admin API key : get /ratings : 3" do
-    before do
-      3.times do |n|
-        Rating.create :text => "Rating #{n}"
-      end
-      get '/ratings', :api_key => @admin_user.primary_api_key
-    end
-    
-    use "successful GET of 3 ratings"
-  end
 end

@@ -1,9 +1,5 @@
 class RequestTestCase < Test::Unit::TestCase
 
-  def app
-    Sinatra::Application
-  end
-  
   include Rack::Test::Methods
   include ModelHelpers
   include VariousHelpers

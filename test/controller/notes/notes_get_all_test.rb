@@ -1,50 +1,17 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper')
 
 class NotesGetAllControllerTest < RequestTestCase
-  
-  context "anonymous : get /notes" do
-    before do
-      get '/notes'
-    end
-    
-    use "return 401 because the API key is missing"
-  end
-  
-  context "incorrect API key : get /notes" do
-    before do
-      get '/notes', :api_key => "does_not_exist_in_database"
-    end
-    
-    use "return 401 because the API key is invalid"
-  end
 
-  context "normal API key : get /notes" do
-    before do
-      get '/notes', :api_key => @normal_user.primary_api_key
-    end
-    
-    use "return 401 because the API key is unauthorized"
-  end
+  def app; DataCatalog::Notes end
 
   # - - - - - - - - - -
-
-  context "admin API key : get /notes : 0" do
-    before do
-      get '/notes', :api_key => @admin_user.primary_api_key
-    end
-    
+  
+  shared "successful GET of 0 notes" do
     use "return 200 Ok"
     use "return an empty response body"
   end
   
-  context "admin API key : get /notes : 3" do
-    before do
-      3.times do |n|
-        Note.create :text => "Note #{n}"
-      end
-      get '/notes', :api_key => @admin_user.primary_api_key
-    end
-    
+  shared "successful GET of 3 notes" do
     test "body should have 3 top level elements" do
       assert_equal 3, parsed_response_body.length
     end
@@ -55,6 +22,14 @@ class NotesGetAllControllerTest < RequestTestCase
     end
   
     3.times do |n|
+      test "element #{n} should have source_id" do
+        assert_include "source_id", parsed_response_body[n]
+      end
+
+      test "element #{n} should have user_id" do
+        assert_include "user_id", parsed_response_body[n]
+      end
+
       test "element #{n} should have created_at" do
         assert_include "created_at", parsed_response_body[n]
       end
@@ -71,6 +46,66 @@ class NotesGetAllControllerTest < RequestTestCase
         assert_not_include "_id", parsed_response_body[n]
       end
     end
+  end
+  
+  # - - - - - - - - - -
+  
+  context "anonymous : get /" do
+    before do
+      get "/"
+    end
+    
+    use "return 401 because the API key is missing"
+  end
+  
+  context "incorrect API key : get /" do
+    before do
+      get "/", :api_key => "does_not_exist_in_database"
+    end
+    
+    use "return 401 because the API key is invalid"
+  end
+
+  # - - - - - - - - - -
+
+  context "normal API key : get / : 0" do
+    before do
+      get "/", :api_key => @normal_user.primary_api_key
+    end
+    
+    use "successful GET of 0 notes"
+  end
+
+  context "admin API key : get / : 0" do
+    before do
+      get "/", :api_key => @admin_user.primary_api_key
+    end
+    
+    use "successful GET of 0 notes"
+  end
+
+  # - - - - - - - - - -
+
+  context "normal API key : get / : 3" do
+    before do
+      3.times do |n|
+        Note.create :text => "Note #{n}"
+      end
+      get "/", :api_key => @normal_user.primary_api_key
+    end
+
+    use "successful GET of 3 notes"
+  end
+  
+  context "admin API key : get / : 3" do
+    before do
+      3.times do |n|
+        Note.create :text => "Note #{n}"
+      end
+      get "/", :api_key => @admin_user.primary_api_key
+    end
+
+    use "successful GET of 3 notes"
   end
 
 end

@@ -2,6 +2,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper
 
 class NotesGetOneControllerTest < RequestTestCase
 
+  def app; DataCatalog::Notes end
+
   before do
     note = Note.create :text => "Note A"
     @id = note.id
@@ -10,52 +12,80 @@ class NotesGetOneControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous : get /notes/:id" do
-    before do
-      get "/notes/#{@id}"
-    end
-    
-    use "return 401 because the API key is missing"
-  end
-  
-  context "incorrect API key : get /notes/:id" do
-    before do
-      get "/notes/#{@id}", :api_key => "does_not_exist_in_database"
-    end
-    
-    use "return 401 because the API key is invalid"
-  end
-  
-  context "normal API key : get /notes/:id" do
-    before do
-      get "/notes/#{@id}", :api_key => @normal_user.primary_api_key
-    end
-    
-    use "return 401 because the API key is unauthorized"
-  end
-  
-  # - - - - - - - - - -
-  
-  context "admin API key : get /notes/:fake_id : not found" do
-    before do
-      get "/notes/#{@fake_id}", :api_key => @admin_user.primary_api_key
-    end
-    
+  shared "attempted GET note with :fake_id" do
     use "return 404 Not Found"
     use "return an empty response body"
   end
-  
-  context "admin API key : get /notes/:id : found" do
-    before do
-      get "/notes/#{@id}", :api_key => @admin_user.primary_api_key
-    end
-    
+
+  shared "successful GET note with :id" do
     use "return 200 Ok"
     use "return timestamps and id in body"
   
     test "body should have correct text" do
       assert_equal "Note A", parsed_response_body["text"]
     end
+
+    test "body should have source_id" do
+      assert_include "source_id", parsed_response_body
+    end
+    
+    test "body should have user_id" do
+      assert_include "user_id", parsed_response_body
+    end
+  end
+
+  # - - - - - - - - - -
+
+  context "anonymous : get /:id" do
+    before do
+      get "/#{@id}"
+    end
+    
+    use "return 401 because the API key is missing"
+  end
+  
+  context "incorrect API key : get /:id" do
+    before do
+      get "/#{@id}", :api_key => "does_not_exist_in_database"
+    end
+    
+    use "return 401 because the API key is invalid"
+  end
+
+  # - - - - - - - - - -
+
+  context "normal API key : get /:fake_id" do
+    before do
+      get "/#{@fake_id}", :api_key => @normal_user.primary_api_key
+    end
+    
+    use "attempted GET note with :fake_id"
+  end
+
+  context "admin API key : get /:fake_id" do
+    before do
+      get "/#{@fake_id}", :api_key => @admin_user.primary_api_key
+    end
+    
+    use "attempted GET note with :fake_id"
+  end
+
+  # - - - - - - - - - -
+  
+  context "normal API key : get /:id" do
+    before do
+      get "/#{@id}", :api_key => @normal_user.primary_api_key
+    end
+    
+    use "successful GET note with :id"
+  end
+
+  context "admin API key : get /:id" do
+    before do
+      get "/#{@id}", :api_key => @admin_user.primary_api_key
+    end
+    
+    use "successful GET note with :id"
   end
 
 end

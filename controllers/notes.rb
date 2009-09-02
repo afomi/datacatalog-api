@@ -1,40 +1,15 @@
-get '/notes' do
-  require_admin
-  notes = Note.find(:all)
-  notes.to_json
-end
+module DataCatalog
 
-get '/notes/:id' do |id|
-  require_admin
-  id = params.delete("id")
-  note = Note.find_by_id(id)
-  error 404, [].to_json unless note
-  note.to_json
-end
+  class Notes < Base
 
-post '/notes' do
-  require_admin
-  id = params.delete("id")
-  validate_note_params
-  note = create_note_from_params
-  note.to_json
-end
+    restful_routes do
+      name "notes"
+      model Note, :read_only => [
+        :created_at,
+        :updated_at
+      ]
+    end
 
-put '/notes/:id' do
-  require_admin
-  id = params.delete("id")
-  note = Note.find_by_id(id)
-  error 404, [].to_json unless note
-  validate_note_params
-  note = Note.update(id, params)
-  note.to_json
-end
+  end
 
-delete '/notes/:id' do
-  require_admin
-  id = params.delete("id")
-  note = Note.find_by_id(id)
-  error 404, [].to_json unless note
-  note.destroy
-  { "id" => id }.to_json
 end

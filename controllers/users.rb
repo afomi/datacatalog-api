@@ -1,40 +1,24 @@
-get '/users' do
-  require_admin
-  users = User.find(:all)
-  users.to_json
-end
+require File.expand_path(File.dirname(__FILE__) + '/users_keys')
 
-get '/users/:id' do
-  require_admin
-  id = params.delete("id")
-  user = User.find_by_id(id)
-  error 404, [].to_json unless user
-  user.to_json
-end
+module DataCatalog
 
-post '/users' do
-  require_admin
-  id = params.delete("id")
-  validate_user_params
-  user = create_user_from_params
-  user.to_json
-end
+  class Users < Base
+  
+    restful_routes do
+      name "users"
+      model User, :read_only => [
+        :api_keys,
+        :admin,
+        :creator_api_key,
+        :created_at,
+        :updated_at
+      ]
+      callback :after_create do
+        @document.add_api_key!({ :key_type => "primary" })
+      end
+      nested_resource UsersKeys
+    end
 
-put '/users/:id' do
-  require_admin
-  id = params.delete("id")
-  user = User.find_by_id(id)
-  error 404, [].to_json unless user
-  validate_user_params
-  user = User.update(id, params)
-  user.to_json
-end
+  end
 
-delete '/users/:id' do
-  require_admin
-  id = params.delete("id")
-  user = User.find_by_id(id)
-  error 404, [].to_json unless user
-  user.destroy
-  { "id" => id }.to_json
 end

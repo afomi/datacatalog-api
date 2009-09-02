@@ -2,4 +2,14 @@ ENV['RACK_ENV'] = "development"
 # ENV['RACK_ENV'] = "staging"
 # ENV['RACK_ENV'] = "production"
 require 'app'
-run Sinatra::Application
+
+map("/")              { run DataCatalog::Root }
+map("/checkup")       { run DataCatalog::Checkup }
+map("/comments")      { run DataCatalog::Comments }
+map("/documents")     { run DataCatalog::Documents }
+map("/notes")         { run DataCatalog::Notes }
+map("/organizations") { run DataCatalog::Organizations }
+map("/ratings")       { run DataCatalog::Organizations }
+map("/sources")       { run DataCatalog::Sources}
+map("/tags")          { run DataCatalog::Tags}
+map("/users")         { run DataCatalog::Users}

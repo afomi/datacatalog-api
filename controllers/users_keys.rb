@@ -1,66 +1,57 @@
-get '/users/:user_id/keys' do
-  require_admin
-  user_id = params.delete("user_id")
-  user = User.find_by_id(user_id)
-  error 404, [].to_json unless user
-  user.api_keys.to_json
-end
+module DataCatalog
 
-get '/users/:user_id/keys/:api_key_id' do
-  user_id = params.delete("user_id")
-  api_key_id = params.delete("api_key_id")
-  require_owner_or_higher(user_id)
-  user = User.find_by_id(user_id)
-  error 404, [].to_json unless user
-  api_key = user.api_keys.find { |x| x.id == api_key_id }
-  error 404, [].to_json unless api_key
-  api_key.to_json
-end
+  class UsersKeys < Nested
 
-post '/users/:user_id/keys' do
-  user_id = params.delete("user_id")
-  require_owner_or_higher(user_id)
-  user = User.find_by_id(user_id)
-  error 404, [].to_json unless user
-  validate_api_key_params :on_create
-  params["api_key"] = user.generate_api_key
-  api_key = ApiKey.new(params)
-  user.api_keys << api_key
-  error 500, [].to_json unless user.save
-  response.status = 201
-  response.headers['Location'] = full_uri "/users/#{user_id}/keys/#{api_key.id}"
-  api_key.to_json
-end
+    restful_routes do
+      name "keys"
 
-put '/users/:user_id/keys/:api_key_id' do
-  user_id = params.delete("user_id")
-  api_key_id = params.delete("api_key_id")
-  require_owner_or_higher(user_id)
-  user = User.find_by_id(user_id)
-  error 404, [].to_json unless user
-  validate_api_key_params :on_update
-  api_key = user.api_keys.find { |x| x.id == api_key_id }
-  error 404, [].to_json unless api_key
-  api_key_index = user.api_keys.index(api_key)
-  api_key.attributes = params
-  user.api_keys[api_key_index] = api_key
-  error 500, [].to_json unless user.save
-  api_key.to_json
-end
+      association :api_keys
 
-delete '/users/:user_id/keys/:api_key_id' do
-  user_id = params.delete("user_id")
-  api_key_id = params.delete("api_key_id")
-  require_owner_or_higher(user_id)
-  user = User.find_by_id(user_id)
-  error 404, [].to_json unless user
-  keys = user.api_keys
-  api_key = user.api_keys.find { |x| x.id == api_key_id }
-  error 404, [].to_json unless api_key
-  if api_key.key_type == "primary"
-    error 403, { "errors" => ["cannot_delete_primary_api_key"] }.to_json
+      model ApiKey, :read_only => [
+        :api_key,
+        :created_at
+      ]
+
+      permission :owner
+
+      callback :before_delete do
+        if @document.key_type == "primary"
+          error 403, {
+            "errors" => ["cannot_delete_primary_api_key"]
+          }.to_json
+        end
+      end
+      
+      callback :before_create do
+        key_type = params["key_type"]
+        unless key_type
+          error 400, { "errors" => { "missing_params" => ["key_type"] } }.to_json
+        end
+        unless %w(application valet).include?(key_type)
+          error 400, {
+            "errors" => {
+              "invalid_values_for_params" => ["key_type"],
+            },
+            "help_text" => "valid values for key_type are 'application' or 'valet'"
+          }.to_json
+        end
+        params["api_key"] = @document.generate_api_key
+      end
+      
+      callback :before_update do
+        key_type = params["key_type"]
+        if key_type && !%w(application valet).include?(key_type)
+          error 400, {
+            "errors" => {
+              "invalid_values_for_params" => ["key_type"],
+            },
+            "help_text" => "valid values for key_type are 'application' or 'valet'"
+          }.to_json
+        end
+      end
+      
+    end
+  
   end
-  user.api_keys.delete(api_key)
-  user.save!
-  { "id" => api_key_id }.to_json
+
 end

@@ -1,40 +1,15 @@
-get '/comments' do
-  require_admin
-  comments = Comment.find(:all)
-  comments.to_json
-end
+module DataCatalog
+  
+  class Comments < Base
+    
+    restful_routes do
+      name "comments"
+      model Comment, :read_only => [
+        :created_at,
+        :updated_at
+      ]
+    end
 
-get '/comments/:id' do |id|
-  require_admin
-  id = params.delete("id")
-  comment = Comment.find_by_id(id)
-  error 404, [].to_json unless comment
-  comment.to_json
-end
+  end
 
-post '/comments' do
-  require_admin
-  id = params.delete("id")
-  validate_comment_params
-  comment = create_comment_from_params
-  comment.to_json
-end
-
-put '/comments/:id' do
-  require_admin
-  id = params.delete("id")
-  comment = Comment.find_by_id(id)
-  error 404, [].to_json unless comment
-  validate_comment_params
-  comment = Comment.update(id, params)
-  comment.to_json
-end
-
-delete '/comments/:id' do
-  require_admin
-  id = params.delete("id")
-  comment = Comment.find_by_id(id)
-  error 404, [].to_json unless comment
-  comment.destroy
-  { "id" => id }.to_json
 end

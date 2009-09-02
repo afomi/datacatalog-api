@@ -37,7 +37,7 @@ module Config
       @environment
     else
       @environment = if Object.const_defined?("Sinatra")
-        Sinatra::Application.environment
+        Sinatra::Base.environment
       else
         ENV['RACK_ENV'] || :development
       end

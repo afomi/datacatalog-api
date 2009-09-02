@@ -2,16 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper
 
 class RatingsGetOneControllerTest < RequestTestCase
 
-  shared "successful GET of a rating" do
-    use "return 200 Ok"
-    use "return timestamps and id in body"
-  
-    test "body should have correct text" do
-      assert_equal "Rating A", parsed_response_body["text"]
-    end
-  end
-
-  # - - - - - - - - - -
+  def app; DataCatalog::Ratings end
 
   before do
     rating = Rating.create :text => "Rating A"
@@ -21,75 +12,80 @@ class RatingsGetOneControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous : get /ratings/:id" do
+  shared "attempted GET rating with :fake_id" do
+    use "return 404 Not Found"
+    use "return an empty response body"
+  end
+
+  shared "successful GET rating with :id" do
+    use "return 200 Ok"
+    use "return timestamps and id in body"
+  
+    test "body should have correct text" do
+      assert_equal "Rating A", parsed_response_body["text"]
+    end
+
+    test "body should have source_id" do
+      assert_include "source_id", parsed_response_body
+    end
+    
+    test "body should have user_id" do
+      assert_include "user_id", parsed_response_body
+    end
+  end
+
+  # - - - - - - - - - -
+
+  context "anonymous : get /:id" do
     before do
-      get "/ratings/#{@id}"
+      get "/#{@id}"
     end
     
     use "return 401 because the API key is missing"
   end
   
-  context "incorrect API key : get /ratings/:id" do
+  context "incorrect API key : get /:id" do
     before do
-      get "/ratings/#{@id}", :api_key => "does_not_exist_in_database"
+      get "/#{@id}", :api_key => "does_not_exist_in_database"
     end
     
     use "return 401 because the API key is invalid"
   end
-  
+
   # - - - - - - - - - -
 
-  context "normal API key : get /ratings/:fake_id : not found" do
+  context "normal API key : get /:fake_id" do
     before do
-      get "/ratings/#{@fake_id}", :api_key => @admin_user.primary_api_key
+      get "/#{@fake_id}", :api_key => @normal_user.primary_api_key
     end
     
-    use "return 404 Not Found"
-    use "return an empty response body"
+    use "attempted GET rating with :fake_id"
   end
 
-  context "curator API key : get /ratings/:fake_id : not found" do
+  context "admin API key : get /:fake_id" do
     before do
-      get "/ratings/#{@fake_id}", :api_key => @curator_user.primary_api_key
+      get "/#{@fake_id}", :api_key => @admin_user.primary_api_key
     end
     
-    use "return 404 Not Found"
-    use "return an empty response body"
-  end
-
-  context "admin API key : get /ratings/:fake_id : not found" do
-    before do
-      get "/ratings/#{@fake_id}", :api_key => @admin_user.primary_api_key
-    end
-    
-    use "return 404 Not Found"
-    use "return an empty response body"
+    use "attempted GET rating with :fake_id"
   end
 
   # - - - - - - - - - -
   
-  context "normal API key : get /ratings/:id" do
+  context "normal API key : get /:id" do
     before do
-      get "/ratings/#{@id}", :api_key => @normal_user.primary_api_key
+      get "/#{@id}", :api_key => @normal_user.primary_api_key
     end
     
-    use "successful GET of a rating"
+    use "successful GET rating with :id"
   end
 
-  context "curator API key : get /ratings/:id" do
+  context "admin API key : get /:id" do
     before do
-      get "/ratings/#{@id}", :api_key => @curator_user.primary_api_key
+      get "/#{@id}", :api_key => @admin_user.primary_api_key
     end
     
-    use "successful GET of a rating"
-  end
-  
-  context "admin API key : get /ratings/:id" do
-    before do
-      get "/ratings/#{@id}", :api_key => @admin_user.primary_api_key
-    end
-
-    use "successful GET of a rating"
+    use "successful GET rating with :id"
   end
 
 end

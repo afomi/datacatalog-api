@@ -1,40 +1,15 @@
-get '/sources' do
-  require_admin
-  sources = Source.find(:all)
-  sources.to_json
-end
+module DataCatalog
 
-get '/sources/:id' do |id|
-  require_admin
-  id = params.delete("id")
-  source = Source.find_by_id(id)
-  error 404, [].to_json unless source
-  source.to_json
-end
+  class Sources < Base
+  
+    restful_routes do
+      name "sources"
+      model Source, :read_only => [
+        :created_at,
+        :updated_at
+      ]
+    end
 
-post '/sources' do
-  require_admin
-  id = params.delete("id")
-  validate_source_params
-  source = create_source_from_params
-  source.to_json
-end
+  end
 
-put '/sources/:id' do
-  require_admin
-  id = params.delete("id")
-  source = Source.find_by_id(id)
-  error 404, [].to_json unless source
-  validate_source_params
-  source = Source.update(id, params)
-  source.to_json
-end
-
-delete '/sources/:id' do
-  require_admin
-  id = params.delete("id")
-  source = Source.find_by_id(id)
-  error 404, [].to_json unless source
-  source.destroy
-  { "id" => id }.to_json
 end

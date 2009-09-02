@@ -2,95 +2,30 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper
 
 class UsersPostControllerTest < RequestTestCase
 
+  def app; DataCatalog::Users end
+
   before do
     @user_count = User.count
   end
-  
-  # - - - - - - - - - -
-  
-  context "anonymous : post /users" do
-    before do
-      post '/users'
-    end
-    
-    use "return 401 because the API key is missing"
-    use "unchanged user count"
-  end
-  
-  context "incorrect API key : post /users" do
-    before do
-      post '/users', :api_key => "does_not_exist_in_database"
-    end
-    
-    use "return 401 because the API key is invalid"
-    use "unchanged user count"
-  end
-  
-  context "normal API key : post /users" do
-    before do
-      post '/users', :api_key => @normal_user.primary_api_key
-    end
-    
-    use "return 401 because the API key is unauthorized"
-    use "unchanged user count"
-  end
 
   # - - - - - - - - - -
 
-  context "admin API key : post /users : protected param 'admin'" do
-    before do
-      post '/users', {
-        :api_key   => @admin_user.primary_api_key,
-        :name      => "John Doe",
-        :email     => "john.doe@email.com",
-        :admin     => true
-      }
-    end
-  
+  shared "attempted POST user with protected param 'admin'" do
     use "return 400 Bad Request"
     use "return errors hash saying admin is invalid"
   end
 
-  context "admin API key : post /users : protected param 'creator_api_key'" do
-    before do
-      post '/users', {
-        :api_key         => @admin_user.primary_api_key,
-        :name            => "John Doe",
-        :email           => "john.doe@email.com",
-        :admin           => true,
-        :creator_api_key => get_fake_api_key("John Doe")
-      }
-    end
-  
+  shared "attempted POST user with protected param 'creator_api_key'" do
     use "return 400 Bad Request"
     use "return errors hash saying creator_api_key is invalid"
   end
-  
-  context "admin API key : post /users : extra param 'junk'" do
-    before do
-      post '/users', {
-        :api_key   => @admin_user.primary_api_key,
-        :name    => "John Doe",
-        :email   => "john.doe@email.com",
-        :junk    => "This is an extra parameter (junk)"
-      }
-    end
-  
+
+  shared "attempted POST user with invalid param 'junk'" do
     use "return 400 Bad Request"
     use "return errors hash saying junk is invalid"
   end
 
-  # - - - - - - - - - -
-  
-  context "admin API key : post /users : correct params" do
-    before do
-      post '/users', {
-        :api_key   => @admin_user.primary_api_key,
-        :name      => "John Doe",
-        :email     => "john.doe@email.com",
-      }
-    end
-    
+  shared "successful POST user" do
     use "return 201 Created"
     use "return timestamps and id in body" 
     use "incremented user count"
@@ -129,4 +64,145 @@ class UsersPostControllerTest < RequestTestCase
     end
   end
   
+  # - - - - - - - - - -
+  
+  context "anonymous : post /" do
+    before do
+      post '/'
+    end
+    
+    use "return 401 because the API key is missing"
+    use "unchanged user count"
+  end
+  
+  context "incorrect API key : post /" do
+    before do
+      post '/', :api_key => "does_not_exist_in_database"
+    end
+    
+    use "return 401 because the API key is invalid"
+    use "unchanged user count"
+  end
+  
+  context "normal API key : post /" do
+    before do
+      post '/', :api_key => @normal_user.primary_api_key
+    end
+    
+    use "return 401 because the API key is unauthorized"
+    use "unchanged user count"
+  end
+
+  # - - - - - - - - - -
+
+  context "curator API key : post / with protected param 'admin'" do
+    before do
+      post '/', {
+        :api_key   => @curator_user.primary_api_key,
+        :name      => "John Doe",
+        :email     => "john.doe@email.com",
+        :admin     => true
+      }
+    end
+  
+    use "attempted POST user with protected param 'admin'"
+  end
+  
+  context "admin API key : post / with protected param 'admin'" do
+    before do
+      post '/', {
+        :api_key   => @admin_user.primary_api_key,
+        :name      => "John Doe",
+        :email     => "john.doe@email.com",
+        :admin     => true
+      }
+    end
+  
+    use "attempted POST user with protected param 'admin'"
+  end
+  
+  # - - - - - - - - - -
+  
+  context "curator API key : post / with protected param 'creator_api_key'" do
+    before do
+      post '/', {
+        :api_key         => @curator_user.primary_api_key,
+        :name            => "John Doe",
+        :email           => "john.doe@email.com",
+        :admin           => true,
+        :creator_api_key => get_fake_api_key("John Doe")
+      }
+    end
+  
+    use "attempted POST user with protected param 'creator_api_key'"
+  end
+  
+  context "admin API key : post / with protected param 'creator_api_key'" do
+    before do
+      post '/', {
+        :api_key         => @admin_user.primary_api_key,
+        :name            => "John Doe",
+        :email           => "john.doe@email.com",
+        :admin           => true,
+        :creator_api_key => get_fake_api_key("John Doe")
+      }
+    end
+  
+    use "attempted POST user with protected param 'creator_api_key'"
+  end
+
+  # - - - - - - - - - -
+
+  context "curator API key : post / with invalid param 'junk'" do
+    before do
+      post '/', {
+        :api_key   => @curator_user.primary_api_key,
+        :name    => "John Doe",
+        :email   => "john.doe@email.com",
+        :junk    => "This is an extra parameter (junk)"
+      }
+    end
+    
+    use "attempted POST user with invalid param 'junk'"
+  end
+  
+  context "admin API key : post / with invalid param 'junk'" do
+    before do
+      post '/', {
+        :api_key   => @admin_user.primary_api_key,
+        :name    => "John Doe",
+        :email   => "john.doe@email.com",
+        :junk    => "This is an extra parameter (junk)"
+      }
+    end
+  
+    use "attempted POST user with invalid param 'junk'"
+  end
+  
+  # - - - - - - - - - -
+  
+  context "curator API key : post / with correct params" do
+    before do
+      post '/', {
+        :api_key   => @curator_user.primary_api_key,
+        :name      => "John Doe",
+        :email     => "john.doe@email.com",
+      }
+    end
+    
+    use "successful POST user"
+  end
+  
+  context "admin API key : post / with correct params" do
+    before do
+      post '/', {
+        :api_key   => @admin_user.primary_api_key,
+        :name      => "John Doe",
+        :email     => "john.doe@email.com",
+      }
+    end
+  
+    use "successful POST user"
+  end
+
 end
