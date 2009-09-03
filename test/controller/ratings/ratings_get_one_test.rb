@@ -6,6 +6,8 @@ class RatingsGetOneControllerTest < RequestTestCase
 
   before do
     rating = Rating.create(
+      :kind      => "source",
+      :value     => 5,
       :text      => "Rating A",
       :source_id => get_fake_mongo_object_id,
       :user_id   => get_fake_mongo_object_id

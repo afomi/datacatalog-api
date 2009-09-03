@@ -5,7 +5,14 @@ class RatingsDeleteControllerTest < RequestTestCase
   def app; DataCatalog::Ratings end
 
   before do
-    rating = Rating.create :text => "Original Rating"
+    rating = Rating.create(
+      :kind      => "source",
+      :value     => 5,
+      :text      => "Original Rating",
+      :user_id   => get_fake_mongo_object_id,
+      :source_id => get_fake_mongo_object_id
+    )
+    assert rating.valid?
     @id = rating.id
     @rating_count = Rating.count
     @fake_id = get_fake_mongo_object_id

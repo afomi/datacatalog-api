@@ -61,12 +61,15 @@ class RatingsPostControllerTest < RequestTestCase
   end
   
   # - - - - - - - - - -
-
-  context "admin API key : post / with protected param" do
+  
+  context "admin API key : post / with protected param 'updated_at'" do
     before do
       post "/", {
         :api_key    => @admin_user.primary_api_key,
+        :kind       => "source",
+        :value      => 5,
         :text       => "Rating A",
+        :source_id  => get_fake_mongo_object_id,
         :updated_at => Time.now.to_json
       }
     end
@@ -75,13 +78,33 @@ class RatingsPostControllerTest < RequestTestCase
     use "unchanged rating count"
     use "return errors hash saying updated_at is invalid"
   end
+
+  context "admin API key : post / with protected param 'user_id'" do
+    before do
+      post "/", {
+        :api_key    => @admin_user.primary_api_key,
+        :kind       => "source",
+        :value      => 5,
+        :text       => "Rating A",
+        :source_id  => get_fake_mongo_object_id,
+        :user_id    => get_fake_mongo_object_id
+      }
+    end
+  
+    use "return 400 Bad Request"
+    use "unchanged rating count"
+    use "return errors hash saying user_id is invalid"
+  end
   
   context "admin API key : post / with invalid param" do
     before do
       post "/", {
-        :api_key => @admin_user.primary_api_key,
-        :text    => "Rating A",
-        :junk    => "This is an extra param (junk)"
+        :api_key   => @admin_user.primary_api_key,
+        :kind      => "source",
+        :value     => 5,
+        :text      => "Rating A",
+        :source_id => get_fake_mongo_object_id,
+        :junk      => "This is an extra param (junk)"
       }
     end
   
@@ -95,8 +118,11 @@ class RatingsPostControllerTest < RequestTestCase
   context "curator API key : post / with correct params" do
     before do
       post "/", {
-        :api_key => @curator_user.primary_api_key,
-        :text    => "Rating A",
+        :api_key   => @curator_user.primary_api_key,
+        :kind      => "source",
+        :value     => 5,
+        :text      => "Rating A",
+        :source_id => get_fake_mongo_object_id,
       }
     end
     
@@ -107,10 +133,13 @@ class RatingsPostControllerTest < RequestTestCase
     before do
       post "/", {
         :api_key => @admin_user.primary_api_key,
-        :text    => "Rating A",
+        :kind      => "source",
+        :value     => 5,
+        :text      => "Rating A",
+        :source_id => get_fake_mongo_object_id,
       }
     end
-
+  
     use "successful POST to ratings"
   end
 

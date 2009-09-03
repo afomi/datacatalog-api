@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_unit_helper')
 class SourceRatingsUnitTest < ModelTestCase
   
   context "source with no ratings" do
-
+  
     before do
       @source = Source.create(:url => "http://data.gov/data-sets/123")
     end
@@ -11,18 +11,24 @@ class SourceRatingsUnitTest < ModelTestCase
     test "#ratings should return []" do
       assert_equal [], @source.ratings
     end
-
+  
   end
 
   context "source with 5 ratings" do
-
+  
     before do
       @source = Source.create(:url => "http://data.gov/data-sets/123")
       @ratings = []
       5.times do |n|
-        @ratings << Rating.create(:value => n)
+        @ratings << Rating.create(
+          :kind      => "source",
+          :value     => n + 1,
+          :text      => "source rating #{n + 1}",
+          :user_id   => get_fake_mongo_object_id
+        )
       end
       @source.ratings = @ratings
+      @ratings.each { |r| assert r.valid? }
       @source.save!
     end
     
@@ -32,7 +38,7 @@ class SourceRatingsUnitTest < ModelTestCase
     
     5.times do |n|
       test "#ratings should include value of #{n}" do
-        assert_include n, @source.ratings.map(&:value)
+        assert_include n + 1, @source.ratings.map(&:value)
       end
       
       test "finding id for #{n} should succeed" do
@@ -50,7 +56,7 @@ class SourceRatingsUnitTest < ModelTestCase
         @source.ratings.find get_fake_mongo_object_id
       end
     end
-
+  
   end
   
 end

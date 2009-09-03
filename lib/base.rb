@@ -71,6 +71,7 @@ module DataCatalog
         require_at_least :curator
         id = params.delete "id"
         validate params, model, read_only_attributes
+        callback callbacks[:before_create], nil # ***
         document = model.create(params)
         callback callbacks[:after_create], document # ***
         response.status = 201

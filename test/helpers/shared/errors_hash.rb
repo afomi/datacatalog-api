@@ -16,6 +16,14 @@ class RequestTestCase
     end
   end
 
+  shared "return errors hash saying user_id is invalid" do
+    test "body should say 'user_id' is an invalid param" do
+      assert_include "errors", parsed_response_body
+      assert_include "invalid_params", parsed_response_body["errors"]
+      assert_include "user_id", parsed_response_body["errors"]["invalid_params"]
+    end
+  end
+
   shared "return errors hash saying admin is invalid" do
     test "body should say 'admin' is an invalid param" do
       assert_include "errors", parsed_response_body
