@@ -31,7 +31,7 @@ namespace :db do
       :admin => true
     })
     if users.length > 0
-      puts "Found #{users.count} admin users in database:"
+      puts "Found #{users.length} admin users in database:"
       verbosely_display_users users
     else
       verbosely_create_admin_user
