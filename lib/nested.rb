@@ -61,68 +61,75 @@ module DataCatalog
         get "/:parent_id/#{child_name}" do
           parent_id = params.delete("parent_id")
           permission_check :basic, level, parent_id
-          parent_doc = parent_model.find_by_id(parent_id)
-          error 404, [].to_json unless parent_doc
-          child_docs = parent_doc.send(association)
-          child_docs.to_json
+          @parent_document = parent_model.find_by_id(parent_id)
+          error 404, [].to_json unless @parent_document
+          @child_documents = @parent_document.send(association)
+          @child_documents.to_json
         end
 
         get "/:parent_id/#{child_name}/:child_id" do
           parent_id = params.delete("parent_id")
           permission_check :basic, level, parent_id
           child_id = params.delete("child_id")
-          parent_doc = parent_model.find_by_id(parent_id)
-          error 404, [].to_json unless parent_doc
-          child_doc = parent_doc.send(association).find { |x| x.id == child_id }
-          error 404, [].to_json unless child_doc
-          child_doc.to_json
+          @parent_document = parent_model.find_by_id(parent_id)
+          error 404, [].to_json unless @parent_document
+          @child_document = @parent_document.send(association).find { |x| x.id == child_id }
+          error 404, [].to_json unless @child_document
+          @child_document.to_json
         end
 
         post "/:parent_id/#{child_name}" do
           parent_id = params.delete("parent_id")
           permission_check :curator, level, parent_id
-          parent_doc = parent_model.find_by_id(parent_id)
-          error 404, [].to_json unless parent_doc
+          @parent_document = parent_model.find_by_id(parent_id)
+          error 404, [].to_json unless @parent_document
           validate_before_save params, child_model, read_only_attributes
-          callback callbacks[:before_create], parent_doc
-          child_doc = child_model.new(params)
-          parent_doc.send(association) << child_doc
-          error 500, [].to_json unless parent_doc.save
+          callback callbacks[:before_save]
+          callback callbacks[:before_create]
+          @child_document = child_model.new(params)
+          @parent_document.send(association) << @child_document
+          error 500, [].to_json unless @parent_document.save
+          callback callbacks[:after_create]
+          callback callbacks[:after_save]
           response.status = 201
           response.headers['Location'] = full_uri(
-            "/#{parent_name}/#{parent_id}/#{child_name}/#{child_doc.id}"
+            "/#{parent_name}/#{parent_id}/#{child_name}/#{@child_document.id}"
           )
-          child_doc.to_json
+          @child_document.to_json
         end
 
         put "/:parent_id/#{child_name}/:child_id" do
           parent_id = params.delete("parent_id")
           permission_check :curator, level, parent_id
           child_id = params.delete("child_id")
-          parent_doc = parent_model.find_by_id(parent_id)
-          error 404, [].to_json unless parent_doc
+          @parent_document = parent_model.find_by_id(parent_id)
+          error 404, [].to_json unless @parent_document
           validate_before_save params, child_model, read_only_attributes
-          callback callbacks[:before_update], parent_doc
-          child_doc = parent_doc.send(association).find { |x| x.id == child_id }
-          error 404, [].to_json unless child_doc
-          child_index = parent_doc.send(association).index(child_doc)
-          child_doc.attributes = params
-          parent_doc.send(association)[child_index] = child_doc
-          error 500, [].to_json unless parent_doc.save
-          child_doc.to_json
+          callback callbacks[:before_save]
+          callback callbacks[:before_update]
+          @child_document = @parent_document.send(association).find { |x| x.id == child_id }
+          error 404, [].to_json unless @child_document
+          child_index = @parent_document.send(association).index(@child_document)
+          @child_document.attributes = params
+          @parent_document.send(association)[child_index] = @child_document
+          error 500, [].to_json unless @parent_document.save
+          callback callbacks[:after_update]
+          callback callbacks[:after_save]
+          @child_document.to_json
         end
 
         delete "/:parent_id/#{child_name}/:child_id" do
           parent_id = params.delete("parent_id")
           permission_check :curator, level, parent_id
           child_id = params.delete("child_id")
-          parent_doc = parent_model.find_by_id(parent_id)
-          error 404, [].to_json unless parent_doc
-          child_doc = parent_doc.send(association).find { |x| x.id == child_id }
-          error 404, [].to_json unless child_doc
-          callback callbacks[:before_delete], child_doc
-          parent_doc.send(association).delete(child_doc)
-          error 500, [].to_json unless parent_doc.save
+          @parent_document = parent_model.find_by_id(parent_id)
+          error 404, [].to_json unless @parent_document
+          @child_document = @parent_document.send(association).find { |x| x.id == child_id }
+          error 404, [].to_json unless @child_document
+          callback callbacks[:before_destroy]
+          @parent_document.send(association).delete(@child_document)
+          callback callbacks[:after_destroy]
+          error 500, [].to_json unless @parent_document.save
           { "id" => child_id }.to_json
         end
       end

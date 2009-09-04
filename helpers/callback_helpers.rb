@@ -1,9 +1,8 @@
 module DataCatalog
   
   module CallbackHelpers
-    def callback(callback, document)
+    def callback(callback)
       return unless callback
-      @document = document # for use by callback
       instance_eval &callback
     end
   end

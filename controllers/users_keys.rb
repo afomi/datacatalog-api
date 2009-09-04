@@ -14,8 +14,8 @@ module DataCatalog
 
       permission :owner
 
-      callback :before_delete do
-        if @document.key_type == "primary"
+      callback :before_destroy do
+        if @child_document.key_type == "primary"
           error 403, {
             "errors" => ["cannot_delete_primary_api_key"]
           }.to_json
@@ -35,7 +35,7 @@ module DataCatalog
             "help_text" => "valid values for key_type are 'application' or 'valet'"
           }.to_json
         end
-        params["api_key"] = @document.generate_api_key
+        params["api_key"] = @parent_document.generate_api_key
       end
       
       callback :before_update do

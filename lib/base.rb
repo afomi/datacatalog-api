@@ -55,46 +55,55 @@ module DataCatalog
 
       get '/?' do
         require_at_least :basic
-        documents = find params, model
-        documents.to_json
+        @documents = find params, model
+        @documents.to_json
       end
 
       get '/:id/?' do |id|
         require_at_least :basic
         id = params.delete "id"
-        document = model.find_by_id id
-        error 404, [].to_json unless document
-        document.to_json
+        @document = model.find_by_id id
+        error 404, [].to_json unless @document
+        @document.to_json
       end
 
       post '/?' do
         require_at_least :curator
         id = params.delete "id"
         validate_before_save params, model, read_only_attributes
-        callback callbacks[:before_create], nil
-        document = model.create(params)
-        callback callbacks[:after_create], document
+        @document = model.find_by_id id
+        callback callbacks[:before_save]
+        callback callbacks[:before_create]
+        @document = model.create(params)
+        callback callbacks[:after_create]
+        callback callbacks[:after_save]
         response.status = 201
-        response.headers['Location'] = full_uri "/#{name}/#{document.id}"
-        document.to_json
+        response.headers['Location'] = full_uri "/#{name}/#{@document.id}"
+        @document.to_json
       end
 
       put '/:id/?' do
         require_at_least :curator
         id = params.delete "id"
-        document = model.find_by_id id
-        error 404, [].to_json unless document
+        @document = model.find_by_id id
+        error 404, [].to_json unless @document
         validate_before_save params, model, read_only_attributes
-        document = model.update id, params
-        document.to_json
+        callback callbacks[:before_save]
+        callback callbacks[:before_update]
+        @document = model.update id, params
+        callback callbacks[:after_update]
+        callback callbacks[:after_save]
+        @document.to_json
       end
 
       delete '/:id/?' do
         require_at_least :curator
         id = params.delete "id"
-        document = model.find_by_id id
-        error 404, [].to_json unless document
-        document.destroy
+        @document = model.find_by_id id
+        error 404, [].to_json unless @document
+        callback callbacks[:before_destroy]
+        @document.destroy
+        callback callbacks[:after_destroy]
         { "id" => id }.to_json
       end
     end
