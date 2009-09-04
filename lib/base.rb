@@ -55,7 +55,7 @@ module DataCatalog
 
       get '/?' do
         require_at_least :basic
-        documents = model.find :all
+        documents = find params, model
         documents.to_json
       end
 
@@ -70,7 +70,7 @@ module DataCatalog
       post '/?' do
         require_at_least :curator
         id = params.delete "id"
-        validate params, model, read_only_attributes
+        validate_before_save params, model, read_only_attributes
         callback callbacks[:before_create], nil
         document = model.create(params)
         callback callbacks[:after_create], document
@@ -84,7 +84,7 @@ module DataCatalog
         id = params.delete "id"
         document = model.find_by_id id
         error 404, [].to_json unless document
-        validate params, model, read_only_attributes
+        validate_before_save params, model, read_only_attributes
         document = model.update id, params
         document.to_json
       end

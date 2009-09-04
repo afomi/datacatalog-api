@@ -2,7 +2,19 @@ module DataCatalog
 
   module ValidationHelpers
 
-    def validate(params, model, read_only_attributes)
+    def validate_before_find(params, model)
+      all_keys = model.keys.keys
+      invalid_params = params.keys - all_keys
+      unless invalid_params.empty?
+        error 400, {
+          "errors" => {
+            "invalid_params" => invalid_params
+          }
+        }.to_json
+      end
+    end
+
+    def validate_before_save(params, model, read_only_attributes)
       invalid_keys = read_only_attributes.map { |x| x.to_s }
       all_keys = model.keys.keys
       valid_params = all_keys - invalid_keys

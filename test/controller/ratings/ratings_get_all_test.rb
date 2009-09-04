@@ -21,7 +21,7 @@ class RatingsGetAllControllerTest < RequestTestCase
         case element["kind"]
         when "source"
           assert_include "source_id", element
-          assert_include "source rating #{element['value']}", element["text"]
+          assert_equal "source rating #{element['value']}", element["text"]
         when "comment"
           assert_include "comment_id", element
         else flunk "incorrect kind of rating"
