@@ -21,29 +21,14 @@ class TagsGetAllControllerTest < RequestTestCase
       3.times { |n| assert_include "Tag #{n}", actual }
     end
   
-    3.times do |n|
-      test "element #{n} should have source_id" do
-        assert_include "source_id", parsed_response_body[n]
-      end
-
-      test "element #{n} should have user_id" do
-        assert_include "user_id", parsed_response_body[n]
-      end
-
-      test "element #{n} should have created_at" do
-        assert_include "created_at", parsed_response_body[n]
-      end
-        
-      test "element #{n} should have updated_at" do
-        assert_include "updated_at", parsed_response_body[n]
-      end
-      
-      test "element #{n} should have id" do
-        assert_include "id", parsed_response_body[n]
-      end
-        
-      test "element #{n} should not have _id" do
-        assert_not_include "_id", parsed_response_body[n]
+    test "each element should have correct attributes" do
+      parsed_response_body.each do |element|
+        assert_include "source_id", element
+        assert_include "user_id", element
+        assert_include "created_at", element
+        assert_include "updated_at", element
+        assert_include "id", element
+        assert_not_include "_id", element
       end
     end
   end

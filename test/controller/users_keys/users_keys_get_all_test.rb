@@ -41,34 +41,15 @@ class UsersKeysGetAllControllerTest < RequestTestCase
     test "body should have 3 top level elements" do
       assert_equal 3, parsed_response_body.length
     end
-    
-    3.times do |n|
-      test "element #{n} should have id" do
-        assert_include "id", parsed_response_body[n]
-      end
-      
-      test "element #{n} should have purpose" do
-        assert_include "purpose", parsed_response_body[n]
-      end
-      
-      test "element #{n} should have api_key" do
-        assert_include "api_key", parsed_response_body[n]
-      end
-  
-      test "element #{n} should have key_type" do
-        assert_include "key_type", parsed_response_body[n]
-      end
-  
-      test "element #{n} should not have _id" do
-        assert_not_include "_id", parsed_response_body[n]
-      end
-  
-      test "element #{n} should have created_at" do
-        assert_include "created_at", parsed_response_body[n]
-      end
-          
-      test "element #{n} should not have updated_at" do
-        assert_not_include "updated_at", parsed_response_body[n]
+
+    test "each element should have correct attributes" do
+      parsed_response_body.each do |element|
+        assert_include "purpose", element
+        assert_include "api_key", element
+        assert_include "key_type", element
+        assert_include "created_at", element
+        assert_include "id", element
+        assert_not_include "_id", element
       end
     end
   end
