@@ -53,9 +53,14 @@ class UsersGetAllControllerTest < RequestTestCase
       assert_equal 6, parsed_response_body.length
     end
 
-    test "body should have correct text" do
-      actual = (3 ... 6).map { |n| parsed_response_body[n]["text"] }
+    test "body should have correct names" do
+      actual = (3 ... 6).map { |n| parsed_response_body[n]["name"] }
       (3 ... 6).each { |n| assert_include "User #{n}", actual }
+    end
+
+    test "body should have correct emails" do
+      actual = (3 ... 6).map { |n| parsed_response_body[n]["email"] }
+      (3 ... 6).each { |n| assert_include "user-#{n}@email.com", actual }
     end
 
     use "correct attributes for each user"
@@ -105,7 +110,10 @@ class UsersGetAllControllerTest < RequestTestCase
     before do
       3.times do |n|
         @user = User.new(
-          :text => "User #{n + 3}"
+          :name    => "User #{n + 3}",
+          :email   => "user-#{n + 3}@email.com",
+          :curator => false,
+          :admin   => false
         )
         @keys = [
           ApiKey.new({
