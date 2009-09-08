@@ -15,7 +15,7 @@ class RatingUnitTest < ModelTestCase
     end
   end
   
-  shared "user_id can't be empty" do
+  shared "rating.user_id can't be empty" do
     test "should have error on user_id" do
       @rating.valid?
       assert_include :user_id, @rating.errors.errors
@@ -23,7 +23,7 @@ class RatingUnitTest < ModelTestCase
     end
   end
 
-  shared "source_id can't be empty" do
+  shared "rating.source_id can't be empty" do
     test "should have error on source_id" do
       @rating.valid?
       assert_include :source_id, @rating.errors.errors
@@ -31,7 +31,7 @@ class RatingUnitTest < ModelTestCase
     end
   end
 
-  shared "comment_id can't be empty" do
+  shared "rating.comment_id can't be empty" do
     test "should have error on user_id" do
       @rating.valid?
       assert_include :comment_id, @rating.errors.errors
@@ -39,7 +39,7 @@ class RatingUnitTest < ModelTestCase
     end
   end
 
-  shared "value not between 0 and 1" do
+  shared "rating.value not between 0 and 1" do
     test "value should be between 0 and 1" do
       @rating.valid?
       assert_include :value, @rating.errors.errors
@@ -47,7 +47,7 @@ class RatingUnitTest < ModelTestCase
     end
   end
   
-  shared "value not between 1 and 5" do
+  shared "rating.value not between 1 and 5" do
     test "value should be between 1 and 5" do
       @rating.valid?
       assert_include :value, @rating.errors.errors
@@ -55,7 +55,7 @@ class RatingUnitTest < ModelTestCase
     end
   end
   
-  shared "text must be empty" do
+  shared "rating.text must be empty" do
     test "text should be empty" do
       @rating.valid?
       assert_include :text, @rating.errors.errors
@@ -90,7 +90,7 @@ class RatingUnitTest < ModelTestCase
       end
   
       use "invalid rating"
-      use "value not between 1 and 5"
+      use "rating.value not between 1 and 5"
     end
 
     context "missing user_id" do
@@ -99,7 +99,7 @@ class RatingUnitTest < ModelTestCase
       end
       
       use "invalid rating"
-      use "user_id can't be empty"
+      use "rating.user_id can't be empty"
     end
 
     context "missing source_id" do
@@ -108,7 +108,7 @@ class RatingUnitTest < ModelTestCase
       end
       
       use "invalid rating"
-      use "source_id can't be empty"
+      use "rating.source_id can't be empty"
     end
   end
   
@@ -136,7 +136,7 @@ class RatingUnitTest < ModelTestCase
       end
   
       use "invalid rating"
-      use "value not between 0 and 1"
+      use "rating.value not between 0 and 1"
     end
   
     context "missing user_id" do
@@ -145,7 +145,7 @@ class RatingUnitTest < ModelTestCase
       end
   
       use "invalid rating"
-      use "user_id can't be empty"
+      use "rating.user_id can't be empty"
     end
   
     context "missing comment_id" do
@@ -154,7 +154,7 @@ class RatingUnitTest < ModelTestCase
       end
       
       use "invalid rating"
-      use "comment_id can't be empty"
+      use "rating.comment_id can't be empty"
     end
     
     context "extra param : text" do
@@ -163,7 +163,7 @@ class RatingUnitTest < ModelTestCase
       end
       
       use "invalid rating"
-      use "text must be empty"
+      use "rating.text must be empty"
     end
   end
 

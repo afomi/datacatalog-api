@@ -35,7 +35,10 @@ class CommentsPostControllerTest < RequestTestCase
 
   context "anonymous : post /" do
     before do
-      post "/"
+      post "/", {
+        :text      => "Comment A",
+        :source_id => get_fake_mongo_object_id
+      }
     end
     
     use "return 401 because the API key is missing"
@@ -44,7 +47,11 @@ class CommentsPostControllerTest < RequestTestCase
   
   context "incorrect API key : post /" do
     before do
-      post "/", :api_key => "does_not_exist_in_database"
+      post "/", {
+        :api_key   => "does_not_exist_in_database",
+        :source_id => get_fake_mongo_object_id,
+        :text      => "Comment A",
+      }
     end
     
     use "return 401 because the API key is invalid"
@@ -53,7 +60,11 @@ class CommentsPostControllerTest < RequestTestCase
   
   context "normal API key : post /" do
     before do
-      post "/", :api_key => @normal_user.primary_api_key
+      post "/", {
+        :api_key   => @normal_user.primary_api_key,
+        :source_id => get_fake_mongo_object_id,
+        :text      => "Comment A",
+      }
     end
     
     use "return 401 because the API key is unauthorized"
@@ -66,6 +77,7 @@ class CommentsPostControllerTest < RequestTestCase
     before do
       post "/", {
         :api_key    => @admin_user.primary_api_key,
+        :source_id  => get_fake_mongo_object_id,
         :text       => "Comment A",
         :updated_at => Time.now.to_json
       }
@@ -79,9 +91,10 @@ class CommentsPostControllerTest < RequestTestCase
   context "admin API key : post / with invalid param" do
     before do
       post "/", {
-        :api_key => @admin_user.primary_api_key,
-        :text    => "Comment A",
-        :junk    => "This is an extra param (junk)"
+        :api_key   => @admin_user.primary_api_key,
+        :source_id => get_fake_mongo_object_id,
+        :text      => "Comment A",
+        :junk      => "This is an extra param (junk)"
       }
     end
   
@@ -95,8 +108,9 @@ class CommentsPostControllerTest < RequestTestCase
   context "curator API key : post / with correct params" do
     before do
       post "/", {
-        :api_key => @curator_user.primary_api_key,
-        :text    => "Comment A",
+        :api_key   => @curator_user.primary_api_key,
+        :source_id => get_fake_mongo_object_id,
+        :text      => "Comment A"
       }
     end
     
@@ -106,8 +120,9 @@ class CommentsPostControllerTest < RequestTestCase
   context "admin API key : post / with correct params" do
     before do
       post "/", {
-        :api_key => @admin_user.primary_api_key,
-        :text    => "Comment A",
+        :api_key   => @admin_user.primary_api_key,
+        :source_id => get_fake_mongo_object_id,
+        :text      => "Comment A"
       }
     end
   

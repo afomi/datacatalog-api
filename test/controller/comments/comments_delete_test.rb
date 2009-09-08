@@ -5,7 +5,11 @@ class CommentsDeleteControllerTest < RequestTestCase
   def app; DataCatalog::Comments end
 
   before do
-    comment = Comment.create :text => "Original Comment"
+    comment = Comment.create(
+      :text      => "Original Comment",
+      :user_id   => get_fake_mongo_object_id,
+      :source_id => get_fake_mongo_object_id
+    )
     @id = comment.id
     @comment_count = Comment.count
     @fake_id = get_fake_mongo_object_id

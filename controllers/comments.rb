@@ -8,6 +8,9 @@ module DataCatalog
         :created_at,
         :updated_at
       ]
+      callback :before_create do
+        params["user_id"] = @current_user.id
+      end
     end
 
   end
