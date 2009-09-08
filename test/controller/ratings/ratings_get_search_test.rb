@@ -4,6 +4,13 @@ class RatingsGetSearchControllerTest < RequestTestCase
 
   def app; DataCatalog::Ratings end
   
+  def assert_shared_attributes(element)
+    assert_include "created_at", element
+    assert_include "updated_at", element
+    assert_include "id", element
+    assert_not_include "_id", element
+  end
+  
   shared "successful GET of ratings where value is 2" do
     test "body should have 1 top level element" do
       assert_equal 1, parsed_response_body.length
@@ -14,10 +21,7 @@ class RatingsGetSearchControllerTest < RequestTestCase
         assert_equal "source rating 2", element["text"]
         assert_equal 2, element["value"]
         assert_equal @user_id, element["user_id"]
-        assert_include "created_at", element
-        assert_include "updated_at", element
-        assert_include "id", element
-        assert_not_include "_id", element
+        assert_shared_attributes element
       end
     end
   end
@@ -33,10 +37,7 @@ class RatingsGetSearchControllerTest < RequestTestCase
         assert_equal true, value >= 4
         assert_equal "source rating #{value}", element["text"]
         assert_equal @user_id, element["user_id"]
-        assert_include "created_at", element
-        assert_include "updated_at", element
-        assert_include "id", element
-        assert_not_include "_id", element
+        assert_shared_attributes element
       end
     end
   end
@@ -51,10 +52,6 @@ class RatingsGetSearchControllerTest < RequestTestCase
         value = element["value"]
         assert_equal true, value < 4
         assert_equal @user_id, element["user_id"]
-        assert_include "created_at", element
-        assert_include "updated_at", element
-        assert_include "id", element
-        assert_not_include "_id", element
         case element["kind"]
         when "source"
           assert_include "source_id", element
@@ -63,6 +60,7 @@ class RatingsGetSearchControllerTest < RequestTestCase
           assert_include "comment_id", element
         else flunk "incorrect kind of rating"
         end
+        assert_shared_attributes element
       end
     end
   end
@@ -190,7 +188,6 @@ class RatingsGetSearchControllerTest < RequestTestCase
     
       use "successful GET of ratings with value less than 4"
     end
-    
   end
 
 end
