@@ -4,7 +4,7 @@ class UsersPutControllerTest < RequestTestCase
 
   def app; DataCatalog::Users end
 
-  before do
+  before :all do
     @user = User.create({
       :name    => "Original Guy",
       :email   => "original.guy@email.com",

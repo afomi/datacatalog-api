@@ -4,7 +4,7 @@ class OrganizationsPutControllerTest < RequestTestCase
 
   def app; DataCatalog::Organizations end
 
-  before do
+  before :all do
     @organization = Organization.create({
       :text => "Original Organization"
     })

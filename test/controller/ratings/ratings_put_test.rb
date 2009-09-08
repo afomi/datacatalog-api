@@ -4,7 +4,7 @@ class RatingsPutControllerTest < RequestTestCase
 
   def app; DataCatalog::Ratings end
 
-  before do
+  before :all do
     @rating = Rating.create(
       :kind      => "source",
       :value     => 3,
@@ -12,7 +12,7 @@ class RatingsPutControllerTest < RequestTestCase
       :user_id   => get_fake_mongo_object_id,
       :source_id => get_fake_mongo_object_id
     )
-    assert @rating.valid?
+    raise "Should be valid" unless @rating.valid?
     @id = @rating.id
     @fake_id = get_fake_mongo_object_id
     @rating_count = Rating.count

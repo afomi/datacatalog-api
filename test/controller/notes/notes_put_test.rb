@@ -4,7 +4,7 @@ class NotesPutControllerTest < RequestTestCase
 
   def app; DataCatalog::Notes end
 
-  before do
+  before :all do
     @note = Note.create({
       :text => "Original Note"
     })

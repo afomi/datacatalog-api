@@ -4,7 +4,7 @@ class CommentsPutControllerTest < RequestTestCase
 
   def app; DataCatalog::Comments end
 
-  before do
+  before :all do
     @comment = Comment.create({
       :text => "Original Comment"
     })

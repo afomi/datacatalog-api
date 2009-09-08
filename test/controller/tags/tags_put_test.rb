@@ -4,7 +4,7 @@ class TagsPutControllerTest < RequestTestCase
 
   def app; DataCatalog::Tags end
 
-  before do
+  before :all do
     @tag = Tag.create({
       :text => "Original Tag"
     })

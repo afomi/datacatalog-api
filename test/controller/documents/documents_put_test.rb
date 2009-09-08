@@ -4,7 +4,7 @@ class DocumentsPutControllerTest < RequestTestCase
 
   def app; DataCatalog::Documents end
 
-  before do
+  before :all do
     @document = Document.create({
       :text => "Original Document"
     })
