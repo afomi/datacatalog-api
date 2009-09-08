@@ -63,7 +63,8 @@ module DataCatalog
           permission_check :basic, level, parent_id
           @parent_document = parent_model.find_by_id(parent_id)
           error 404, [].to_json unless @parent_document
-          @child_documents = @parent_document.send(association)
+          all_child_documents = @parent_document.send(association)
+          @child_documents = nested_find all_child_documents, params, parent_model
           @child_documents.to_json
         end
 

@@ -21,6 +21,7 @@ class RatingsGetSearchControllerTest < RequestTestCase
         assert_equal "source rating 2", element["text"]
         assert_equal 2, element["value"]
         assert_equal @user_id, element["user_id"]
+        assert_equal "#{@source_base}2", element["source_id"]
         assert_shared_attributes element
       end
     end
@@ -56,6 +57,7 @@ class RatingsGetSearchControllerTest < RequestTestCase
         when "source"
           assert_include "source_id", element
           assert_equal "source rating #{value}", element["text"]
+          assert_equal "#{@source_base}#{value}", element["source_id"]
         when "comment"
           assert_include "comment_id", element
         else flunk "incorrect kind of rating"
@@ -89,6 +91,27 @@ class RatingsGetSearchControllerTest < RequestTestCase
           :comment_id => "#{@comment_base}#{n + 1}"
         ).valid?
       end
+    end
+
+    # - - - - - - - - - -
+
+    context "anonymous : get / where value is 2" do
+      before do
+        get "/",
+          :value   => 2
+      end
+    
+      use "return 401 because the API key is missing"
+    end
+
+    context "incorrect API key : get / where value is 2" do
+      before do
+        get "/",
+          :value   => 2,
+          :api_key => "does_not_exist_in_database"
+      end
+    
+      use "return 401 because the API key is invalid"
     end
 
     # - - - - - - - - - -
