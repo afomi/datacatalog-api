@@ -1,20 +1,25 @@
 # A user can rate a source.
+#
+# kind    | values        | required keys
+# ----    | ------        | -------------
+# comment | 0, +1         | user_id, value, comment_id
+# source  | 1, 2, 3, 4, 5 | user_id, value, text, source_id
+#
 class Rating
 
   include MongoMapper::Document
 
-  key :user_id,    String,  :required => true
-  key :value,      Integer, :required => true
-  key :text,       String
   key :kind,       String
+  key :user_id,    String,  :required => true
   key :source_id,  String
   key :comment_id, String
+  key :value,      Integer, :required => true
+  key :text,       String
   timestamps!
-  
-  # kind    | values        | required keys
-  # ----    | ------        | -------------
-  # comment | 0, +1         | user_id, value, comment_id
-  # source  | 1, 2, 3, 4, 5 | user_id, value, text, source_id
+
+  belongs_to :user
+  belongs_to :source
+  belongs_to :comment
   
   validate :general_validation
   
@@ -46,4 +51,5 @@ class Rating
       errors.add(:value, "must be between 1 and 5")
     end
   end
+
 end

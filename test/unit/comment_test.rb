@@ -1,6 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_unit_helper')
 
 class CommentUnitTest < ModelTestCase
+
   shared "valid comment" do
     test "should be valid" do
       assert_equal true, @comment.valid?

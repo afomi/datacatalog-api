@@ -8,4 +8,6 @@ class Comment
   key :user_id,   String,  :required => true
   timestamps!
 
+  many :ratings
+
 end

@@ -54,12 +54,12 @@ class UsersGetAllControllerTest < RequestTestCase
     end
 
     test "body should have correct names" do
-      actual = (3 ... 6).map { |n| parsed_response_body[n]["name"] }
+      actual = parsed_response_body.map { |element| element["name"] }
       (3 ... 6).each { |n| assert_include "User #{n}", actual }
     end
 
     test "body should have correct emails" do
-      actual = (3 ... 6).map { |n| parsed_response_body[n]["email"] }
+      actual = parsed_response_body.map { |element| element["email"] }
       (3 ... 6).each { |n| assert_include "user-#{n}@email.com", actual }
     end
 
@@ -109,21 +109,21 @@ class UsersGetAllControllerTest < RequestTestCase
   context_ "3 added users" do
     before do
       3.times do |n|
-        @user = User.new(
+        user = User.new(
           :name    => "User #{n + 3}",
           :email   => "user-#{n + 3}@email.com",
           :curator => false,
           :admin   => false
         )
-        @keys = [
+        keys = [
           ApiKey.new({
-            :api_key  => @user.generate_api_key,
+            :api_key  => user.generate_api_key,
             :key_type => "primary",
             :purpose  => "The primary key"
           })
         ]
-        @user.api_keys = @keys
-        @user.save!
+        user.api_keys = keys
+        user.save!
       end
     end
   

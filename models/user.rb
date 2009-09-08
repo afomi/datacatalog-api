@@ -13,6 +13,8 @@ class User
   key :admin,           Boolean, :default => false
   key :creator_api_key, String
   timestamps!
+  
+  many :ratings
 
   class InconsistentState < RuntimeError; end
   

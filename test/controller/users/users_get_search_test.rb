@@ -30,21 +30,21 @@ class UsersGetSearchControllerTest < RequestTestCase
   context_ "3 added users" do
     before do
       3.times do |n|
-        @user = User.new(
+        user = User.new(
           :name    => "User #{n + 3}",
           :email   => "user-#{n + 3}@email.com",
           :curator => false,
           :admin   => false
         )
-        @keys = [
+        keys = [
           ApiKey.new({
-            :api_key  => @user.generate_api_key,
+            :api_key  => user.generate_api_key,
             :key_type => "primary",
             :purpose  => "The primary key"
           })
         ]
-        @user.api_keys = @keys
-        @user.save!
+        user.api_keys = keys
+        user.save!
       end
     end
 
