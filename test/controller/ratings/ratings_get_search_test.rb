@@ -95,7 +95,9 @@ class RatingsGetSearchControllerTest < RequestTestCase
 
     context "normal API key : get / where value is 2" do
       before do
-        get "/?value=2", :api_key => @normal_user.primary_api_key
+        get "/",
+          :value   => 2,
+          :api_key => @normal_user.primary_api_key
       end
     
       use "successful GET of ratings where value is 2"
@@ -103,7 +105,9 @@ class RatingsGetSearchControllerTest < RequestTestCase
 
     context "admin API key : get / where value is 2" do
       before do
-        get "/?value=2", :api_key => @admin_user.primary_api_key
+        get "/",
+          :value   => 2,
+          :api_key => @admin_user.primary_api_key
       end
     
       use "successful GET of ratings where value is 2"
@@ -113,7 +117,8 @@ class RatingsGetSearchControllerTest < RequestTestCase
 
     context "normal API key : get / with value greater than or equal to 4" do
       before do
-        get "/?value=#{CGI.escape(">=")}4",
+        get "/",
+          :value   => ">=4",
           :api_key => @normal_user.primary_api_key
       end
     
@@ -122,7 +127,8 @@ class RatingsGetSearchControllerTest < RequestTestCase
     
     context "admin API key : get / with value greater than or equal to 4" do
       before do
-        get "/?value=#{CGI.escape(">=")}4",
+        get "/",
+          :value   => ">=4",
           :api_key => @admin_user.primary_api_key
       end
     
@@ -133,7 +139,8 @@ class RatingsGetSearchControllerTest < RequestTestCase
 
     context "normal API key : get / with value greater than 3" do
       before do
-        get "/?value=#{CGI.escape(">")}3",
+        get "/",
+          :value   => ">3",
           :api_key => @normal_user.primary_api_key
       end
     
@@ -142,7 +149,8 @@ class RatingsGetSearchControllerTest < RequestTestCase
     
     context "admin API key : get / with value greater than 3" do
       before do
-        get "/?value=#{CGI.escape(">")}3",
+        get "/",
+          :value   => ">3",
           :api_key => @admin_user.primary_api_key
       end
     
@@ -153,7 +161,8 @@ class RatingsGetSearchControllerTest < RequestTestCase
 
     context "normal API key : get / with value less than 4" do
       before do
-        get "/?value=#{CGI.escape("<")}4",
+        get "/",
+          :value   => "<4",
           :api_key => @normal_user.primary_api_key
       end
     
@@ -162,7 +171,8 @@ class RatingsGetSearchControllerTest < RequestTestCase
     
     context "admin API key : get / with value less than 4" do
       before do
-        get "/?value=#{CGI.escape("<")}4",
+        get "/",
+          :value   => "<4",
           :api_key => @admin_user.primary_api_key
       end
     
@@ -173,7 +183,8 @@ class RatingsGetSearchControllerTest < RequestTestCase
 
     context "normal API key : get / with value less than or equal to 3" do
       before do
-        get "/?value=#{CGI.escape("<=")}3",
+        get "/",
+          :value   => "<=3",
           :api_key => @normal_user.primary_api_key
       end
     
@@ -182,7 +193,8 @@ class RatingsGetSearchControllerTest < RequestTestCase
     
     context "admin API key : get / with value less than or equal to 3" do
       before do
-        get "/?value=#{CGI.escape("<=")}3",
+        get "/",
+          :value   => "<=3",
           :api_key => @admin_user.primary_api_key
       end
     

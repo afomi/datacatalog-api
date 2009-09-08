@@ -3,7 +3,6 @@ require 'test/unit'
 require 'rack/test'
 require 'json'
 require 'rr'
-require 'cgi'
 
 gem 'djsun-context', '>= 0.5.6'
 require 'context'
