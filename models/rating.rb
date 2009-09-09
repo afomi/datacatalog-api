@@ -1,4 +1,4 @@
-# A user can rate a source.
+# A user can rate a source and/or a comment.
 #
 # kind    | values        | required keys
 # ----    | ------        | -------------
