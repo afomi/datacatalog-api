@@ -23,6 +23,8 @@ class Rating
   
   validate :general_validation
   
+  protected
+  
   def general_validation
     case kind
     when "comment" then comment_validation
