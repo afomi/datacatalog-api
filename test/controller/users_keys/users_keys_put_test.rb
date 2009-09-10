@@ -37,6 +37,13 @@ class UsersKeysPutControllerTest < RequestTestCase
   
   # - - - - - - - - - -
 
+  def lookup_user_and_api_key
+    raise "@n must be defined" unless @n
+    user = User.find_by_id(@user.id)
+    api_key = user.api_keys.find { |x| x.id == @keys[@n].id }
+    [user, api_key]
+  end
+
   shared "unchanged created_at in database" do
     test "created_at should be unchanged in database" do
       raise "@n must be defined" unless @n
@@ -48,36 +55,42 @@ class UsersKeysPutControllerTest < RequestTestCase
   
   shared "unchanged purpose in database" do
     test "purpose should be unchanged in database" do
-      raise "@n must be defined" unless @n
-      user = User.find_by_id(@user.id)
-      api_key = user.api_keys.find { |x| x.id == @keys[@n].id }
+      user, api_key = lookup_user_and_api_key
       assert_equal @keys[@n].purpose, api_key.purpose
     end
   end
   
   shared "updated purpose in database" do
     test "purpose should be updated in database" do
-      raise "@n must be defined" unless @n
-      user = User.find_by_id(@user.id)
-      api_key = user.api_keys.find { |x| x.id == @keys[@n].id }
+      user, api_key = lookup_user_and_api_key
       assert_equal "Updated purpose", api_key.purpose
     end
   end
   
   shared "unchanged key_type in database" do
     test "key_type should be unchanged in database" do
-      raise "@n must be defined" unless @n
-      user = User.find_by_id(@user.id)
-      api_key = user.api_keys.find { |x| x.id == @keys[@n].id }
+      user, api_key = lookup_user_and_api_key
+      assert_equal @keys[@n].key_type, api_key.key_type
+    end
+  end
+  
+  shared "key_type in database is primary" do
+    test "key_type should be 'primary' in database" do
+      user, api_key = lookup_user_and_api_key
+      assert_equal "primary", api_key.key_type
+    end
+  end
+
+  shared "key_type in database is valet" do
+    test "key_type should be 'valet' in database" do
+      user, api_key = lookup_user_and_api_key
       assert_equal "valet", api_key.key_type
     end
   end
 
-  shared "updated key_type in database" do
-    test "key_type should be updated in database" do
-      raise "@n must be defined" unless @n
-      user = User.find_by_id(@user.id)
-      api_key = user.api_keys.find { |x| x.id == @keys[@n].id }
+  shared "key_type in database is application" do
+    test "key_type should be 'application' in database" do
+      user, api_key = lookup_user_and_api_key
       assert_equal "application", api_key.key_type
     end
   end
@@ -104,6 +117,22 @@ class UsersKeysPutControllerTest < RequestTestCase
     use "unchanged created_at in database"
     use "unchanged purpose in database"
     use "return errors hash saying key_type has invalid value"
+
+    test "return help_text saying you can't change a primary key's key_type" do
+      assert_include "valid values for key_type are 'application' or 'valet'", parsed_response_body["help_text"]
+    end
+  end
+  
+  shared "attempted PUT users_keys with invalid change to key_type" do
+    use "return 400 Bad Request"
+    use "unchanged api_key count"
+    use "unchanged created_at in database"
+    use "unchanged key_type in database"
+    use "return errors hash saying key_type has invalid value"
+
+    test "return help_text saying you can't change a primary key's key_type" do
+      assert_include "cannot change the key_type of a primary key", parsed_response_body["help_text"]
+    end
   end
   
   shared "successful PUT users_keys : update purpose" do
@@ -113,13 +142,13 @@ class UsersKeysPutControllerTest < RequestTestCase
     use "updated purpose in database"
     use "unchanged key_type in database"
   end
-
-  shared "successful PUT users_keys : update key_type" do
+  
+  shared "successful PUT users_keys : update key_type to application" do
     use "return 200 Ok"
     use "unchanged api_key count"
     use "unchanged created_at in database"
     use "unchanged purpose in database"
-    use "updated key_type in database"
+    use "key_type in database is application"
   end
   
   shared "successful PUT users_keys : full update" do
@@ -127,9 +156,9 @@ class UsersKeysPutControllerTest < RequestTestCase
     use "unchanged api_key count"
     use "unchanged created_at in database"
     use "updated purpose in database"
-    use "updated key_type in database"
+    use "key_type in database is application"
   end
-
+  
   # - - - - - - - - - -
 
   # Tests that apply for all keys
@@ -294,9 +323,70 @@ class UsersKeysPutControllerTest < RequestTestCase
       end
     end
   end
+  
+  # - - - - - - - - - -
+  
+  # Tests that apply to primary key
+  (0 .. 0).each do |n|
+    context "owner API key : put /:id/keys : changing primary to application not ok" do
+      before do
+        @original_created_at = @user.api_keys[n].created_at.dup
+        put "/#{@user.id}/keys/#{@keys[n].id}", {
+          :api_key  => @user.api_keys[n].api_key,
+          :key_type => "application"
+        }
+        @n = n
+      end
+
+      use "attempted PUT users_keys with invalid change to key_type"
+    end
+    
+    context "admin API key : put /:id/keys : changing primary to application not ok" do
+      before do
+        @original_created_at = @user.api_keys[n].created_at.dup
+        put "/#{@user.id}/keys/#{@keys[n].id}", {
+          :api_key  => @admin_user.primary_api_key,
+          :key_type => "application"
+        }
+        @n = n
+      end
+    
+      use "attempted PUT users_keys with invalid change to key_type"
+    end
+    
+    # - - - - - - - - - -
+    
+    context "owner API key : put /:id/keys : changing primary to valet not ok" do
+      before do
+        @original_created_at = @user.api_keys[n].created_at.dup
+        put "/#{@user.id}/keys/#{@keys[n].id}", {
+          :api_key  => @user.api_keys[n].api_key,
+          :key_type => "valet"
+        }
+        @n = n
+      end
+
+      use "attempted PUT users_keys with invalid change to key_type"
+    end
+    
+    context "admin API key : put /:id/keys : changing primary to valet not ok" do
+      before do
+        @original_created_at = @user.api_keys[n].created_at.dup
+        put "/#{@user.id}/keys/#{@keys[n].id}", {
+          :api_key  => @admin_user.primary_api_key,
+          :key_type => "valet"
+        }
+        @n = n
+      end
+    
+      use "attempted PUT users_keys with invalid change to key_type"
+    end
+  end
+
+  # - - - - - - - - - -
 
   # Tests that apply to valet keys
-  (1 ... 3).each do |n|
+  (1 .. 2).each do |n|
     context "owner API key : put /:id/keys : invalid key_type" do
       before do
         @original_created_at = @user.api_keys[n].created_at.dup
@@ -319,8 +409,8 @@ class UsersKeysPutControllerTest < RequestTestCase
         }
         @n = n
       end
+  
       use "attempted PUT users_keys with invalid key_type"
-    
     end
     
     # - - - - - - - - - -
@@ -350,7 +440,7 @@ class UsersKeysPutControllerTest < RequestTestCase
     
       use "successful PUT users_keys : update purpose"
     end
-
+    
     # - - - - - - - - - -
       
     context "owner API key : put /:id/keys : update key_type : correct params" do
@@ -363,7 +453,7 @@ class UsersKeysPutControllerTest < RequestTestCase
         @n = n
       end
     
-      use "successful PUT users_keys : update key_type"
+      use "successful PUT users_keys : update key_type to application"
     end
     
     context "admin API key : put /:id/keys : update key_type : correct params" do
@@ -376,7 +466,7 @@ class UsersKeysPutControllerTest < RequestTestCase
         @n = n
       end
     
-      use "successful PUT users_keys : update key_type"
+      use "successful PUT users_keys : update key_type to application"
     end
     
     # - - - - - - - - - -
