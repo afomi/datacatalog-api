@@ -106,12 +106,12 @@ module DataCatalog
           @parent_document = parent_model.find_by_id(parent_id)
           error 404, [].to_json unless @parent_document
           validate_before_save params, child_model, read_only_attributes
-          callback callbacks[:before_save]
-          callback callbacks[:before_update]
           @child_document = @parent_document.send(association).find { |x| x.id == child_id }
           error 404, [].to_json unless @child_document
-          child_index = @parent_document.send(association).index(@child_document)
+          callback callbacks[:before_save]
+          callback callbacks[:before_update]
           @child_document.attributes = params
+          child_index = @parent_document.send(association).index(@child_document)
           @parent_document.send(association)[child_index] = @child_document
           error 500, [].to_json unless @parent_document.save
           callback callbacks[:after_update]
