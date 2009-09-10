@@ -20,8 +20,8 @@ class RatingsGetSearchControllerTest < RequestTestCase
       parsed_response_body.each do |element|
         assert_equal "source rating 2", element["text"]
         assert_equal 2, element["value"]
-        assert_equal @user_id, element["user_id"]
-        assert_equal "#{@source_base}2", element["source_id"]
+        assert_equal @normal_user.id, element["user_id"]
+        assert_include "source_id", element
         assert_shared_attributes element
       end
     end
@@ -37,7 +37,7 @@ class RatingsGetSearchControllerTest < RequestTestCase
         value = element["value"]
         assert_equal true, value >= 4
         assert_equal "source rating #{value}", element["text"]
-        assert_equal @user_id, element["user_id"]
+        assert_equal @normal_user.id, element["user_id"]
         assert_shared_attributes element
       end
     end
@@ -52,12 +52,11 @@ class RatingsGetSearchControllerTest < RequestTestCase
       parsed_response_body.each do |element|
         value = element["value"]
         assert_equal true, value < 4
-        assert_equal @user_id, element["user_id"]
+        assert_equal @normal_user.id, element["user_id"]
         case element["kind"]
         when "source"
-          assert_include "source_id", element
           assert_equal "source rating #{value}", element["text"]
-          assert_equal "#{@source_base}#{value}", element["source_id"]
+          assert_include "source_id", element
         when "comment"
           assert_include "comment_id", element
         else flunk "incorrect kind of rating"
@@ -71,25 +70,35 @@ class RatingsGetSearchControllerTest < RequestTestCase
 
   context_ "7 ratings" do
     before do
-      @user_id      = "4aa136f125b7e72c76000001"
-      @source_base  = "4aa1370c25b7e72c7600000"
-      @comment_base = "800139b125b7e72c7600000"
       5.times do |n|
-        assert Rating.create(
+        source = Source.create(
+          :url => "http://data.gov/sources/a/#{n}"
+        )
+        rating = Rating.create(
           :kind      => "source",
           :value     => n + 1,
           :text      => "source rating #{n + 1}",
-          :user_id   => @user_id,
-          :source_id => "#{@source_base}#{n + 1}"
-        ).valid?
+          :user_id   => @normal_user.id,
+          :source_id => source.id
+        )
+        assert rating.valid?
       end
       2.times do |n|
-        assert Rating.create(
+        source = Source.create(
+          :url => "http://data.gov/sources/b/#{n}"
+        )
+        comment = Comment.create(
+          :text      => "a comment",
+          :user_id   => @normal_user.id,
+          :source_id => source.id
+        )
+        rating = Rating.create(
           :kind       => "comment",
           :value      => n,
-          :user_id    => @user_id,
-          :comment_id => "#{@comment_base}#{n + 1}"
-        ).valid?
+          :user_id    => @normal_user.id,
+          :comment_id => comment.id
+        )
+        assert rating.valid?
       end
     end
 

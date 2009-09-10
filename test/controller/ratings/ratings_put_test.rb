@@ -5,12 +5,15 @@ class RatingsPutControllerTest < RequestTestCase
   def app; DataCatalog::Ratings end
 
   before :all do
+    source = Source.create(
+      :url => "http://data.gov/sources/6804"
+    )
     @rating = Rating.create(
       :kind      => "source",
       :value     => 3,
       :text      => "Original Rating",
-      :user_id   => get_fake_mongo_object_id,
-      :source_id => get_fake_mongo_object_id
+      :user_id   => @normal_user.id,
+      :source_id => source.id
     )
     raise "Should be valid" unless @rating.valid?
     @id = @rating.id

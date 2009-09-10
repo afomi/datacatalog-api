@@ -11,5 +11,6 @@ Config.setup
 
 require_dir 'lib'
 require_dir 'models'
+require_dir 'observers'
 require_dir 'controllers'
 require_dir 'helpers'

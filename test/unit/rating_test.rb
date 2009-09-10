@@ -67,12 +67,16 @@ class RatingUnitTest < ModelTestCase
   
   context "Rating.new : source" do
     before do
+      @user = create_normal_user
+      @source = Source.create(
+        :url => "http://data.gov/sources/6"
+      )
       @valid_params = {
         :kind      => "source",
         :value     => 4,
         :text      => "An explanation",
-        :user_id   => Mongo::ObjectID.new.to_s,
-        :source_id => Mongo::ObjectID.new.to_s
+        :user_id   => @user.id,
+        :source_id => @source.id
       }
     end
     
@@ -114,11 +118,20 @@ class RatingUnitTest < ModelTestCase
   
   context "Rating.new : comment" do
     before do
+      @user = create_normal_user
+      @source = Source.create(
+        :url => "http://data.gov/sources/6"
+      )
+      @comment = Comment.create(
+        :text      => "Original Comment",
+        :user_id   => @user.id,
+        :source_id => @source.id
+      )
       @valid_params = {
         :kind       => "comment",
         :value      => 1,
-        :user_id    => Mongo::ObjectID.new.to_s,
-        :comment_id => Mongo::ObjectID.new.to_s
+        :user_id    => @user.id,
+        :comment_id => @comment.id
       }
     end
     

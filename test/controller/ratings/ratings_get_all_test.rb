@@ -79,21 +79,34 @@ class RatingsGetAllControllerTest < RequestTestCase
   context_ "7 ratings" do
     before do
       5.times do |n|
-        assert Rating.create(
+        source = Source.create(
+          :url => "http://data.gov/sources/a/#{n}"
+        )
+        rating = Rating.create(
           :kind      => "source",
           :value     => n + 1,
           :text      => "source rating #{n + 1}",
-          :user_id   => get_fake_mongo_object_id,
-          :source_id => get_fake_mongo_object_id
-        ).valid?
+          :user_id   => @normal_user.id,
+          :source_id => source.id
+        )
+        assert rating.valid?
       end
       2.times do |n|
-        assert Rating.create(
+        source = Source.create(
+          :url => "http://data.gov/sources/b/#{n}"
+        )
+        comment = Comment.create(
+          :text      => "a comment",
+          :user_id   => @normal_user.id,
+          :source_id => source.id
+        )
+        rating = Rating.create(
           :kind       => "comment",
           :value      => n,
-          :user_id    => get_fake_mongo_object_id,
-          :comment_id => get_fake_mongo_object_id
-        ).valid?
+          :user_id    => @normal_user.id,
+          :comment_id => comment.id
+        )
+        assert rating.valid?
       end
     end
     

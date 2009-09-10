@@ -9,12 +9,13 @@ class Rating
 
   include MongoMapper::Document
 
-  key :kind,       String
-  key :user_id,    String,  :required => true
-  key :source_id,  String
-  key :comment_id, String
-  key :value,      Integer, :required => true
-  key :text,       String
+  key :kind,           String
+  key :user_id,        String,  :required => true
+  key :source_id,      String
+  key :comment_id,     String
+  key :value,          Integer, :required => true
+  key :previous_value, Integer, :default => 0
+  key :text,           String
   timestamps!
 
   belongs_to :user
@@ -26,6 +27,9 @@ class Rating
   protected
   
   def general_validation
+    if user.nil?
+      errors.add(:user_id, "must be valid")
+    end
     case kind
     when "comment" then comment_validation
     when "source"  then source_validation
@@ -36,6 +40,9 @@ class Rating
   def comment_validation
     if comment_id.blank?
       errors.add(:comment_id, "can't be empty")
+    end
+    if comment.nil?
+      errors.add(:comment_id, "must be valid")
     end
     unless value >= 0 && value <= 1
       errors.add(:value, "must be 0 or 1")
@@ -48,6 +55,9 @@ class Rating
   def source_validation
     if source_id.blank?
       errors.add(:source_id, "can't be empty")
+    end
+    if source.nil?
+      errors.add(:source_id, "must be valid")
     end
     unless value >= 1 && value <= 5
       errors.add(:value, "must be between 1 and 5")

@@ -19,5 +19,6 @@ namespace :environment do
     puts "Loading models..."
     Config.setup_mongomapper
     require_dir 'models'
+    require_dir 'observers'
   end
 end

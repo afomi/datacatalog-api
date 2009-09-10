@@ -4,15 +4,10 @@ class RatingAssociationsUnitTest < ModelTestCase
   
   context "Rating.create : source" do
     before do
-      @user = User.create(
-        :name  => "Data Mangler",
-        :email => "data.mangler@usa.gov"
-      )
-      
+      @user = create_normal_user
       @source = Source.create(
         :url => "http://data.gov/original"
       )
-      
       @rating = Rating.create(
         :kind      => "source",
         :value     => 4,
@@ -57,17 +52,12 @@ class RatingAssociationsUnitTest < ModelTestCase
 
   context "Rating.create : comment" do
     before do
-      @user = User.create(
-        :name  => "Data Mangler",
-        :email => "data.mangler@usa.gov"
-      )
-      
+      @user = create_normal_user
       @comment = Comment.create(
         :text      => "Just a comment",
         :user_id   => @user.id,
         :source_id => Mongo::ObjectID.new.to_s
       )
-      
       @rating = Rating.create(
         :kind       => "comment",
         :value      => 1,

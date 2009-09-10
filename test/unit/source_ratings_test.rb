@@ -5,7 +5,9 @@ class SourceRatingsUnitTest < ModelTestCase
   context "source with no ratings" do
   
     before do
-      @source = Source.create(:url => "http://data.gov/data-sets/123")
+      @source = Source.create(
+        :url => "http://data.gov/data-sets/123"
+      )
     end
     
     test "#ratings should return []" do
@@ -17,14 +19,17 @@ class SourceRatingsUnitTest < ModelTestCase
   context "source with 5 ratings" do
   
     before do
-      @source = Source.create(:url => "http://data.gov/data-sets/123")
+      @user = create_normal_user
+      @source = Source.create(
+        :url => "http://data.gov/data-sets/123"
+      )
       @ratings = []
       5.times do |n|
         @ratings << Rating.create(
           :kind      => "source",
           :value     => n + 1,
           :text      => "source rating #{n + 1}",
-          :user_id   => get_fake_mongo_object_id
+          :user_id   => @user.id
         )
       end
       @source.ratings = @ratings

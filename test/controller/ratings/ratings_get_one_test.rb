@@ -5,12 +5,15 @@ class RatingsGetOneControllerTest < RequestTestCase
   def app; DataCatalog::Ratings end
 
   before do
+    source = Source.create(
+      :url => "http://data.gov/sources/9600"
+    )
     rating = Rating.create(
       :kind      => "source",
       :value     => 5,
       :text      => "Rating A",
-      :source_id => get_fake_mongo_object_id,
-      :user_id   => get_fake_mongo_object_id
+      :user_id   => @normal_user.id,
+      :source_id => source.id
     )
     @id = rating.id
     @fake_id = get_fake_mongo_object_id
