@@ -23,6 +23,23 @@ class Rating
   belongs_to :comment
   
   validate :general_validation
+
+  def find_rated_document
+    case self.kind
+    when "comment" then self.comment
+    when "source"  then self.source
+    end
+  end
+  
+  def find_rated_document!
+    doc = case self.kind
+    when "comment" then self.comment
+    when "source"  then self.source
+    else raise "Invalid kind of rating"
+    end
+    raise "Associated #{self.kind} not found" if doc.nil?
+    doc
+  end
   
   protected
   

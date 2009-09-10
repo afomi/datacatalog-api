@@ -53,7 +53,22 @@ class RatingAggregatesUnitTest < ModelTestCase
           assert_equal 1, @source.ratings_count
         end
       end
-    end    
+
+      context "deleted Rating" do
+        before do
+          @rating.destroy
+          @source = Source.find_by_id(@source.id)
+        end
+      
+        test "updates ratings_total" do
+          assert_equal 0, @source.ratings_total
+        end
+    
+        test "does not change ratings_count" do
+          assert_equal 0, @source.ratings_count
+        end
+      end
+    end
   end
   
   context "Rating about a Comment" do
@@ -110,6 +125,21 @@ class RatingAggregatesUnitTest < ModelTestCase
     
         test "does not change ratings_count" do
           assert_equal 1, @comment.ratings_count
+        end
+      end
+
+      context "deleted Rating" do
+        before do
+          @rating.destroy
+          @comment = Comment.find_by_id(@comment.id)
+        end
+      
+        test "updates ratings_total" do
+          assert_equal 0, @comment.ratings_total
+        end
+    
+        test "does not change ratings_count" do
+          assert_equal 0, @comment.ratings_count
         end
       end
     end
