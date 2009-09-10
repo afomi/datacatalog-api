@@ -82,7 +82,7 @@ class UsersKeysPutControllerTest < RequestTestCase
     end
   end
   
-  shared "shared tests for trying to update users_keys with protected parameter" do
+  shared "attempted PUT users_keys with protected parameter" do
     use "return 400 Bad Request"
     use "unchanged api_key count"
     use "unchanged created_at in database"
@@ -90,7 +90,7 @@ class UsersKeysPutControllerTest < RequestTestCase
     use "return errors hash saying created_at is invalid"
   end
   
-  shared "shared tests for trying to update users_keys with invalid parameter" do
+  shared "attempted PUT users_keys with invalid parameter" do
     use "return 400 Bad Request"
     use "unchanged api_key count"
     use "unchanged created_at in database"
@@ -98,7 +98,7 @@ class UsersKeysPutControllerTest < RequestTestCase
     use "return errors hash saying junk is invalid"
   end
   
-  shared "shared tests for trying to update users_keys with invalid key_type" do
+  shared "attempted PUT users_keys with invalid key_type" do
     use "return 400 Bad Request"
     use "unchanged api_key count"
     use "unchanged created_at in database"
@@ -106,7 +106,7 @@ class UsersKeysPutControllerTest < RequestTestCase
     use "return errors hash saying key_type has invalid value"
   end
   
-  shared "shared tests for successful partial update of purpose of user key" do
+  shared "successful PUT users_keys : update purpose" do
     use "return 200 Ok"
     use "unchanged api_key count"
     use "unchanged created_at in database"
@@ -114,7 +114,7 @@ class UsersKeysPutControllerTest < RequestTestCase
     use "unchanged key_type in database"
   end
 
-  shared "shared tests for successful partial update of key_type of user key" do
+  shared "successful PUT users_keys : update key_type" do
     use "return 200 Ok"
     use "unchanged api_key count"
     use "unchanged created_at in database"
@@ -122,7 +122,7 @@ class UsersKeysPutControllerTest < RequestTestCase
     use "updated key_type in database"
   end
   
-  shared "shared tests for successful full update of users' key" do
+  shared "successful PUT users_keys : full update" do
     use "return 200 Ok"
     use "unchanged api_key count"
     use "unchanged created_at in database"
@@ -183,7 +183,7 @@ class UsersKeysPutControllerTest < RequestTestCase
         use "unchanged api_key count"
       end
       
-      context "admin API key : put /:id/keys/:fake_id : attempt to create : not found" do
+      context "admin API key : put /:id/keys/:fake_id" do
         before do
           put "/#{@user.id}/keys/#{@fake_id}", {
             :api_key  => @admin_user.primary_api_key,
@@ -198,7 +198,7 @@ class UsersKeysPutControllerTest < RequestTestCase
       
       # - - - - - - - - - -
       
-      context "admin API key : put /:fake_id/keys/:id : attempt to create : not found" do
+      context "admin API key : put /:fake_id/keys/:id" do
         before do
           put "/#{@fake_id}/keys/#{@keys[n].id}", {
             :api_key  => @admin_user.primary_api_key,
@@ -211,8 +211,7 @@ class UsersKeysPutControllerTest < RequestTestCase
         use "unchanged api_key count"
       end
       
-      
-      context "admin API key : put /:fake_id/keys/:fake_id : attempt to create : not found" do
+      context "admin API key : put /:fake_id/keys/:fake_id" do
         before do
           put "/#{@fake_id}/keys/#{@fake_id}",
             :api_key => @admin_user.primary_api_key
@@ -229,7 +228,7 @@ class UsersKeysPutControllerTest < RequestTestCase
       
       # - - - - - - - - - -
       
-      context "owner API key : put /:id/keys/:id : update : protected param 'created_at'" do
+      context "owner API key : put /:id/keys/:id : protected param 'created_at'" do
         before do
           @original_created_at = @user.api_keys[n].created_at.dup
           put "/#{@user.id}/keys/#{@keys[n].id}", {
@@ -240,10 +239,10 @@ class UsersKeysPutControllerTest < RequestTestCase
           @n = n
         end
         
-        use "shared tests for trying to update users_keys with protected parameter"
+        use "attempted PUT users_keys with protected parameter"
       end
       
-      context "admin API key : put /:id/keys/:id : update : protected param 'created_at'" do
+      context "admin API key : put /:id/keys/:id : protected param 'created_at'" do
         before do
           @original_created_at = @user.api_keys[n].created_at.dup
           put "/#{@user.id}/keys/#{@keys[n].id}", {
@@ -255,12 +254,12 @@ class UsersKeysPutControllerTest < RequestTestCase
           @n = n
         end
       
-        use "shared tests for trying to update users_keys with protected parameter"
+        use "attempted PUT users_keys with protected parameter"
       end
       
       # - - - - - - - - - -
       
-      context "owner API key : put /:id/keys/:id : update : extra param 'junk'" do
+      context "owner API key : put /:id/keys/:id : extra param 'junk'" do
         before do
           stubbed_time = Time.now + 10
           stub(Time).now {stubbed_time}
@@ -274,10 +273,10 @@ class UsersKeysPutControllerTest < RequestTestCase
           @n = n
         end
         
-        use "shared tests for trying to update users_keys with invalid parameter"
+        use "attempted PUT users_keys with invalid parameter"
       end
       
-      context "admin API key : put /:id/keys/:id : update : extra param 'junk'" do
+      context "admin API key : put /:id/keys/:id : extra param 'junk'" do
         before do
           stubbed_time = Time.now + 10
           stub(Time).now {stubbed_time}
@@ -291,14 +290,14 @@ class UsersKeysPutControllerTest < RequestTestCase
           @n = n
         end
       
-        use "shared tests for trying to update users_keys with invalid parameter"
+        use "attempted PUT users_keys with invalid parameter"
       end
     end
   end
 
   # Tests that apply to valet keys
   (1 ... 3).each do |n|
-    context "owner API key : put /:id/keys : update key_type : invalid params" do
+    context "owner API key : put /:id/keys : invalid key_type" do
       before do
         @original_created_at = @user.api_keys[n].created_at.dup
         put "/#{@user.id}/keys/#{@keys[n].id}", {
@@ -308,10 +307,10 @@ class UsersKeysPutControllerTest < RequestTestCase
         @n = n
       end
     
-      use "shared tests for trying to update users_keys with invalid key_type"
+      use "attempted PUT users_keys with invalid key_type"
     end
     
-    context "admin API key : put /:id/keys : update key_type : invalid params" do
+    context "admin API key : put /:id/keys : invalid key_type" do
       before do
         @original_created_at = @user.api_keys[n].created_at.dup
         put "/#{@user.id}/keys/#{@keys[n].id}", {
@@ -320,8 +319,8 @@ class UsersKeysPutControllerTest < RequestTestCase
         }
         @n = n
       end
+      use "attempted PUT users_keys with invalid key_type"
     
-      use "shared tests for trying to update users_keys with invalid key_type"
     end
     
     # - - - - - - - - - -
@@ -336,7 +335,7 @@ class UsersKeysPutControllerTest < RequestTestCase
         @n = n
       end
     
-      use "shared tests for successful partial update of purpose of user key"
+      use "successful PUT users_keys : update purpose"
     end
     
     context "admin API key : put /:id/keys : update purpose : correct params" do
@@ -349,9 +348,9 @@ class UsersKeysPutControllerTest < RequestTestCase
         @n = n
       end
     
-      use "shared tests for successful partial update of purpose of user key"
+      use "successful PUT users_keys : update purpose"
     end
-    
+
     # - - - - - - - - - -
       
     context "owner API key : put /:id/keys : update key_type : correct params" do
@@ -364,7 +363,7 @@ class UsersKeysPutControllerTest < RequestTestCase
         @n = n
       end
     
-      use "shared tests for successful partial update of key_type of user key"
+      use "successful PUT users_keys : update key_type"
     end
     
     context "admin API key : put /:id/keys : update key_type : correct params" do
@@ -377,7 +376,7 @@ class UsersKeysPutControllerTest < RequestTestCase
         @n = n
       end
     
-      use "shared tests for successful partial update of key_type of user key"
+      use "successful PUT users_keys : update key_type"
     end
     
     # - - - - - - - - - -
@@ -393,7 +392,7 @@ class UsersKeysPutControllerTest < RequestTestCase
         @n = n
       end
       
-      use "shared tests for successful full update of users' key"
+      use "successful PUT users_keys : full update"
     end
       
     context "admin API key : put /:id/keys/:id : full update : correct params" do
@@ -407,7 +406,7 @@ class UsersKeysPutControllerTest < RequestTestCase
         @n = n
       end
       
-      use "shared tests for successful full update of users' key"
+      use "successful PUT users_keys : full update"
     end
   end
 
