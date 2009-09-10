@@ -17,7 +17,8 @@ module DataCatalog
       callback :before_destroy do
         if @child_document.key_type == "primary"
           error 403, {
-            "errors" => ["cannot_delete_primary_api_key"]
+            "errors" => ["cannot_delete_primary_api_key"],
+            "help_text" => "cannot delete a primary API key"
           }.to_json
         end
       end

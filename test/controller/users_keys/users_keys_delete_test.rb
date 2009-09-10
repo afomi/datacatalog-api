@@ -46,6 +46,7 @@ class UsersKeysDeleteControllerTest < RequestTestCase
     test "body should explain that you cannot delete a primary API key" do
       assert_include "errors", parsed_response_body
       assert_include "cannot_delete_primary_api_key", parsed_response_body["errors"]
+      assert_include "cannot delete a primary API key", parsed_response_body["help_text"]
     end
   end
   
