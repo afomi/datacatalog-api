@@ -5,6 +5,8 @@ module DataCatalog
     restful_routes do
       name "comments"
       model Comment, :read_only => [
+        :ratings_total,
+        :ratings_count,
         :created_at,
         :updated_at
       ]
