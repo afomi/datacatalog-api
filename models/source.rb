@@ -2,11 +2,23 @@ class Source
 
   include MongoMapper::Document
 
-  key :url,           String,  :index => true
+  # == Attributes
+  key :url,           String
   key :ratings_total, Integer, :default => 0
   key :ratings_count, Integer, :default => 0
   timestamps!
 
-  many :ratings
+  # == Indices
+  ensure_index :url
 
+  # == Associations
+  many :ratings
+  
+  # == Validations
+  validates_presence_of :url
+
+  # == Class Methods
+
+  # == Instance Methods
+  
 end

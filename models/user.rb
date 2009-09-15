@@ -3,21 +3,33 @@ require 'digest/sha1'
 class User
   
   include MongoMapper::Document
+  class InconsistentState < RuntimeError; end
 
-  many :api_keys
-  ensure_index 'api_keys.api_key' # not tested
-
+  # == Attributes
   key :name,            String
-  key :email,           String,  :index => true
+  key :email,           String
   key :curator,         Boolean, :default => false
   key :admin,           Boolean, :default => false
   key :creator_api_key, String
   timestamps!
-  
+
+  # == Indices
+  ensure_index :email
+  ensure_index 'api_keys.api_key' # not tested
+
+  # == Associations
+  many :api_keys
   many :ratings
 
-  class InconsistentState < RuntimeError; end
-  
+  # == Validations
+
+  # == Class Methods
+  def self.find_by_api_key(api_key)
+    find(:first, :conditions => { 'api_keys.api_key' => api_key })
+    # TODO: find :all and raise exception if more than 1 result
+  end
+
+  # == Instance Methods
   def primary_api_key
     keys = api_keys.select { |k| k.key_type == "primary" }
     case keys.length
@@ -57,11 +69,6 @@ class User
     key = ApiKey.new(params)
     self.api_keys << key
     self.save!
-  end
-  
-  def self.find_by_api_key(api_key)
-    find(:first, :conditions => { 'api_keys.api_key' => api_key })
-    # TODO: find :all and raise exception if more than 1 result
   end
   
   alias original_to_json to_json

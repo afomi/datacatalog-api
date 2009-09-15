@@ -9,40 +9,28 @@ class Rating
 
   include MongoMapper::Document
 
+  # == Attributes
   key :kind,           String
-  key :user_id,        String,  :required => true
+  key :user_id,        String
   key :source_id,      String
   key :comment_id,     String
-  key :value,          Integer, :required => true
+  key :value,          Integer
   key :previous_value, Integer, :default => 0
   key :text,           String
   timestamps!
 
+  # == Indices
+
+  # == Associations
   belongs_to :user
   belongs_to :source
   belongs_to :comment
-  
+
+  # == Validations
+  validates_presence_of :user_id
+  validates_presence_of :value
   validate :general_validation
 
-  def find_rated_document
-    case self.kind
-    when "comment" then self.comment
-    when "source"  then self.source
-    end
-  end
-  
-  def find_rated_document!
-    doc = case self.kind
-    when "comment" then self.comment
-    when "source"  then self.source
-    else raise "Invalid kind of rating"
-    end
-    raise "Associated #{self.kind} not found" if doc.nil?
-    doc
-  end
-  
-  protected
-  
   def general_validation
     if user.nil?
       errors.add(:user_id, "must be valid")
@@ -68,6 +56,7 @@ class Rating
       errors.add(:text, "must be empty")
     end
   end
+  protected :comment_validation
   
   def source_validation
     if source_id.blank?
@@ -79,6 +68,27 @@ class Rating
     unless value >= 1 && value <= 5
       errors.add(:value, "must be between 1 and 5")
     end
+  end
+  protected :source_validation
+
+  # == Class Methods
+
+  # == Instance Methods
+  def find_rated_document
+    case self.kind
+    when "comment" then self.comment
+    when "source"  then self.source
+    end
+  end
+  
+  def find_rated_document!
+    doc = case self.kind
+    when "comment" then self.comment
+    when "source"  then self.source
+    else raise "Invalid kind of rating"
+    end
+    raise "Associated #{self.kind} not found" if doc.nil?
+    doc
   end
 
 end
