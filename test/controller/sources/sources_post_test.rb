@@ -62,7 +62,7 @@ class SourcesPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
 
-  context "admin API key : post / with protected param" do
+  context "admin API key : post / with protected key" do
     before do
       post "/", {
         :api_key    => @admin_user.primary_api_key,
@@ -76,7 +76,7 @@ class SourcesPostControllerTest < RequestTestCase
     use "return errors hash saying updated_at is invalid"
   end
   
-  context "admin API key : post / with invalid param" do
+  context "admin API key : post / with invalid key" do
     before do
       post "/", {
         :api_key => @admin_user.primary_api_key,
@@ -90,6 +90,60 @@ class SourcesPostControllerTest < RequestTestCase
     use "return errors hash saying junk is invalid"
   end
   
+  # - - - - - - - - - -
+
+  context "curator API key : post / with missing key" do
+    before do
+      post "/", {
+        :api_key => @curator_user.primary_api_key
+      }
+    end
+    
+    use "return 400 Bad Request"
+    use "unchanged source count"
+    use "return errors hash saying url is missing"
+  end
+  
+  context "admin API key : post / with missing key" do
+    before do
+      post "/", {
+        :api_key => @admin_user.primary_api_key
+      }
+    end
+
+    use "return 400 Bad Request"
+    use "unchanged source count"
+    use "return errors hash saying url is missing"
+  end
+
+  # - - - - - - - - - -
+
+  context "curator API key : post / with invalid value" do
+    before do
+      post "/", {
+        :api_key => @curator_user.primary_api_key,
+        :url     => "https://secret.com/13"
+      }
+    end
+    
+    use "return 400 Bad Request"
+    use "unchanged source count"
+    use "return errors hash saying url scheme is incorrect"
+  end
+  
+  context "admin API key : post / with invalid value" do
+    before do
+      post "/", {
+        :api_key => @admin_user.primary_api_key,
+        :url     => "https://secret.com/13"
+      }
+    end
+
+    use "return 400 Bad Request"
+    use "unchanged source count"
+    use "return errors hash saying url scheme is incorrect"
+  end
+
   # - - - - - - - - - -
   
   context "curator API key : post / with correct params" do

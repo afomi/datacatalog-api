@@ -74,7 +74,11 @@ module DataCatalog
         @document = model.find_by_id id
         callback callbacks[:before_save]
         callback callbacks[:before_create]
-        @document = model.create(params)
+        @document = model.new(params)
+        unless @document.valid?
+          error 400, { "errors" => @document.errors.errors }.to_json
+        end
+        @document.save
         callback callbacks[:after_create]
         callback callbacks[:after_save]
         response.status = 201

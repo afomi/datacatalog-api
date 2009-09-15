@@ -71,5 +71,21 @@ class RequestTestCase
       assert_include "key_type", parsed_response_body["errors"]["invalid_values_for_params"]
     end
   end
+  
+  shared "return errors hash saying url is missing" do
+    test "body should say 'url' is missing" do
+      assert_include "errors", parsed_response_body
+      assert_include "url", parsed_response_body["errors"]
+      assert_include "can't be empty", parsed_response_body["errors"]["url"]
+    end
+  end
+  
+  shared "return errors hash saying url scheme is incorrect" do
+    test "body should say url scheme is incorrect" do
+      assert_include "errors", parsed_response_body
+      assert_include "url", parsed_response_body["errors"]
+      assert_include "URI scheme must be http or ftp", parsed_response_body["errors"]["url"]
+    end
+  end
 
 end
