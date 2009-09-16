@@ -62,7 +62,7 @@ class SourcesPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
 
-  context "admin API key : post / with protected key" do
+  context "admin API key : post / with protected param" do
     before do
       post "/", {
         :api_key    => @admin_user.primary_api_key,
@@ -76,7 +76,7 @@ class SourcesPostControllerTest < RequestTestCase
     use "return errors hash saying updated_at is invalid"
   end
   
-  context "admin API key : post / with invalid key" do
+  context "admin API key : post / with invalid param" do
     before do
       post "/", {
         :api_key => @admin_user.primary_api_key,
@@ -92,7 +92,7 @@ class SourcesPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
 
-  context "curator API key : post / with missing key" do
+  context "curator API key : post / without url" do
     before do
       post "/", {
         :api_key => @curator_user.primary_api_key
@@ -104,7 +104,7 @@ class SourcesPostControllerTest < RequestTestCase
     use "return errors hash saying url is missing"
   end
   
-  context "admin API key : post / with missing key" do
+  context "admin API key : post / without url" do
     before do
       post "/", {
         :api_key => @admin_user.primary_api_key
@@ -118,7 +118,7 @@ class SourcesPostControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "curator API key : post / with invalid value" do
+  context "curator API key : post / with invalid url" do
     before do
       post "/", {
         :api_key => @curator_user.primary_api_key,
@@ -131,7 +131,7 @@ class SourcesPostControllerTest < RequestTestCase
     use "return errors hash saying url scheme is incorrect"
   end
   
-  context "admin API key : post / with invalid value" do
+  context "admin API key : post / with invalid url" do
     before do
       post "/", {
         :api_key => @admin_user.primary_api_key,
