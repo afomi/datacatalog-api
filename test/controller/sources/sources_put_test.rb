@@ -55,6 +55,25 @@ class SourcesPutControllerTest < RequestTestCase
     use "unchanged source text in database"
     use "return errors hash saying junk is invalid"
   end
+  
+  shared "attempted PUT source with :id with invalid url" do
+    use "return 400 Bad Request"
+    use "unchanged source count"
+    use "return errors hash saying url scheme is incorrect"
+  end
+  
+  shared "attempted PUT source with :id without params" do
+    use "return 400 Bad Request"
+    use "unchanged source count"
+    
+    test "body should say 'no_params_to_save'" do
+      assert_include "no_params_to_save", parsed_response_body["errors"]
+    end
+
+    test "return help_text saying params are needed" do
+      assert_include "cannot save without parameters", parsed_response_body["help_text"]
+    end
+  end
 
   shared "successful PUT source with :id" do
     use "return 200 Ok"
@@ -86,7 +105,7 @@ class SourcesPutControllerTest < RequestTestCase
     use "return 401 because the API key is invalid"
     use "unchanged source count"
   end
-
+  
   context "normal API key : put /" do
     before do
       put "/#{@id}", :api_key => @normal_user.primary_api_key
@@ -95,9 +114,9 @@ class SourcesPutControllerTest < RequestTestCase
     use "return 401 because the API key is unauthorized"
     use "unchanged source count"
   end
-
+  
   # - - - - - - - - - -
-
+  
   context "curator API key : put /:fake_id with protected param" do
     before do
       put "/#{@fake_id}", {
@@ -109,7 +128,7 @@ class SourcesPutControllerTest < RequestTestCase
     
     use "attempted PUT source with :fake_id with protected param"
   end
-
+  
   context "admin API key : put /:fake_id with protected param" do
     before do
       put "/#{@fake_id}", {
@@ -121,9 +140,9 @@ class SourcesPutControllerTest < RequestTestCase
   
     use "attempted PUT source with :fake_id with protected param"
   end
-
+  
   # - - - - - - - - - -
-
+  
   context "curator API key : put /:fake_id with invalid param" do
     before do
       put "/#{@fake_id}", {
@@ -149,7 +168,7 @@ class SourcesPutControllerTest < RequestTestCase
   end
   
   # - - - - - - - - - -
-
+  
   context "curator API key : put /:fake_id with correct params" do
     before do
       put "/#{@fake_id}", {
@@ -171,9 +190,9 @@ class SourcesPutControllerTest < RequestTestCase
   
     use "attempted PUT source with :fake_id with correct params"
   end
-
+  
   # - - - - - - - - - -
-
+  
   context "curator API key : put /:id with protected param" do
     before do
       put "/#{@id}", {
@@ -185,7 +204,7 @@ class SourcesPutControllerTest < RequestTestCase
     
     use "attempted PUT source with :id with protected param"
   end
-
+  
   context "admin API key : put /:id with protected param" do
     before do
       put "/#{@id}", {
@@ -211,7 +230,7 @@ class SourcesPutControllerTest < RequestTestCase
   
     use "attempted PUT source with :id with invalid param"
   end
-
+  
   context "admin API key : put /:id with invalid param" do
     before do
       put "/#{@id}", {
@@ -226,6 +245,52 @@ class SourcesPutControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
+  context "curator API key : put /:id with invalid url" do
+    before do
+      put "/#{@id}", {
+        :api_key => @curator_user.primary_api_key,
+        :url     => "https://secret.com/13"
+      }
+    end
+    
+    use "attempted PUT source with :id with invalid url"
+  end
+
+  context "admin API key : put /:id with invalid url" do
+    before do
+      put "/#{@id}", {
+        :api_key => @admin_user.primary_api_key,
+        :url     => "https://secret.com/13"
+      }
+    end
+  
+    use "attempted PUT source with :id with invalid url"
+  end
+  
+  # - - - - - - - - - -
+  
+  context "curator API key : put /:id without url" do
+    before do
+      put "/#{@id}", {
+        :api_key => @curator_user.primary_api_key
+      }
+    end
+
+    use "attempted PUT source with :id without params"
+  end
+  
+  context "admin API key : put /:id without url" do
+    before do
+      put "/#{@id}", {
+        :api_key => @admin_user.primary_api_key
+      }
+    end
+  
+    use "attempted PUT source with :id without params"
+  end
+
+  # - - - - - - - - - -
+
   context "curator API key : put /:id with correct param" do
     before do
       put "/#{@id}", {

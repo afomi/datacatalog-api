@@ -84,7 +84,7 @@ module DataCatalog
           permission_check :curator, level, parent_id
           @parent_document = parent_model.find_by_id(parent_id)
           error 404, [].to_json unless @parent_document
-          validate_before_save params, child_model, read_only_attributes
+          validate_before_create params, child_model, read_only_attributes
           callback callbacks[:before_save]
           callback callbacks[:before_create]
           @child_document = child_model.new(params)
@@ -105,7 +105,7 @@ module DataCatalog
           child_id = params.delete("child_id")
           @parent_document = parent_model.find_by_id(parent_id)
           error 404, [].to_json unless @parent_document
-          validate_before_save params, child_model, read_only_attributes
+          validate_before_update params, child_model, read_only_attributes
           @child_document = @parent_document.send(association).find { |x| x.id == child_id }
           error 404, [].to_json unless @child_document
           callback callbacks[:before_save]

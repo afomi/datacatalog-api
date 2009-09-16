@@ -70,7 +70,7 @@ module DataCatalog
       post '/?' do
         require_at_least :curator
         id = params.delete "id"
-        validate_before_save params, model, read_only_attributes
+        validate_before_create params, model, read_only_attributes
         @document = model.find_by_id id
         callback callbacks[:before_save]
         callback callbacks[:before_create]
@@ -91,10 +91,14 @@ module DataCatalog
         id = params.delete "id"
         @document = model.find_by_id id
         error 404, [].to_json unless @document
-        validate_before_save params, model, read_only_attributes
+        validate_before_update params, model, read_only_attributes
         callback callbacks[:before_save]
         callback callbacks[:before_update]
+        validate_before_update params, model, read_only_attributes
         @document = model.update id, params
+        unless @document.valid?
+          error 400, { "errors" => @document.errors.errors }.to_json
+        end
         callback callbacks[:after_update]
         callback callbacks[:after_save]
         @document.to_json
