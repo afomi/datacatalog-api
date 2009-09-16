@@ -135,6 +135,19 @@ class UsersKeysPutControllerTest < RequestTestCase
     end
   end
   
+  shared "attempted PUT users_keys with :id without params" do
+    use "return 400 Bad Request"
+    use "unchanged api_key count"
+    
+    test "body should say 'no_params_to_save'" do
+      assert_include "no_params_to_save", parsed_response_body["errors"]
+    end
+  
+    test "return help_text saying params are needed" do
+      assert_include "cannot save without parameters", parsed_response_body["help_text"]
+    end
+  end
+
   shared "successful PUT users_keys : update purpose" do
     use "return 200 Ok"
     use "unchanged api_key count"
@@ -413,6 +426,27 @@ class UsersKeysPutControllerTest < RequestTestCase
       use "attempted PUT users_keys with invalid key_type"
     end
     
+    # - - - - - - - - - -
+
+    context "owner API key : put /:id without params" do
+      before do
+        put "/#{@user.id}/keys/#{@keys[n].id}", {
+          :api_key => @user.primary_api_key
+        }
+      end
+
+      use "attempted PUT users_keys with :id without params"
+    end
+
+    context "admin API key : put /:id without params" do
+      before do
+        put "/#{@user.id}/keys/#{@keys[n].id}", {
+          :api_key => @admin_user.primary_api_key
+        }
+      end
+
+      use "attempted PUT users_keys with :id without params"
+    end
     # - - - - - - - - - -
       
     context "owner API key : put /:id/keys : update purpose : correct params" do

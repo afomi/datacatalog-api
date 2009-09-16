@@ -56,6 +56,19 @@ class OrganizationsPutControllerTest < RequestTestCase
     use "return errors hash saying junk is invalid"
   end
 
+  shared "attempted PUT organization with :id without params" do
+    use "return 400 Bad Request"
+    use "unchanged organization count"
+    
+    test "body should say 'no_params_to_save'" do
+      assert_include "no_params_to_save", parsed_response_body["errors"]
+    end
+  
+    test "return help_text saying params are needed" do
+      assert_include "cannot save without parameters", parsed_response_body["help_text"]
+    end
+  end
+  
   shared "successful PUT organization with :id" do
     use "return 200 Ok"
     use "return timestamps and id in body"
@@ -222,6 +235,28 @@ class OrganizationsPutControllerTest < RequestTestCase
     end
   
     use "attempted PUT organization with :id with invalid param"
+  end
+  
+  # - - - - - - - - - -
+  
+  context "curator API key : put /:id without params" do
+    before do
+      put "/#{@id}", {
+        :api_key => @curator_user.primary_api_key
+      }
+    end
+
+    use "attempted PUT organization with :id without params"
+  end
+
+  context "admin API key : put /:id without params" do
+    before do
+      put "/#{@id}", {
+        :api_key => @admin_user.primary_api_key
+      }
+    end
+
+    use "attempted PUT organization with :id without params"
   end
   
   # - - - - - - - - - -

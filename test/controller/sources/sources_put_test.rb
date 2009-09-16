@@ -61,7 +61,7 @@ class SourcesPutControllerTest < RequestTestCase
     use "unchanged source count"
     use "return errors hash saying url scheme is incorrect"
   end
-  
+
   shared "attempted PUT source with :id without params" do
     use "return 400 Bad Request"
     use "unchanged source count"
@@ -269,7 +269,7 @@ class SourcesPutControllerTest < RequestTestCase
   
   # - - - - - - - - - -
   
-  context "curator API key : put /:id without url" do
+  context "curator API key : put /:id without params" do
     before do
       put "/#{@id}", {
         :api_key => @curator_user.primary_api_key
@@ -279,7 +279,7 @@ class SourcesPutControllerTest < RequestTestCase
     use "attempted PUT source with :id without params"
   end
   
-  context "admin API key : put /:id without url" do
+  context "admin API key : put /:id without params" do
     before do
       put "/#{@id}", {
         :api_key => @admin_user.primary_api_key
