@@ -255,8 +255,10 @@ class UsersKeysPutControllerTest < RequestTestCase
       
       context "admin API key : put /:fake_id/keys/:fake_id" do
         before do
-          put "/#{@fake_id}/keys/#{@fake_id}",
-            :api_key => @admin_user.primary_api_key
+          put "/#{@fake_id}/keys/#{@fake_id}", {
+            :api_key  => @admin_user.primary_api_key,
+            :key_type => "application"
+          }
         end
       
         use "return 404 Not Found"
