@@ -178,16 +178,18 @@ class UsersKeysPutControllerTest < RequestTestCase
 
   3.times do |n|
     context_ "API key #{n}" do
-      context "anonymous : put /:id/keys/:id" do
+      context "anonymous : put /:id/keys/:id with correct params" do
         before do
-          put "/#{@user.id}/keys/#{@keys[n].id}"
+          put "/#{@user.id}/keys/#{@keys[n].id}", {
+            :key_type => "application"
+          }
         end
       
         use "return 401 because the API key is missing"
         use "unchanged api_key count"
       end
       
-      context "incorrect API key : put /:id/keys/:id" do
+      context "incorrect API key : put /:id/keys/:id with correct params" do
         before do
           put "/#{@user.id}/keys/#{@keys[n].id}", {
             :api_key  => "does_not_exist_in_database",
@@ -199,7 +201,7 @@ class UsersKeysPutControllerTest < RequestTestCase
         use "unchanged api_key count"
       end
       
-      context "non owner API key : put /:id/keys/:id" do
+      context "non owner API key : put /:id/keys/:id with correct params" do
         before do
           put "/#{@user.id}/keys/#{@keys[n].id}", {
             :api_key  => @normal_user.primary_api_key,
@@ -215,7 +217,7 @@ class UsersKeysPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous : put /:fake_id/keys/:fake_id" do
+  context "anonymous : put /:fake_id/keys/:fake_id with correct params" do
     before do
       put "/#{@fake_id}/keys/#{@fake_id}", {
         :key_type => "application"
@@ -226,7 +228,7 @@ class UsersKeysPutControllerTest < RequestTestCase
     use "unchanged api_key count"
   end
 
-  context "incorrect API key : put /:fake_id/keys/:fake_id" do
+  context "incorrect API key : put /:fake_id/keys/:fake_id with correct params" do
     before do
       put "/#{@fake_id}/keys/#{@fake_id}", {
         :api_key  => "does_not_exist_in_database",
@@ -238,7 +240,7 @@ class UsersKeysPutControllerTest < RequestTestCase
     use "unchanged api_key count"
   end
 
-  context "normal API key : put /:fake_id/keys/:fake_id" do
+  context "normal API key : put /:fake_id/keys/:fake_id with correct params" do
     before do
       put "/#{@fake_id}/keys/#{@fake_id}", {
         :api_key  => @normal_user.primary_api_key,
@@ -255,6 +257,7 @@ class UsersKeysPutControllerTest < RequestTestCase
   3.times do |n|
     context_ "API key #{n}" do
       context "owner API key : put /:id/keys/:fake_id" do
+      context "owner API key : put /:id/keys/:fake_id without params" do
         before do
           put "/#{@user.id}/keys/#{@fake_id}", {
             :api_key  => @user.api_keys[n].api_key,
@@ -286,7 +289,7 @@ class UsersKeysPutControllerTest < RequestTestCase
   
   3.times do |n|
     context_ "API key #{n}" do
-      context "admin API key : put /:fake_id/keys/:id" do
+      context "admin API key : put /:fake_id/keys/:id with correct params" do
         before do
           put "/#{@fake_id}/keys/#{@keys[n].id}", {
             :api_key  => @admin_user.primary_api_key,
@@ -303,7 +306,7 @@ class UsersKeysPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "admin API key : put /:fake_id/keys/:fake_id" do
+  context "admin API key : put /:fake_id/keys/:fake_id with correct params" do
     before do
       put "/#{@fake_id}/keys/#{@fake_id}", {
         :api_key  => @admin_user.primary_api_key,
@@ -316,12 +319,12 @@ class UsersKeysPutControllerTest < RequestTestCase
     use "unchanged api_key count"
   end
 
-  # --------------------------------------------------------------
-  # This section is a placeholder for handling missing parameters.
-  # --------------------------------------------------------------
-
   3.times do |n|
     context_ "API key #{n}" do
+      # --------------------------------------------------------------
+      # This section is a placeholder for handling missing parameters.
+      # --------------------------------------------------------------
+
       context "owner API key : put /:id/keys/:id : protected param 'created_at'" do
         before do
           @original_created_at = @user.api_keys[n].created_at.dup
@@ -394,7 +397,7 @@ class UsersKeysPutControllerTest < RequestTestCase
   # ------------------------------------
 
   (0 .. 0).each do |n|
-    context "owner API key : put /:id/keys : changing primary to application not ok" do
+    context "owner API key : put /:id/keys/:id : changing primary to application not ok" do
       before do
         @original_created_at = @user.api_keys[n].created_at.dup
         put "/#{@user.id}/keys/#{@keys[n].id}", {
@@ -407,7 +410,7 @@ class UsersKeysPutControllerTest < RequestTestCase
       use "attempted PUT users_keys with invalid change to key_type"
     end
     
-    context "admin API key : put /:id/keys : changing primary to application not ok" do
+    context "admin API key : put /:id/keys/:id : changing primary to application not ok" do
       before do
         @original_created_at = @user.api_keys[n].created_at.dup
         put "/#{@user.id}/keys/#{@keys[n].id}", {
@@ -422,7 +425,7 @@ class UsersKeysPutControllerTest < RequestTestCase
     
     # - - - - - - - - - -
     
-    context "owner API key : put /:id/keys : changing primary to valet not ok" do
+    context "owner API key : put /:id/keys/:id : changing primary to valet not ok" do
       before do
         @original_created_at = @user.api_keys[n].created_at.dup
         put "/#{@user.id}/keys/#{@keys[n].id}", {
@@ -435,7 +438,7 @@ class UsersKeysPutControllerTest < RequestTestCase
       use "attempted PUT users_keys with invalid change to key_type"
     end
     
-    context "admin API key : put /:id/keys : changing primary to valet not ok" do
+    context "admin API key : put /:id/keys/:id : changing primary to valet not ok" do
       before do
         @original_created_at = @user.api_keys[n].created_at.dup
         put "/#{@user.id}/keys/#{@keys[n].id}", {
@@ -454,7 +457,7 @@ class UsersKeysPutControllerTest < RequestTestCase
   # -----------------------------------
   
   (1 .. 2).each do |n|
-    context "owner API key : put /:id/keys : invalid key_type" do
+    context "owner API key : put /:id/keys/:id : invalid key_type" do
       before do
         @original_created_at = @user.api_keys[n].created_at.dup
         put "/#{@user.id}/keys/#{@keys[n].id}", {
@@ -467,7 +470,7 @@ class UsersKeysPutControllerTest < RequestTestCase
       use "attempted PUT users_keys with invalid key_type"
     end
     
-    context "admin API key : put /:id/keys : invalid key_type" do
+    context "admin API key : put /:id/keys/:id : invalid key_type" do
       before do
         @original_created_at = @user.api_keys[n].created_at.dup
         put "/#{@user.id}/keys/#{@keys[n].id}", {
@@ -482,7 +485,7 @@ class UsersKeysPutControllerTest < RequestTestCase
     
     # - - - - - - - - - -
 
-    context "owner API key : put /:id without params" do
+    context "owner API key : put /:id/keys/:id without params" do
       before do
         put "/#{@user.id}/keys/#{@keys[n].id}", {
           :api_key => @user.primary_api_key
@@ -492,7 +495,7 @@ class UsersKeysPutControllerTest < RequestTestCase
       use "attempted PUT users_keys with :id without params"
     end
 
-    context "admin API key : put /:id without params" do
+    context "admin API key : put /:id/keys/:id without params" do
       before do
         put "/#{@user.id}/keys/#{@keys[n].id}", {
           :api_key => @admin_user.primary_api_key
@@ -504,7 +507,7 @@ class UsersKeysPutControllerTest < RequestTestCase
 
     # - - - - - - - - - -
       
-    context "owner API key : put /:id/keys : update purpose : correct params" do
+    context "owner API key : put /:id/keys/:id : update purpose : correct params" do
       before do
         @original_created_at = @user.api_keys[n].created_at.dup
         put "/#{@user.id}/keys/#{@keys[n].id}", {
@@ -517,7 +520,7 @@ class UsersKeysPutControllerTest < RequestTestCase
       use "successful PUT users_keys : update purpose"
     end
     
-    context "admin API key : put /:id/keys : update purpose : correct params" do
+    context "admin API key : put /:id/keys/:id : update purpose : correct params" do
       before do
         @original_created_at = @user.api_keys[n].created_at.dup
         put "/#{@user.id}/keys/#{@keys[n].id}", {
@@ -545,7 +548,7 @@ class UsersKeysPutControllerTest < RequestTestCase
       use "successful PUT users_keys : update key_type to application"
     end
     
-    context "admin API key : put /:id/keys : update key_type : correct params" do
+    context "admin API key : put /:id/keys/:id : update key_type : correct params" do
       before do
         @original_created_at = @user.api_keys[n].created_at.dup
         put "/#{@user.id}/keys/#{@keys[n].id}", {
