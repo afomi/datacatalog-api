@@ -84,7 +84,7 @@ class CommentsPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous : put /" do
+  context "anonymous : put /:id" do
     before do
       put "/#{@id}"
     end
@@ -93,7 +93,7 @@ class CommentsPutControllerTest < RequestTestCase
     use "unchanged comment count"
   end
 
-  context "incorrect API key : put /" do
+  context "incorrect API key : put /:id" do
     before do
       put "/#{@id}", :api_key => "does_not_exist_in_database"
     end
@@ -102,7 +102,7 @@ class CommentsPutControllerTest < RequestTestCase
     use "unchanged comment count"
   end
 
-  context "normal API key : put /" do
+  context "normal API key : put /:id" do
     before do
       put "/#{@id}", :api_key => @normal_user.primary_api_key
     end

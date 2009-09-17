@@ -90,7 +90,7 @@ class RatingsPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous : put /" do
+  context "anonymous : put /:id" do
     before do
       put "/#{@id}"
     end
@@ -99,7 +99,7 @@ class RatingsPutControllerTest < RequestTestCase
     use "unchanged rating count"
   end
 
-  context "incorrect API key : put /" do
+  context "incorrect API key : put /:id" do
     before do
       put "/#{@id}", :api_key => "does_not_exist_in_database"
     end
@@ -108,7 +108,7 @@ class RatingsPutControllerTest < RequestTestCase
     use "unchanged rating count"
   end
 
-  context "normal API key : put /" do
+  context "normal API key : put /:id" do
     before do
       put "/#{@id}", :api_key => @normal_user.primary_api_key
     end
