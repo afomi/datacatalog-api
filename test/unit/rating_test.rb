@@ -82,7 +82,7 @@ class RatingUnitTest < ModelTestCase
     
     context "correct params" do
       before do
-        @rating = Rating.new @valid_params
+        @rating = Rating.new(@valid_params)
       end
       
       use "valid rating"
@@ -90,7 +90,7 @@ class RatingUnitTest < ModelTestCase
 
     context "invalid value" do
       before do
-        @rating = Rating.new @valid_params.merge(:value => 6)
+        @rating = Rating.new(@valid_params.merge(:value => 6))
       end
   
       use "invalid rating"
@@ -99,7 +99,7 @@ class RatingUnitTest < ModelTestCase
 
     context "missing user_id" do
       before do
-        @rating = Rating.new @valid_params.merge(:user_id => "")
+        @rating = Rating.new(@valid_params.merge(:user_id => ""))
       end
       
       use "invalid rating"
@@ -108,7 +108,7 @@ class RatingUnitTest < ModelTestCase
 
     context "missing source_id" do
       before do
-        @rating = Rating.new @valid_params.merge(:source_id => "")
+        @rating = Rating.new(@valid_params.merge(:source_id => ""))
       end
       
       use "invalid rating"
@@ -137,7 +137,7 @@ class RatingUnitTest < ModelTestCase
     
     context "correct params" do
       before do
-        @rating = Rating.new @valid_params
+        @rating = Rating.new(@valid_params)
       end
   
       use "valid rating"
@@ -145,7 +145,7 @@ class RatingUnitTest < ModelTestCase
   
     context "invalid value" do
       before do
-        @rating = Rating.new @valid_params.merge(:value => 2)
+        @rating = Rating.new(@valid_params.merge(:value => 2))
       end
   
       use "invalid rating"
@@ -154,7 +154,7 @@ class RatingUnitTest < ModelTestCase
   
     context "missing user_id" do
       before do
-        @rating = Rating.new @valid_params.merge(:user_id => "")
+        @rating = Rating.new(@valid_params.merge(:user_id => ""))
       end
   
       use "invalid rating"
@@ -163,7 +163,7 @@ class RatingUnitTest < ModelTestCase
   
     context "missing comment_id" do
       before do
-        @rating = Rating.new @valid_params.merge(:comment_id => "")
+        @rating = Rating.new(@valid_params.merge(:comment_id => ""))
       end
       
       use "invalid rating"
@@ -172,7 +172,7 @@ class RatingUnitTest < ModelTestCase
     
     context "extra param : text" do
       before do
-        @rating = Rating.new @valid_params.merge(:text => "explanation")
+        @rating = Rating.new(@valid_params.merge(:text => "explanation"))
       end
       
       use "invalid rating"

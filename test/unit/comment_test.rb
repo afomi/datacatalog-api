@@ -59,7 +59,7 @@ class CommentUnitTest < ModelTestCase
     
     context "correct params" do
       before do
-        @comment = Comment.new @valid_params
+        @comment = Comment.new(@valid_params)
       end
       
       use "valid comment"
@@ -67,7 +67,7 @@ class CommentUnitTest < ModelTestCase
 
     context "missing text" do
       before do
-        @comment = Comment.new @valid_params.merge(:text => "")
+        @comment = Comment.new(@valid_params.merge(:text => ""))
       end
       
       use "invalid comment"
@@ -76,7 +76,7 @@ class CommentUnitTest < ModelTestCase
 
     context "missing user_id" do
       before do
-        @comment = Comment.new @valid_params.merge(:user_id => "")
+        @comment = Comment.new(@valid_params.merge(:user_id => ""))
       end
       
       use "invalid comment"
@@ -85,7 +85,7 @@ class CommentUnitTest < ModelTestCase
 
     context "missing source_id" do
       before do
-        @comment = Comment.new @valid_params.merge(:source_id => "")
+        @comment = Comment.new(@valid_params.merge(:source_id => ""))
       end
       
       use "invalid comment"

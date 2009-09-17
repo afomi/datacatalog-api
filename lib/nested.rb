@@ -60,16 +60,16 @@ module DataCatalog
       @parent_resource.instance_eval do
         get "/:parent_id/#{child_name}" do
           parent_id = params.delete("parent_id")
-          permission_check :basic, level, parent_id
+          permission_check(:basic, level, parent_id)
           @parent_document = find_parent(parent_model, parent_id)
           all_child_documents = @parent_document.send(association)
-          @child_documents = nested_find all_child_documents, params, parent_model
+          @child_documents = nested_find(all_child_documents, params, parent_model)
           @child_documents.to_json
         end
 
         get "/:parent_id/#{child_name}/:child_id" do
           parent_id = params.delete("parent_id")
-          permission_check :basic, level, parent_id
+          permission_check(:basic, level, parent_id)
           child_id = params.delete("child_id")
           @parent_document, @child_document = find_documents(parent_model, parent_id, association, child_id)
           @child_document.to_json
@@ -77,9 +77,9 @@ module DataCatalog
         
         post "/:parent_id/#{child_name}" do
           parent_id = params.delete("parent_id")
-          permission_check :curator, level, parent_id
+          permission_check(:curator, level, parent_id)
           @parent_document = find_parent(parent_model, parent_id)
-          validate_before_create params, child_model, read_only_attributes
+          validate_before_create(params, child_model, read_only_attributes)
           callback callbacks[:before_save]
           callback callbacks[:before_create]
           @child_document = child_model.new(params)
@@ -96,10 +96,10 @@ module DataCatalog
 
         put "/:parent_id/#{child_name}/:child_id" do
           parent_id = params.delete("parent_id")
-          permission_check :curator, level, parent_id
+          permission_check(:curator, level, parent_id)
           child_id = params.delete("child_id")
           @parent_document, @child_document = find_documents(parent_model, parent_id, association, child_id)
-          validate_before_update params, child_model, read_only_attributes
+          validate_before_update(params, child_model, read_only_attributes)
           callback callbacks[:before_save]
           callback callbacks[:before_update]
           @child_document.attributes = params
@@ -113,7 +113,7 @@ module DataCatalog
 
         delete "/:parent_id/#{child_name}/:child_id" do
           parent_id = params.delete("parent_id")
-          permission_check :curator, level, parent_id
+          permission_check(:curator, level, parent_id)
           child_id = params.delete("child_id")
           @parent_document, @child_document = find_documents(parent_model, parent_id, association, child_id)
           callback callbacks[:before_destroy]

@@ -4,11 +4,11 @@ module DataCatalog
 
     def permission_check(default_level, custom_level, user_id)
       if custom_level && custom_level == :owner
-        require_at_least custom_level, user_id
+        require_at_least(custom_level, user_id)
       elsif custom_level
-        require_at_least custom_level
+        require_at_least(custom_level)
       else
-        require_at_least default_level
+        require_at_least(default_level)
       end
     end
 

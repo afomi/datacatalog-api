@@ -5,7 +5,7 @@ class UsersDeleteControllerTest < RequestTestCase
   def app; DataCatalog::Users end
 
   before do
-    user = User.create :text => "Original User"
+    user = User.create(:text => "Original User")
     @id = user.id
     @user_count = User.count
     @fake_id = get_fake_mongo_object_id

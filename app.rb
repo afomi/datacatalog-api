@@ -6,7 +6,7 @@ require 'sinatra/base'
 
 require_file 'config/config'
 
-Sinatra::Base.set :config, Config.environment_config
+Sinatra::Base.set(:config, Config.environment_config)
 Config.setup
 
 require_dir 'lib'

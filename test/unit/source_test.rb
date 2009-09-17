@@ -49,7 +49,7 @@ class SourceUnitTest < ModelTestCase
 
     context "correct params" do
       before do
-        @source = Source.new @valid_params
+        @source = Source.new(@valid_params)
       end
 
       use "valid source"
@@ -57,9 +57,9 @@ class SourceUnitTest < ModelTestCase
 
     context "url with port" do
       before do
-        @source = Source.new @valid_params.merge(
+        @source = Source.new(@valid_params.merge(
           :url => "http://other-data.com:8080/42"
-        )
+        ))
       end
 
       use "valid source"
@@ -67,7 +67,9 @@ class SourceUnitTest < ModelTestCase
 
     context "ftp url" do
       before do
-        @source = Source.new @valid_params.merge(:url => "ftp://data.gov/42")
+        @source = Source.new(@valid_params.merge(
+          :url => "ftp://data.gov/42"
+        ))
       end
 
       use "valid source"
@@ -77,7 +79,7 @@ class SourceUnitTest < ModelTestCase
 
     context "missing url" do
       before do
-        @source = Source.new @valid_params.merge(:url => "")
+        @source = Source.new(@valid_params.merge(:url => ""))
       end
 
       use "invalid source"

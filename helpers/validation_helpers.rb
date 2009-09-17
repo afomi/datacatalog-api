@@ -15,11 +15,11 @@ module DataCatalog
     end
 
     def validate_before_create(params, model, read_only_attributes)
-      validate_before_save params, model, read_only_attributes
+      validate_before_save(params, model, read_only_attributes)
     end
 
     def validate_before_update(params, model, read_only_attributes)
-      validate_before_save params, model, read_only_attributes
+      validate_before_save(params, model, read_only_attributes)
       if params.empty?
         error 400, {
           "errors"    => ["no_params_to_save"],

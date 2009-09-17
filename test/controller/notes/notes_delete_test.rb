@@ -5,7 +5,7 @@ class NotesDeleteControllerTest < RequestTestCase
   def app; DataCatalog::Notes end
 
   before do
-    note = Note.create :text => "Original Note"
+    note = Note.create(:text => "Original Note")
     @id = note.id
     @note_count = Note.count
     @fake_id = get_fake_mongo_object_id

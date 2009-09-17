@@ -17,7 +17,7 @@ module Config
   def self.new_mongo_connection
     gem 'mongodb-mongo', "= 0.14"
     require 'mongo'
-    Mongo::Connection.new environment_config["mongo_hostname"]
+    Mongo::Connection.new(environment_config["mongo_hostname"])
   end
 
   def self.drop_database

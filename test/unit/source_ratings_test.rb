@@ -58,7 +58,7 @@ class SourceRatingsUnitTest < ModelTestCase
     #   associations or plain old documents
     test "finding fake_id should raise exception" do
       assert_raise MongoMapper::DocumentNotFound do
-        @source.ratings.find get_fake_mongo_object_id
+        @source.ratings.find(get_fake_mongo_object_id)
       end
     end
   

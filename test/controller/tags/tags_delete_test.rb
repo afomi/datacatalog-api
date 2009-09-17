@@ -5,7 +5,7 @@ class TagsDeleteControllerTest < RequestTestCase
   def app; DataCatalog::Tags end
 
   before do
-    tag = Tag.create :text => "Original Tag"
+    tag = Tag.create(:text => "Original Tag")
     @id = tag.id
     @tag_count = Tag.count
     @fake_id = get_fake_mongo_object_id
