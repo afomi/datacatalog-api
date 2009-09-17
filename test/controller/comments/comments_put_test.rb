@@ -113,6 +113,35 @@ class CommentsPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
+  context "anonymous : put /:fake_id" do
+    before do
+      put "/#{@fake_id}"
+    end
+  
+    use "return 401 because the API key is missing"
+    use "unchanged comment count"
+  end
+
+  context "incorrect API key : put /:fake_id" do
+    before do
+      put "/#{@fake_id}", :api_key => "does_not_exist_in_database"
+    end
+  
+    use "return 401 because the API key is invalid"
+    use "unchanged comment count"
+  end
+
+  context "normal API key : put /:fake_id" do
+    before do
+      put "/#{@fake_id}", :api_key => @normal_user.primary_api_key
+    end
+  
+    use "return 401 because the API key is unauthorized"
+    use "unchanged comment count"
+  end
+
+  # - - - - - - - - - -
+
   context "curator API key : put /:fake_id with protected param" do
     before do
       put "/#{@fake_id}", {
