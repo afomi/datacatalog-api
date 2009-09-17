@@ -105,9 +105,9 @@ module DataCatalog
           child_id = params.delete("child_id")
           @parent_document = parent_model.find_by_id(parent_id)
           error 404, [].to_json unless @parent_document
-          validate_before_update params, child_model, read_only_attributes
           @child_document = @parent_document.send(association).find { |x| x.id == child_id }
           error 404, [].to_json unless @child_document
+          validate_before_update params, child_model, read_only_attributes
           callback callbacks[:before_save]
           callback callbacks[:before_update]
           @child_document.attributes = params

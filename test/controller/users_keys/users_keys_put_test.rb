@@ -256,12 +256,10 @@ class UsersKeysPutControllerTest < RequestTestCase
 
   3.times do |n|
     context_ "API key #{n}" do
-      context "owner API key : put /:id/keys/:fake_id" do
       context "owner API key : put /:id/keys/:fake_id without params" do
         before do
           put "/#{@user.id}/keys/#{@fake_id}", {
-            :api_key  => @user.api_keys[n].api_key,
-            :key_type => "application"
+            :api_key  => @user.api_keys[n].api_key
           }
         end
       
@@ -269,10 +267,35 @@ class UsersKeysPutControllerTest < RequestTestCase
         use "return an empty response body"
         use "unchanged api_key count"
       end
+
+      context "owner API key : put /:id/keys/:fake_id with correct params" do
+        before do
+          put "/#{@user.id}/keys/#{@fake_id}", {
+            :api_key  => @user.api_keys[n].api_key,
+            :key_type => "application"
+          }
+        end
+        
+        use "return 404 Not Found"
+        use "return an empty response body"
+        use "unchanged api_key count"
+      end
     end
   end
-      
-  context "admin API key : put /:id/keys/:fake_id" do
+
+  context "admin API key : put /:id/keys/:fake_id without params" do
+    before do
+      put "/#{@user.id}/keys/#{@fake_id}", {
+        :api_key  => @admin_user.primary_api_key
+      }
+    end
+  
+    use "return 404 Not Found"
+    use "return an empty response body"
+    use "unchanged api_key count"
+  end
+
+  context "admin API key : put /:id/keys/:fake_id with correct params" do
     before do
       put "/#{@user.id}/keys/#{@fake_id}", {
         :api_key  => @admin_user.primary_api_key,
