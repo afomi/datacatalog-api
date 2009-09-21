@@ -6,7 +6,8 @@ class SourceRatingsUnitTest < ModelTestCase
   
     before do
       @source = Source.create(
-        :url => "http://data.gov/data-sets/123"
+        :title => "2005-2007 American Community Survey Three-Year PUMS Housing File",
+        :url   => "http://www.data.gov/details/90"
       )
     end
     
@@ -21,7 +22,8 @@ class SourceRatingsUnitTest < ModelTestCase
     before do
       @user = create_normal_user
       @source = Source.create(
-        :url => "http://data.gov/data-sets/123"
+        :title => "2005-2007 American Community Survey Three-Year PUMS Housing File",
+        :url   => "http://www.data.gov/details/90"
       )
       @ratings = []
       5.times do |n|

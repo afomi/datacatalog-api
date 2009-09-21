@@ -6,7 +6,8 @@ class RatingAssociationsUnitTest < ModelTestCase
     before do
       @user = create_normal_user
       @source = Source.create(
-        :url => "http://data.gov/original"
+        :title => "The Original Data Source",
+        :url   => "http://data.gov/original"
       )
       @rating = Rating.create(
         :kind      => "source",

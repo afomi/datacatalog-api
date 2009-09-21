@@ -30,7 +30,8 @@ class SourcesGetSearchControllerTest < RequestTestCase
     before do
       3.times do |n|
         assert Source.create(
-          :url => "http://data.gov/sources/#{n+1}"
+          :title => "Source #{n + 1}",
+          :url   => "http://data.gov/sources/#{n + 1}"
         ).valid?
       end
     end

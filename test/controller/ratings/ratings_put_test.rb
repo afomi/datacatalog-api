@@ -6,7 +6,8 @@ class RatingsPutControllerTest < RequestTestCase
 
   before :all do
     source = Source.create(
-      :url => "http://data.gov/sources/6804"
+      :title => "Home Health Agency (HHA) Medicare Cost Report Data - FY 2004",
+      :url   => "http://www.data.gov/details/769"
     )
     @rating = Rating.create(
       :kind      => "source",

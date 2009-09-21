@@ -6,7 +6,8 @@ class RatingAggregatesUnitTest < ModelTestCase
     before do
       @user = create_normal_user
       @source = Source.create(
-        :url => "http://data.gov/sources/6"
+        :title => "Annual Electric Generator Report",
+        :url   => "http://www.data.gov/details/858"
       )
     end
     
@@ -75,7 +76,8 @@ class RatingAggregatesUnitTest < ModelTestCase
     before do
       @user = create_normal_user
       @source = Source.create(
-        :url => "http://data.gov/sources/6"
+        :title => "Annual Electric Generator Report",
+        :url   => "http://www.data.gov/details/858"
       )
       @comment = Comment.create(
         :text      => "Original Comment",

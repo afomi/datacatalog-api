@@ -43,7 +43,8 @@ class SourceUnitTest < ModelTestCase
   context "Source.new" do
     before do
       @valid_params = {
-        :url => "http://data.gov/sources/1492"
+        :title => "Migratory Bird Flyways - Continental United States",
+        :url   => "http://www.data.gov/details/12"
       }
     end
 
@@ -58,7 +59,7 @@ class SourceUnitTest < ModelTestCase
     context "url with port" do
       before do
         @source = Source.new(@valid_params.merge(
-          :url => "http://other-data.com:8080/42"
+          :url => "http://www.data.gov:80/details/12"
         ))
       end
 
@@ -68,7 +69,7 @@ class SourceUnitTest < ModelTestCase
     context "ftp url" do
       before do
         @source = Source.new(@valid_params.merge(
-          :url => "ftp://data.gov/42"
+          :url => "ftp://data.gov/12"
         ))
       end
 
@@ -112,7 +113,10 @@ class SourceUnitTest < ModelTestCase
   context "updating a Source" do
     before do
       Source.destroy_all
-      doc = Source.create(:url => "http://original.gov")
+      doc = Source.create(
+        :title => "Just Some Data",
+        :url   => "http://original.gov"
+      )
       @original_id = doc._id
       @original_created_at = doc.created_at
       @original_updated_at = doc.updated_at

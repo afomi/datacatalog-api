@@ -6,7 +6,8 @@ class SourcesPutControllerTest < RequestTestCase
 
   before :all do
     @source = Source.create({
-      :url => "http://data.gov/original"
+      :title => "Just a data source",
+      :url   => "http://data.gov/original"
     })
     @id = @source.id
     @fake_id = get_fake_mongo_object_id

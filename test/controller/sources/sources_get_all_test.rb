@@ -75,7 +75,8 @@ class SourcesGetAllControllerTest < RequestTestCase
     before do
       3.times do |n|
         Source.create(
-          :url => "http://data.gov/sources/#{n}"
+          :title => "Source #{n}", 
+          :url   => "http://data.gov/sources/#{n}"
         )
       end
     end

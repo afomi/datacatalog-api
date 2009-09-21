@@ -6,6 +6,11 @@ class RatingsPostControllerTest < RequestTestCase
 
   before do
     @rating_count = Rating.count
+    source = Source.create(
+      :title => "Multifactor Productivity",
+      :url   => "http://www.data.gov/details/332"
+    )
+    @id = source.id
   end
 
   # - - - - - - - - - -
@@ -64,15 +69,12 @@ class RatingsPostControllerTest < RequestTestCase
   
   context "admin API key : post / with protected param 'updated_at'" do
     before do
-      source = Source.create(
-        :url => "http://data.gov/sources/1006"
-      )
       post "/", {
         :api_key    => @admin_user.primary_api_key,
         :kind       => "source",
         :value      => 5,
         :text       => "Rating A",
-        :source_id  => source.id,
+        :source_id  => @id,
         :updated_at => Time.now.to_json
       }
     end
@@ -84,15 +86,12 @@ class RatingsPostControllerTest < RequestTestCase
 
   context "admin API key : post / with protected param 'user_id'" do
     before do
-      source = Source.create(
-        :url => "http://data.gov/sources/1006"
-      )
       post "/", {
         :api_key    => @admin_user.primary_api_key,
         :kind       => "source",
         :value      => 5,
         :text       => "Rating A",
-        :source_id  => source.id,
+        :source_id  => @id,
         :user_id    => @normal_user.id
       }
     end
@@ -104,15 +103,12 @@ class RatingsPostControllerTest < RequestTestCase
   
   context "admin API key : post / with invalid param" do
     before do
-      source = Source.create(
-        :url => "http://data.gov/sources/1006"
-      )
       post "/", {
         :api_key   => @admin_user.primary_api_key,
         :kind      => "source",
         :value     => 5,
         :text      => "Rating A",
-        :source_id => source.id,
+        :source_id => @id,
         :junk      => "This is an extra param (junk)"
       }
     end
@@ -126,15 +122,12 @@ class RatingsPostControllerTest < RequestTestCase
   
   context "curator API key : post / with correct params" do
     before do
-      source = Source.create(
-        :url => "http://data.gov/sources/1006"
-      )
       post "/", {
         :api_key   => @curator_user.primary_api_key,
         :kind      => "source",
         :value     => 5,
         :text      => "Rating A",
-        :source_id => source.id
+        :source_id => @id,
       }
     end
     
@@ -143,15 +136,12 @@ class RatingsPostControllerTest < RequestTestCase
   
   context "admin API key : post / with correct params" do
     before do
-      source = Source.create(
-        :url => "http://data.gov/sources/1006"
-      )
       post "/", {
         :api_key => @admin_user.primary_api_key,
         :kind      => "source",
         :value     => 5,
         :text      => "Rating A",
-        :source_id => source.id,
+        :source_id => @id,
       }
     end
   

@@ -20,6 +20,7 @@ class Source
   many :ratings
   
   # == Validations
+  validates_presence_of :title
   validates_presence_of :url
   validate :validate_url
 

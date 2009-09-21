@@ -6,7 +6,8 @@ class RatingsDeleteControllerTest < RequestTestCase
 
   before do
     source = Source.create(
-      :url => "http://data.gov/sources/333"
+      :title => "2005-2007 American Community Survey Three-Year PUMS Population File",
+      :url   => "http://www.data.gov/details/91"
     )
     rating = Rating.create(
       :kind      => "source",

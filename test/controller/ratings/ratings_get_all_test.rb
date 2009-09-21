@@ -80,7 +80,8 @@ class RatingsGetAllControllerTest < RequestTestCase
     before do
       5.times do |n|
         source = Source.create(
-          :url => "http://data.gov/sources/a/#{n}"
+          :title => "Data Source A #{n}",
+          :url   => "http://data.gov/sources/a/#{n}"
         )
         rating = Rating.create(
           :kind      => "source",
@@ -93,6 +94,7 @@ class RatingsGetAllControllerTest < RequestTestCase
       end
       2.times do |n|
         source = Source.create(
+        :title => "Data Source B #{n}",
           :url => "http://data.gov/sources/b/#{n}"
         )
         comment = Comment.create(

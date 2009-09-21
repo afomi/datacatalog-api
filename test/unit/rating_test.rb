@@ -69,7 +69,8 @@ class RatingUnitTest < ModelTestCase
     before do
       @user = create_normal_user
       @source = Source.create(
-        :url => "http://data.gov/sources/6"
+        :title => "Worldwide M5+ Earthquakes, Past 7 Days",
+        :url   => "http://www.data.gov/details/31"
       )
       @valid_params = {
         :kind      => "source",
@@ -120,7 +121,8 @@ class RatingUnitTest < ModelTestCase
     before do
       @user = create_normal_user
       @source = Source.create(
-        :url => "http://data.gov/sources/6"
+        :title => "Worldwide M5+ Earthquakes, Past 7 Days",
+        :url   => "http://www.data.gov/details/31"
       )
       @comment = Comment.create(
         :text      => "Original Comment",

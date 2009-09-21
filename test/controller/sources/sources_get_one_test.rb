@@ -6,7 +6,8 @@ class SourcesGetOneControllerTest < RequestTestCase
 
   before do
     source = Source.create(
-      :url => "http://data.gov/original"
+      :title => "The Original Data Source",
+      :url   => "http://data.gov/original"
     )
     @id = source.id
     @fake_id = get_fake_mongo_object_id

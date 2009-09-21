@@ -66,7 +66,8 @@ class SourcesPostControllerTest < RequestTestCase
     before do
       post "/", {
         :api_key    => @admin_user.primary_api_key,
-        :url     => "http://data.gov/original",
+        :title      => "Just a data source",
+        :url        => "http://data.gov/original",
         :updated_at => Time.now.to_json
       }
     end
@@ -80,6 +81,7 @@ class SourcesPostControllerTest < RequestTestCase
     before do
       post "/", {
         :api_key => @admin_user.primary_api_key,
+        :title   => "Just a data source",
         :url     => "http://data.gov/original",
         :junk    => "This is an extra param (junk)"
       }
@@ -95,7 +97,8 @@ class SourcesPostControllerTest < RequestTestCase
   context "curator API key : post / without url" do
     before do
       post "/", {
-        :api_key => @curator_user.primary_api_key
+        :api_key => @curator_user.primary_api_key,
+        :title   => "Just a data source",
       }
     end
     
@@ -107,7 +110,8 @@ class SourcesPostControllerTest < RequestTestCase
   context "admin API key : post / without url" do
     before do
       post "/", {
-        :api_key => @admin_user.primary_api_key
+        :api_key => @admin_user.primary_api_key,
+        :title   => "Just a data source",
       }
     end
 
@@ -122,6 +126,7 @@ class SourcesPostControllerTest < RequestTestCase
     before do
       post "/", {
         :api_key => @curator_user.primary_api_key,
+        :title   => "Just a data source",
         :url     => "https://secret.com/13"
       }
     end
@@ -135,6 +140,7 @@ class SourcesPostControllerTest < RequestTestCase
     before do
       post "/", {
         :api_key => @admin_user.primary_api_key,
+        :title   => "Just a data source",
         :url     => "https://secret.com/13"
       }
     end
@@ -150,6 +156,7 @@ class SourcesPostControllerTest < RequestTestCase
     before do
       post "/", {
         :api_key => @curator_user.primary_api_key,
+        :title   => "Just a data source",
         :url     => "http://data.gov/original"
       }
     end
@@ -161,6 +168,7 @@ class SourcesPostControllerTest < RequestTestCase
     before do
       post "/", {
         :api_key => @admin_user.primary_api_key,
+        :title   => "Just a data source",
         :url     => "http://data.gov/original"
       }
     end

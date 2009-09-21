@@ -6,7 +6,8 @@ class RatingsGetOneControllerTest < RequestTestCase
 
   before do
     source = Source.create(
-      :url => "http://data.gov/sources/9600"
+      :title => "Consumer Expenditure Survey",
+      :url   => "http://www.data.gov/details/319"
     )
     rating = Rating.create(
       :kind      => "source",
