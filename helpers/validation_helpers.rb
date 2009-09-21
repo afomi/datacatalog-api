@@ -57,8 +57,10 @@ module DataCatalog
 
   end
 
-  class Base
-    helpers ValidationHelpers
+  if const_defined?("Base")
+    class Base
+      helpers ValidationHelpers
+    end
   end
 
 end

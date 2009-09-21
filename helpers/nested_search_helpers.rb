@@ -17,8 +17,10 @@ module DataCatalog
     
   end
 
-  class Base
-    helpers NestedSearchHelpers
+  if const_defined?("Base")
+    class Base
+      helpers NestedSearchHelpers
+    end
   end
 
 end

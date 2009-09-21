@@ -7,8 +7,10 @@ module DataCatalog
     end
   end
 
-  class Base
-    helpers CallbackHelpers
+  if const_defined?("Base")
+    class Base
+      helpers CallbackHelpers
+    end
   end
 
 end

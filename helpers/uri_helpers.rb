@@ -7,8 +7,10 @@ module DataCatalog
     end
   end
 
-  class Base
-    helpers UriHelpers
+  if const_defined?("Base")
+    class Base
+      helpers UriHelpers
+    end
   end
 
 end
