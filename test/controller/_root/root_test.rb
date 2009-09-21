@@ -17,11 +17,7 @@ class RootControllerTest < RequestTestCase
 
   def app; DataCatalog::Root end
 
-  context "anonymous : get /" do
-    before :all do
-      get '/'
-    end
-
+  shared "return api level metadata" do
     use "return 200 Ok"
 
     test "body has name" do
@@ -33,14 +29,13 @@ class RootControllerTest < RequestTestCase
     end
     
     test "body has correct version" do
-      assert_equal "0.10", parsed_response_body["version"]
+      assert_equal "0.20", parsed_response_body["version"]
     end
     
     test "body has list of resources" do
-      assert_include "resources", parsed_response_body
-      resources = parsed_response_body["resources"]
-      assert_include "/"             , resources
-      assert_include "checkup"       , resources
+      assert_include "resource_directory", parsed_response_body
+      expected = { "href" => "/resources" }
+      assert_equal expected, parsed_response_body["resource_directory"]
     end
     
     test "body contains only the expected keys" do
@@ -48,9 +43,17 @@ class RootControllerTest < RequestTestCase
         name
         creator
         version
-        resources
+        resource_directory
       )
     end
+  end
+
+  context "anonymous : get /" do
+    before :all do
+      get '/'
+    end
+  
+    use "return api level metadata"
   end
   
   context "incorrect API key : get /" do
@@ -58,7 +61,7 @@ class RootControllerTest < RequestTestCase
       get '/', :api_key => "does_not_exist_in_database"
     end
     
-    use "return 400 because the API key is not allowed"
+    use "return 401 because the API key is invalid"
   end
 
   context "normal API key : get /" do
@@ -66,7 +69,7 @@ class RootControllerTest < RequestTestCase
       get '/', :api_key => @normal_user.primary_api_key
     end
     
-    use "return 400 because the API key is not allowed"
+    use "return api level metadata"
   end
   
   context "admin API key : get /" do
@@ -74,7 +77,7 @@ class RootControllerTest < RequestTestCase
       get '/', :api_key => @admin_user.primary_api_key
     end
     
-    use "return 400 because the API key is not allowed"
+    use "return api level metadata"
   end
 
 end

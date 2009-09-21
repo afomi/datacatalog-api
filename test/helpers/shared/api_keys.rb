@@ -1,14 +1,4 @@
 class RequestTestCase
-
-  shared "return 400 because the API key is not allowed" do
-    use "return 400 Bad Request"
-    # Please note that this is intentionally *not* an authentication
-    # error. It is the result of passing an API key when it is not
-    # allowed. In order words, some actions can only be done
-    # anonymously.
-    
-    use "return errors hash saying api_key is invalid"
-  end
   
   shared "return 401 because the API key is invalid" do
     use "return 401 Unauthorized"

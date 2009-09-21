@@ -42,6 +42,18 @@ module DataCatalog
       return @cached_privileges if @cached_privileges
       @cached_privileges = _privileges_for_api_key(user_id)
     end
+
+    def missing_api_key!
+      error 401, { "errors" => ["missing_api_key"] }.to_json
+    end
+
+    def invalid_api_key!
+      error 401, { "errors" => ["invalid_api_key"] }.to_json
+    end
+
+    def unauthorized_api_key!
+      error 401, { "errors" => ["unauthorized_api_key"] }.to_json
+    end
     
     protected
     
@@ -86,18 +98,6 @@ module DataCatalog
         )
       end
       DEFAULT_PRIVILEGES.merge(:basic => true)
-    end
-
-    def missing_api_key!
-      error 401, { "errors" => ["missing_api_key"] }.to_json
-    end
-
-    def invalid_api_key!
-      error 401, { "errors" => ["invalid_api_key"] }.to_json
-    end
-
-    def unauthorized_api_key!
-      error 401, { "errors" => ["unauthorized_api_key"] }.to_json
     end
 
   end

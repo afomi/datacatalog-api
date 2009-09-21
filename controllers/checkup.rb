@@ -7,26 +7,11 @@ module DataCatalog
       basic = {
         "anonymous"     => false,
         "valid_api_key" => true,
-        "resources" => {
-          "/"             => full_uri("/"),
-          "checkup"       => full_uri("checkup"),
-          "comments"      => full_uri("comments"),
-          "documents"     => full_uri("documents"),
-          "organizations" => full_uri("organizations"),
-          "sources"       => full_uri("sources"),
-          "users"         => full_uri("users")
-        }
       }
       basic.merge!("user_id" => @current_user.id) if @current_user
       hash =
         if privileges[:anonymous]
-          {
-            "anonymous" => true,
-            "resources" => {
-              "/"            => full_uri("/"),
-              "checkup"      => full_uri("checkup"),
-            }
-          }
+          { "anonymous" => true }
         elsif privileges[:admin]
           basic.merge("admin" => true)
         elsif privileges[:curator]
