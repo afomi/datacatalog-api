@@ -15,21 +15,24 @@ module DataCatalog
     def require_at_least(level, user_id=nil)
       privileges = privileges_for_api_key(user_id)
       case level
+      when :anonymous
+        return if privileges[:anonymous]
+        return invalid_api_key! unless privileges[:basic]
       when :basic
-        missing_api_key! if privileges[:anonymous]
-        invalid_api_key! unless privileges[:basic]
+        return missing_api_key! if privileges[:anonymous]
+        return invalid_api_key! unless privileges[:basic]
       when :owner
-        missing_api_key! if privileges[:anonymous]
-        invalid_api_key! unless privileges[:basic]
-        unauthorized_api_key! unless privileges[:owner]
+        return missing_api_key! if privileges[:anonymous]
+        return invalid_api_key! unless privileges[:basic]
+        return unauthorized_api_key! unless privileges[:owner]
       when :curator
-        missing_api_key! if privileges[:anonymous]
-        invalid_api_key! unless privileges[:basic]
-        unauthorized_api_key! unless privileges[:curator]
+        return missing_api_key! if privileges[:anonymous]
+        return invalid_api_key! unless privileges[:basic]
+        return unauthorized_api_key! unless privileges[:curator]
       when :admin
-        missing_api_key! if privileges[:anonymous]
-        invalid_api_key! unless privileges[:basic]
-        unauthorized_api_key! unless privileges[:admin]
+        return missing_api_key! if privileges[:anonymous]
+        return invalid_api_key! unless privileges[:basic]
+        return unauthorized_api_key! unless privileges[:admin]
       else
         raise "Unexpected parameter"
       end
@@ -99,8 +102,10 @@ module DataCatalog
 
   end
 
-  class Base
-    helpers PermissionHelpers
+  if const_defined?("Base")
+    class Base
+      helpers PermissionHelpers
+    end
   end
 
 end

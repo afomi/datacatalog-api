@@ -11,6 +11,18 @@ module ModelHelpers
       :email     => "normal.user@inter.net"
     })
   end
+  
+  def create_another_normal_user
+    key = ApiKey.new(
+      :api_key  => "normal-400746a36d098181c15c52cd9e3eff66d",
+      :key_type => "primary"
+    )
+    User.create({
+      :api_keys  => [key],
+      :name      => "Another Normal User",
+      :email     => "another.normal.user@inter.net"
+    })
+  end
 
   def create_curator_user
     key = ApiKey.new(
