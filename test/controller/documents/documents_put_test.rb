@@ -278,7 +278,7 @@ class DocumentsPutControllerTest < RequestTestCase
     use "attempted PUT document with :id without params"
   end
 
-  context "admin API key : put /:id without text" do
+  context "admin API key : put /:id without params" do
     before do
       put "/#{@id}", {
         :api_key => @admin_user.primary_api_key
