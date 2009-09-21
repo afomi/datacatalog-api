@@ -37,34 +37,53 @@ module DataCatalog
 
     def privileges_for_api_key(user_id=nil)
       return @cached_privileges if @cached_privileges
-      default = {
-        :anonymous => false,
-        :basic     => false,
-        :owner     => false,
-        :curator   => false,
-        :admin     => false
-      }
-      api_key = params.delete("api_key")
-      unless api_key
-        return default.merge(:anonymous => true)
-      end
-      @current_user = User.find_by_api_key(api_key)
-      unless @current_user
-        return default
-      end
-      if @current_user.admin
-        return default.merge(:admin => true, :curator => true, :owner => true, :basic => true)
-      end
-      if @current_user.curator
-        return default.merge(:curator => true, :owner => true, :basic => true)
-      end
-      if user_id && user_id == @current_user.id
-        return default.merge(:owner => true, :basic => true)
-      end
-      @cached_privileges = default.merge(:basic => true)
+      @cached_privileges = _privileges_for_api_key(user_id)
     end
     
     protected
+    
+    DEFAULT_PRIVILEGES = {
+      :admin     => false,
+      :curator   => false,
+      :owner     => false,
+      :basic     => false,
+      :anonymous => false
+    }
+    
+    def _privileges_for_api_key(user_id=nil)
+      api_key = params.delete("api_key")
+      unless api_key
+        return DEFAULT_PRIVILEGES.merge(
+          :anonymous => true
+        )
+      end
+      @current_user = User.find_by_api_key(api_key)
+      unless @current_user
+        return DEFAULT_PRIVILEGES
+      end
+      if @current_user.admin
+        return DEFAULT_PRIVILEGES.merge(
+          :admin   => true,
+          :curator => true,
+          :owner   => true,
+          :basic   => true
+        )
+      end
+      if @current_user.curator
+        return DEFAULT_PRIVILEGES.merge(
+          :curator => true,
+          :owner   => true,
+          :basic   => true
+        )
+      end
+      if user_id && user_id == @current_user.id
+        return DEFAULT_PRIVILEGES.merge(
+          :owner => true,
+          :basic => true
+        )
+      end
+      DEFAULT_PRIVILEGES.merge(:basic => true)
+    end
 
     def missing_api_key!
       error 401, { "errors" => ["missing_api_key"] }.to_json
