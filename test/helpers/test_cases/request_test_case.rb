@@ -6,6 +6,7 @@ class RequestTestCase < Test::Unit::TestCase
   include RequestHelpers
 
   before :all do
+    Category.destroy_all
     Comment.destroy_all
     Document.destroy_all
     Note.destroy_all
