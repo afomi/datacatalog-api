@@ -1,5 +1,14 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_functional_helper')
 
+class PermissionException < StandardError
+  attr_accessor :status, :message
+
+  def initialize(status, message)
+    self.status = status
+    self.message = message
+  end
+end
+
 class CategoryUnitTest < ModelTestCase
 
   include DataCatalog::PermissionHelpers
@@ -14,42 +23,51 @@ class CategoryUnitTest < ModelTestCase
 
   attr_accessor :params
   
-  def error(code, message)
-    @errors << [code, message]
+  def error(status, message)
+    raise PermissionException.new(status, message)
+  end
+  
+  def error_expected(status, message)
+    begin
+      yield
+    rescue PermissionException => e
+      assert_equal status, e.status
+      assert_equal message, e.message
+    end
   end
 
-  MISSING_API_KEY      = [401, %<{"errors":["missing_api_key"]}>]
-  INVALID_API_KEY      = [401, %<{"errors":["invalid_api_key"]}>]
-  UNAUTHORIZED_API_KEY = [401, %<{"errors":["unauthorized_api_key"]}>]
+  MISSING      = %<{"errors":["missing_api_key"]}>
+  INVALID      = %<{"errors":["invalid_api_key"]}>
+  UNAUTHORIZED = %<{"errors":["unauthorized_api_key"]}>
   
   context "#require_at_least" do
-    before do
-      @errors = []
-    end
-    
     context "fake" do
       before do
         self.params = { "api_key" => get_fake_api_key("John Doe") }
       end
       
       it "anonymous" do
-        require_at_least(:anonymous)
-        assert_equal [INVALID_API_KEY], @errors
+        error_expected(401, INVALID) do
+          require_at_least(:anonymous)
+        end
       end
       
       it "basic" do
-        require_at_least(:basic)
-        assert_equal [INVALID_API_KEY], @errors
+        error_expected(401, INVALID) do
+          require_at_least(:basic)
+        end
       end
       
       it "curator" do
-        require_at_least(:curator)
-        assert_equal [INVALID_API_KEY], @errors
+        error_expected(401, INVALID) do
+          require_at_least(:curator)
+        end
       end
       
       it "admin" do
-        require_at_least(:admin)
-        assert_equal [INVALID_API_KEY], @errors
+        error_expected(401, INVALID) do
+          require_at_least(:admin)
+        end
       end
     end
 
@@ -60,23 +78,25 @@ class CategoryUnitTest < ModelTestCase
       
       it "anonymous" do
         require_at_least(:anonymous)
-        assert_equal [], @errors
       end
       
       it "basic" do
-        require_at_least(:basic)
-        assert_equal [MISSING_API_KEY], @errors
+        error_expected(401, MISSING) do
+          require_at_least(:basic)
+        end
       end
       
       it "curator" do
-        require_at_least(:curator)
-        assert_equal [MISSING_API_KEY], @errors
+        error_expected(401, MISSING) do
+          require_at_least(:curator)
+        end
       end
       
       it "admin" do
-        require_at_least(:admin)
-        assert_equal [MISSING_API_KEY], @errors
-      end
+        error_expected(401, MISSING) do
+          require_at_least(:admin)
+        end
+      end      
     end
 
     context "normal user" do
@@ -86,22 +106,22 @@ class CategoryUnitTest < ModelTestCase
       
       it "anonymous" do
         require_at_least(:anonymous)
-        assert_equal [], @errors
       end
       
       it "basic" do
         require_at_least(:basic)
-        assert_equal [], @errors
       end
       
       it "curator" do
-        require_at_least(:curator)
-        assert_equal [UNAUTHORIZED_API_KEY], @errors
+        error_expected(401, UNAUTHORIZED) do
+          require_at_least(:curator)
+        end
       end
       
       it "admin" do
-        require_at_least(:admin)
-        assert_equal [UNAUTHORIZED_API_KEY], @errors
+        error_expected(401, UNAUTHORIZED) do
+          require_at_least(:admin)
+        end
       end
     end
 
@@ -112,22 +132,20 @@ class CategoryUnitTest < ModelTestCase
       
       it "anonymous" do
         require_at_least(:anonymous)
-        assert_equal [], @errors
       end
       
       it "basic" do
         require_at_least(:basic)
-        assert_equal [], @errors
       end
       
       it "curator" do
         require_at_least(:curator)
-        assert_equal [], @errors
       end
       
       it "admin" do
-        require_at_least(:admin)
-        assert_equal [UNAUTHORIZED_API_KEY], @errors
+        error_expected(401, UNAUTHORIZED) do
+          require_at_least(:admin)
+        end
       end
     end
 
@@ -138,26 +156,22 @@ class CategoryUnitTest < ModelTestCase
       
       it "anonymous" do
         require_at_least(:anonymous)
-        assert_equal [], @errors
       end
       
       it "basic" do
         require_at_least(:basic)
-        assert_equal [], @errors
       end
       
       it "curator" do
         require_at_least(:curator)
-        assert_equal [], @errors
       end
       
       it "admin" do
         require_at_least(:admin)
-        assert_equal [], @errors
       end
     end
   end
-  
+
   context "#privileges_for_api_key" do
     it "anonymous" do
       self.params = {}
@@ -182,7 +196,7 @@ class CategoryUnitTest < ModelTestCase
       }
       assert_equal expected, privileges_for_api_key
     end
-    
+
     it "normal user" do
       self.params = { "api_key" => @normal_user.primary_api_key }
       expected = {
@@ -206,7 +220,7 @@ class CategoryUnitTest < ModelTestCase
       }
       assert_equal expected, privileges_for_api_key(@normal_user.id)
     end
-    
+
     it "owner user" do
       self.params = { "api_key" => @normal_user.primary_api_key }
       expected = {

@@ -17,22 +17,22 @@ module DataCatalog
       case level
       when :anonymous
         return if privileges[:anonymous]
-        return invalid_api_key! unless privileges[:basic]
+        invalid_api_key! unless privileges[:basic]
       when :basic
-        return missing_api_key! if privileges[:anonymous]
-        return invalid_api_key! unless privileges[:basic]
+        missing_api_key! if privileges[:anonymous]
+        invalid_api_key! unless privileges[:basic]
       when :owner
-        return missing_api_key! if privileges[:anonymous]
-        return invalid_api_key! unless privileges[:basic]
-        return unauthorized_api_key! unless privileges[:owner]
+        missing_api_key! if privileges[:anonymous]
+        invalid_api_key! unless privileges[:basic]
+        unauthorized_api_key! unless privileges[:owner]
       when :curator
-        return missing_api_key! if privileges[:anonymous]
-        return invalid_api_key! unless privileges[:basic]
-        return unauthorized_api_key! unless privileges[:curator]
+        missing_api_key! if privileges[:anonymous]
+        invalid_api_key! unless privileges[:basic]
+        unauthorized_api_key! unless privileges[:curator]
       when :admin
-        return missing_api_key! if privileges[:anonymous]
-        return invalid_api_key! unless privileges[:basic]
-        return unauthorized_api_key! unless privileges[:admin]
+        missing_api_key! if privileges[:anonymous]
+        invalid_api_key! unless privileges[:basic]
+        unauthorized_api_key! unless privileges[:admin]
       else
         raise "Unexpected parameter"
       end
