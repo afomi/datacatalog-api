@@ -65,7 +65,9 @@ class User
   #   user.save
   #
   def add_api_key!(params = {})
-    params.merge!({ :api_key => generate_api_key })
+    unless params[:api_key]
+      params.merge!({ :api_key => generate_api_key })
+    end
     key = ApiKey.new(params)
     self.api_keys << key
     self.save!

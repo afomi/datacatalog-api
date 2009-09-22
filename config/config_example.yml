@@ -3,21 +3,34 @@
   mongo_hostname: localhost
   mongo_database: natdatcat_dev
   api_key_salt: "000000000000000000000000000000000000000000000000000000000"
+  default_users: &users
+    - name: Admin 1
+      email: admin_1@your_organization.com
+      admin: true
+    - name: Admin 2
+      email: admin_2@your_organization.com
+      admin: true
+    - name: Curator 1
+      email: curator_1@your_organization.com
+      curator: true
 
 :test:
   base_uri: http://localhost:4567/
   mongo_hostname: localhost
   mongo_database: natdatcat_test
   api_key_salt: "000000000000000000000000000000000000000000000000000000000"
+  default_users: *users
 
 :staging:
   base_uri: http://staging.com/
   mongo_hostname: localhost
   mongo_database: natdatcat_sta
   api_key_salt: "000000000000000000000000000000000000000000000000000000000"
+  default_users: *users
   
 :production:
   base_uri: http://production.com/
   mongo_hostname: localhost
   mongo_database: natdatcat_pro
   api_key_salt: "000000000000000000000000000000000000000000000000000000000"
+  default_users: *users

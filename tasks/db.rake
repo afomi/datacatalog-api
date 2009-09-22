@@ -1,19 +1,21 @@
 namespace :db do
   
+  ADMIN_NAME = "Primary Admin"
+  
   def verbosely_drop_database
     db_name = Config.drop_database
     puts "Dropped database: #{db_name}."
   end
   
-  def verbosely_create_admin_user
-    user = User.create({
-      :name      => "National Data Catalog",
-      :email     => "ndc@sunlightlabs.com",
-      :admin     => true
+  def verbosely_create_user(params, phrase="user")
+    api_key = params.delete("primary_api_key")
+    user = User.create(params)
+    user.add_api_key!({
+      :api_key  => api_key,
+      :key_type => "primary"
     })
-    user.add_api_key!({ :key_type => "primary" })
-    puts "Created an admin user:"
-    verbosely_display_users [user]
+    puts "Created #{phrase}:"
+    verbosely_display_users([user])
   end
   
   def verbosely_display_users(users)
@@ -25,16 +27,40 @@ namespace :db do
     end
   end
   
-  desc "Create an admin user if it does not already exist"
+  desc "Create the primary admin user if not present"
   task :ensure_admin => ["environment:models"] do
     users = User.find(:all, :conditions => {
+      :name  => ADMIN_NAME,
       :admin => true
     })
     if users.length > 0
-      puts "Found #{users.length} admin users in database:"
-      verbosely_display_users users
+      puts "Found #{users.length} users in database:"
+      verbosely_display_users(users)
     else
-      verbosely_create_admin_user
+      verbosely_create_user({
+        :name  => ADMIN_NAME,
+        :admin => true
+      }, "admin user")
+    end
+  end
+
+  desc "Create default users if not present"
+  task :ensure_default_users => ["environment:models"] do
+    default_users = Config.environment_config["default_users"]
+    if default_users && default_users.length > 0
+      default_users.each do |default_user|
+        existing_user = User.find(:first, :conditions => {
+          :name => default_user["name"]
+        })
+        if existing_user
+          puts "Found user:"
+          verbosely_display_users([existing_user])
+        else
+          verbosely_create_user(default_user)
+        end
+      end
+    else
+      puts "No default users specified in config.yml"
     end
   end
   
