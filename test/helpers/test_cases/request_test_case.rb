@@ -20,6 +20,10 @@ class RequestTestCase < Test::Unit::TestCase
     @admin_user = create_admin_user
   end
 
+  def primary_api_key_for(role)
+    instance_variable_get("@#{role}_user").primary_api_key
+  end
+
   class << self
     
     alias context_ context

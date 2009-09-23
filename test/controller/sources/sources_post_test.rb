@@ -59,181 +59,89 @@ class SourcesPostControllerTest < RequestTestCase
     use "return 401 because the API key is unauthorized"
     use "unchanged source count"
   end
-  
-  # - - - - - - - - - -
 
-  context "curator API key : post / with protected param" do
-    before do
-      post "/", {
-        :api_key    => @curator_user.primary_api_key,
-        :title      => "Just a data source",
-        :url        => "http://data.gov/original",
-        :updated_at => Time.now.to_json
-      }
+  %w(curator admin).each do |role|
+    context "#{role} API key : post / with protected param" do
+      before do
+        post "/", {
+          :api_key    => primary_api_key_for(role),
+          :title      => "Just a data source",
+          :url        => "http://data.gov/original",
+          :updated_at => Time.now.to_json
+        }
+      end
+      
+      use "return 400 Bad Request"
+      use "unchanged source count"
+      use "return errors hash saying updated_at is invalid"
     end
-  
-    use "return 400 Bad Request"
-    use "unchanged source count"
-    use "return errors hash saying updated_at is invalid"
-  end
 
-  context "admin API key : post / with protected param" do
-    before do
-      post "/", {
-        :api_key    => @admin_user.primary_api_key,
-        :title      => "Just a data source",
-        :url        => "http://data.gov/original",
-        :updated_at => Time.now.to_json
-      }
+    context "#{role} API key : post / with invalid param" do
+      before do
+        post "/", {
+          :api_key => primary_api_key_for(role),
+          :title   => "Just a data source",
+          :url     => "http://data.gov/original",
+          :junk    => "This is an extra param (junk)"
+        }
+      end
+      
+      use "return 400 Bad Request"
+      use "unchanged source count"
+      use "return errors hash saying junk is invalid"
     end
-  
-    use "return 400 Bad Request"
-    use "unchanged source count"
-    use "return errors hash saying updated_at is invalid"
-  end
 
-  # - - - - - - - - - -
-
-  context "curator API key : post / with invalid param" do
-    before do
-      post "/", {
-        :api_key => @curator_user.primary_api_key,
-        :title   => "Just a data source",
-        :url     => "http://data.gov/original",
-        :junk    => "This is an extra param (junk)"
-      }
-    end
-  
-    use "return 400 Bad Request"
-    use "unchanged source count"
-    use "return errors hash saying junk is invalid"
-  end  
-
-  context "admin API key : post / with invalid param" do
-    before do
-      post "/", {
-        :api_key => @admin_user.primary_api_key,
-        :title   => "Just a data source",
-        :url     => "http://data.gov/original",
-        :junk    => "This is an extra param (junk)"
-      }
-    end
-  
-    use "return 400 Bad Request"
-    use "unchanged source count"
-    use "return errors hash saying junk is invalid"
-  end
-
-  # - - - - - - - - - -
-
-  context "curator API key : post / without title" do
-    before do
-      post "/", {
-        :api_key => @curator_user.primary_api_key,
-        :url     => "http://data.gov/original"
-      }
+    context "#{role} API key : post / without title" do
+      before do
+        post "/", {
+          :api_key => primary_api_key_for(role),
+          :url     => "http://data.gov/original"
+        }
+      end
+    
+      use "return 400 Bad Request"
+      use "unchanged source count"
+      use "return errors hash saying title is missing"
     end
     
-    use "return 400 Bad Request"
-    use "unchanged source count"
-    use "return errors hash saying title is missing"
-  end
-  
-  context "admin API key : post / without title" do
-    before do
-      post "/", {
-        :api_key => @admin_user.primary_api_key,
-        :url     => "http://data.gov/original"
-      }
-    end
-
-    use "return 400 Bad Request"
-    use "unchanged source count"
-    use "return errors hash saying title is missing"
-  end
+    context "#{role} API key : post / without url" do
+      before do
+        post "/", {
+          :api_key => primary_api_key_for(role),
+          :title   => "Just a data source",
+        }
+      end
     
-  # - - - - - - - - - -
-
-  context "curator API key : post / without url" do
-    before do
-      post "/", {
-        :api_key => @curator_user.primary_api_key,
-        :title   => "Just a data source",
-      }
+      use "return 400 Bad Request"
+      use "unchanged source count"
+      use "return errors hash saying url is missing"
     end
     
-    use "return 400 Bad Request"
-    use "unchanged source count"
-    use "return errors hash saying url is missing"
-  end
-  
-  context "admin API key : post / without url" do
-    before do
-      post "/", {
-        :api_key => @admin_user.primary_api_key,
-        :title   => "Just a data source",
-      }
-    end
-
-    use "return 400 Bad Request"
-    use "unchanged source count"
-    use "return errors hash saying url is missing"
-  end
-
-  # - - - - - - - - - -
-
-  context "curator API key : post / with invalid url" do
-    before do
-      post "/", {
-        :api_key => @curator_user.primary_api_key,
-        :title   => "Just a data source",
-        :url     => "https://secret.com/13"
-      }
-    end
+    context "#{role} API key : post / with invalid url" do
+      before do
+        post "/", {
+          :api_key => primary_api_key_for(role),
+          :title   => "Just a data source",
+          :url     => "https://secret.com/13"
+        }
+      end
     
-    use "return 400 Bad Request"
-    use "unchanged source count"
-    use "return errors hash saying url scheme is incorrect"
-  end
-  
-  context "admin API key : post / with invalid url" do
-    before do
-      post "/", {
-        :api_key => @admin_user.primary_api_key,
-        :title   => "Just a data source",
-        :url     => "https://secret.com/13"
-      }
+      use "return 400 Bad Request"
+      use "unchanged source count"
+      use "return errors hash saying url scheme is incorrect"
     end
-
-    use "return 400 Bad Request"
-    use "unchanged source count"
-    use "return errors hash saying url scheme is incorrect"
-  end
-
-  # - - - - - - - - - -
-  
-  context "curator API key : post / with correct params" do
-    before do
-      post "/", {
-        :api_key => @curator_user.primary_api_key,
-        :title   => "Just a data source",
-        :url     => "http://data.gov/original"
-      }
-    end
+      
+    context "#{role} API key : post / with correct params" do
+      before do
+        post "/", {
+          :api_key => primary_api_key_for(role),
+          :title   => "Just a data source",
+          :url     => "http://data.gov/original"
+        }
+      end
     
-    use "successful POST to sources"
-  end
-  
-  context "admin API key : post / with correct params" do
-    before do
-      post "/", {
-        :api_key => @admin_user.primary_api_key,
-        :title   => "Just a data source",
-        :url     => "http://data.gov/original"
-      }
+      use "successful POST to sources"
     end
-
-    use "successful POST to sources"
   end
 
 end
