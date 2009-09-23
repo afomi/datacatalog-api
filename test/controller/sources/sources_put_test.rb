@@ -139,186 +139,97 @@ class SourcesPutControllerTest < RequestTestCase
     use "unchanged source count"
   end
   
-  context "curator API key : put /:fake_id with protected param" do
-    before do
-      put "/#{@fake_id}", {
-        :api_key    => @curator_user.primary_api_key,
-        :url        => "http://data.gov/updated",
-        :created_at => Time.now.to_json
-      }
-    end
-    
-    use "attempted PUT source with :fake_id with protected param"
-  end
-  
-  context "admin API key : put /:fake_id with protected param" do
-    before do
-      put "/#{@fake_id}", {
-        :api_key    => @admin_user.primary_api_key,
-        :url        => "http://data.gov/updated",
-        :created_at => Time.now.to_json
-      }
-    end
-  
-    use "attempted PUT source with :fake_id with protected param"
-  end
-  
-  context "curator API key : put /:fake_id with invalid param" do
-    before do
-      put "/#{@fake_id}", {
-        :api_key => @curator_user.primary_api_key,
-        :url     => "http://data.gov/updated",
-        :junk    => "This is an extra param (junk)"
-      }
-    end
-    
-    use "attempted PUT source with :fake_id with invalid param"
-  end
-  
-  context "admin API key : put /:fake_id with invalid param" do
-    before do
-      put "/#{@fake_id}", {
-        :api_key => @admin_user.primary_api_key,
-        :url     => "http://data.gov/updated",
-        :junk    => "This is an extra param (junk)"
-      }
-    end
-  
-    use "attempted PUT source with :fake_id with invalid param"
-  end
-  
-  context "curator API key : put /:fake_id with correct params" do
-    before do
-      put "/#{@fake_id}", {
-        :api_key => @curator_user.primary_api_key,
-        :url     => "http://data.gov/updated"
-      }
-    end
-    
-    use "attempted PUT source with :fake_id with correct params"
-  end
-    
-  context "admin API key : put /:fake_id with correct params" do
-    before do
-      put "/#{@fake_id}", {
-        :api_key => @admin_user.primary_api_key,
-        :url     => "http://data.gov/updated"
-      }
-    end
-  
-    use "attempted PUT source with :fake_id with correct params"
-  end
-  
-  context "curator API key : put /:id with protected param" do
-    before do
-      put "/#{@id}", {
-        :api_key    => @curator_user.primary_api_key,
-        :url        => "http://data.gov/updated",
-        :updated_at => Time.now.to_json
-      }
-    end
-    
-    use "attempted PUT source with :id with protected param"
-  end
-  
-  context "admin API key : put /:id with protected param" do
-    before do
-      put "/#{@id}", {
-        :api_key    => @admin_user.primary_api_key,
-        :url        => "http://data.gov/updated",
-        :updated_at => Time.now.to_json
-      }
-    end
-    
-    use "attempted PUT source with :id with protected param"
-  end
-  
-  context "curator API key : put /:id with invalid param" do
-    before do
-      put "/#{@id}", {
-        :api_key => @curator_user.primary_api_key,
-        :url     => "http://data.gov/updated",
-        :junk    => "This is an extra param (junk)"
-      }
-    end
-  
-    use "attempted PUT source with :id with invalid param"
-  end
-  
-  context "admin API key : put /:id with invalid param" do
-    before do
-      put "/#{@id}", {
-        :api_key => @admin_user.primary_api_key,
-        :url     => "http://data.gov/updated",
-        :junk    => "This is an extra param (junk)"
-      }
-    end
-  
-    use "attempted PUT source with :id with invalid param"
-  end
-  
-  context "curator API key : put /:id with invalid url" do
-    before do
-      put "/#{@id}", {
-        :api_key => @curator_user.primary_api_key,
-        :url     => "https://secret.com/13"
-      }
-    end
-    
-    use "attempted PUT source with :id with invalid url"
-  end
+  %w(curator admin).each do |role|
+    context "#{role} API key : put /:fake_id with protected param" do
+      before do
+        put "/#{@fake_id}", {
+          :api_key    => primary_api_key_for(role),
+          :url        => "http://data.gov/updated",
+          :created_at => Time.now.to_json
+        }
+      end
 
-  context "admin API key : put /:id with invalid url" do
-    before do
-      put "/#{@id}", {
-        :api_key => @admin_user.primary_api_key,
-        :url     => "https://secret.com/13"
-      }
-    end
-  
-    use "attempted PUT source with :id with invalid url"
-  end
-  
-  context "curator API key : put /:id without params" do
-    before do
-      put "/#{@id}", {
-        :api_key => @curator_user.primary_api_key
-      }
+      use "attempted PUT source with :fake_id with protected param"
     end
 
-    use "attempted PUT source with :id without params"
-  end
-  
-  context "admin API key : put /:id without params" do
-    before do
-      put "/#{@id}", {
-        :api_key => @admin_user.primary_api_key
-      }
+    context "#{role} API key : put /:fake_id with invalid param" do
+      before do
+        put "/#{@fake_id}", {
+          :api_key => primary_api_key_for(role),
+          :url     => "http://data.gov/updated",
+          :junk    => "This is an extra param (junk)"
+        }
+      end
+    
+      use "attempted PUT source with :fake_id with invalid param"
     end
-  
-    use "attempted PUT source with :id without params"
-  end
 
-  context "curator API key : put /:id with correct param" do
-    before do
-      put "/#{@id}", {
-        :api_key => @curator_user.primary_api_key,
-        :url     => "http://data.gov/updated"
-      }
+    context "#{role} API key : put /:fake_id with correct params" do
+      before do
+        put "/#{@fake_id}", {
+          :api_key => primary_api_key_for(role),
+          :url     => "http://data.gov/updated"
+        }
+      end
+
+      use "attempted PUT source with :fake_id with correct params"
     end
-    
-    use "successful PUT source with :id"
-  end
-  
-  context "admin API key : put /:id with correct param" do
-    before do
-      put "/#{@id}", {
-        :api_key => @admin_user.primary_api_key,
-        :url     => "http://data.gov/updated"
-      }
+
+    context "#{role} API key : put /:id with protected param" do
+      before do
+        put "/#{@id}", {
+          :api_key    => primary_api_key_for(role),
+          :url        => "http://data.gov/updated",
+          :updated_at => Time.now.to_json
+        }
+      end
+
+      use "attempted PUT source with :id with protected param"
     end
-    
-    use "successful PUT source with :id"
+
+    context "#{role} API key : put /:id with invalid param" do
+      before do
+        put "/#{@id}", {
+          :api_key => primary_api_key_for(role),
+          :url     => "http://data.gov/updated",
+          :junk    => "This is an extra param (junk)"
+        }
+      end
+
+      use "attempted PUT source with :id with invalid param"
+    end
+
+    context "#{role} API key : put /:id with invalid url" do
+      before do
+        put "/#{@id}", {
+          :api_key => primary_api_key_for(role),
+          :url     => "https://secret.com/13"
+        }
+      end
+
+      use "attempted PUT source with :id with invalid url"
+    end
+
+    context "#{role} API key : put /:id without params" do
+      before do
+        put "/#{@id}", {
+          :api_key => primary_api_key_for(role),
+        }
+      end
+
+      use "attempted PUT source with :id without params"
+    end
+
+    context "#{role} API key : put /:id with correct param" do
+      before do
+        put "/#{@id}", {
+          :api_key => primary_api_key_for(role),
+          :url     => "http://data.gov/updated"
+        }
+      end
+
+      use "successful PUT source with :id"
+    end
   end
 
 end

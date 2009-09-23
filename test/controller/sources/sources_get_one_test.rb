@@ -42,37 +42,25 @@ class SourcesGetOneControllerTest < RequestTestCase
     
     use "return 401 because the API key is invalid"
   end
+  
+  %w(normal curator admin).each do |role|
+    context "#{role} API key : get /:fake_id" do
+      before do
+        get "/#{@fake_id}", :api_key => primary_api_key_for(role)
+      end
 
-  context "normal API key : get /:fake_id" do
-    before do
-      get "/#{@fake_id}", :api_key => @normal_user.primary_api_key
+      use "attempted GET source with :fake_id"
     end
-    
-    use "attempted GET source with :fake_id"
   end
 
-  context "admin API key : get /:fake_id" do
-    before do
-      get "/#{@fake_id}", :api_key => @admin_user.primary_api_key
-    end
-    
-    use "attempted GET source with :fake_id"
-  end
+  %w(normal curator admin).each do |role|
+    context "#{role} API key : get /:id" do
+      before do
+        get "/#{@id}", :api_key => primary_api_key_for(role)
+      end
 
-  context "normal API key : get /:id" do
-    before do
-      get "/#{@id}", :api_key => @normal_user.primary_api_key
+      use "successful GET source with :id"
     end
-    
-    use "successful GET source with :id"
-  end
-
-  context "admin API key : get /:id" do
-    before do
-      get "/#{@id}", :api_key => @admin_user.primary_api_key
-    end
-    
-    use "successful GET source with :id"
   end
 
 end

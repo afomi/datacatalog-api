@@ -52,25 +52,17 @@ class SourcesGetSearchControllerTest < RequestTestCase
     
       use "return 401 because the API key is invalid"
     end
-
-    context "normal API key : get / where url is source #3" do
-      before do
-        get "/",
-          :url     => "http://data.gov/sources/3",
-          :api_key => @normal_user.primary_api_key
-      end
     
-      use "successful GET of sources where url is source #3'"
-    end
+    %w(normal curator admin).each do |role|
+      context "#{role} API key : get / where url is source #3" do
+        before do
+          get "/",
+            :url     => "http://data.gov/sources/3",
+            :api_key => primary_api_key_for(role)
+        end
 
-    context "admin API key : get / where url is source #3" do
-      before do
-        get "/",
-          :url     => "http://data.gov/sources/3",
-          :api_key => @admin_user.primary_api_key
+        use "successful GET of sources where url is source #3'"
       end
-    
-      use "successful GET of sources where url is source #3'"
     end
   end
 
