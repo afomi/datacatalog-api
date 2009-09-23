@@ -1,16 +1,22 @@
 # About the National Data Catalog API
 
-The National Data Catalog stores metadata about data sets and APIs published by all levels and branches of the United States government. The API is designed to help software developers search for, identify, and work with U.S. government data sources.
+The National Data Catalog, a project of the [Sunlight Labs](http://sunlightlabs.com), stores metadata about data sets and APIs published by all levels and branches of the United States government. The API is designed to help software developers search for, identify, and work with U.S. government data sources.
 
-The National Data Catalog is powered by an ecosystem of Web-based applications. At the core of the the National Data Catalog is a RESTful API. This API powers a Web front-end, accessible at http://nationaldatacatalog.com, intended for developers and non-developers.
+The National Data Catalog consists of several pieces:
 
-The catalog is kept up-to-date with the help of our users, curators, and automatic importers. The importers are Web services that talk directly to the API that populate the National Data Catalog with information from other Web sites and services.
+* At the center is the API. (We say the center because the other services rely on it.)
+
+* The API powers the [National Data Catalog Web app](http://nationaldatacatalog.com), intended for use by the public (e.g. reporters, researchers, and so on -- not only software developers).
+
+* The catalog is kept up-to-date with the help of our users, curators, and automatic importers. The importers are Web services that talk directly to the API that populate the National Data Catalog with information from other Web sites and services.
+
+* The API is intended to be open-ended; we encourage the development of third-party applications and tools built around it.
 
 ## Getting Access
 
 Generally speaking, all API calls require an API key parameter (called api_key).
 
-To get an API key, please go to http://nationaldatacatalog.com. If you would like to be a curator or administrator, please contact us using the Contact Us form.
+To get an API key, please visit [nationaldatacatalog.com](http://nationaldatacatalog.com). If you would like to become a curator or administrator, please use the Contact Us form.
 
 ## JSON Based
 
@@ -21,7 +27,7 @@ The API speaks [JSON](http://json.org/). It does not speak XML or HTML.
 For getting started quickly, we recommend using [Firefox](http://getfirefox.com) with two add-ons:
 
 1. [JSONView](https://addons.mozilla.org/en-US/firefox/addon/10869) so that JSON renders in Firefox (instead of downloading a file)
-2. [REST Client]() so you can easily use the four [HTTP](http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol)  verbs from Firefox:  GET, POST, PUT, and DELETE.
+2. [REST Client](https://addons.mozilla.org/en-US/firefox/addon/9780) so you can easily use the four [HTTP](http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol)  verbs from Firefox:  GET, POST, PUT, and DELETE.
 
 To view general meta data about the API:
 
@@ -62,3 +68,14 @@ The National Data Catalog API is designed to be a Resource-Oriented Architecture
     * 503 Service Unavailable
 
 4. You can navigate the API by following links (hypermedia). This matches up with the fourth constraint of [REST's four interface constraints](http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm#sec_5_1_5) by [Roy Fielding](http://roy.gbiv.com/): "identification of resources; manipulation of resources through representations; self-descriptive messages; and, hypermedia as the engine of application state." Put another way, this is what [Joe Gregorio calls Hypertext Navigation](http://www.xml.com/pub/a/2005/04/06/restful.html) (as opposed to URI Construction). 
+
+## Join Our Community
+
+Here are some ways to get involved:
+
+* the [National Data Catalog Mailing List](http://groups.google.com/group/datacatalog)
+* the [National Data Catalog project page](http://sunlightlabs.com/projects/datacatalog/)
+* the [Sunlight Labs Mailing List](http://groups.google.com/group/sunlightlabs)
+* the [transparency chat room](irc://chat.freenode.net/transparency)
+
+You might also like to read our [inaugural blog post](http://www.sunlightlabs.com/blog/2009/kickoff-national-data-catalog/) about the project.
