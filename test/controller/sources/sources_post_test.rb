@@ -91,7 +91,35 @@ class SourcesPostControllerTest < RequestTestCase
     use "unchanged source count"
     use "return errors hash saying junk is invalid"
   end
+
+  # - - - - - - - - - -
+
+  context "curator API key : post / without title" do
+    before do
+      post "/", {
+        :api_key => @curator_user.primary_api_key,
+        :url     => "http://data.gov/original"
+      }
+    end
+    
+    use "return 400 Bad Request"
+    use "unchanged source count"
+    use "return errors hash saying title is missing"
+  end
   
+  context "admin API key : post / without title" do
+    before do
+      post "/", {
+        :api_key => @admin_user.primary_api_key,
+        :url     => "http://data.gov/original"
+      }
+    end
+
+    use "return 400 Bad Request"
+    use "unchanged source count"
+    use "return errors hash saying title is missing"
+  end
+    
   # - - - - - - - - - -
 
   context "curator API key : post / without url" do

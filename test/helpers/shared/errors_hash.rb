@@ -71,6 +71,14 @@ class RequestTestCase
       assert_include "key_type", parsed_response_body["errors"]["invalid_values_for_params"]
     end
   end
+
+  shared "return errors hash saying title is missing" do
+    test "body should say 'title' is missing" do
+      assert_include "errors", parsed_response_body
+      assert_include "title", parsed_response_body["errors"]
+      assert_include "can't be empty", parsed_response_body["errors"]["title"]
+    end
+  end
   
   shared "return errors hash saying url is missing" do
     test "body should say 'url' is missing" do
