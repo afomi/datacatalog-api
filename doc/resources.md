@@ -1,39 +1,16 @@
-# National Data Catalog API
+# National Data Catalog API Resources
 
-The National Data Catalog stores metadata about data sets and APIs published by all leves of government. It helps developers search for, identify, and work with data sources that would otherwise take significant effort to track down.
+This document contains a list of resources made available by the National Data Catalog API.
 
-Currently, the National Data Catalog consists of a web front-end that is powered by an API back-end.
-
-## Accessing the API
-
-The API is RESTful and speaks JSON. It will throw appropriate HTTP status codes on errors, along with a helpful error message passed as a JSON object.
-
-All calls regarding Users and Sources must include an API Key as a parameter.
-User accounts can be registered on the National Data Catalog website and curator/admin access can be granted via the Contact Us form.
-
-To view general information:
-
-    http://sandbox.nationaldatacatalog.com/
-    
-To view available resources for an anonymous user:
-
-    http://sandbox.nationaldatacatalog.com/resources
-    
-To view available resources for a keyed user:
-
-    http://sandbox.nationaldatacatalog.com/resources?api_key=YOURAPIKEY
-
-To view status of a user via her API key:
-
-    http://sandbox.nationaldatacatalog.com/checkup?api_key=YOURAPIKEY
-    
 ## User
 
-The `User` resource represents a user account, which comes with an API key and the ability to request more API keys. In addition to anonymous users, there are three types of keyed users:
+The `User` resource represents a user account. A user account starts off with a primary API key. Using this key, you can request more API keys.
 
-1. **Plain user** - Has read access to data sources and other users. Has full access to own user profile.
-2. **Curator** - Has full access to data sources and own user profile. Has read access to other users.
-3. **Admin** - Has full access to data sources and all users.
+There are three types of users:
+
+1. **basic** - Has read access to data sources and other users. Has full access to own user profile.
+2. **curator** - Has full access to data sources and own user profile. Has read access to other users.
+3. **admin** - Has full access to data sources and all users.
 
 ### Schema for User
 
@@ -57,7 +34,7 @@ The `User` resource represents a user account, which comes with an API key and t
 
 According to the access rules described above, the `User` resource responds to standard CRUD operations.
 
-*Note*: All calls assume an added `api_key=YOURAPIKEY` as a parameter.
+*Note*: All calls assume an added `api_key=MY_API_KEY` as a parameter.
 
 Get all users:
 
@@ -69,7 +46,7 @@ Get all users named John:
 
 Get one user:
 
-    GET http://sandbox.nationaldatacatalog.com/users/SOMEUSERID
+    GET http://sandbox.nationaldatacatalog.com/users/USER_ID
     
 Create a new user:
 
@@ -77,11 +54,11 @@ Create a new user:
 
 Update an existing user:
 
-    PUT http://sandbox.nationaldatacatalog.com/users/SOMEUSERID
+    PUT http://sandbox.nationaldatacatalog.com/users/USER_ID
     
 Delete an existing user:
 
-    DELETE http://sandbox.nationaldatacatalog.com/users/SOMEUSERID
+    DELETE http://sandbox.nationaldatacatalog.com/users/USER_ID
     
 ## ApiKey
 
@@ -109,27 +86,27 @@ There are three types of API Keys:
 
 A user can perform CRUD on her own keys, as can an admin user. `Keys` are nested underneath the `User` resource.
 
-*Note*: All calls assume an added `api_key=YOURAPIKEY` as a parameter.
+*Note*: All calls assume an added `api_key=MY_API_KEY` as a parameter.
 
 Get a user's API keys:
 
-    GET http://sandbox.nationaldatacatalog.com/users/SOMEUSERID/keys
+    GET http://sandbox.nationaldatacatalog.com/users/USER_ID/keys
 
 Get one API key:
 
-    GET http://sandbox.nationaldatacatalog.com/users/SOMEUSERID/keys/SOMEKEYID
+    GET http://sandbox.nationaldatacatalog.com/users/USER_ID/keys/KEY_ID
     
 Create a new key:
 
-    POST http://sandbox.nationaldatacatalog.com/users/SOMEUSERID/keys
+    POST http://sandbox.nationaldatacatalog.com/users/USER_ID/keys
 
 Update an existing key:
 
-    PUT http://sandbox.nationaldatacatalog.com/users/SOMEUSERID/keys/SOMEKEYID
+    PUT http://sandbox.nationaldatacatalog.com/users/USER_ID/keys/KEY_ID
     
 Delete an existing key:
 
-    DELETE http://sandbox.nationaldatacatalog.com/users/SOMEUSERID/keys/SOMEKEYID
+    DELETE http://sandbox.nationaldatacatalog.com/users/USER_ID/keys/KEY_ID
     
 ## Source
 
@@ -159,7 +136,7 @@ Data sources are the primary feature of the National Data Catalog. They are repr
 
 A normal user can read sources, while curators and admins can perform full CRUD on sources.
 
-*Note*: All calls assume an added `api_key=YOURAPIKEY` as a parameter.
+*Note*: All calls assume an added `api_key=MY_API_KEY` as a parameter.
 
 Get all sources:
 
@@ -167,7 +144,7 @@ Get all sources:
 
 Get one source:
 
-    GET http://sandbox.nationaldatacatalog.com/sources/SOMESOURCEID
+    GET http://sandbox.nationaldatacatalog.com/sources/SOURCE_ID
     
 Create a new source:
 
@@ -175,11 +152,11 @@ Create a new source:
 
 Update an existing source:
 
-    PUT http://sandbox.nationaldatacatalog.com/sources/SOMESOURCEID
+    PUT http://sandbox.nationaldatacatalog.com/sources/SOURCE_ID
     
 Delete an existing source:
 
-    DELETE http://sandbox.nationaldatacatalog.com/sources/SOMESOURCEID
+    DELETE http://sandbox.nationaldatacatalog.com/sources/SOURCE_ID
     
 ## Coming Soon...
 

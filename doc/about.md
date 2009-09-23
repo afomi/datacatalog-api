@@ -1,0 +1,64 @@
+# About the National Data Catalog API
+
+The National Data Catalog stores metadata about data sets and APIs published by all levels and branches of the United States government. The API is designed to help software developers search for, identify, and work with U.S. government data sources.
+
+The National Data Catalog is powered by an ecosystem of Web-based applications. At the core of the the National Data Catalog is a RESTful API. This API powers a Web front-end, accessible at http://nationaldatacatalog.com, intended for developers and non-developers.
+
+The catalog is kept up-to-date with the help of our users, curators, and automatic importers. The importers are Web services that talk directly to the API that populate the National Data Catalog with information from other Web sites and services.
+
+## Getting Access
+
+Generally speaking, all API calls require an API key parameter (called api_key).
+
+To get an API key, please go to http://nationaldatacatalog.com. If you would like to be a curator or administrator, please contact us using the Contact Us form.
+
+## JSON Based
+
+The API speaks [JSON](http://json.org/). It does not speak XML or HTML.
+
+## Exploring with a Web Browser
+
+For getting started quickly, we recommend using [Firefox](http://getfirefox.com) with two add-ons:
+
+1. [JSONView](https://addons.mozilla.org/en-US/firefox/addon/10869) so that JSON renders in Firefox (instead of downloading a file)
+2. [REST Client]() so you can easily use the four [HTTP](http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol)  verbs from Firefox:  GET, POST, PUT, and DELETE.
+
+To view general meta data about the API:
+
+    GET http://sandbox.nationaldatacatalog.com/
+    
+To view available resources for anonymous access:
+
+    GET http://sandbox.nationaldatacatalog.com/resources
+
+To view available resources accessible via a particular API key:
+
+    GET http://sandbox.nationaldatacatalog.com/resources?api_key=MY_API_KEY
+
+To view status of an API key, including the associated user ID:
+
+    GET http://sandbox.nationaldatacatalog.com/checkup?api_key=MY_API_KEY
+
+## API Design Principles
+
+The National Data Catalog API is designed to be a Resource-Oriented Architecture (ROA), as explained by [Leonard Richardson](http://www.crummy.com/) and [Sam Ruby](http://intertwingly.net/) in [RESTful Web Services](http://oreilly.com/catalog/9780596529260). This means that the API is (1) organized around resources, (2) accessible using a uniform interface
+(3) careful to return correct HTTP status codes, and (4) interconnected with hyperlinks:
+
+1. Each resource is named with one or more [URI](http://en.wikipedia.org/wiki/Uniform_Resource_Identifier)s.
+
+2. The uniform interface defines [CRUD](http://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations on each resource using four HTTP verbs: GET, POST, PUT, and DELETE.
+
+3. A good list of HTTP status codes can be found in [several](http://en.wikipedia.org/wiki/List_of_HTTP_status_codes) [places](http://www.w3.org/Protocols/HTTP/HTRESP.html). For the purpose of this API, the most relevant status codes are:
+
+    * 200 OK
+    * 201 Created
+    * 301 Moved Permanently
+    * 303 See Other
+    * 400 Bad Request
+    * 401 Unauthorized
+    * 403 Forbidden
+    * 404 Not Found
+    * 500 Internal Server Error
+    * 503 Service Unavailable
+
+4. You can navigate the API by following links (hypermedia). This matches up with the fourth constraint of [REST's four interface constraints](http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm#sec_5_1_5) by [Roy Fielding](http://roy.gbiv.com/): "identification of resources; manipulation of resources through representations; self-descriptive messages; and, hypermedia as the engine of application state." Put another way, this is what [Joe Gregorio calls Hypertext Navigation](http://www.xml.com/pub/a/2005/04/06/restful.html) (as opposed to URI Construction). 
