@@ -23,21 +23,9 @@ class Source
   validates_presence_of :title
   validates_presence_of :url
   validate :validate_url
+  include UrlValidator
   validate :validate_period
   validate :validate_frequency
-
-  def validate_url
-    return unless url
-    uri = URI.parse(url)
-    unless uri.absolute?
-      errors.add(:url, "URI must be absolute")
-    end
-    unless %w(http ftp).include?(uri.scheme)
-      errors.add(:url, "URI scheme must be http or ftp")
-    end
-  rescue URI::InvalidURIError => e
-    errors.add(:url, "Invalid URI: #{e})")
-  end
   
   def validate_period
     return if !period_start && !period_end

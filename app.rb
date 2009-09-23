@@ -10,6 +10,7 @@ Sinatra::Base.set(:config, Config.environment_config)
 Config.setup
 
 require_dir 'lib'
+require_dir 'model_helpers'
 require_dir 'models'
 require_dir 'observers'
 require_dir 'controllers'
