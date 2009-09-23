@@ -1,5 +1,13 @@
 # About the National Data Catalog API
 
+## Pre-Release Note
+
+The National Data Catalog has not yet been launched. We plan on an early October 2009 release for both the Web App and the API.
+
+Please consider this to be early-stage documentation. We are releasing it now (in rough form) to help internal development and to solicit feedback from our community.
+
+## Overview
+
 The National Data Catalog, a project of the [Sunlight Labs](http://sunlightlabs.com), stores metadata about data sets and APIs published by all levels and branches of the United States government. The API is designed to help software developers search for, identify, and work with U.S. government data sources.
 
 The National Data Catalog consists of several pieces:
@@ -16,7 +24,7 @@ The National Data Catalog consists of several pieces:
 
 Generally speaking, all API calls require an API key parameter (called api_key).
 
-To get an API key, please visit [nationaldatacatalog.com](http://nationaldatacatalog.com). If you would like to become a curator or administrator, please use the Contact Us form.
+When we launch the National Data Catalog Web App, you will be able to get an API key by visiting [nationaldatacatalog.com](http://nationaldatacatalog.com).
 
 ## JSON Based
 
