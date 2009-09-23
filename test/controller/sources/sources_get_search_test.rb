@@ -43,7 +43,7 @@ class SourcesGetSearchControllerTest < RequestTestCase
       use "return 401 because the API key is missing"
     end
 
-    context "missing API key : get / where url is source #3" do
+    context "invalid API key : get / where url is source #3" do
       before do
         get "/",
           :url     => "http://data.gov/sources/3",
