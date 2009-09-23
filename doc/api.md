@@ -50,8 +50,8 @@ The `User` resource represents a user account, which comes with an API key and t
     primary_api_key*        String         Convenience method
     application_api_keys*   String         Convenience method
     valet_api_keys*         String         Convenience method
-    created_at              Timestamp      
-    updated_at              Timestamp      Last updated
+    created_at*             Time           Automatic timestamp on creation
+    updated_at*             Time           Automatic timestamp on update
 
 ### API Calls for User
 
@@ -102,8 +102,8 @@ There are three types of API Keys:
     api_key                 String         Unique key to be used
     key_type+               String         Must be "application" or "valet".
     purpose+                String         User-supplied description of key's use
-    created_at              Timestamp      
-    updated_at              Timestamp      Last updated
+    created_at*             Time           Automatic timestamp on creation
+    updated_at*             Time           Automatic timestamp on update
     
 ### API Calls for ApiKey
 
@@ -152,8 +152,8 @@ Data sources are the primary feature of the National Data Catalog. They are repr
     ratings                 Array          Embedded collection of Ratings objects
     ratings_total*          Integer        Total rating, convenience method
     ratings_count*          Integer        Number of ratings, convenience method
-    created_at              Timestamp      
-    updated_at              Timestamp      Last updated
+    created_at*             Time           Automatic timestamp on creation
+    updated_at*             Time           Automatic timestamp on update
 
 ### API Calls for Source
 
