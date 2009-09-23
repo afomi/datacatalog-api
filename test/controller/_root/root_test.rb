@@ -24,10 +24,6 @@ class RootControllerTest < RequestTestCase
       assert_equal "National Data Catalog API", parsed_response_body["name"]
     end
     
-    test "body has correct creator" do
-      assert_equal "The Sunlight Labs", parsed_response_body["creator"]
-    end
-    
     test "body has correct version" do
       assert_equal "0.20", parsed_response_body["version"]
     end
@@ -40,44 +36,49 @@ class RootControllerTest < RequestTestCase
     
     test "body contains only the expected keys" do
       assert_equal [], parsed_response_body.keys - %w(
-        name
         creator
-        version
+        documentation
+        name
+        project_page
         resource_directory
+        source_code
+        version
       )
     end
   end
+  
+  context_ "get /" do
+    context "anonymous" do
+      before :all do
+        get '/'
+      end
 
-  context "anonymous : get /" do
-    before :all do
-      get '/'
+      use "return api level metadata"
     end
-  
-    use "return api level metadata"
-  end
-  
-  context "incorrect API key : get /" do
-    before :all do
-      get '/', :api_key => "does_not_exist_in_database"
-    end
-    
-    use "return 401 because the API key is invalid"
-  end
 
-  context "normal API key : get /" do
-    before :all do
-      get '/', :api_key => @normal_user.primary_api_key
+    context "incorrect API key" do
+      before :all do
+        get '/', :api_key => "does_not_exist_in_database"
+      end
+
+      use "return 401 because the API key is invalid"
     end
-    
-    use "return api level metadata"
-  end
-  
-  context "admin API key : get /" do
-    before :all do
-      get '/', :api_key => @admin_user.primary_api_key
+
+    context "normal API key" do
+      before :all do
+        get '/', :api_key => @normal_user.primary_api_key
+      end
+
+      use "return api level metadata"
     end
-    
-    use "return api level metadata"
+
+    context "admin API key" do
+      before :all do
+        get '/', :api_key => @admin_user.primary_api_key
+      end
+
+      use "return api level metadata"
+    end
   end
 
 end
