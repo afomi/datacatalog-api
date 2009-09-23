@@ -62,6 +62,21 @@ class SourcesPostControllerTest < RequestTestCase
   
   # - - - - - - - - - -
 
+  context "curator API key : post / with protected param" do
+    before do
+      post "/", {
+        :api_key    => @curator_user.primary_api_key,
+        :title      => "Just a data source",
+        :url        => "http://data.gov/original",
+        :updated_at => Time.now.to_json
+      }
+    end
+  
+    use "return 400 Bad Request"
+    use "unchanged source count"
+    use "return errors hash saying updated_at is invalid"
+  end
+
   context "admin API key : post / with protected param" do
     before do
       post "/", {
@@ -76,7 +91,24 @@ class SourcesPostControllerTest < RequestTestCase
     use "unchanged source count"
     use "return errors hash saying updated_at is invalid"
   end
+
+  # - - - - - - - - - -
+
+  context "curator API key : post / with invalid param" do
+    before do
+      post "/", {
+        :api_key => @curator_user.primary_api_key,
+        :title   => "Just a data source",
+        :url     => "http://data.gov/original",
+        :junk    => "This is an extra param (junk)"
+      }
+    end
   
+    use "return 400 Bad Request"
+    use "unchanged source count"
+    use "return errors hash saying junk is invalid"
+  end  
+
   context "admin API key : post / with invalid param" do
     before do
       post "/", {
