@@ -13,8 +13,6 @@ class SourcesGetOneControllerTest < RequestTestCase
     @fake_id = get_fake_mongo_object_id
   end
 
-  # - - - - - - - - - -
-
   shared "attempted GET source with :fake_id" do
     use "return 404 Not Found"
     use "return an empty response body"
@@ -28,8 +26,6 @@ class SourcesGetOneControllerTest < RequestTestCase
       assert_equal "http://data.gov/original", parsed_response_body["url"]
     end
   end
-
-  # - - - - - - - - - -
 
   context "anonymous : get /:id" do
     before do
@@ -47,8 +43,6 @@ class SourcesGetOneControllerTest < RequestTestCase
     use "return 401 because the API key is invalid"
   end
 
-  # - - - - - - - - - -
-
   context "normal API key : get /:fake_id" do
     before do
       get "/#{@fake_id}", :api_key => @normal_user.primary_api_key
@@ -65,8 +59,6 @@ class SourcesGetOneControllerTest < RequestTestCase
     use "attempted GET source with :fake_id"
   end
 
-  # - - - - - - - - - -
-  
   context "normal API key : get /:id" do
     before do
       get "/#{@id}", :api_key => @normal_user.primary_api_key

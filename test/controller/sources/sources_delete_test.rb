@@ -14,8 +14,6 @@ class SourcesDeleteControllerTest < RequestTestCase
     @fake_id = get_fake_mongo_object_id
   end
 
-  # - - - - - - - - - -
-
   shared "attempted DELETE source with :fake_id" do
     use "return 404 Not Found"
     use "return an empty response body"
@@ -46,8 +44,6 @@ class SourcesDeleteControllerTest < RequestTestCase
     end
   end
 
-  # - - - - - - - - - -
-
   context "anonymous : delete /" do
     before do
       delete "/#{@id}"
@@ -75,7 +71,6 @@ class SourcesDeleteControllerTest < RequestTestCase
     use "unchanged source count"
   end
 
-  # - - - - - - - - - -
 
   context "curator API key : delete /:fake_id" do
     before do
@@ -93,8 +88,6 @@ class SourcesDeleteControllerTest < RequestTestCase
     use "attempted DELETE source with :fake_id"
   end
 
-  # - - - - - - - - - -
-
   context "curator API key : delete /:id" do
     before do
       delete "/#{@id}", :api_key => @curator_user.primary_api_key
@@ -110,8 +103,6 @@ class SourcesDeleteControllerTest < RequestTestCase
     
     use "successful DELETE source with :id"
   end
-
-  # - - - - - - - - - -
 
   context "admin API key : double delete /users" do
     before do

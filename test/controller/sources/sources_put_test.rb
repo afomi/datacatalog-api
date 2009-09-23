@@ -14,8 +14,6 @@ class SourcesPutControllerTest < RequestTestCase
     @source_count = Source.count
   end
 
-  # - - - - - - - - - -
-
   shared "unchanged source text in database" do
     test "url should be unchanged in database" do
       assert_equal "http://data.gov/original", @source.url
@@ -87,8 +85,6 @@ class SourcesPutControllerTest < RequestTestCase
     end
   end
 
-  # - - - - - - - - - -
-
   context "anonymous : put /:id" do
     before do
       put "/#{@id}"
@@ -116,8 +112,6 @@ class SourcesPutControllerTest < RequestTestCase
     use "unchanged source count"
   end
   
-  # - - - - - - - - - -
-
   context "anonymous : put /:fake_id" do
     before do
       put "/#{@fake_id}"
@@ -145,8 +139,6 @@ class SourcesPutControllerTest < RequestTestCase
     use "unchanged source count"
   end
   
-  # - - - - - - - - - -
-  
   context "curator API key : put /:fake_id with protected param" do
     before do
       put "/#{@fake_id}", {
@@ -170,8 +162,6 @@ class SourcesPutControllerTest < RequestTestCase
   
     use "attempted PUT source with :fake_id with protected param"
   end
-  
-  # - - - - - - - - - -
   
   context "curator API key : put /:fake_id with invalid param" do
     before do
@@ -197,8 +187,6 @@ class SourcesPutControllerTest < RequestTestCase
     use "attempted PUT source with :fake_id with invalid param"
   end
   
-  # - - - - - - - - - -
-  
   context "curator API key : put /:fake_id with correct params" do
     before do
       put "/#{@fake_id}", {
@@ -220,8 +208,6 @@ class SourcesPutControllerTest < RequestTestCase
   
     use "attempted PUT source with :fake_id with correct params"
   end
-  
-  # - - - - - - - - - -
   
   context "curator API key : put /:id with protected param" do
     before do
@@ -247,8 +233,6 @@ class SourcesPutControllerTest < RequestTestCase
     use "attempted PUT source with :id with protected param"
   end
   
-  # - - - - - - - - - -
-  
   context "curator API key : put /:id with invalid param" do
     before do
       put "/#{@id}", {
@@ -273,8 +257,6 @@ class SourcesPutControllerTest < RequestTestCase
     use "attempted PUT source with :id with invalid param"
   end
   
-  # - - - - - - - - - -
-  
   context "curator API key : put /:id with invalid url" do
     before do
       put "/#{@id}", {
@@ -297,8 +279,6 @@ class SourcesPutControllerTest < RequestTestCase
     use "attempted PUT source with :id with invalid url"
   end
   
-  # - - - - - - - - - -
-  
   context "curator API key : put /:id without params" do
     before do
       put "/#{@id}", {
@@ -318,8 +298,6 @@ class SourcesPutControllerTest < RequestTestCase
   
     use "attempted PUT source with :id without params"
   end
-
-  # - - - - - - - - - -
 
   context "curator API key : put /:id with correct param" do
     before do

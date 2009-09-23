@@ -24,8 +24,6 @@ class SourcesGetSearchControllerTest < RequestTestCase
     end
   end
 
-  # - - - - - - - - - -
-
   context_ "3 sources" do
     before do
       3.times do |n|
@@ -35,8 +33,6 @@ class SourcesGetSearchControllerTest < RequestTestCase
         ).valid?
       end
     end
-
-    # - - - - - - - - - -
 
     context "anonymous : get / where url is source #3" do
       before do
@@ -56,8 +52,6 @@ class SourcesGetSearchControllerTest < RequestTestCase
     
       use "return 401 because the API key is invalid"
     end
-
-    # - - - - - - - - - -
 
     context "normal API key : get / where url is source #3" do
       before do

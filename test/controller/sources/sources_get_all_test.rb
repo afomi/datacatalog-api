@@ -4,8 +4,6 @@ class SourcesGetAllControllerTest < RequestTestCase
 
   def app; DataCatalog::Sources end
 
-  # - - - - - - - - - -
-  
   shared "successful GET of 0 sources" do
     use "return 200 Ok"
     use "return an empty response body"
@@ -31,8 +29,6 @@ class SourcesGetAllControllerTest < RequestTestCase
     end
   end
   
-  # - - - - - - - - - -
-  
   context "anonymous : get /" do
     before do
       get "/"
@@ -48,8 +44,6 @@ class SourcesGetAllControllerTest < RequestTestCase
     
     use "return 401 because the API key is invalid"
   end
-
-  # - - - - - - - - - -
 
   context_ "0 sources" do
     context "normal API key : get /" do
@@ -68,8 +62,6 @@ class SourcesGetAllControllerTest < RequestTestCase
       use "successful GET of 0 sources"
     end
   end
-
-  # - - - - - - - - - -
 
   context_ "3 sources" do
     before do

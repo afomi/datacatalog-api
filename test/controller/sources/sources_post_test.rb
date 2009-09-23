@@ -8,8 +8,6 @@ class SourcesPostControllerTest < RequestTestCase
     @source_count = Source.count
   end
 
-  # - - - - - - - - - -
-
   shared "successful POST to sources" do
     use "return 201 Created"
     use "return timestamps and id in body" 
@@ -30,8 +28,6 @@ class SourcesPostControllerTest < RequestTestCase
       assert_equal "http://data.gov/original", source.url
     end
   end
-  
-  # - - - - - - - - - -
 
   context "anonymous : post /" do
     before do
