@@ -16,8 +16,8 @@ class OrganizationsGetAllControllerTest < RequestTestCase
       assert_equal 3, parsed_response_body.length
     end
     
-    test "body should have correct text" do
-      actual = (0 ... 3).map { |n| parsed_response_body[n]["text"] }
+    test "body should have correct name" do
+      actual = (0 ... 3).map { |n| parsed_response_body[n]["name"] }
       3.times { |n| assert_include "Organization #{n}", actual }
     end
     
@@ -78,7 +78,7 @@ class OrganizationsGetAllControllerTest < RequestTestCase
     before do
       3.times do |n|
         Organization.create(
-          :text      => "Organization #{n}",
+          :name      => "Organization #{n}",
           :user_id   => get_fake_mongo_object_id,
           :source_id => get_fake_mongo_object_id
         )

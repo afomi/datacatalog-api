@@ -6,7 +6,7 @@ class OrganizationsGetOneControllerTest < RequestTestCase
 
   before do
     organization = Organization.create(
-      :text      => "Organization A",
+      :name      => "Organization A",
       :user_id   => get_fake_mongo_object_id,
       :source_id => get_fake_mongo_object_id
     )
@@ -25,8 +25,8 @@ class OrganizationsGetOneControllerTest < RequestTestCase
     use "return 200 Ok"
     use "return timestamps and id in body"
   
-    test "body should have correct text" do
-      assert_equal "Organization A", parsed_response_body["text"]
+    test "body should have correct name" do
+      assert_equal "Organization A", parsed_response_body["name"]
     end
 
     test "body should have source_id" do

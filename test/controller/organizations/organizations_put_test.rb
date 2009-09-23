@@ -6,7 +6,7 @@ class OrganizationsPutControllerTest < RequestTestCase
 
   before :all do
     @organization = Organization.create({
-      :text => "Original Organization"
+      :name => "Original Organization"
     })
     @id = @organization.id
     @fake_id = get_fake_mongo_object_id
@@ -15,9 +15,9 @@ class OrganizationsPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  shared "unchanged organization text in database" do
-    test "text should be unchanged in database" do
-      assert_equal "Original Organization", @organization.text
+  shared "unchanged organization name in database" do
+    test "name should be unchanged in database" do
+      assert_equal "Original Organization", @organization.name
     end
   end
 
@@ -25,34 +25,34 @@ class OrganizationsPutControllerTest < RequestTestCase
     use "return 404 Not Found"
     use "return an empty response body"
     use "unchanged organization count"
-    use "unchanged organization text in database"
+    use "unchanged organization name in database"
   end
 
   shared "attempted PUT organization with :fake_id with invalid param" do
     use "return 404 Not Found"
     use "return an empty response body"
     use "unchanged organization count"
-    use "unchanged organization text in database"
+    use "unchanged organization name in database"
   end
 
   shared "attempted PUT organization with :fake_id with correct params" do
     use "return 404 Not Found"
     use "return an empty response body"
     use "unchanged organization count"
-    use "unchanged organization text in database"
+    use "unchanged organization name in database"
   end
 
   shared "attempted PUT organization with :id with protected param" do
     use "return 400 Bad Request"
     use "unchanged organization count"
-    use "unchanged organization text in database"
+    use "unchanged organization name in database"
     use "return errors hash saying updated_at is invalid"
   end
 
   shared "attempted PUT organization with :id with invalid param" do
     use "return 400 Bad Request"
     use "unchanged organization count"
-    use "unchanged organization text in database"
+    use "unchanged organization name in database"
     use "return errors hash saying junk is invalid"
   end
 
@@ -64,7 +64,7 @@ class OrganizationsPutControllerTest < RequestTestCase
       assert_include "no_params_to_save", parsed_response_body["errors"]
     end
   
-    test "return help_text saying params are needed" do
+    test "return help_name saying params are needed" do
       assert_include "cannot save without parameters", parsed_response_body["help_text"]
     end
   end
@@ -74,9 +74,9 @@ class OrganizationsPutControllerTest < RequestTestCase
     use "return timestamps and id in body"
     use "unchanged organization count"
 
-    test "text should be updated in database" do
+    test "name should be updated in database" do
       organization = Organization.find_by_id(@id)
-      assert_equal "New Organization", organization.text
+      assert_equal "New Organization", organization.name
     end
   end
 
@@ -144,7 +144,7 @@ class OrganizationsPutControllerTest < RequestTestCase
     before do
       put "/#{@fake_id}", {
         :api_key    => @curator_user.primary_api_key,
-        :text       => "New Organization",
+        :name       => "New Organization",
         :created_at => Time.now.to_json
       }
     end
@@ -156,7 +156,7 @@ class OrganizationsPutControllerTest < RequestTestCase
     before do
       put "/#{@fake_id}", {
         :api_key    => @admin_user.primary_api_key,
-        :text       => "New Organization",
+        :name       => "New Organization",
         :created_at => Time.now.to_json
       }
     end
@@ -170,7 +170,7 @@ class OrganizationsPutControllerTest < RequestTestCase
     before do
       put "/#{@fake_id}", {
         :api_key => @curator_user.primary_api_key,
-        :text    => "New Organization",
+        :name    => "New Organization",
         :junk    => "This is an extra param (junk)"
       }
     end
@@ -182,7 +182,7 @@ class OrganizationsPutControllerTest < RequestTestCase
     before do
       put "/#{@fake_id}", {
         :api_key => @admin_user.primary_api_key,
-        :text    => "New Organization",
+        :name    => "New Organization",
         :junk    => "This is an extra param (junk)"
       }
     end
@@ -196,7 +196,7 @@ class OrganizationsPutControllerTest < RequestTestCase
     before do
       put "/#{@fake_id}", {
         :api_key => @curator_user.primary_api_key,
-        :text    => "New Organization"
+        :name    => "New Organization"
       }
     end
     
@@ -207,7 +207,7 @@ class OrganizationsPutControllerTest < RequestTestCase
     before do
       put "/#{@fake_id}", {
         :api_key => @admin_user.primary_api_key,
-        :text    => "New Organization"
+        :name    => "New Organization"
       }
     end
   
@@ -220,7 +220,7 @@ class OrganizationsPutControllerTest < RequestTestCase
     before do
       put "/#{@id}", {
         :api_key    => @curator_user.primary_api_key,
-        :text       => "New Organization",
+        :name       => "New Organization",
         :updated_at => Time.now.to_json
       }
     end
@@ -232,7 +232,7 @@ class OrganizationsPutControllerTest < RequestTestCase
     before do
       put "/#{@id}", {
         :api_key    => @admin_user.primary_api_key,
-        :text       => "New Organization",
+        :name       => "New Organization",
         :updated_at => Time.now.to_json
       }
     end
@@ -246,7 +246,7 @@ class OrganizationsPutControllerTest < RequestTestCase
     before do
       put "/#{@id}", {
         :api_key => @curator_user.primary_api_key,
-        :text    => "New Organization",
+        :name    => "New Organization",
         :junk    => "This is an extra param (junk)"
       }
     end
@@ -258,7 +258,7 @@ class OrganizationsPutControllerTest < RequestTestCase
     before do
       put "/#{@id}", {
         :api_key => @admin_user.primary_api_key,
-        :text    => "New Organization",
+        :name    => "New Organization",
         :junk    => "This is an extra param (junk)"
       }
     end
@@ -294,7 +294,7 @@ class OrganizationsPutControllerTest < RequestTestCase
     before do
       put "/#{@id}", {
         :api_key => @curator_user.primary_api_key,
-        :text    => "New Organization"
+        :name    => "New Organization"
       }
     end
     
@@ -305,7 +305,7 @@ class OrganizationsPutControllerTest < RequestTestCase
     before do
       put "/#{@id}", {
         :api_key => @admin_user.primary_api_key,
-        :text    => "New Organization"
+        :name    => "New Organization"
       }
     end
     

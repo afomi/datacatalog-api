@@ -21,13 +21,13 @@ class OrganizationsPostControllerTest < RequestTestCase
       assert_equal new_uri, last_response.headers["Location"]
     end
     
-    test "body should have correct text" do
-      assert_equal "Organization A", parsed_response_body["text"]
+    test "body should have correct name" do
+      assert_equal "Organization A", parsed_response_body["name"]
     end
     
-    test "text should be correct in database" do
+    test "name should be correct in database" do
       organization = Organization.find_by_id(parsed_response_body["id"])
-      assert_equal "Organization A", organization.text
+      assert_equal "Organization A", organization.name
     end
   end
   
@@ -66,7 +66,7 @@ class OrganizationsPostControllerTest < RequestTestCase
     before do
       post "/", {
         :api_key    => @admin_user.primary_api_key,
-        :text       => "Organization A",
+        :name       => "Organization A",
         :updated_at => Time.now.to_json
       }
     end
@@ -80,7 +80,7 @@ class OrganizationsPostControllerTest < RequestTestCase
     before do
       post "/", {
         :api_key => @admin_user.primary_api_key,
-        :text    => "Organization A",
+        :name    => "Organization A",
         :junk    => "This is an extra param (junk)"
       }
     end
@@ -96,7 +96,7 @@ class OrganizationsPostControllerTest < RequestTestCase
     before do
       post "/", {
         :api_key => @curator_user.primary_api_key,
-        :text    => "Organization A",
+        :name    => "Organization A",
       }
     end
     
@@ -107,7 +107,7 @@ class OrganizationsPostControllerTest < RequestTestCase
     before do
       post "/", {
         :api_key => @admin_user.primary_api_key,
-        :text    => "Organization A",
+        :name    => "Organization A",
       }
     end
 

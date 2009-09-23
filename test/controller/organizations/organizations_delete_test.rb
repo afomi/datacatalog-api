@@ -5,7 +5,7 @@ class OrganizationsDeleteControllerTest < RequestTestCase
   def app; DataCatalog::Organizations end
 
   before do
-    organization = Organization.create(:text => "Original Organization")
+    organization = Organization.create(:name => "Original Organization")
     @id = organization.id
     @organization_count = Organization.count
     @fake_id = get_fake_mongo_object_id

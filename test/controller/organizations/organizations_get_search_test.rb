@@ -11,14 +11,14 @@ class OrganizationsGetSearchControllerTest < RequestTestCase
     assert_not_include "_id", element
   end
   
-  shared "successful GET of organizations where text is 'organization 3'" do
+  shared "successful GET of organizations where name is 'organization 3'" do
     test "body should have 2 top level elements" do
       assert_equal 2, parsed_response_body.length
     end
 
     test "each element should be correct" do
       parsed_response_body.each do |element|
-        assert_equal "organization 3", element["text"]
+        assert_equal "organization 3", element["name"]
         assert_equal @user_id, element["user_id"]
         assert_equal "#{@source_base}3", element["source_id"]
         assert_equal "#{@previous_base}3", element["previous_id"]
@@ -37,7 +37,7 @@ class OrganizationsGetSearchControllerTest < RequestTestCase
       6.times do |n|
         k = (n % 3) + 1
         assert Organization.create(
-          :text           => "organization #{k}",
+          :name           => "organization #{k}",
           :user_id        => @user_id,
           :source_id      => "#{@source_base}#{k}",
           :previous_id    => "#{@previous_base}#{k}",
@@ -48,19 +48,19 @@ class OrganizationsGetSearchControllerTest < RequestTestCase
 
     # - - - - - - - - - -
 
-    context "anonymous : get / where text is 'organization 3'" do
+    context "anonymous : get / where name is 'organization 3'" do
       before do
         get "/",
-          :text    => "organization 3"
+          :name    => "organization 3"
       end
     
       use "return 401 because the API key is missing"
     end
     
-    context "incorrect API key : get / where text is 'organization 3'" do
+    context "incorrect API key : get / where name is 'organization 3'" do
       before do
         get "/",
-          :text    => "organization 3",
+          :name    => "organization 3",
           :api_key => "does_not_exist_in_database"
       end
     
@@ -69,24 +69,24 @@ class OrganizationsGetSearchControllerTest < RequestTestCase
 
     # - - - - - - - - - -
 
-    context "normal API key : get / where text is 'organization 3'" do
+    context "normal API key : get / where name is 'organization 3'" do
       before do
         get "/",
-          :text    => "organization 3",
+          :name    => "organization 3",
           :api_key => @normal_user.primary_api_key
       end
     
-      use "successful GET of organizations where text is 'organization 3'"
+      use "successful GET of organizations where name is 'organization 3'"
     end
 
-    context "admin API key : get / where text is 'organization 3'" do
+    context "admin API key : get / where name is 'organization 3'" do
       before do
         get "/",
-          :text    => "organization 3",
+          :name    => "organization 3",
           :api_key => @admin_user.primary_api_key
       end
     
-      use "successful GET of organizations where text is 'organization 3'"
+      use "successful GET of organizations where name is 'organization 3'"
     end
   end
 
