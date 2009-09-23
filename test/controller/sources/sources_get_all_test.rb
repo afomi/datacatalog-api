@@ -29,20 +29,22 @@ class SourcesGetAllControllerTest < RequestTestCase
     end
   end
   
-  context "anonymous : get /" do
-    before do
-      get "/"
+  context_ "get /" do
+    context "anonymous" do
+      before do
+        get "/"
+      end
+
+      use "return 401 because the API key is missing"
     end
-    
-    use "return 401 because the API key is missing"
-  end
-  
-  context "incorrect API key : get /" do
-    before do
-      get "/", :api_key => "does_not_exist_in_database"
+
+    context "incorrect API key" do
+      before do
+        get "/", :api_key => "does_not_exist_in_database"
+      end
+
+      use "return 401 because the API key is invalid"
     end
-    
-    use "return 401 because the API key is invalid"
   end
 
   context_ "0 sources" do

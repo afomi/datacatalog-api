@@ -43,32 +43,34 @@ class SourcesDeleteControllerTest < RequestTestCase
       assert_equal nil, Source.find_by_id(@id)
     end
   end
+  
+  context_ "delete /" do
+    context "anonymous" do
+      before do
+        delete "/#{@id}"
+      end
 
-  context "anonymous : delete /" do
-    before do
-      delete "/#{@id}"
+      use "return 401 because the API key is missing"
+      use "unchanged source count"
     end
 
-    use "return 401 because the API key is missing"
-    use "unchanged source count"
-  end
+    context "incorrect API key" do
+      before do
+        delete "/#{@id}", :api_key => "does_not_exist_in_database"
+      end
 
-  context "incorrect API key : delete /" do
-    before do
-      delete "/#{@id}", :api_key => "does_not_exist_in_database"
+      use "return 401 because the API key is invalid"
+      use "unchanged source count"
     end
 
-    use "return 401 because the API key is invalid"
-    use "unchanged source count"
-  end
+    context "normal API key" do
+      before do
+        delete "/#{@id}", :api_key => @normal_user.primary_api_key
+      end
 
-  context "normal API key : delete /" do
-    before do
-      delete "/#{@id}", :api_key => @normal_user.primary_api_key
+      use "return 401 because the API key is unauthorized"
+      use "unchanged source count"
     end
-
-    use "return 401 because the API key is unauthorized"
-    use "unchanged source count"
   end
 
   %w(curator admin).each do |role|

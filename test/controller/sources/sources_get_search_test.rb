@@ -33,24 +33,26 @@ class SourcesGetSearchControllerTest < RequestTestCase
         ).valid?
       end
     end
-
-    context "anonymous : get / where url is source #3" do
-      before do
-        get "/",
-          :url     => "http://data.gov/sources/3"
-      end
     
-      use "return 401 because the API key is missing"
-    end
+    context_ "get / where url is source #3" do
+      context "anonymous" do
+        before do
+          get "/",
+            :url     => "http://data.gov/sources/3"
+        end
 
-    context "invalid API key : get / where url is source #3" do
-      before do
-        get "/",
-          :url     => "http://data.gov/sources/3",
-          :api_key => "does_not_exist_in_database"
+        use "return 401 because the API key is missing"
       end
-    
-      use "return 401 because the API key is invalid"
+
+      context "invalid API key" do
+        before do
+          get "/",
+            :url     => "http://data.gov/sources/3",
+            :api_key => "does_not_exist_in_database"
+        end
+
+        use "return 401 because the API key is invalid"
+      end
     end
     
     %w(normal curator admin).each do |role|

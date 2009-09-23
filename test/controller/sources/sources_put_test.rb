@@ -85,58 +85,62 @@ class SourcesPutControllerTest < RequestTestCase
     end
   end
 
-  context "anonymous : put /:id" do
-    before do
-      put "/#{@id}"
-    end
-  
-    use "return 401 because the API key is missing"
-    use "unchanged source count"
-  end
+  context_ "put /:id" do
+    context "anonymous" do
+      before do
+        put "/#{@id}"
+      end
 
-  context "incorrect API key : put /:id" do
-    before do
-      put "/#{@id}", :api_key => "does_not_exist_in_database"
+      use "return 401 because the API key is missing"
+      use "unchanged source count"
     end
-  
-    use "return 401 because the API key is invalid"
-    use "unchanged source count"
-  end
-  
-  context "normal API key : put /:id" do
-    before do
-      put "/#{@id}", :api_key => @normal_user.primary_api_key
-    end
-  
-    use "return 401 because the API key is unauthorized"
-    use "unchanged source count"
-  end
-  
-  context "anonymous : put /:fake_id" do
-    before do
-      put "/#{@fake_id}"
-    end
-  
-    use "return 401 because the API key is missing"
-    use "unchanged source count"
-  end
 
-  context "incorrect API key : put /:fake_id" do
-    before do
-      put "/#{@fake_id}", :api_key => "does_not_exist_in_database"
+    context "incorrect API key" do
+      before do
+        put "/#{@id}", :api_key => "does_not_exist_in_database"
+      end
+
+      use "return 401 because the API key is invalid"
+      use "unchanged source count"
     end
-  
-    use "return 401 because the API key is invalid"
-    use "unchanged source count"
+
+    context "normal API key" do
+      before do
+        put "/#{@id}", :api_key => @normal_user.primary_api_key
+      end
+
+      use "return 401 because the API key is unauthorized"
+      use "unchanged source count"
+    end
   end
   
-  context "normal API key : put /:fake_id" do
-    before do
-      put "/#{@fake_id}", :api_key => @normal_user.primary_api_key
+  context_ "put /:fake_id" do
+    context "anonymous" do
+      before do
+        put "/#{@fake_id}"
+      end
+
+      use "return 401 because the API key is missing"
+      use "unchanged source count"
     end
-  
-    use "return 401 because the API key is unauthorized"
-    use "unchanged source count"
+
+    context "incorrect API key" do
+      before do
+        put "/#{@fake_id}", :api_key => "does_not_exist_in_database"
+      end
+
+      use "return 401 because the API key is invalid"
+      use "unchanged source count"
+    end
+
+    context "normal API key" do
+      before do
+        put "/#{@fake_id}", :api_key => @normal_user.primary_api_key
+      end
+
+      use "return 401 because the API key is unauthorized"
+      use "unchanged source count"
+    end
   end
   
   %w(curator admin).each do |role|

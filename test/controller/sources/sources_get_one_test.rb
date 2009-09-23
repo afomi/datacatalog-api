@@ -27,20 +27,22 @@ class SourcesGetOneControllerTest < RequestTestCase
     end
   end
 
-  context "anonymous : get /:id" do
-    before do
-      get "/#{@id}"
+  context_ "get /:id" do
+    context "anonymous" do
+      before do
+        get "/#{@id}"
+      end
+
+      use "return 401 because the API key is missing"
     end
-    
-    use "return 401 because the API key is missing"
-  end
-  
-  context "incorrect API key : get /:id" do
-    before do
-      get "/#{@id}", :api_key => "does_not_exist_in_database"
+
+    context "incorrect API key" do
+      before do
+        get "/#{@id}", :api_key => "does_not_exist_in_database"
+      end
+
+      use "return 401 because the API key is invalid"
     end
-    
-    use "return 401 because the API key is invalid"
   end
   
   %w(normal curator admin).each do |role|

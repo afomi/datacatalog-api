@@ -29,31 +29,33 @@ class SourcesPostControllerTest < RequestTestCase
     end
   end
 
-  context "anonymous : post /" do
-    before do
-      post "/"
+  context_ "post /" do
+    context "anonymous" do
+      before do
+        post "/"
+      end
+
+      use "return 401 because the API key is missing"
+      use "unchanged source count"
     end
-    
-    use "return 401 because the API key is missing"
-    use "unchanged source count"
-  end
-  
-  context "incorrect API key : post /" do
-    before do
-      post "/", :api_key => "does_not_exist_in_database"
+
+    context "incorrect API key" do
+      before do
+        post "/", :api_key => "does_not_exist_in_database"
+      end
+
+      use "return 401 because the API key is invalid"
+      use "unchanged source count"
     end
-    
-    use "return 401 because the API key is invalid"
-    use "unchanged source count"
-  end
-  
-  context "normal API key : post /" do
-    before do
-      post "/", :api_key => @normal_user.primary_api_key
+
+    context "normal API key" do
+      before do
+        post "/", :api_key => @normal_user.primary_api_key
+      end
+
+      use "return 401 because the API key is unauthorized"
+      use "unchanged source count"
     end
-    
-    use "return 401 because the API key is unauthorized"
-    use "unchanged source count"
   end
 
   %w(curator admin).each do |role|
