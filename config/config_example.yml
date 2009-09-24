@@ -1,4 +1,4 @@
-:development:
+development:
   base_uri: http://localhost:4567/
   mongo_hostname: localhost
   mongo_database: natdatcat_dev
@@ -14,21 +14,21 @@
       email: curator_1@your_organization.com
       curator: true
 
-:test:
+test:
   base_uri: http://localhost:4567/
   mongo_hostname: localhost
   mongo_database: natdatcat_test
   api_key_salt: "000000000000000000000000000000000000000000000000000000000"
   default_users: *users
 
-:staging:
+staging:
   base_uri: http://staging.com/
   mongo_hostname: localhost
   mongo_database: natdatcat_sta
   api_key_salt: "000000000000000000000000000000000000000000000000000000000"
   default_users: *users
   
-:production:
+production:
   base_uri: http://production.com/
   mongo_hostname: localhost
   mongo_database: natdatcat_pro

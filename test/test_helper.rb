@@ -16,7 +16,7 @@ require_dir 'test/helpers/assertions'
 require_dir 'test/helpers/shared'
 
 require_file 'config/config'
-Config.environment = :test
+Config.environment = 'test'
 
 class Test::Unit::TestCase
   include RR::Adapters::TestUnit

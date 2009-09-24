@@ -80,7 +80,7 @@ namespace :db do
 
     desc 'Drop test database'
     task :test do
-      Config.environment = :test
+      Config.environment = 'test'
       verbosely_drop_database
     end
   end

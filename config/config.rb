@@ -28,7 +28,9 @@ module Config
 
   def self.environment_config
     env_config = config[environment]
-    raise "Environment not found" unless env_config
+    unless env_config
+      raise "Environment config not found for #{environment.inspect}"
+    end
     env_config
   end
 
@@ -37,11 +39,9 @@ module Config
       @environment
     else
       @environment = if Object.const_defined?("Sinatra")
-        Sinatra::Base.environment
-      elsif ENV['RACK_ENV']
-        ENV['RACK_ENV'].intern
+        Sinatra::Base.environment.to_s
       else
-        :development
+        ENV['RACK_ENV'] || 'development'
       end
     end
   end
