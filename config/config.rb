@@ -22,7 +22,7 @@ module Config
 
   def self.drop_database
     database_name = environment_config["mongo_database"]
-    new_mongo_connection.drop_database database_name
+    new_mongo_connection.drop_database(database_name)
     database_name
   end
 
