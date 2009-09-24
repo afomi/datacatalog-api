@@ -2,8 +2,8 @@ desc "Run tests"
 task :test => %w(
   db:reset:test
   test:unit
-  test:functional
   test:controller
+  test:other
   test:integration
 )
 
@@ -14,9 +14,9 @@ namespace :test do
     t.test_files = FileList["test/unit/*_test.rb"]
   end
 
-  desc "Run functional tests"
-  Rake::TestTask.new(:functional) do |t|
-    t.test_files = FileList["test/functional/**/*_test.rb"]
+  desc "Run other tests"
+  Rake::TestTask.new(:other) do |t|
+    t.test_files = FileList["test/other/**/*_test.rb"]
   end
 
   desc "Run controller tests"

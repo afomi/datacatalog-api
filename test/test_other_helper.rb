@@ -4,4 +4,4 @@ Config.setup_mongomapper
 require_dir 'model_helpers'
 require_dir 'models'
 require_dir 'observers'
-require_dir 'helpers'
+require_dir 'controller_helpers'

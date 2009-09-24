@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../test_functional_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../test_other_helper')
 
 class PermissionException < StandardError
   attr_accessor :status, :message
