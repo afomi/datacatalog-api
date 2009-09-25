@@ -141,7 +141,7 @@ class UsersKeysDeleteControllerTest < RequestTestCase
             :api_key => @user.api_keys[n].api_key
         end
   
-        use "return 403 Forbidden"
+        use "return 409 Conflict"
         use "return error about attempt to delete primary API key"
         use "unchanged api_key count"
       end
@@ -152,7 +152,7 @@ class UsersKeysDeleteControllerTest < RequestTestCase
             :api_key => @admin_user.primary_api_key
         end
       
-        use "return 403 Forbidden"
+        use "return 409 Conflict"
         use "return error about attempt to delete primary API key"
         use "unchanged api_key count"
       end

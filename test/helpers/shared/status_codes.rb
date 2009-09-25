@@ -42,4 +42,10 @@ class RequestTestCase
     end
   end
 
+  shared "return 409 Conflict" do
+    test "status should be 409 Conflict" do
+      assert_equal 409, last_response.status
+    end
+  end
+
 end
