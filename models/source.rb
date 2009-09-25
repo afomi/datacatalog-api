@@ -5,9 +5,9 @@ class Source
   # == Attributes
   key :title,         String
   key :url,           String
-  key :released,      Date
-  key :period_start,  Date
-  key :period_end,    Date
+  key :released,      Time
+  key :period_start,  Time
+  key :period_end,    Time
   key :frequency,     String,  :default => ""
   key :ratings_total, Integer, :default => 0
   key :ratings_count, Integer, :default => 0

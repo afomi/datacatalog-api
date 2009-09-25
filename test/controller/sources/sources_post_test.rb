@@ -27,6 +27,17 @@ class SourcesPostControllerTest < RequestTestCase
       source = Source.find_by_id(parsed_response_body["id"])
       assert_equal "http://data.gov/original", source.url
     end
+
+    test "body should have correct attributes" do
+      assert_include "title", parsed_response_body
+      assert_include "url", parsed_response_body
+      assert_include "released", parsed_response_body
+      assert_include "period_start", parsed_response_body
+      assert_include "period_end", parsed_response_body
+      assert_include "ratings_total", parsed_response_body
+      assert_include "ratings_count", parsed_response_body
+    end
+
   end
 
   context_ "post /" do
