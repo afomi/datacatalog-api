@@ -2,12 +2,10 @@ module DataCatalog
   
   class Documents < Base
 
-    restful_routes do
-      name "documents"
-      model Document, :read_only => [
-        :created_at,
-        :updated_at
-      ]
+    resource "documents" do
+      model Document
+      read_only :created_at
+      read_only :updated_at
     end
 
   end

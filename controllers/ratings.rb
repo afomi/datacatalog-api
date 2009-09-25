@@ -2,14 +2,13 @@ module DataCatalog
 
   class Ratings < Base
 
-    restful_routes do
-      name "ratings"
-      model Rating, :read_only => [
-        :previous_value,
-        :user_id,
-        :created_at,
-        :updated_at
-      ]
+    resource "ratings" do
+      model Rating
+      read_only :previous_value
+      read_only :user_id
+      read_only :created_at
+      read_only :updated_at
+
       callback :before_create do
         params["user_id"] = @current_user.id
       end

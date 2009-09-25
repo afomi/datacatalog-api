@@ -2,14 +2,12 @@ module DataCatalog
 
   class Sources < Base
   
-    restful_routes do
-      name "sources"
-      model Source, :read_only => [
-        :ratings_total,
-        :ratings_count,
-        :created_at,
-        :updated_at
-      ]
+    resource "sources" do
+      model Source
+      read_only :ratings_total
+      read_only :ratings_count
+      read_only :created_at
+      read_only :updated_at
     end
 
   end

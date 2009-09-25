@@ -9,6 +9,9 @@ require_file 'config/config'
 Sinatra::Base.set(:config, Config.environment_config)
 Config.setup
 
+gem 'djsun-rest-sinatra', ">= 0.3.0", "< 0.4.0"
+require 'rest-sinatra'
+
 require_dir 'lib'
 require_dir 'model_helpers'
 require_dir 'models'

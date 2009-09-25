@@ -4,19 +4,19 @@ module DataCatalog
 
   class Users < Base
   
-    restful_routes do
-      name "users"
-      model User, :read_only => [
-        :api_keys,
-        :admin,
-        :creator_api_key,
-        :created_at,
-        :updated_at
-      ]
+    resource "users" do
+      model User
+      read_only :api_keys
+      read_only :admin
+      read_only :creator_api_key
+      read_only :created_at
+      read_only :updated_at
+
       callback :after_create do
         @document.add_api_key!({ :key_type => "primary" })
       end
-      nested_resource UsersKeys
+
+      nested_resource UsersKeys, :association => :api_keys
     end
 
   end

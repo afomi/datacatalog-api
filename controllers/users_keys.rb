@@ -1,16 +1,11 @@
 module DataCatalog
 
-  class UsersKeys < Nested
+  class UsersKeys < Base
 
-    restful_routes do
-      name "keys"
-
-      association :api_keys
-
-      model ApiKey, :read_only => [
-        :api_key,
-        :created_at
-      ]
+    nestable_resource "keys" do
+      model ApiKey
+      read_only :api_key
+      read_only :created_at
 
       permission :owner
 
@@ -58,7 +53,7 @@ module DataCatalog
           }.to_json
         end
       end
-      
+
     end
   
   end

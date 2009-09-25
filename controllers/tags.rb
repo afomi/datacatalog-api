@@ -2,12 +2,10 @@ module DataCatalog
 
   class Tags < Base
 
-    restful_routes do
-      name "tags"
-      model Tag, :read_only => [
-        :created_at,
-        :updated_at
-      ]
+    resource "tags" do
+      model Tag
+      read_only :created_at
+      read_only :updated_at
     end
 
   end
