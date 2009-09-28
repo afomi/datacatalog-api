@@ -30,6 +30,10 @@ class SourceOrganizationUnitTest < ModelTestCase
     test "#organization should return the organization" do
       assert_equal @organization, @source.organization
     end
+    
+    test "#sources should return the source" do
+      assert_equal [@source], @organization.sources
+    end
   end
   
 end

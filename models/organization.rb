@@ -15,6 +15,7 @@ class Organization
   # == Indices
 
   # == Associations
+  many :sources
 
   # == Validations
   validates_presence_of :name
