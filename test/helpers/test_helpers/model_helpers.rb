@@ -49,7 +49,7 @@ module ModelHelpers
       :admin     => true
     })
   end
-  
+
   # def create_example_source
   #   
   # end

@@ -11,6 +11,7 @@ class Source
   key :frequency,     String,  :default => ""
   key :ratings_total, Integer, :default => 0
   key :ratings_count, Integer, :default => 0
+  key :custom,        Hash
   timestamps!
 
   # == Indices
