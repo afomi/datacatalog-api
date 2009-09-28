@@ -3,15 +3,16 @@ class Source
   include MongoMapper::Document
 
   # == Attributes
-  key :title,         String
-  key :url,           String
-  key :released,      Time
-  key :period_start,  Time
-  key :period_end,    Time
-  key :frequency,     String,  :default => ""
-  key :ratings_total, Integer, :default => 0
-  key :ratings_count, Integer, :default => 0
-  key :custom,        Hash
+  key :title,           String
+  key :url,             String
+  key :released,        Time
+  key :period_start,    Time
+  key :period_end,      Time
+  key :frequency,       String,  :default => ""
+  key :ratings_total,   Integer, :default => 0
+  key :ratings_count,   Integer, :default => 0
+  key :organization_id, String
+  key :custom,          Hash
   timestamps!
 
   # == Indices
@@ -19,6 +20,7 @@ class Source
 
   # == Associations
   many :ratings
+  belongs_to :organization
   
   # == Validations
   validates_presence_of :title
