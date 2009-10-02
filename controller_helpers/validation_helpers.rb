@@ -2,7 +2,11 @@ module DataCatalog
 
   module ValidationHelpers
 
-    def validate_before_find(params, model)
+    def validate_before_find_one(params, model)
+      # ...
+    end
+
+    def validate_before_find_all(params, model)
       all_keys = model.keys.keys
       invalid_params = params.keys - all_keys
       unless invalid_params.empty?

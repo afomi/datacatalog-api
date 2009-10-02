@@ -17,7 +17,7 @@ class RatingsPostControllerTest < RequestTestCase
 
   shared "successful POST to ratings" do
     use "return 201 Created"
-    use "return timestamps and id in body" 
+    use "return timestamps and id in body"
     use "incremented rating count"
       
     test "location header should point to new resource" do
@@ -72,10 +72,10 @@ class RatingsPostControllerTest < RequestTestCase
       post "/", {
         :api_key    => @admin_user.primary_api_key,
         :kind       => "source",
-        :value      => 5,
-        :text       => "Rating A",
         :source_id  => @id,
-        :updated_at => Time.now.to_json
+        :text       => "Rating A",
+        :updated_at => Time.now.to_json,
+        :value      => 5
       }
     end
   
@@ -83,16 +83,16 @@ class RatingsPostControllerTest < RequestTestCase
     use "unchanged rating count"
     use "return errors hash saying updated_at is invalid"
   end
-
+  
   context "admin API key : post / with protected param 'user_id'" do
     before do
       post "/", {
         :api_key    => @admin_user.primary_api_key,
         :kind       => "source",
-        :value      => 5,
-        :text       => "Rating A",
         :source_id  => @id,
-        :user_id    => @normal_user.id
+        :text       => "Rating A",
+        :user_id    => get_fake_mongo_object_id,
+        :value      => 5
       }
     end
   
@@ -105,11 +105,11 @@ class RatingsPostControllerTest < RequestTestCase
     before do
       post "/", {
         :api_key   => @admin_user.primary_api_key,
+        :junk      => "This is an extra param (junk)",
         :kind      => "source",
-        :value     => 5,
-        :text      => "Rating A",
         :source_id => @id,
-        :junk      => "This is an extra param (junk)"
+        :text      => "Rating A",
+        :value     => 5
       }
     end
   
@@ -118,16 +118,16 @@ class RatingsPostControllerTest < RequestTestCase
     use "return errors hash saying junk is invalid"
   end
   
-  # - - - - - - - - - -
+  # # - - - - - - - - - -
   
   context "curator API key : post / with correct params" do
     before do
       post "/", {
         :api_key   => @curator_user.primary_api_key,
         :kind      => "source",
-        :value     => 5,
-        :text      => "Rating A",
         :source_id => @id,
+        :text      => "Rating A",
+        :value     => 5
       }
     end
     
@@ -137,11 +137,11 @@ class RatingsPostControllerTest < RequestTestCase
   context "admin API key : post / with correct params" do
     before do
       post "/", {
-        :api_key => @admin_user.primary_api_key,
+        :api_key   => @admin_user.primary_api_key,
         :kind      => "source",
         :value     => 5,
         :text      => "Rating A",
-        :source_id => @id,
+        :source_id => @id
       }
     end
   

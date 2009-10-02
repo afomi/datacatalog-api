@@ -2,8 +2,8 @@ module DataCatalog
 
   module NestedSearchHelpers
 
-    # Note: not as full-featured as SearchHelpers.find.
-    def nested_find(documents, params, model)
+    # Not as full-featured as SearchHelpers.find_with_filters
+    def nested_find_with_filters(documents, params, model)
       documents.select do |document|
         match = true
         params.each do |key_string, value|

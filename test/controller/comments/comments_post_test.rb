@@ -36,8 +36,9 @@ class CommentsPostControllerTest < RequestTestCase
   context "anonymous : post /" do
     before do
       post "/", {
+        :source_id => get_fake_mongo_object_id,
         :text      => "Comment A",
-        :source_id => get_fake_mongo_object_id
+        :user_id   => get_fake_mongo_object_id
       }
     end
     
@@ -51,6 +52,7 @@ class CommentsPostControllerTest < RequestTestCase
         :api_key   => "does_not_exist_in_database",
         :source_id => get_fake_mongo_object_id,
         :text      => "Comment A",
+        :user_id   => get_fake_mongo_object_id
       }
     end
     
@@ -64,6 +66,7 @@ class CommentsPostControllerTest < RequestTestCase
         :api_key   => @normal_user.primary_api_key,
         :source_id => get_fake_mongo_object_id,
         :text      => "Comment A",
+        :user_id   => get_fake_mongo_object_id
       }
     end
     
@@ -79,7 +82,8 @@ class CommentsPostControllerTest < RequestTestCase
         :api_key    => @admin_user.primary_api_key,
         :source_id  => get_fake_mongo_object_id,
         :text       => "Comment A",
-        :updated_at => Time.now.to_json
+        :updated_at => Time.now.to_json,
+        :user_id    => get_fake_mongo_object_id
       }
     end
   
@@ -87,14 +91,15 @@ class CommentsPostControllerTest < RequestTestCase
     use "unchanged comment count"
     use "return errors hash saying updated_at is invalid"
   end
-
+  
   context "admin API key : post / with invalid param" do
     before do
       post "/", {
         :api_key   => @admin_user.primary_api_key,
+        :junk      => "This is an extra param (junk)",
         :source_id => get_fake_mongo_object_id,
         :text      => "Comment A",
-        :junk      => "This is an extra param (junk)"
+        :user_id   => get_fake_mongo_object_id,
       }
     end
   
@@ -110,19 +115,21 @@ class CommentsPostControllerTest < RequestTestCase
       post "/", {
         :api_key   => @curator_user.primary_api_key,
         :source_id => get_fake_mongo_object_id,
-        :text      => "Comment A"
+        :text      => "Comment A",
+        :user_id   => get_fake_mongo_object_id
       }
     end
     
     use "successful POST to comments"
   end
-
+  
   context "admin API key : post / with correct params" do
     before do
       post "/", {
         :api_key   => @admin_user.primary_api_key,
         :source_id => get_fake_mongo_object_id,
-        :text      => "Comment A"
+        :text      => "Comment A",
+        :user_id   => get_fake_mongo_object_id
       }
     end
   

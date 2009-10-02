@@ -2,8 +2,7 @@ module DataCatalog
 
   module SearchHelpers
 
-    def find(params, model)
-      validate_before_find(params, model)
+    def find_with_filters(params, model)
       return(model.find(:all)) if params.empty?
       conditions = build_conditions_hash(params, model)
       model.find(:all, :conditions => conditions)
