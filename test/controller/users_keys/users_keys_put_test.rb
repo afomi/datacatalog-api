@@ -412,6 +412,34 @@ class UsersKeysPutControllerTest < RequestTestCase
       
         use "attempted PUT users_keys with invalid parameter"
       end
+
+      # - - - - - - - - - -
+
+      context "owner API key : put /:id/keys/:id : update purpose : correct params" do
+        before do
+          @original_created_at = @user.api_keys[n].created_at.dup
+          put "/#{@user.id}/keys/#{@keys[n].id}", {
+            :api_key => @user.api_keys[n].api_key,
+            :purpose => "Updated purpose"
+          }
+          @n = n
+        end
+
+        use "successful PUT users_keys : update purpose"
+      end
+
+      context "admin API key : put /:id/keys/:id : update purpose : correct params" do
+        before do
+          @original_created_at = @user.api_keys[n].created_at.dup
+          put "/#{@user.id}/keys/#{@keys[n].id}", {
+            :api_key => @admin_user.primary_api_key,
+            :purpose => "Updated purpose"
+          }
+          @n = n
+        end
+
+        use "successful PUT users_keys : update purpose"
+      end
     end
   end
   
@@ -528,34 +556,6 @@ class UsersKeysPutControllerTest < RequestTestCase
       use "attempted PUT users_keys with :id without params"
     end
 
-    # - - - - - - - - - -
-      
-    context "owner API key : put /:id/keys/:id : update purpose : correct params" do
-      before do
-        @original_created_at = @user.api_keys[n].created_at.dup
-        put "/#{@user.id}/keys/#{@keys[n].id}", {
-          :api_key => @user.api_keys[n].api_key,
-          :purpose => "Updated purpose"
-        }
-        @n = n
-      end
-    
-      use "successful PUT users_keys : update purpose"
-    end
-    
-    context "admin API key : put /:id/keys/:id : update purpose : correct params" do
-      before do
-        @original_created_at = @user.api_keys[n].created_at.dup
-        put "/#{@user.id}/keys/#{@keys[n].id}", {
-          :api_key => @admin_user.primary_api_key,
-          :purpose => "Updated purpose"
-        }
-        @n = n
-      end
-    
-      use "successful PUT users_keys : update purpose"
-    end
-    
     # - - - - - - - - - -
       
     context "owner API key : put /:id/keys : update key_type : correct params" do

@@ -36,15 +36,14 @@ module DataCatalog
       
       callback :before_update do
         key_type = params["key_type"]
-        if @child_document.key_type == "primary"
+        if key_type && @child_document.key_type == "primary"
           error 400, {
             "errors" => {
               "invalid_values_for_params" => ["key_type"],
             },
             "help_text" => "cannot change the key_type of a primary key"
           }.to_json
-        end
-        if key_type && !%w(application valet).include?(key_type)
+        elsif key_type && !%w(application valet).include?(key_type)
           error 400, {
             "errors" => {
               "invalid_values_for_params" => ["key_type"],
