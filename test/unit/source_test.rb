@@ -1,4 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_unit_helper')
+require 'timecop'
 
 class SourceUnitTest < ModelTestCase
 
@@ -239,11 +240,11 @@ class SourceUnitTest < ModelTestCase
       @original_id = doc._id
       @original_created_at = doc.created_at
       @original_updated_at = doc.updated_at
-  
-      sleep_enough_for_mongo_timestamps_to_differ
+      Timecop.travel(1)
       doc.url = "http://updated.gov"
       doc.save
       @updated = doc
+      Timecop.return
     end
   
     test "should have updated url" do

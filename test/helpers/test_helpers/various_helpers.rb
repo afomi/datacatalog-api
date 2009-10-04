@@ -1,10 +1,5 @@
 module VariousHelpers
   
-  def sleep_enough_for_mongo_timestamps_to_differ
-    delay = Test::Unit::Assertions::MONGODB_TIME_GRANULARITY
-    sleep delay
-  end
-
   def sleep_enough_for_json_timestamps_to_differ
     delay = Test::Unit::Assertions::JSON_TIME_GRANULARITY
     sleep delay
