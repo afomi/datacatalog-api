@@ -42,6 +42,7 @@ class Source
   end
   
   FREQUENCIES = {
+    "daily"      => 365,
     "weekly"     => 52,
     "monthly"    => 12,
     "quarterly"  => 4,
