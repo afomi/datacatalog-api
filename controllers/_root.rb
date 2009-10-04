@@ -4,7 +4,7 @@ module DataCatalog
     
     PROJECT_META_DATA = {
       "name"    => "National Data Catalog API",
-      "version" => "0.2.1",
+      "version" => "0.2.2",
       "resource_directory" => {
         "href" => "/resources"
       },
