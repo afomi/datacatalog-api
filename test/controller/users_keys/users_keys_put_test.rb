@@ -40,7 +40,7 @@ class UsersKeysPutControllerTest < RequestTestCase
   def lookup_user_and_api_key
     raise "@n must be defined" unless @n
     user = User.find_by_id(@user.id)
-    api_key = user.api_keys.find { |x| x.id == @keys[@n].id }
+    api_key = user.api_keys.detect { |x| x.id == @keys[@n].id }
     [user, api_key]
   end
 
