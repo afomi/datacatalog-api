@@ -8,7 +8,7 @@ class Source
   key :released,        Time
   key :period_start,    Time
   key :period_end,      Time
-  key :frequency,       String,  :default => ""
+  key :frequency,       String
   key :ratings_total,   Integer, :default => 0
   key :ratings_count,   Integer, :default => 0
   key :organization_id, String
@@ -50,11 +50,10 @@ class Source
     "yearly"     => 1,
     "unknown"    => nil,
     "irregular"  => nil,
-    ""           => nil
   }
   
   def validate_frequency
-    unless FREQUENCIES.keys.include?(frequency)
+    if frequency && !FREQUENCIES.keys.include?(frequency)
       errors.add(:frequency, "is invalid")
     end
   end
