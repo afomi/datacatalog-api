@@ -46,8 +46,8 @@ class CheckupTest < RequestTestCase
     use "return 200 OK"
     use "anonymous"
     
-    test "should not have a user_id" do
-      assert_not_include "user_id", parsed_response_body
+    test "should not have a user" do
+      assert_not_include "user", parsed_response_body
     end
   end
   
@@ -69,8 +69,9 @@ class CheckupTest < RequestTestCase
     use "not anonymous"
     use "valid API key"
 
-    test "should have correct user_id" do
-      assert_equal @normal_user.id, parsed_response_body["user_id"]
+    test "should have correct user href" do
+      expected = { "href" => "/users/#{@normal_user.id}" }
+      assert_equal expected, parsed_response_body["user"]
     end
   end
   
@@ -88,8 +89,9 @@ class CheckupTest < RequestTestCase
       assert_equal true, parsed_response_body["curator"]
     end
 
-    test "should have correct user_id" do
-      assert_equal @curator_user.id, parsed_response_body["user_id"]
+    test "should have correct user href" do
+      expected = { "href" => "/users/#{@curator_user.id}" }
+      assert_equal expected, parsed_response_body["user"]
     end
   end
   
@@ -107,8 +109,9 @@ class CheckupTest < RequestTestCase
       assert_equal true, parsed_response_body["admin"]
     end
 
-    test "should have correct user_id" do
-      assert_equal @admin_user.id, parsed_response_body["user_id"]
+    test "should have correct user href" do
+      expected = { "href" => "/users/#{@admin_user.id}" }
+      assert_equal expected, parsed_response_body["user"]
     end
   end
 

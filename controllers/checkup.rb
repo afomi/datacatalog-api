@@ -8,7 +8,13 @@ module DataCatalog
         "anonymous"     => false,
         "valid_api_key" => true,
       }
-      basic.merge!("user_id" => @current_user.id) if @current_user
+      if @current_user
+        basic.merge!({
+          "user" => {
+            "href" => "/users/#{@current_user.id}"
+          }
+        })
+      end
       hash =
         if privileges[:anonymous]
           { "anonymous" => true }
