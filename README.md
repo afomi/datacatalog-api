@@ -7,17 +7,19 @@
 
 ## Production
 
-    sudo gem sources -a http://gems.github.com
-    sudo gem install sinatra
-    sudo gem install mongodb-mongo
-    sudo gem install jnunemaker-mongomapper
+    gem sources -a http://gems.github.com
+    gem install sinatra
+    gem install mongo
+    gem install djsun-mongomapper
+    gem install rest-sinatra
 
 ## Testing
 
-    sudo gem install rack-test
-    sudo gem install djsun-context
-    sudo gem install jeremymcanally-pending
-    sudo gem install rr
+    gem install rack-test
+    gem install djsun-context
+    gem install jeremymcanally-pending
+    gem install rr
+    gem install timecop
     
 # Setting up Config Files
 
