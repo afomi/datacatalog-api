@@ -11,7 +11,8 @@ module DataCatalog
       if @current_user
         basic.merge!({
           "user" => {
-            "href" => "/users/#{@current_user.id}"
+            "href" => "/users/#{@current_user.id}",
+            "id"   => @current_user.id
           }
         })
       end
