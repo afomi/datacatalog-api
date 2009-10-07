@@ -7,7 +7,8 @@
 
 ## Production
 
-    gem sources -a http://gems.github.com
+    gem install gemcutter
+    gem tumble
     gem install sinatra
     gem install mongo
     gem install djsun-mongomapper
@@ -15,6 +16,7 @@
 
 ## Testing
 
+    gem install rcov
     gem install rack-test
     gem install djsun-context
     gem install jeremymcanally-pending
