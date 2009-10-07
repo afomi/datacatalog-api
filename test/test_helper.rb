@@ -10,12 +10,13 @@ require 'context'
 gem 'jeremymcanally-pending', '>= 0.1'
 require 'pending'
 
-require_dir 'test/helpers/test_helpers'
-require_dir 'test/helpers/test_cases'
-require_dir 'test/helpers/assertions'
-require_dir 'test/helpers/shared'
+base = File.dirname(__FILE__)
+Dir.glob(base + '/helpers/test_helpers/*.rb').each { |f| require f }
+Dir.glob(base + '/helpers/test_cases/*.rb'  ).each { |f| require f }
+Dir.glob(base + '/helpers/assertions/*.rb'  ).each { |f| require f }
+Dir.glob(base + '/helpers/shared/*.rb'      ).each { |f| require f }
 
-require_file 'config/config'
+require File.dirname(__FILE__) + '/../config/config'
 Config.environment = 'test'
 
 class Test::Unit::TestCase

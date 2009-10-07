@@ -1,10 +1,9 @@
 require 'rake/testtask'
 require 'rake/rdoctask'
 require 'rcov/rcovtask'
-require File.expand_path(File.dirname(__FILE__) + '/require_helpers')
 
-require_file 'config/config'
-load_dir 'tasks', '*.rake'
+require File.dirname(__FILE__) + '/config/config'
+Dir.glob(File.dirname(__FILE__) + '/tasks/*.rake').each { |f| load f }
 
 desc "Default: run all tests"
 task :default => :test
@@ -12,14 +11,15 @@ task :default => :test
 namespace :environment do
   task :application do
     puts "Loading application environment..."
-    require_file 'app'
+    require File.dirname(__FILE__) + '/app'
   end
   
   task :models do
     puts "Loading models..."
     Config.setup_mongomapper
-    require_dir 'model_helpers'
-    require_dir 'models'
-    require_dir 'observers'
+    base = File.dirname(__FILE__)
+    Dir.glob(base + '/model_helpers/*.rb'               ).each { |f| require f }
+    Dir.glob(base + '/models/*.rb'               ).each { |f| require f }
+    Dir.glob(base + '/observers/*.rb'               ).each { |f| require f }
   end
 end

@@ -1,6 +1,7 @@
-require File.expand_path(File.dirname(__FILE__) + '/../require_helpers')
-require_file 'test/test_helper'
+require File.dirname(__FILE__) + '/test_helper'
+
 Config.setup_mongomapper
-require_dir 'model_helpers'
-require_dir 'models'
-require_dir 'observers'
+base = File.dirname(__FILE__)
+Dir.glob(base + '/../model_helpers/*.rb').each { |f| require f }
+Dir.glob(base + '/../models/*.rb'       ).each { |f| require f }
+Dir.glob(base + '/../observers/*.rb'    ).each { |f| require f }

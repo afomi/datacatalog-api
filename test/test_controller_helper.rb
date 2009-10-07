@@ -1,3 +1,2 @@
-require File.expand_path(File.dirname(__FILE__) + '/../require_helpers')
-require_file 'test/test_helper'
-require_file 'app'
+require File.dirname(__FILE__) + '/test_helper'
+require File.dirname(__FILE__) + '/../app'
