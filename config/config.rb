@@ -8,8 +8,8 @@ module Config
   end
   
   def self.setup_mongomapper
-    gem 'djsun-mongomapper', '= 0.4.1.2'
-    require 'mongomapper'
+    gem 'djsun-mongo_mapper', '= 0.5.0.1'
+    require 'mongo_mapper'
     MongoMapper.connection = new_mongo_connection
     MongoMapper.database = environment_config['mongo_database']
   end
