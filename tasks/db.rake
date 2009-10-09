@@ -1,6 +1,7 @@
 namespace :db do
   
   ADMIN_NAME = "Primary Admin"
+  ADMIN_EMAIL = "admin@nationaldatacatalog.com"
   
   def verbosely_drop_database
     db_name = Config.drop_database
@@ -20,7 +21,7 @@ namespace :db do
   
   def verbosely_display_users(users)
     users.each do |user|
-      puts "  * #{user.name} (id: #{user.id})"
+      puts "  * #{user.name} | id: #{user.id} | email: #{user.email}"
       user.api_keys.each do |api_key|
         puts "    - API key : #{user.primary_api_key}"
       end
@@ -34,11 +35,18 @@ namespace :db do
       :admin => true
     })
     if users.length > 0
+      users.each do |u|
+        if u.email.nil?
+          u.update_attributes(:email => ADMIN_EMAIL)
+          u.save
+        end
+      end
       puts "Found #{users.length} users in database:"
       verbosely_display_users(users)
     else
       verbosely_create_user({
         :name  => ADMIN_NAME,
+        :email => ADMIN_EMAIL,
         :admin => true
       }, "admin user")
     end
