@@ -13,6 +13,11 @@ class Source
   key :ratings_count,   Integer, :default => 0
   key :organization_id, String
   key :custom,          Hash
+  key :raw_data_gov,         Hash # http://data.gov
+  key :raw_data_octo_dc_gov, Hash # http://data.octo.dc.gov
+  key :raw_utah_gov_data,    Hash # http://utah.gov/data
+  key :raw_nyc_gov_datamine, Hash # http://nyc.gov/datamine
+  key :raw_datasf_org,       Hash # http://datasf.org
   timestamps!
 
   # == Indices
