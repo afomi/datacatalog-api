@@ -23,7 +23,7 @@ namespace :db do
     users.each do |user|
       puts "  * #{user.name} | id: #{user.id} | email: #{user.email}"
       user.api_keys.each do |api_key|
-        puts "    - API key : #{user.primary_api_key}"
+        puts "    - API key : #{api_key.api_key} | #{api_key.key_type}"
       end
     end
   end
