@@ -37,7 +37,7 @@ namespace :db do
     if users.length > 0
       users.each do |u|
         if u.email.nil?
-          u.update_attributes(:email => ADMIN_EMAIL)
+          u.email = ADMIN_EMAIL
           u.save
         end
       end
