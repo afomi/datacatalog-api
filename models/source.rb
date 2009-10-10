@@ -46,16 +46,28 @@ class Source
     end
   end
   
+  # TODO: add key :updates_per_year
+  # that takes the value from this hash:
+  # (The purpose is to allow sorting.)
   FREQUENCIES = {
-    "daily"      => 365,
-    "weekly"     => 52,
-    "monthly"    => 12,
-    "quarterly"  => 4,
-    "biannually" => 2,
-    "annually"   => 1,
-    "yearly"     => 1,
-    "unknown"    => nil,
-    "irregular"  => nil,
+    "each second"  => 31_536_000,
+    "each minute"  =>    525_600,
+    "each hour"    =>      8_760,
+    "each day"     =>        365,
+    "each week"    =>         52,
+    "each month"   =>         12,
+    "each quarter" =>          4,
+    "each year"    =>          1,
+    "hourly"       =>      8_760,
+    "daily"        =>        365,
+    "weekly"       =>         52,
+    "monthly"      =>         12,
+    "quarterly"    =>          4,
+    "biannually"   =>          2,
+    "annually"     =>          1,
+    "yearly"       =>          1,
+    "other"        =>        nil,
+    "unknown"      =>        nil,
   }
   
   def validate_frequency
