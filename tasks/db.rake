@@ -35,7 +35,7 @@ namespace :db do
       :admin => true
     })
     if users.length > 0
-      users.each do { u.update_attributes(:email => ADMIN_EMAIL) }
+      users.each { |u| u.update_attributes(:email => ADMIN_EMAIL) }
       puts "Found #{users.length} users in database:"
       verbosely_display_users(users)
     else
