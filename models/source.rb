@@ -102,5 +102,6 @@ class Source
       ],
     })
   end
+  # == Various Instance Methods
   
 end
