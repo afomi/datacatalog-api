@@ -3,6 +3,7 @@ class ApiKey
   include MongoMapper::EmbeddedDocument
 
   # == Attributes
+
   key :api_key,    String
   key :key_type,   String
   key :purpose,    String

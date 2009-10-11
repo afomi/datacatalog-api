@@ -6,6 +6,7 @@ class User
   class InconsistentState < RuntimeError; end
 
   # == Attributes
+
   key :name,            String
   key :email,           String
   key :curator,         Boolean, :default => false
@@ -14,10 +15,12 @@ class User
   timestamps!
 
   # == Indices
+
   ensure_index :email
   ensure_index 'api_keys.api_key' # not tested
 
   # == Associations
+
   many :api_keys
   many :ratings
 
@@ -45,12 +48,11 @@ class User
   # == Validations
 
   # == Class Methods
+
   def self.find_by_api_key(api_key)
     find(:first, :conditions => { 'api_keys.api_key' => api_key })
     # TODO: find :all and raise exception if more than 1 result
   end
-
-  # == Instance Methods
 
   # == Various Instance Methods
 

@@ -3,6 +3,7 @@ class Organization
   include MongoMapper::Document
 
   # == Attributes
+
   key :name,           String
   key :abbreviation,   String
   key :description,    String
@@ -15,11 +16,13 @@ class Organization
   # == Indices
 
   # == Associations
+
   many :sources
 
   # == Derived Attributes
 
   # == Validations
+
   validates_presence_of :name
   validate :validate_url
   include UrlValidator

@@ -10,6 +10,7 @@ class Rating
   include MongoMapper::Document
 
   # == Attributes
+
   key :kind,           String
   key :user_id,        String
   key :source_id,      String
@@ -22,6 +23,7 @@ class Rating
   # == Indices
 
   # == Associations
+
   belongs_to :user
   belongs_to :source
   belongs_to :comment
@@ -29,6 +31,7 @@ class Rating
   # == Derived Attributes
 
   # == Validations
+
   validates_presence_of :user_id
   validates_presence_of :value
   validate :general_validation
@@ -76,6 +79,7 @@ class Rating
   # == Class Methods
 
   # == Various Instance Methods
+
   def find_rated_document
     case self.kind
     when "comment" then self.comment

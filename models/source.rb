@@ -3,6 +3,7 @@ class Source
   include MongoMapper::Document
 
   # == Attributes
+
   key :title,           String
   key :url,             String
   key :released,        Time
@@ -17,9 +18,11 @@ class Source
   timestamps!
 
   # == Indices
+
   ensure_index :url
 
   # == Associations
+
   many :ratings
   many :categorizations
   belongs_to :organization
@@ -43,6 +46,7 @@ class Source
   end
   
   # == Validations
+
   validates_presence_of :title
   validates_presence_of :url
   validate :validate_url
@@ -91,6 +95,7 @@ class Source
   # == Class Methods
   
   # == JSON Output
+
   alias original_to_json to_json
   def to_json(options = nil)
     original_to_json({

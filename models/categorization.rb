@@ -3,6 +3,7 @@ class Categorization
   include MongoMapper::Document
 
   # == Attributes
+
   key :source_id,   String
   key :category_id, String
   timestamps!
@@ -10,6 +11,7 @@ class Categorization
   # == Indices
 
   # == Associations
+
   belongs_to :source
   belongs_to :category
 
@@ -22,6 +24,7 @@ class Categorization
   # == Derived Fields
 
   # == JSON Output
+
   # == Various Instance Methods
 
 end

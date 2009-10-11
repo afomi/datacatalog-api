@@ -4,6 +4,7 @@ class Comment
   include MongoMapper::Document
 
   # == Attributes
+
   key :text,          String
   key :source_id,     String
   key :user_id,       String
@@ -14,11 +15,13 @@ class Comment
   # == Indices
 
   # == Associations
+
   many :ratings
 
   # == Derived Fields
 
   # == Validations
+
   validates_presence_of :text
   validates_presence_of :source_id
   validates_presence_of :user_id
