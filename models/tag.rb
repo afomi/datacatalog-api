@@ -1,6 +1,7 @@
 class Tag
 
   include MongoMapper::Document
+  include Renderable
 
   # == Attributes
 

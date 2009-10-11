@@ -2,6 +2,7 @@
 class Document
 
   include MongoMapper::Document
+  include Renderable
 
   # == Attributes
 

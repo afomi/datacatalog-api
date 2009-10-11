@@ -8,6 +8,7 @@
 class Rating
 
   include MongoMapper::Document
+  include Renderable
 
   # == Attributes
 

@@ -3,6 +3,8 @@ require 'digest/sha1'
 class User
   
   include MongoMapper::Document
+  include Renderable
+
   class InconsistentState < RuntimeError; end
 
   # == Attributes
@@ -26,11 +28,13 @@ class User
 
   # == Derived Fields
 
+  derived_key :application_api_keys
   def application_api_keys
     objects = api_keys.select { |k| k.key_type == "application" }
     objects.map { |k| k.api_key }
   end
 
+  derived_key :primary_api_key
   def primary_api_key
     keys = api_keys.select { |k| k.key_type == "primary" }
     case keys.length
@@ -39,7 +43,8 @@ class User
     else raise InconsistentState, "More than one primary API key found"
     end
   end
-  
+
+  derived_key :valet_api_keys
   def valet_api_keys
     objects = api_keys.select { |k| k.key_type == "valet" }
     objects.map { |k| k.api_key }
@@ -78,19 +83,6 @@ class User
     key = ApiKey.new(params)
     self.api_keys << key
     self.save!
-  end
-  
-  alias original_to_json to_json
-  def to_json(options = nil)
-    original_to_json({
-      :methods => [
-        :id,
-        :primary_api_key,
-        :application_api_keys,
-        :valet_api_keys
-      ],
-      :except  => :_id
-    })
   end
   
 end

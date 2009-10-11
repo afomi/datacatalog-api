@@ -8,7 +8,7 @@ require File.dirname(__FILE__) + '/config/config'
 Sinatra::Base.set(:config, Config.environment_config)
 Config.setup
 
-gem 'rest-sinatra', ">= 0.3.2", "< 0.4.0"
+gem 'rest-sinatra', ">= 0.3.3", "< 0.4.0"
 require 'rest-sinatra'
 
 base = File.dirname(__FILE__)

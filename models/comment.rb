@@ -2,6 +2,7 @@
 class Comment
 
   include MongoMapper::Document
+  include Renderable
 
   # == Attributes
 

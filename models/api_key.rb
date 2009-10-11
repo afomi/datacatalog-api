@@ -1,6 +1,7 @@
 class ApiKey
   
   include MongoMapper::EmbeddedDocument
+  include Renderable
 
   # == Attributes
 

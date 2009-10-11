@@ -1,6 +1,7 @@
 class Categorization
 
   include MongoMapper::Document
+  include Renderable
 
   # == Attributes
 

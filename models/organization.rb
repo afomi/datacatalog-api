@@ -1,6 +1,7 @@
 class Organization
 
   include MongoMapper::Document
+  include Renderable
 
   # == Attributes
 

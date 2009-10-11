@@ -1,6 +1,7 @@
 class Source
 
   include MongoMapper::Document
+  include Renderable
 
   # == Attributes
 
@@ -32,12 +33,15 @@ class Source
   end
   
   # == Derived Attributes
+
+  derived_key :category_names
   def category_names
     categorizations.map do |categorization|
       categorization.category.name
     end
   end
-  
+
+  derived_key :updates_per_year
   def updates_per_year
     FREQUENCIES[frequency]
   end
@@ -91,17 +95,6 @@ class Source
 
   # == Class Methods
   
-  # == JSON Output
-
-  alias original_to_json to_json
-  def to_json(options = nil)
-    original_to_json({
-      :methods => [
-        :updates_per_year,
-        :category_names,
-      ],
-    })
-  end
   # == Various Instance Methods
   
 end

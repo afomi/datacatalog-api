@@ -1,6 +1,7 @@
 class Category
 
   include MongoMapper::Document
+  include Renderable
 
   # == Attributes
 
