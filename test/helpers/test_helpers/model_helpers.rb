@@ -52,19 +52,47 @@ module ModelHelpers
   
   # == Factories
   
-  def create_source_rating(params)
-    required = {
+  def create_source(custom={})
+    create_model!(Source, custom, {
+      :title => "2005-2007 American Community Survey Three-Year PUMS Housing File",
+      :url   => "http://www.data.gov/details/90"
+    })
+  end
+  
+  def create_source_rating(custom={})
+    create_model!(Rating, custom, {
       :kind      => "source",
       :value     => 4,
       :text      => "Rating Text",
       :user_id   => @normal_user.id,
       :source_id => get_fake_mongo_object_id,
-    }
-    rating = Rating.create(required.merge(params))
-    unless rating.valid?
-      raise "Invalid Rating: #{rating.errors.errors.inspect}"
-    end
-    rating
+    })
   end
   
+
+  def new_source(custom={})
+    new_model!(Source, custom, {
+      :title => "2005-2007 American Community Survey Three-Year PUMS Housing File",
+      :url   => "http://www.data.gov/details/90"
+    })
+  end
+  
+  protected
+
+  def create_model!(klass, custom, required)
+    model = klass.create(required.merge(custom))
+    unless model.valid?
+      raise "Invalid #{klass}: #{model.errors.errors.inspect}"
+    end
+    model
+  end
+
+  def new_model!(klass, custom, required)
+    model = klass.new(required.merge(custom))
+    unless model.valid?
+      raise "Invalid #{klass}: #{model.errors.errors.inspect}"
+    end
+    model
+  end
+
 end
