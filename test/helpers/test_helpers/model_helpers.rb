@@ -49,9 +49,22 @@ module ModelHelpers
       :admin     => true
     })
   end
-
-  # def create_example_source
-  #   
-  # end
+  
+  # == Factories
+  
+  def create_source_rating(params)
+    required = {
+      :kind      => "source",
+      :value     => 4,
+      :text      => "Rating Text",
+      :user_id   => @normal_user.id,
+      :source_id => get_fake_mongo_object_id,
+    }
+    rating = Rating.create(required.merge(params))
+    unless rating.valid?
+      raise "Invalid Rating: #{rating.errors.errors.inspect}"
+    end
+    rating
+  end
   
 end
