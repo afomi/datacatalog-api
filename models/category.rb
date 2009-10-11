@@ -19,6 +19,13 @@ class Category
   end
 
   # == Derived Fields
+  
+  derived_key :source_ids
+  def source_ids
+    categorizations.map do |categorization|
+      categorization.source.id
+    end
+  end
 
   # == Validations
 
