@@ -72,7 +72,7 @@ class SourcesGetOneControllerTest < RequestTestCase
       use "successful GET source with :id"
     end
 
-    context "#{role} API key : get /:id with ratings" do
+    context "#{role} API key : 2 ratings : get /:id" do
       before do
         @ratings = [
           create_source_rating(
