@@ -107,7 +107,6 @@ class SourceUnitTest < ModelTestCase
         annually
         yearly
         unknown
-        irregular
       )
 
       VALID_FREQUENCIES.each do |term|
