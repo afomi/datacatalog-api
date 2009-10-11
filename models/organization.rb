@@ -17,6 +17,8 @@ class Organization
   # == Associations
   many :sources
 
+  # == Derived Attributes
+
   # == Validations
   validates_presence_of :name
   validate :validate_url

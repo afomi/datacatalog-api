@@ -16,6 +16,8 @@ class Comment
   # == Associations
   many :ratings
 
+  # == Derived Fields
+
   # == Validations
   validates_presence_of :text
   validates_presence_of :source_id

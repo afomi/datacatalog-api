@@ -14,6 +14,8 @@ class Document
 
   # == Associations
 
+  # == Derived Fields
+
   # == Validations
 
   # == Class Methods

@@ -13,6 +13,8 @@ class Categorization
   belongs_to :source
   belongs_to :category
 
+  # == Derived Fields
+
   # == Validations
 
   # == Class Methods

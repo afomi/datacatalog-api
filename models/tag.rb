@@ -12,6 +12,8 @@ class Tag
 
   # == Associations
 
+  # == Derived Fields
+
   # == Validations
 
   # == Class Methods

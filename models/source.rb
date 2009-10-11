@@ -24,6 +24,24 @@ class Source
   many :categorizations
   belongs_to :organization
   
+  # == Derived Attributes
+
+  def categories
+    categorizations.map do |categorization|
+      categorization.category
+    end
+  end
+  
+  def category_names
+    categorizations.map do |categorization|
+      categorization.category.name
+    end
+  end
+  
+  def updates_per_year
+    FREQUENCIES[frequency]
+  end
+  
   # == Validations
   validates_presence_of :title
   validates_presence_of :url
@@ -71,23 +89,6 @@ class Source
   end
 
   # == Class Methods
-
-  # == Derived Fields
-  def categories
-    categorizations.map do |categorization|
-      categorization.category
-    end
-  end
-  
-  def category_names
-    categorizations.map do |categorization|
-      categorization.category.name
-    end
-  end
-  
-  def updates_per_year
-    FREQUENCIES[frequency]
-  end
   
   # == JSON Output
   alias original_to_json to_json

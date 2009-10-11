@@ -26,6 +26,8 @@ class Rating
   belongs_to :source
   belongs_to :comment
 
+  # == Derived Attributes
+
   # == Validations
   validates_presence_of :user_id
   validates_presence_of :value

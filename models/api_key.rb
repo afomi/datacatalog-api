@@ -12,6 +12,8 @@ class ApiKey
 
   # == Associations
 
+  # == Derived Fields
+
   # == Validations
   
   # == Class Methods

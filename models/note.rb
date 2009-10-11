@@ -12,6 +12,8 @@ class Note
 
   # == Associations
 
+  # == Derived Attributes
+
   # == Validations
 
   # == Class Methods

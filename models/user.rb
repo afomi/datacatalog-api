@@ -21,15 +21,12 @@ class User
   many :api_keys
   many :ratings
 
-  # == Validations
+  # == Derived Fields
 
-  # == Class Methods
-  def self.find_by_api_key(api_key)
-    find(:first, :conditions => { 'api_keys.api_key' => api_key })
-    # TODO: find :all and raise exception if more than 1 result
+  def application_api_keys
+    objects = api_keys.select { |k| k.key_type == "application" }
+    objects.map { |k| k.api_key }
   end
-
-  # == Various Instance Methods
 
   def primary_api_key
     keys = api_keys.select { |k| k.key_type == "primary" }
@@ -40,15 +37,22 @@ class User
     end
   end
   
-  def application_api_keys
-    objects = api_keys.select { |k| k.key_type == "application" }
-    objects.map { |k| k.api_key }
-  end
-  
   def valet_api_keys
     objects = api_keys.select { |k| k.key_type == "valet" }
     objects.map { |k| k.api_key }
   end
+
+  # == Validations
+
+  # == Class Methods
+  def self.find_by_api_key(api_key)
+    find(:first, :conditions => { 'api_keys.api_key' => api_key })
+    # TODO: find :all and raise exception if more than 1 result
+  end
+
+  # == Instance Methods
+
+  # == Various Instance Methods
 
   def generate_api_key
     salt = Config.environment_config["api_key_salt"]
