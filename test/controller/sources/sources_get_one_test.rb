@@ -100,8 +100,10 @@ class SourcesGetOneControllerTest < RequestTestCase
 
     context "#{role} API key : 3 categorizations : get /:id" do
       before do
-        %w(Energy Finance Poverty).each do |name|
-          category = create_category(:name => name)
+        @categories = %w(Energy Finance Poverty).map do |name|
+          create_category(:name => name)
+        end
+        @categories.each do |category|
           create_categorization(
             :category_id => category.id,
             :source_id   => @id
@@ -111,6 +113,13 @@ class SourcesGetOneControllerTest < RequestTestCase
       end
 
       use "successful GET source with :id"
+
+      test "body should have correct category_ids" do
+        actual = parsed_response_body["category_ids"]
+        @categories.each do |category|
+          assert_include category.id, actual
+        end
+      end
       
       test "body should have correct category_names" do
         actual = parsed_response_body["category_names"]

@@ -34,6 +34,13 @@ class Source
   
   # == Derived Attributes
 
+  derived_key :category_ids
+  def category_ids
+    categorizations.map do |categorization|
+      categorization.category.id
+    end
+  end
+
   derived_key :category_names
   def category_names
     categorizations.map do |categorization|
