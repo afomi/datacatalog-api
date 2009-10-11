@@ -63,9 +63,7 @@ class SourcesGetOneControllerTest < RequestTestCase
 
       use "attempted GET source with :fake_id"
     end
-  end
 
-  %w(normal curator admin).each do |role|
     context "#{role} API key : get /:id" do
       before do
         get "/#{@id}", :api_key => primary_api_key_for(role)
