@@ -42,9 +42,6 @@ class Source
     end
   end
   
-  # TODO: add key :updates_per_year
-  # that takes the value from this hash:
-  # (The purpose is to allow sorting.)
   FREQUENCIES = {
     "each second"  => 31_536_000,
     "each minute"  =>    525_600,
@@ -77,6 +74,16 @@ class Source
   # == Instance Methods
   def updates_per_year
     FREQUENCIES[frequency]
+  end
+  
+  # == JSON Output
+  alias original_to_json to_json
+  def to_json(options = nil)
+    original_to_json({
+      :methods => [
+        :updates_per_year,
+      ],
+    })
   end
   
 end
