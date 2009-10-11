@@ -6,15 +6,18 @@ class RequestTestCase < Test::Unit::TestCase
   include RequestHelpers
 
   before :all do
-    Category.destroy_all
-    Comment.destroy_all
-    Document.destroy_all
-    Note.destroy_all
-    Organization.destroy_all
-    Rating.destroy_all
-    Source.destroy_all
-    Tag.destroy_all
-    User.destroy_all
+    [
+      Categorization,
+      Category,
+      Comment,
+      Document,
+      Note,
+      Organization,
+      Rating,
+      Source,
+      Tag,
+      User,
+    ].each { |m| m.destroy_all }
     @normal_user = create_normal_user
     @curator_user = create_curator_user
     @admin_user = create_admin_user
