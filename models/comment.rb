@@ -23,6 +23,6 @@ class Comment
 
   # == Class Methods
 
-  # == Instance Methods
+  # == Various Instance Methods
 
 end

@@ -73,7 +73,7 @@ class Rating
 
   # == Class Methods
 
-  # == Instance Methods
+  # == Various Instance Methods
   def find_rated_document
     case self.kind
     when "comment" then self.comment

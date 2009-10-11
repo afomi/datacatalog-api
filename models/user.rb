@@ -29,7 +29,8 @@ class User
     # TODO: find :all and raise exception if more than 1 result
   end
 
-  # == Instance Methods
+  # == Various Instance Methods
+
   def primary_api_key
     keys = api_keys.select { |k| k.key_type == "primary" }
     case keys.length

@@ -16,7 +16,8 @@ class ApiKey
   
   # == Class Methods
 
-  # == Instance Methods
+  # == Various Instance Methods
+
   def initialize(attrs={})
     super
     write_attribute('created_at', Time.now.utc) unless read_attribute('created_at')

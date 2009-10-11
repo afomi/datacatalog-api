@@ -20,5 +20,6 @@ class Category
   def sources
     categorizations.map(&:source)
   end
+  # == Various Instance Methods
 
 end

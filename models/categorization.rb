@@ -20,5 +20,6 @@ class Categorization
   # == Derived Fields
 
   # == JSON Output
+  # == Various Instance Methods
 
 end
