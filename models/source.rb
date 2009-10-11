@@ -21,6 +21,7 @@ class Source
 
   # == Associations
   many :ratings
+  many :categorizations
   belongs_to :organization
   
   # == Validations
@@ -71,7 +72,19 @@ class Source
 
   # == Class Methods
 
-  # == Instance Methods
+  # == Derived Fields
+  def categories
+    categorizations.map do |categorization|
+      categorization.category
+    end
+  end
+  
+  def category_names
+    categorizations.map do |categorization|
+      categorization.category.name
+    end
+  end
+  
   def updates_per_year
     FREQUENCIES[frequency]
   end
@@ -82,6 +95,7 @@ class Source
     original_to_json({
       :methods => [
         :updates_per_year,
+        :category_names,
       ],
     })
   end

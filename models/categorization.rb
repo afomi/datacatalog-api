@@ -1,24 +1,24 @@
-class Category
+class Categorization
 
   include MongoMapper::Document
 
   # == Attributes
-  key :name, String
+  key :source_id,   String
+  key :category_id, String
   timestamps!
 
   # == Indices
 
   # == Associations
-  many :categorizations
+  belongs_to :source
+  belongs_to :category
 
   # == Validations
-  validates_presence_of :name
 
   # == Class Methods
 
   # == Derived Fields
-  def sources
-    categorizations.map(&:source)
-  end
+
+  # == JSON Output
 
 end

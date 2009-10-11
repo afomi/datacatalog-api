@@ -97,6 +97,27 @@ class SourcesGetOneControllerTest < RequestTestCase
         assert_equal 2, parsed_response_body["ratings_count"]
       end
     end
+
+    context "#{role} API key : 3 categorizations : get /:id" do
+      before do
+        %w(Energy Finance Poverty).each do |name|
+          category = create_category(:name => name)
+          create_categorization(
+            :category_id => category.id,
+            :source_id   => @id
+          )
+        end
+        get "/#{@id}", :api_key => primary_api_key_for(role)
+      end
+
+      use "successful GET source with :id"
+      
+      test "body should have correct category_names" do
+        actual = parsed_response_body["category_names"]
+        expected = %w(Finance Energy Poverty)
+        assert_equal expected.sort, actual.sort
+      end
+    end
   end
 
 end

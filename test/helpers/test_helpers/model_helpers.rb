@@ -69,11 +69,38 @@ module ModelHelpers
     })
   end
   
+  def create_category(custom={})
+    create_model!(Category, custom, {
+      :source_id   => get_fake_mongo_object_id,
+      :category_id => get_fake_mongo_object_id,
+    })
+  end
+  
+  def create_categorization(custom={})
+    create_model!(Categorization, custom, {
+      :source_id   => get_fake_mongo_object_id,
+      :category_id => get_fake_mongo_object_id,
+    })
+  end
 
   def new_source(custom={})
     new_model!(Source, custom, {
       :title => "2005-2007 American Community Survey Three-Year PUMS Housing File",
       :url   => "http://www.data.gov/details/90"
+    })
+  end
+
+  def new_category(custom={})
+    new_model!(Category, custom, {
+      :source_id   => get_fake_mongo_object_id,
+      :category_id => get_fake_mongo_object_id,
+    })
+  end
+  
+  def new_categorization(custom={})
+    new_model!(Categorization, custom, {
+      :source_id   => get_fake_mongo_object_id,
+      :category_id => get_fake_mongo_object_id,
     })
   end
   
