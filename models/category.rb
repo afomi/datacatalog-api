@@ -13,11 +13,11 @@ class Category
 
   many :categorizations
 
-  # == Derived Fields
-
   def sources
     categorizations.map(&:source)
   end
+
+  # == Derived Fields
 
   # == Validations
 

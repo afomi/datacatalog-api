@@ -26,15 +26,12 @@ class Source
   many :ratings
   many :categorizations
   belongs_to :organization
-  
-  # == Derived Attributes
 
   def categories
-    categorizations.map do |categorization|
-      categorization.category
-    end
+    categorizations.map(&:category)
   end
   
+  # == Derived Attributes
   def category_names
     categorizations.map do |categorization|
       categorization.category.name
