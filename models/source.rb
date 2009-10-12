@@ -47,7 +47,7 @@ class Source
 
   derived_key :updates_per_year
   def updates_per_year
-    FREQUENCIES[frequency]
+    FREQUENCIES[frequency].to_f
   end
   
   derived_key :comment_details
@@ -84,6 +84,10 @@ class Source
     end
   end
   
+  # Source: the Macintosh built-in dictionary:
+  # Notes:
+  # * biweekly is ambiguous so I left it out
+  # * biennially != biannually
   FREQUENCIES = {
     "each second"  => 31_536_000,
     "each minute"  =>    525_600,
@@ -99,8 +103,13 @@ class Source
     "monthly"      =>         12,
     "quarterly"    =>          4,
     "biannually"   =>          2,
+    "annual"       =>          1,
     "annually"     =>          1,
     "yearly"       =>          1,
+    "biennial"     =>          0.5,
+    "biennially"   =>          0.5,
+    "one time"     =>          0,
+    "one-time"     =>          0,
     "other"        =>        nil,
     "unknown"      =>        nil,
   }
