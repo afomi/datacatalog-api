@@ -24,9 +24,10 @@ class Source
 
   # == Associations
 
-  many :ratings
-  many :categorizations
   belongs_to :organization
+  many :categorizations
+  many :comments
+  many :ratings
 
   def categories
     categorizations.map(&:category)

@@ -52,6 +52,14 @@ module ModelHelpers
   
   # == Factories
   
+  def create_comment(custom={})
+    create_model!(Comment, custom, {
+      :text      => "Comment Text",
+      :source_id => get_fake_mongo_object_id,
+      :user_id   => get_fake_mongo_object_id,
+    })
+  end
+  
   def create_source(custom={})
     create_model!(Source, custom, {
       :title => "2005-2007 American Community Survey Three-Year PUMS Housing File",
@@ -80,6 +88,14 @@ module ModelHelpers
     create_model!(Categorization, custom, {
       :source_id   => get_fake_mongo_object_id,
       :category_id => get_fake_mongo_object_id,
+    })
+  end
+  
+  def new_comment(custom={})
+    new_model!(Comment, custom, {
+      :text      => "Comment Text",
+      :source_id => get_fake_mongo_object_id,
+      :user_id   => get_fake_mongo_object_id,
     })
   end
 
