@@ -13,6 +13,7 @@
     gem install mongo
     gem install djsun-mongomapper
     gem install rest-sinatra
+    gem install frequency
 
 ## Testing
 

@@ -47,7 +47,7 @@ class Source
 
   derived_key :updates_per_year
   def updates_per_year
-    FREQUENCIES[frequency].to_f
+    Frequency.new(frequency).per_year
   end
   
   derived_key :comment_details
@@ -83,39 +83,9 @@ class Source
       errors.add(:period_end, "must be later than period_start")
     end
   end
-  
-  # Source: the Macintosh built-in dictionary:
-  # Notes:
-  # * biweekly is ambiguous so I left it out
-  # * biennially != biannually
-  FREQUENCIES = {
-    "each second"  => 31_536_000,
-    "each minute"  =>    525_600,
-    "each hour"    =>      8_760,
-    "each day"     =>        365,
-    "each week"    =>         52,
-    "each month"   =>         12,
-    "each quarter" =>          4,
-    "each year"    =>          1,
-    "hourly"       =>      8_760,
-    "daily"        =>        365,
-    "weekly"       =>         52,
-    "monthly"      =>         12,
-    "quarterly"    =>          4,
-    "biannually"   =>          2,
-    "annual"       =>          1,
-    "annually"     =>          1,
-    "yearly"       =>          1,
-    "biennial"     =>          0.5,
-    "biennially"   =>          0.5,
-    "one time"     =>          0,
-    "one-time"     =>          0,
-    "other"        =>        nil,
-    "unknown"      =>        nil,
-  }
-  
+
   def validate_frequency
-    if frequency && !FREQUENCIES.keys.include?(frequency)
+    if frequency && !Frequency.new(frequency).valid?
       errors.add(:frequency, "is invalid")
     end
   end

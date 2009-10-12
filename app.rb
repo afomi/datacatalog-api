@@ -11,6 +11,9 @@ Config.setup
 gem 'rest-sinatra', ">= 0.3.3", "< 0.4.0"
 require 'rest-sinatra'
 
+gem 'frequency', '>= 0.1.0'
+require 'frequency'
+
 base = File.dirname(__FILE__)
 Dir.glob(base + '/lib/*.rb'               ).each { |f| require f }
 Dir.glob(base + '/model_helpers/*.rb'     ).each { |f| require f }
