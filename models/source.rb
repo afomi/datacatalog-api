@@ -35,17 +35,13 @@ class Source
   
   # == Derived Attributes
 
-  derived_key :category_ids
-  def category_ids
+  derived_key :category_details
+  def category_details
     categorizations.map do |categorization|
-      categorization.category.id
-    end
-  end
-
-  derived_key :category_names
-  def category_names
-    categorizations.map do |categorization|
-      categorization.category.name
+      {
+        "href" => "/categories/#{categorization.category.id}",
+        "name" => categorization.category.name,
+      }
     end
   end
 

@@ -54,7 +54,7 @@ class SourcesGetOneControllerTest < RequestTestCase
       use "return 401 because the API key is invalid"
     end
   end
-  
+
   %w(normal curator admin).each do |role|
     context "#{role} API key : get /:fake_id" do
       before do
@@ -114,17 +114,15 @@ class SourcesGetOneControllerTest < RequestTestCase
 
       use "successful GET source with :id"
 
-      test "body should have correct category_ids" do
-        actual = parsed_response_body["category_ids"]
+      test "body should have correct category_details" do
+        actual = parsed_response_body["category_details"]
         @categories.each do |category|
-          assert_include category.id, actual
+          expected = {
+            "href" => "/categories/#{category.id}",
+            "name" => category.name,
+          }
+          assert_include expected, actual
         end
-      end
-      
-      test "body should have correct category_names" do
-        actual = parsed_response_body["category_names"]
-        expected = %w(Finance Energy Poverty)
-        assert_equal expected.sort, actual.sort
       end
     end
 
