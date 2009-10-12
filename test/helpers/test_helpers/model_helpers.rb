@@ -53,11 +53,12 @@ module ModelHelpers
   # == Factories
   
   def create_comment(custom={})
-    create_model!(Comment, custom, {
+    required = {
       :text      => "Comment Text",
       :source_id => get_fake_mongo_object_id,
-      :user_id   => get_fake_mongo_object_id,
-    })
+    }
+    required[:user_id] = @normal_user.id if @normal_user
+    create_model!(Comment, custom, required)
   end
   
   def create_source(custom={})
@@ -68,13 +69,14 @@ module ModelHelpers
   end
   
   def create_source_rating(custom={})
-    create_model!(Rating, custom, {
+    required = {
       :kind      => "source",
       :value     => 4,
       :text      => "Rating Text",
-      :user_id   => @normal_user.id,
       :source_id => get_fake_mongo_object_id,
-    })
+    }
+    required[:user_id] = @normal_user.id if @normal_user
+    create_model!(Rating, custom, required)
   end
   
   def create_category(custom={})
@@ -92,11 +94,12 @@ module ModelHelpers
   end
   
   def new_comment(custom={})
-    new_model!(Comment, custom, {
+    required = {
       :text      => "Comment Text",
       :source_id => get_fake_mongo_object_id,
-      :user_id   => get_fake_mongo_object_id,
-    })
+    }
+    required[:user_id] = @normal_user.id if @normal_user
+    new_model!(Comment, custom, required)
   end
 
   def new_source(custom={})
