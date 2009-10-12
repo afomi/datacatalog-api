@@ -56,9 +56,6 @@ class Source
   
   derived_key :comment_details
   def comment_details
-    # puts "\n== comment_details"
-    # puts comments.class
-    comments
     comments.map do |comment|
       {
         "href" => "/comments/#{comment.id}",
