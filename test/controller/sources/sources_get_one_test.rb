@@ -146,7 +146,7 @@ class SourcesGetOneControllerTest < RequestTestCase
       use "successful GET source with :id"
       
       test "body should have correct comment_details" do
-        comment_details = parsed_response_body["comment_details"]
+        actual = parsed_response_body["comment_details"]
         @comments.each do |comment|
           expected = {
             "href" => "/comments/#{comment.id}",
@@ -156,7 +156,7 @@ class SourcesGetOneControllerTest < RequestTestCase
               "href" => "/users/#{@normal_user.id}"
             }
           }
-          assert_include expected, comment_details
+          assert_include expected, actual
         end
       end
     end
