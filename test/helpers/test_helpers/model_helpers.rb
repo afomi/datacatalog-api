@@ -62,7 +62,7 @@ module ModelHelpers
   
   def create_source(custom={})
     create_model!(Source, custom, {
-      :title => "2005-2007 American Community Survey Three-Year PUMS Housing File",
+      :title => "2005-2007 American Community Survey PUMS Housing File",
       :url   => "http://www.data.gov/details/90"
     })
   end
