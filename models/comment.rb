@@ -18,6 +18,7 @@ class Comment
   # == Associations
 
   belongs_to :source
+  belongs_to :user
   many :ratings
 
   # == Derived Fields

@@ -127,6 +127,40 @@ class SourcesGetOneControllerTest < RequestTestCase
         assert_equal expected.sort, actual.sort
       end
     end
+
+    context "#{role} API key : 2 comments : get /:id" do
+      before do
+        @comments = [
+          create_comment({
+            :text      => "Comment 1",
+            :source_id => @id,
+          }),
+          create_comment({
+            :text      => "Comment 2",
+            :source_id => @id,
+          })
+        ]
+        get "/#{@id}", :api_key => primary_api_key_for(role)
+      end
+      
+      use "successful GET source with :id"
+      
+      test "body should have correct comment_details" do
+        comment_details = parsed_response_body["comment_details"]
+        @comments.each do |comment|
+          expected = {
+            "href" => "/comments/#{comment.id}",
+            "text" => comment.text,
+            "user" => {
+              "name" => "Normal User",
+              "href" => "/users/#{@normal_user.id}"
+            }
+          }
+          assert_include expected, comment_details
+        end
+      end
+    end
+
   end
 
 end

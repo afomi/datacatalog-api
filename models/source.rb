@@ -54,6 +54,23 @@ class Source
     FREQUENCIES[frequency]
   end
   
+  derived_key :comment_details
+  def comment_details
+    # puts "\n== comment_details"
+    # puts comments.class
+    comments
+    comments.map do |comment|
+      {
+        "href" => "/comments/#{comment.id}",
+        "text" => comment.text,
+        "user" => {
+          "name" => comment.user.name,
+          "href" => "/users/#{comment.user.id}",
+        }
+      }
+    end
+  end
+  
   # == Validations
 
   validates_presence_of :title
