@@ -5,9 +5,11 @@ class DocumentsPutControllerTest < RequestTestCase
   def app; DataCatalog::Documents end
 
   before :all do
-    @document = Document.create({
-      :text => "Original Document"
-    })
+    source = create_source
+    @document = create_document(
+      :text      => "Original Document",
+      :source_id => source.id
+    )
     @id = @document.id
     @fake_id = get_fake_mongo_object_id
     @document_count = Document.count

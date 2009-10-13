@@ -61,7 +61,7 @@ class DocumentsPostControllerTest < RequestTestCase
   end
   
   # - - - - - - - - - -
-
+  
   context "admin API key : post / with protected param" do
     before do
       post "/", {
@@ -94,9 +94,11 @@ class DocumentsPostControllerTest < RequestTestCase
   
   context "curator API key : post / with correct params" do
     before do
+      source = create_source
       post "/", {
-        :api_key => @curator_user.primary_api_key,
-        :text    => "Document A",
+        :api_key   => @curator_user.primary_api_key,
+        :text      => "Document A",
+        :source_id => source.id
       }
     end
     
@@ -105,12 +107,14 @@ class DocumentsPostControllerTest < RequestTestCase
   
   context "admin API key : post / with correct params" do
     before do
+      source = create_source
       post "/", {
-        :api_key => @admin_user.primary_api_key,
-        :text    => "Document A",
+        :api_key   => @admin_user.primary_api_key,
+        :text      => "Document A",
+        :source_id => source.id
       }
     end
-
+  
     use "successful POST to documents"
   end
 

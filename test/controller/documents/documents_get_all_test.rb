@@ -76,10 +76,10 @@ class DocumentsGetAllControllerTest < RequestTestCase
   context_ "3 documents" do
     before do
       3.times do |n|
-        Document.create(
-          :text        => "Document #{n}",
-          :user_id     => get_fake_mongo_object_id,
-          :previous_id => get_fake_mongo_object_id
+        source = create_source
+        create_document(
+          :text      => "Document #{n}",
+          :source_id => source.id
         )
       end
     end

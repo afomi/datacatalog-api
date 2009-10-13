@@ -5,7 +5,10 @@ class DocumentsDeleteControllerTest < RequestTestCase
   def app; DataCatalog::Documents end
 
   before do
-    document = Document.create(:text => "Original Document")
+    source = create_source
+    document = create_document(
+      :source_id => source.id
+    )
     @id = document.id
     @document_count = Document.count
     @fake_id = get_fake_mongo_object_id

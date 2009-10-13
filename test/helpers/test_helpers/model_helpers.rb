@@ -61,6 +61,15 @@ module ModelHelpers
     create_model!(Comment, custom, required)
   end
   
+  def create_document(custom={})
+    required = {
+      :text      => "Sample Document",
+      :source_id => get_fake_mongo_object_id,
+    }
+    required[:user_id] = @normal_user.id if @normal_user
+    create_model!(Document, custom, required)
+  end
+  
   def create_source(custom={})
     create_model!(Source, custom, {
       :title => "2005-2007 American Community Survey PUMS Housing File",
@@ -100,6 +109,15 @@ module ModelHelpers
     }
     required[:user_id] = @normal_user.id if @normal_user
     new_model!(Comment, custom, required)
+  end
+  
+  def new_document(custom={})
+    required = {
+      :text      => "Sample Document",
+      :source_id => get_fake_mongo_object_id,
+    }
+    required[:user_id] = @normal_user.id if @normal_user
+    new_model!(Document, custom, required)
   end
 
   def new_source(custom={})

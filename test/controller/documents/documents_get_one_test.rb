@@ -5,10 +5,9 @@ class DocumentsGetOneControllerTest < RequestTestCase
   def app; DataCatalog::Documents end
 
   before do
-    document = Document.create(
-      :text        => "Document A",
-      :user_id     => get_fake_mongo_object_id,
-      :previous_id => get_fake_mongo_object_id
+    source = create_source
+    document = create_document(
+      :source_id => source.id
     )
     @id = document.id
     @fake_id = get_fake_mongo_object_id
@@ -26,7 +25,7 @@ class DocumentsGetOneControllerTest < RequestTestCase
     use "return timestamps and id in body"
   
     test "body should have correct text" do
-      assert_equal "Document A", parsed_response_body["text"]
+      assert_equal "Sample Document", parsed_response_body["text"]
     end
     
     test "body should have user_id" do
