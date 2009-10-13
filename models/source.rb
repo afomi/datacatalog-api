@@ -31,6 +31,7 @@ class Source
   many :categorizations
   many :comments
   many :documents
+  many :notes
   many :ratings
 
   def categories
