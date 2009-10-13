@@ -159,6 +159,39 @@ class SourcesGetOneControllerTest < RequestTestCase
       end
     end
 
+    context "#{role} API key : 2 documents : get /:id" do
+      before do
+        @documents = [
+          create_document({
+            :text      => "Document 1",
+            :source_id => @id,
+          }),
+          create_document({
+            :text      => "Document 2",
+            :source_id => @id,
+          })
+        ]
+        get "/#{@id}", :api_key => primary_api_key_for(role)
+      end
+      
+      use "successful GET source with :id"
+      
+      test "body should have correct document_details" do
+        actual = parsed_response_body["document_details"]
+        @documents.each do |document|
+          expected = {
+            "href" => "/documents/#{document.id}",
+            "text" => document.text,
+            "user" => {
+              "name" => "Normal User",
+              "href" => "/users/#{@normal_user.id}"
+            }
+          }
+          assert_include expected, actual
+        end
+      end
+    end
+
   end
 
 end

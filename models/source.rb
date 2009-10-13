@@ -30,6 +30,7 @@ class Source
   belongs_to :organization
   many :categorizations
   many :comments
+  many :documents
   many :ratings
 
   def categories
@@ -57,6 +58,20 @@ class Source
         "user" => {
           "name" => comment.user.name,
           "href" => "/users/#{comment.user.id}",
+        }
+      }
+    end
+  end
+
+  derived_key :document_details
+  def document_details
+    documents.map do |document|
+      {
+        "href" => "/documents/#{document.id}",
+        "text" => document.text,
+        "user" => {
+          "name" => document.user.name,
+          "href" => "/users/#{document.user.id}",
         }
       }
     end
