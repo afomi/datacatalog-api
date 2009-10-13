@@ -51,6 +51,20 @@ module ModelHelpers
   end
   
   # == Factories
+
+  def create_category(custom={})
+    create_model!(Category, custom, {
+      :source_id   => get_fake_mongo_object_id,
+      :category_id => get_fake_mongo_object_id,
+    })
+  end
+  
+  def create_categorization(custom={})
+    create_model!(Categorization, custom, {
+      :source_id   => get_fake_mongo_object_id,
+      :category_id => get_fake_mongo_object_id,
+    })
+  end
   
   def create_comment(custom={})
     required = {
@@ -106,16 +120,16 @@ module ModelHelpers
     required[:user_id] = @normal_user.id if @normal_user
     create_model!(Rating, custom, required)
   end
-  
-  def create_category(custom={})
-    create_model!(Category, custom, {
+
+  def new_category(custom={})
+    new_model!(Category, custom, {
       :source_id   => get_fake_mongo_object_id,
       :category_id => get_fake_mongo_object_id,
     })
   end
   
-  def create_categorization(custom={})
-    create_model!(Categorization, custom, {
+  def new_categorization(custom={})
+    new_model!(Categorization, custom, {
       :source_id   => get_fake_mongo_object_id,
       :category_id => get_fake_mongo_object_id,
     })
@@ -165,20 +179,6 @@ module ModelHelpers
     })
   end
 
-  def new_category(custom={})
-    new_model!(Category, custom, {
-      :source_id   => get_fake_mongo_object_id,
-      :category_id => get_fake_mongo_object_id,
-    })
-  end
-  
-  def new_categorization(custom={})
-    new_model!(Categorization, custom, {
-      :source_id   => get_fake_mongo_object_id,
-      :category_id => get_fake_mongo_object_id,
-    })
-  end
-  
   protected
 
   def create_model!(klass, custom, required)
