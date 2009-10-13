@@ -11,17 +11,16 @@ class NotesGetSearchControllerTest < RequestTestCase
     assert_not_include "_id", element
   end
   
-  shared "successful GET of notes where text is 'note 3'" do
+  shared "successful GET of notes where text is 'Note 2'" do
     test "body should have 2 top level elements" do
       assert_equal 2, parsed_response_body.length
     end
 
     test "each element should be correct" do
       parsed_response_body.each do |element|
-        assert_equal "note 3", element["text"]
-        assert_equal @user_id, element["user_id"]
-        assert_equal "#{@source_base}3", element["source_id"]
-        assert_equal "#{@previous_base}3", element["previous_id"]
+        assert_equal 'Note 2', element["text"]
+        assert_equal @normal_user.id, element["user_id"]
+        assert_equal @sources[2].id, element["source_id"]
         assert_shared_attributes element
       end
     end
@@ -30,36 +29,33 @@ class NotesGetSearchControllerTest < RequestTestCase
   # - - - - - - - - - -
 
   context_ "6 notes" do
-    before do
-      @user_id       = "4aa677bb25b7e70733000001"
-      @source_base   = "200077d325b7e7073300000"
-      @previous_base = "1000200005b7e70733000BB"
+    before :all do
+      @sources = (0 ... 3).map { |n| create_source }
       6.times do |n|
-        k = (n % 3) + 1
-        assert Note.create(
-          :text        => "note #{k}",
-          :user_id     => @user_id,
-          :source_id   => "#{@source_base}#{k}",
-          :previous_id => "#{@previous_base}#{k}"
-        ).valid?
+        k = n % 3
+        create_note(
+          :text      => "Note #{k}",
+          :user_id   => @normal_user.id,
+          :source_id => @sources[k].id
+        )
       end
     end
 
     # - - - - - - - - - -
 
-    context "anonymous : get / where text is 'note 3'" do
+    context "anonymous : get / where text is 'Note 2'" do
       before do
         get "/",
-          :text    => "note 3"
+          :text    => "Note 2"
       end
     
       use "return 401 because the API key is missing"
     end
     
-    context "incorrect API key : get / where text is 'note 3'" do
+    context "incorrect API key : get / where text is 'Note 2'" do
       before do
         get "/",
-          :text    => "note 3",
+          :text    => 'Note 2',
           :api_key => "does_not_exist_in_database"
       end
     
@@ -68,24 +64,24 @@ class NotesGetSearchControllerTest < RequestTestCase
     
     # - - - - - - - - - -
 
-    context "normal API key : get / where text is 'note 3'" do
+    context "normal API key : get / where text is 'Note 2'" do
       before do
         get "/",
-          :text    => "note 3",
+          :text    => 'Note 2',
           :api_key => @normal_user.primary_api_key
       end
     
-      use "successful GET of notes where text is 'note 3'"
+      use "successful GET of notes where text is 'Note 2'"
     end
 
-    context "admin API key : get / where text is 'note 3'" do
+    context "admin API key : get / where text is 'Note 2'" do
       before do
         get "/",
-          :text    => "note 3",
+          :text    => 'Note 2',
           :api_key => @admin_user.primary_api_key
       end
     
-      use "successful GET of notes where text is 'note 3'"
+      use "successful GET of notes where text is 'Note 2'"
     end
   end
 

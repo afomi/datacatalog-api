@@ -35,7 +35,10 @@ class NotesPostControllerTest < RequestTestCase
 
   context "anonymous : post /" do
     before do
-      post "/"
+      source = create_source
+      post "/",
+        :text      => "Note A",
+        :source_id => source.id
     end
     
     use "return 401 because the API key is missing"
@@ -44,7 +47,11 @@ class NotesPostControllerTest < RequestTestCase
   
   context "incorrect API key : post /" do
     before do
-      post "/", :api_key => "does_not_exist_in_database"
+      source = create_source
+      post "/",
+        :api_key   => "does_not_exist_in_database",
+        :text      => "Note A",
+        :source_id => source.id
     end
     
     use "return 401 because the API key is invalid"
@@ -53,7 +60,11 @@ class NotesPostControllerTest < RequestTestCase
   
   context "normal API key : post /" do
     before do
-      post "/", :api_key => @normal_user.primary_api_key
+      source = create_source
+      post "/",
+        :api_key   => @normal_user.primary_api_key,
+        :text      => "Note A",
+        :source_id => source.id
     end
     
     use "return 401 because the API key is unauthorized"
@@ -61,14 +72,15 @@ class NotesPostControllerTest < RequestTestCase
   end
   
   # - - - - - - - - - -
-
+  
   context "admin API key : post / with protected param" do
     before do
-      post "/", {
+      source = create_source
+      post "/",
         :api_key    => @admin_user.primary_api_key,
         :text       => "Note A",
+        :source_id  => source.id,
         :updated_at => Time.now.to_json
-      }
     end
   
     use "return 400 Bad Request"
@@ -78,11 +90,12 @@ class NotesPostControllerTest < RequestTestCase
   
   context "admin API key : post / with invalid param" do
     before do
-      post "/", {
-        :api_key => @admin_user.primary_api_key,
-        :text    => "Note A",
-        :junk    => "This is an extra param (junk)"
-      }
+      source = create_source
+      post "/",
+        :api_key   => @admin_user.primary_api_key,
+        :text      => "Note A",
+        :source_id => source.id,
+        :junk      => "This is an extra param (junk)"
     end
   
     use "return 400 Bad Request"
@@ -94,10 +107,11 @@ class NotesPostControllerTest < RequestTestCase
   
   context "curator API key : post / with correct params" do
     before do
-      post "/", {
-        :api_key => @curator_user.primary_api_key,
-        :text    => "Note A",
-      }
+      source = create_source
+      post "/",
+        :api_key   => @curator_user.primary_api_key,
+        :text      => "Note A",
+        :source_id => source.id
     end
     
     use "successful POST to notes"
@@ -105,12 +119,13 @@ class NotesPostControllerTest < RequestTestCase
   
   context "admin API key : post / with correct params" do
     before do
-      post "/", {
-        :api_key => @admin_user.primary_api_key,
-        :text    => "Note A",
-      }
+      source = create_source
+      post "/",
+        :api_key   => @admin_user.primary_api_key,
+        :text      => "Note A",
+        :source_id => source.id
     end
-
+  
     use "successful POST to notes"
   end
 

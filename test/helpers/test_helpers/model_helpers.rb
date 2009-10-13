@@ -70,6 +70,15 @@ module ModelHelpers
     create_model!(Document, custom, required)
   end
   
+  def create_note(custom={})
+    required = {
+      :text      => "Sample Note",
+      :source_id => get_fake_mongo_object_id,
+    }
+    required[:user_id] = @normal_user.id if @normal_user
+    create_model!(Note, custom, required)
+  end
+  
   def create_source(custom={})
     create_model!(Source, custom, {
       :title => "2005-2007 American Community Survey PUMS Housing File",
@@ -118,6 +127,15 @@ module ModelHelpers
     }
     required[:user_id] = @normal_user.id if @normal_user
     new_model!(Document, custom, required)
+  end
+
+  def new_note(custom={})
+    required = {
+      :text      => "Sample Note",
+      :source_id => get_fake_mongo_object_id,
+    }
+    required[:user_id] = @normal_user.id if @normal_user
+    new_model!(Note, custom, required)
   end
 
   def new_source(custom={})

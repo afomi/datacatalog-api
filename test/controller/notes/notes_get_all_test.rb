@@ -76,10 +76,10 @@ class NotesGetAllControllerTest < RequestTestCase
   context_ "3 notes" do
     before do
       3.times do |n|
-        Note.create(
+        source = create_source
+        create_note(
           :text      => "Note #{n}",
-          :user_id   => get_fake_mongo_object_id,
-          :source_id => get_fake_mongo_object_id
+          :source_id => source.id
         )
       end
     end

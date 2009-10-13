@@ -5,10 +5,9 @@ class NotesGetOneControllerTest < RequestTestCase
   def app; DataCatalog::Notes end
 
   before do
-    note = Note.create(
-      :text      => "Note A",
-      :source_id => get_fake_mongo_object_id,
-      :user_id   => get_fake_mongo_object_id
+    source = create_source
+    note = create_note(
+      :source_id => source.id
     )
     @id = note.id
     @fake_id = get_fake_mongo_object_id
@@ -26,7 +25,7 @@ class NotesGetOneControllerTest < RequestTestCase
     use "return timestamps and id in body"
   
     test "body should have correct text" do
-      assert_equal "Note A", parsed_response_body["text"]
+      assert_equal "Sample Note", parsed_response_body["text"]
     end
 
     test "body should have source_id" do

@@ -5,9 +5,11 @@ class NotesPutControllerTest < RequestTestCase
   def app; DataCatalog::Notes end
 
   before :all do
-    @note = Note.create({
-      :text => "Original Note"
-    })
+    source = create_source
+    @note = create_note(
+      :text      => "Original Note",
+      :source_id => source.id
+    )
     @id = @note.id
     @fake_id = get_fake_mongo_object_id
     @note_count = Note.count
