@@ -48,11 +48,6 @@ class Source
     end
   end
 
-  derived_key :updates_per_year
-  def updates_per_year
-    Frequency.new(frequency).per_year
-  end
-  
   derived_key :comment_details
   def comment_details
     comments.map do |comment|
@@ -65,6 +60,11 @@ class Source
         }
       }
     end
+  end
+
+  derived_key :updates_per_year
+  def updates_per_year
+    Frequency.new(frequency).per_year
   end
   
   # == Validations
