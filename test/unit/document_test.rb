@@ -1,4 +1,3 @@
-# TODO: use get_fake_mongo_object_id instead of Mongo::ObjectID.new.to_s
 require File.expand_path(File.dirname(__FILE__) + '/../test_unit_helper')
 
 class DocumentUnitTest < ModelTestCase
@@ -108,7 +107,6 @@ class DocumentUnitTest < ModelTestCase
       use "invalid document"
       use "document.source_id must be valid"
     end
-
 
     context "missing source_id" do
       before do
