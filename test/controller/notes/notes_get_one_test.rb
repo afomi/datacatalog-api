@@ -13,8 +13,6 @@ class NotesGetOneControllerTest < RequestTestCase
     @fake_id = get_fake_mongo_object_id
   end
 
-  # - - - - - - - - - -
-
   shared "attempted GET note with :fake_id" do
     use "return 404 Not Found"
     use "return an empty response body"
@@ -23,7 +21,7 @@ class NotesGetOneControllerTest < RequestTestCase
   shared "successful GET note with :id" do
     use "return 200 Ok"
     use "return timestamps and id in body"
-  
+
     test "body should have correct text" do
       assert_equal "Sample Note", parsed_response_body["text"]
     end
@@ -31,64 +29,46 @@ class NotesGetOneControllerTest < RequestTestCase
     test "body should have source_id" do
       assert_include "source_id", parsed_response_body
     end
-    
+
     test "body should have user_id" do
       assert_include "user_id", parsed_response_body
     end
   end
 
-  # - - - - - - - - - -
+  context_ "get /:id" do
+    context "anonymous" do
+      before do
+        get "/#{@id}"
+      end
 
-  context "anonymous : get /:id" do
-    before do
-      get "/#{@id}"
+      use "return 401 because the API key is missing"
     end
-    
-    use "return 401 because the API key is missing"
-  end
-  
-  context "incorrect API key : get /:id" do
-    before do
-      get "/#{@id}", :api_key => "does_not_exist_in_database"
-    end
-    
-    use "return 401 because the API key is invalid"
-  end
 
-  # - - - - - - - - - -
+    context "incorrect API key" do
+      before do
+        get "/#{@id}", :api_key => "does_not_exist_in_database"
+      end
 
-  context "normal API key : get /:fake_id" do
-    before do
-      get "/#{@fake_id}", :api_key => @normal_user.primary_api_key
+      use "return 401 because the API key is invalid"
     end
-    
-    use "attempted GET note with :fake_id"
   end
 
-  context "admin API key : get /:fake_id" do
-    before do
-      get "/#{@fake_id}", :api_key => @admin_user.primary_api_key
-    end
-    
-    use "attempted GET note with :fake_id"
-  end
+  %w(normal curator admin).each do |role|
+    context "#{role} API key : get /:fake_id" do
+      before do
+        get "/#{@fake_id}", :api_key => primary_api_key_for(role)
+      end
 
-  # - - - - - - - - - -
-  
-  context "normal API key : get /:id" do
-    before do
-      get "/#{@id}", :api_key => @normal_user.primary_api_key
+      use "attempted GET note with :fake_id"
     end
-    
-    use "successful GET note with :id"
-  end
 
-  context "admin API key : get /:id" do
-    before do
-      get "/#{@id}", :api_key => @admin_user.primary_api_key
+    context "#{role} API key : get /:id" do
+      before do
+        get "/#{@id}", :api_key => primary_api_key_for(role)
+      end
+
+      use "successful GET note with :id"
     end
-    
-    use "successful GET note with :id"
   end
 
 end
