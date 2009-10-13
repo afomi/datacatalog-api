@@ -33,10 +33,10 @@ class DocumentsGetSearchControllerTest < RequestTestCase
       @sources = (0 ... 3).map { |n| create_source }
       6.times do |n|
         k = n % 3
-        d = create_document(
-          :text        => "Document #{k}",
-          :user_id     => @normal_user.id,
-          :source_id   => @sources[k].id
+        create_document(
+          :text      => "Document #{k}",
+          :user_id   => @normal_user.id,
+          :source_id => @sources[k].id
         )
       end
     end
