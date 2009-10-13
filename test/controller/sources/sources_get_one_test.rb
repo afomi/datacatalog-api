@@ -21,7 +21,7 @@ class SourcesGetOneControllerTest < RequestTestCase
   shared "successful GET source with :id" do
     use "return 200 Ok"
     use "return timestamps and id in body"
-  
+
     test "body should have correct text" do
       assert_equal "http://data.gov/original", parsed_response_body["url"]
     end
@@ -114,9 +114,9 @@ class SourcesGetOneControllerTest < RequestTestCase
         ]
         get "/#{@id}", :api_key => primary_api_key_for(role)
       end
-      
+
       use "successful GET source with :id"
-      
+
       test "body should have correct comment_details" do
         actual = parsed_response_body["comment_details"]
         @comments.each do |comment|
@@ -147,9 +147,9 @@ class SourcesGetOneControllerTest < RequestTestCase
         ]
         get "/#{@id}", :api_key => primary_api_key_for(role)
       end
-      
+
       use "successful GET source with :id"
-      
+
       test "body should have correct document_details" do
         actual = parsed_response_body["document_details"]
         @documents.each do |document|
@@ -228,9 +228,9 @@ class SourcesGetOneControllerTest < RequestTestCase
         ]
         get "/#{@id}", :api_key => primary_api_key_for(role)
       end
-      
+
       use "successful GET source with :id"
-      
+
       test "body should have correct ratings_total" do
         assert_equal 6, parsed_response_body["ratings_total"]
       end

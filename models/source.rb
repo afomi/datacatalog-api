@@ -37,7 +37,7 @@ class Source
   def categories
     categorizations.map(&:category)
   end
-  
+
   # == Derived Attributes
 
   derived_key :category_details
@@ -96,7 +96,7 @@ class Source
       }
     end
   end
-  
+
   derived_key :rating_details
   def rating_details
     ratings.map do |rating|
@@ -120,7 +120,7 @@ class Source
   include UrlValidator
   validate :validate_period
   validate :validate_frequency
-  
+
   def validate_period
     return if !period_start && !period_end
     if period_start && !period_end
@@ -139,7 +139,7 @@ class Source
   end
 
   # == Class Methods
-  
+
   # == Various Instance Methods
-  
+
 end
