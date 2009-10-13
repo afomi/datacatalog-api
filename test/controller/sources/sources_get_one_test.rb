@@ -115,6 +115,14 @@ class SourcesGetOneControllerTest < RequestTestCase
             :source_id => @id,
           })
         ]
+        @comments.each do |comment|
+          [0, 1].each do |value|
+            create_comment_rating({
+              :value      => value,
+              :comment_id => comment.id
+            })
+          end
+        end
         get "/#{@id}", :api_key => primary_api_key_for(role)
       end
 
@@ -126,6 +134,11 @@ class SourcesGetOneControllerTest < RequestTestCase
           expected = {
             "href" => "/comments/#{comment.id}",
             "text" => comment.text,
+            "rating_stats" => {
+              "count"   => 2,
+              "total"   => 1,
+              "average" => 0.5
+            },
             "user" => {
               "name" => "Normal User",
               "href" => "/users/#{@normal_user.id}"

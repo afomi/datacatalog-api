@@ -58,7 +58,8 @@ class Source
         "user" => {
           "name" => comment.user.name,
           "href" => "/users/#{comment.user.id}",
-        }
+        },
+        "rating_stats" => comment.rating_stats,
       }
     end
   end
