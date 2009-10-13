@@ -4,6 +4,7 @@ module DataCatalog
   
     resource "sources" do
       model Source
+
       read_only :updates_per_year
       read_only :ratings_total
       read_only :ratings_count

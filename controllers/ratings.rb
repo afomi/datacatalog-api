@@ -4,6 +4,7 @@ module DataCatalog
 
     resource "ratings" do
       model Rating
+
       read_only :previous_value
       read_only :user_id
       read_only :created_at

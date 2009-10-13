@@ -4,6 +4,7 @@ module DataCatalog
     
     resource "comments" do
       model Comment
+
       read_only :ratings_total
       read_only :ratings_count
       read_only :created_at

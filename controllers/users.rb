@@ -6,6 +6,7 @@ module DataCatalog
   
     resource "users" do
       model User
+
       read_only :api_keys
       read_only :admin
       read_only :creator_api_key

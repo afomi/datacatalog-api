@@ -4,6 +4,7 @@ module DataCatalog
 
     nestable_resource "keys" do
       model ApiKey
+
       read_only :api_key
       read_only :created_at
 

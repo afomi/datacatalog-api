@@ -4,6 +4,7 @@ module DataCatalog
   
     resource "organizations" do
       model Organization
+
       read_only :user_id
       read_only :needs_curation
       read_only :created_at

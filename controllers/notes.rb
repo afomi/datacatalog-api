@@ -4,6 +4,7 @@ module DataCatalog
 
     resource "notes" do
       model Note
+
       read_only :created_at
       read_only :updated_at
     end
