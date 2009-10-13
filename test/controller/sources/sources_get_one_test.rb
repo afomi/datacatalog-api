@@ -72,32 +72,6 @@ class SourcesGetOneControllerTest < RequestTestCase
       use "successful GET source with :id"
     end
 
-    context "#{role} API key : 2 ratings : get /:id" do
-      before do
-        @ratings = [
-          create_source_rating(
-            :value     => 1,
-            :source_id => @id
-          ),
-          create_source_rating(
-            :value     => 5,
-            :source_id => @id
-          )
-        ]
-        get "/#{@id}", :api_key => primary_api_key_for(role)
-      end
-      
-      use "successful GET source with :id"
-      
-      test "body should have correct ratings_total" do
-        assert_equal 6, parsed_response_body["ratings_total"]
-      end
-
-      test "body should have correct ratings_count" do
-        assert_equal 2, parsed_response_body["ratings_count"]
-      end
-    end
-
     context "#{role} API key : 3 categorizations : get /:id" do
       before do
         @categories = %w(Energy Finance Poverty).map do |name|
@@ -225,6 +199,31 @@ class SourcesGetOneControllerTest < RequestTestCase
       end
     end
 
+    context "#{role} API key : 2 ratings : get /:id" do
+      before do
+        @ratings = [
+          create_source_rating(
+            :value     => 1,
+            :source_id => @id
+          ),
+          create_source_rating(
+            :value     => 5,
+            :source_id => @id
+          )
+        ]
+        get "/#{@id}", :api_key => primary_api_key_for(role)
+      end
+      
+      use "successful GET source with :id"
+      
+      test "body should have correct ratings_total" do
+        assert_equal 6, parsed_response_body["ratings_total"]
+      end
+
+      test "body should have correct ratings_count" do
+        assert_equal 2, parsed_response_body["ratings_count"]
+      end
+    end
   end
 
 end
