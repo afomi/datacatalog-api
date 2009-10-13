@@ -26,8 +26,12 @@ class SourcesGetAllControllerTest < RequestTestCase
         assert_include "released"      , element
         assert_include "period_start"  , element
         assert_include "period_end"    , element
-        assert_include "ratings_total" , element
-        assert_include "ratings_count" , element
+        assert_include "rating_stats"  , element
+        rating_stats = element["rating_stats"]
+        assert_include "count",        rating_stats
+        assert_include "average",      rating_stats
+        assert_include "total",        rating_stats
+
         assert_include "created_at"    , element
         assert_include "updated_at"    , element
         assert_include "id"            , element

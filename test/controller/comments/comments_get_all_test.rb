@@ -23,13 +23,18 @@ class CommentsGetAllControllerTest < RequestTestCase
   
     test "each element should have correct attributes" do
       parsed_response_body.each do |element|
-        assert_include "source_id", element
-        assert_include "user_id", element
+        assert_include "source_id",      element
+        assert_include "user_id",        element
         assert_include "needs_curation", element
+        rating_stats = element["rating_stats"]
+        assert_include "count",          element
+        assert_include "average",        element
+        assert_include "total",          element
+
         assert_include "created_at", element
         assert_include "updated_at", element
-        assert_include "id", element
-        assert_not_include "_id", element
+        assert_include "id",         element
+        assert_not_include "_id",    element
       end
     end
   end

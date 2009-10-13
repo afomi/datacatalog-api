@@ -3,14 +3,13 @@ class Comment
 
   include MongoMapper::Document
   include Renderable
+  include Ratable
 
   # == Attributes
 
   key :text,          String
   key :source_id,     String
   key :user_id,       String
-  key :ratings_total, Integer, :default => 0
-  key :ratings_count, Integer, :default => 0
   timestamps!
 
   # == Indices

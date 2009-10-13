@@ -11,12 +11,16 @@ class RatingAggregatesUnitTest < ModelTestCase
       )
     end
     
-    test "ratings_total is 0" do
-      assert_equal 0, @source.ratings_total
+    test "ratings total is 0" do
+      assert_equal 0, @source.rating_stats[:total]
     end
   
-    test "ratings_count is 0" do
-      assert_equal 0, @source.ratings_count
+    test "ratings count is 0" do
+      assert_equal 0, @source.rating_stats[:count]
+    end
+
+    test "ratings average is nil" do
+      assert_equal nil, @source.rating_stats[:average]
     end
 
     context "new Rating" do
@@ -30,29 +34,38 @@ class RatingAggregatesUnitTest < ModelTestCase
         raise "Must be valid" unless @rating.valid?
         @source = Source.find_by_id(@source.id)
       end
-  
-      test "updates ratings_total" do
-        assert_equal 4, @source.ratings_total
+
+      test "updates ratings total" do
+        assert_equal 4, @source.rating_stats[:total]
       end
-  
-      test "increases ratings_count" do
-        assert_equal 1, @source.ratings_count
+
+      test "increases ratings count" do
+        assert_equal 1, @source.rating_stats[:count]
       end
-    
+
+      test "updates ratings average" do
+        assert_equal 4.0, @source.rating_stats[:average]
+      end
+
       context "updated Rating" do
         before do
           @rating.value = 2
           @rating.save!
           @source = Source.find_by_id(@source.id)
         end
-      
-        test "updates ratings_total" do
-          assert_equal 2, @source.ratings_total
+
+        test "updates ratings total" do
+          assert_equal 2, @source.rating_stats[:total]
         end
-    
-        test "does not change ratings_count" do
-          assert_equal 1, @source.ratings_count
+
+        test "does not change ratings count" do
+          assert_equal 1, @source.rating_stats[:count]
         end
+
+        test "updates ratings average" do
+          assert_equal 2.0, @source.rating_stats[:average]
+        end
+
       end
 
       context "deleted Rating" do
@@ -61,12 +74,16 @@ class RatingAggregatesUnitTest < ModelTestCase
           @source = Source.find_by_id(@source.id)
         end
       
-        test "updates ratings_total" do
-          assert_equal 0, @source.ratings_total
+        test "updates ratings total" do
+          assert_equal 0, @source.rating_stats[:total]
         end
     
-        test "does not change ratings_count" do
-          assert_equal 0, @source.ratings_count
+        test "does not change ratings count" do
+          assert_equal 0, @source.rating_stats[:count]
+        end
+
+        test "updates ratings average" do
+          assert_equal nil, @source.rating_stats[:average]
         end
       end
     end
@@ -86,12 +103,16 @@ class RatingAggregatesUnitTest < ModelTestCase
       )
     end
 
-    test "ratings_total is 0" do
-      assert_equal 0, @comment.ratings_total
+    test "ratings total is 0" do
+      assert_equal 0, @comment.rating_stats[:total]
     end
   
-    test "ratings_count is 0" do
-      assert_equal 0, @comment.ratings_count
+    test "ratings count is 0" do
+      assert_equal 0, @comment.rating_stats[:count]
+    end
+
+    test "ratings average is nil" do
+      assert_equal nil, @comment.rating_stats[:average]
     end
 
     context "new Rating" do
@@ -106,12 +127,16 @@ class RatingAggregatesUnitTest < ModelTestCase
         @comment = Comment.find_by_id(@comment.id)
       end
   
-      test "updates ratings_total" do
-        assert_equal 1, @comment.ratings_total
+      test "updates ratings total" do
+        assert_equal 1, @comment.rating_stats[:total]
       end
   
-      test "increases ratings_count" do
-        assert_equal 1, @comment.ratings_count
+      test "increases ratings count" do
+        assert_equal 1, @comment.rating_stats[:count]
+      end
+
+      test "updates ratings average" do
+        assert_equal 1.0, @comment.rating_stats[:average]
       end
     
       context "updated Rating" do
@@ -120,13 +145,17 @@ class RatingAggregatesUnitTest < ModelTestCase
           @rating.save!
           @comment = Comment.find_by_id(@comment.id)
         end
-      
-        test "updates ratings_total" do
-          assert_equal 0, @comment.ratings_total
+
+        test "updates ratings total" do
+          assert_equal 0, @comment.rating_stats[:total]
         end
-    
-        test "does not change ratings_count" do
-          assert_equal 1, @comment.ratings_count
+
+        test "does not change ratings count" do
+          assert_equal 1, @comment.rating_stats[:count]
+        end
+
+        test "updates ratings average" do
+          assert_equal 0.0, @comment.rating_stats[:average]
         end
       end
 
@@ -136,12 +165,16 @@ class RatingAggregatesUnitTest < ModelTestCase
           @comment = Comment.find_by_id(@comment.id)
         end
       
-        test "updates ratings_total" do
-          assert_equal 0, @comment.ratings_total
+        test "updates ratings total" do
+          assert_equal 0, @comment.rating_stats[:total]
         end
     
-        test "does not change ratings_count" do
-          assert_equal 0, @comment.ratings_count
+        test "does not change ratings count" do
+          assert_equal 0, @comment.rating_stats[:count]
+        end
+
+        test "updates rating average" do
+          assert_equal nil, @comment.rating_stats[:average]
         end
       end
     end

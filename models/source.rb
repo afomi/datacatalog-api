@@ -5,6 +5,7 @@ class Source
 
   include MongoMapper::Document
   include Renderable
+  include Ratable
 
   # == Attributes
 
@@ -14,8 +15,6 @@ class Source
   key :period_start,    Time
   key :period_end,      Time
   key :frequency,       String
-  key :ratings_total,   Integer, :default => 0
-  key :ratings_count,   Integer, :default => 0
   key :organization_id, String
   key :custom,          Hash
   key :raw,             Hash

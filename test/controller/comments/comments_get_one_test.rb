@@ -27,10 +27,16 @@ class CommentsGetOneControllerTest < RequestTestCase
   
     test "body should have correct text" do
       assert_equal "Comment A", parsed_response_body["text"]
+      assert_include "rating_stats", parsed_response_body
     end
-    
-    test "body should have user_id" do
-      assert_include "user_id", parsed_response_body
+
+    test "body should have correct attributes" do
+      assert_include "user_id",      parsed_response_body
+      assert_include "rating_stats", parsed_response_body
+      rating_stats = parsed_response_body["rating_stats"]
+      assert_include "count",        rating_stats
+      assert_include "average",      rating_stats
+      assert_include "total",        rating_stats
     end
   end
 

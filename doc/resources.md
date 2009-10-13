@@ -127,8 +127,7 @@ Data sources are the primary feature of the National Data Catalog. They are repr
     period_end              Date           End date for source's applicability
     frequency               String         How often the data source is released
     ratings                 Array          Embedded collection of Rating objects
-    ratings_total*          Integer        Sum of ratings. Divide by ratings_count to get average.
-    ratings_count*          Integer        Number of ratings.
+    rating_stats*           Hash           Contains total, count, average, and histogram
     created_at*             Time           Automatic timestamp on creation
     updated_at*             Time           Automatic timestamp on update
 

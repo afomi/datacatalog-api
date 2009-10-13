@@ -27,13 +27,16 @@ class SourcesGetOneControllerTest < RequestTestCase
     end
 
     test "body should have correct attributes" do
-      assert_include "title", parsed_response_body
-      assert_include "url", parsed_response_body
-      assert_include "released", parsed_response_body
+      assert_include "title",        parsed_response_body
+      assert_include "url",          parsed_response_body
+      assert_include "released",     parsed_response_body
       assert_include "period_start", parsed_response_body
-      assert_include "period_end", parsed_response_body
-      assert_include "ratings_total", parsed_response_body
-      assert_include "ratings_count", parsed_response_body
+      assert_include "period_end",   parsed_response_body
+      assert_include "rating_stats", parsed_response_body
+      rating_stats = parsed_response_body["rating_stats"]
+      assert_include "count",        rating_stats
+      assert_include "average",      rating_stats
+      assert_include "total",        rating_stats
     end
   end
 
@@ -231,12 +234,16 @@ class SourcesGetOneControllerTest < RequestTestCase
 
       use "successful GET source with :id"
 
-      test "body should have correct ratings_total" do
-        assert_equal 6, parsed_response_body["ratings_total"]
+      test "body should have correct ratings total" do
+        assert_equal 6, parsed_response_body["rating_stats"]["total"]
       end
 
-      test "body should have correct ratings_count" do
-        assert_equal 2, parsed_response_body["ratings_count"]
+      test "body should have correct ratings count" do
+        assert_equal 2, parsed_response_body["rating_stats"]["count"]
+      end
+
+      test "body should have correct ratings average" do
+        assert_equal 3.0, parsed_response_body["rating_stats"]["average"]
       end
 
       test "body should have correct rating_details" do

@@ -29,13 +29,16 @@ class SourcesPostControllerTest < RequestTestCase
     end
 
     test "body should have correct attributes" do
-      assert_include "title", parsed_response_body
-      assert_include "url", parsed_response_body
-      assert_include "released", parsed_response_body
+      assert_include "title",        parsed_response_body
+      assert_include "url",          parsed_response_body
+      assert_include "released",     parsed_response_body
       assert_include "period_start", parsed_response_body
-      assert_include "period_end", parsed_response_body
-      assert_include "ratings_total", parsed_response_body
-      assert_include "ratings_count", parsed_response_body
+      assert_include "period_end",   parsed_response_body
+      assert_include "rating_stats", parsed_response_body
+      rating_stats = parsed_response_body["rating_stats"]
+      assert_include "count",        rating_stats
+      assert_include "average",      rating_stats
+      assert_include "total",        rating_stats
     end
 
   end

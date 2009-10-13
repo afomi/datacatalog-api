@@ -4,8 +4,10 @@ class RatingObserver < MongoMapper::Observer
   
   def after_create(rating)
     doc = rating.find_rated_document!
-    doc.ratings_count += 1
-    doc.ratings_total += rating.value
+    stale = doc.rating_stats
+    count = (doc.rating_stats[:count] += 1)
+    total = (doc.rating_stats[:total] += rating.value)
+    doc.rating_stats[:average] = total.to_f / count
     doc.save
   end
   
@@ -16,15 +18,19 @@ class RatingObserver < MongoMapper::Observer
   
   def after_update(rating)
     doc = rating.find_rated_document!
-    doc.ratings_total += (rating.value - rating.previous_value)
+    value_delta = rating.value - rating.previous_value
+    total = (doc.rating_stats[:total] += value_delta)
+    count = doc.rating_stats[:count]
+    doc.rating_stats[:average] = total.to_f / count
     doc.save
   end
 
   def after_destroy(rating)
     doc = rating.find_rated_document
     return if doc.nil?
-    doc.ratings_count -= 1
-    doc.ratings_total -= rating.value
+    count = (doc.rating_stats[:count] -= 1)
+    doc.rating_stats[:total] -= rating.value
+    doc.rating_stats[:average] = nil if count == 0
     doc.save
   end
   
