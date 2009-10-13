@@ -201,7 +201,7 @@ class SourcesGetOneControllerTest < RequestTestCase
 
     context "#{role} API key : 2 ratings : get /:id" do
       before do
-        @ratings = [
+        @source_ratings = [
           create_source_rating(
             :value     => 1,
             :source_id => @id
@@ -209,6 +209,21 @@ class SourcesGetOneControllerTest < RequestTestCase
           create_source_rating(
             :value     => 5,
             :source_id => @id
+          )
+        ]
+        # Just to make sure comment ratings don't get included
+        # in source.ratings.
+        comment = create_comment(
+          :source_id => @id
+        )
+        @comment_ratings = [
+          create_comment_rating(
+            :value      => 0,
+            :comment_id => comment.id
+          ),
+          create_comment_rating(
+            :value      => 1,
+            :comment_id => comment.id
           )
         ]
         get "/#{@id}", :api_key => primary_api_key_for(role)
@@ -222,6 +237,23 @@ class SourcesGetOneControllerTest < RequestTestCase
 
       test "body should have correct ratings_count" do
         assert_equal 2, parsed_response_body["ratings_count"]
+      end
+
+      test "body should have correct rating_details" do
+        actual = parsed_response_body["rating_details"]
+        assert_equal 2, actual.length
+        @source_ratings.each do |rating|
+          expected = {
+            "href"  => "/ratings/#{rating.id}",
+            "text"  => rating.text,
+            "value" => rating.value,
+            "user"  => {
+              "name" => "Normal User",
+              "href" => "/users/#{@normal_user.id}"
+            }
+          }
+          assert_include expected, actual
+        end
       end
     end
   end

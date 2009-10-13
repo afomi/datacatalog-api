@@ -97,6 +97,21 @@ class Source
     end
   end
   
+  derived_key :rating_details
+  def rating_details
+    ratings.map do |rating|
+      {
+        "href"  => "/ratings/#{rating.id}",
+        "text"  => rating.text,
+        "value" => rating.value,
+        "user"  => {
+          "name" => rating.user.name,
+          "href" => "/users/#{rating.user.id}",
+        }
+      }
+    end
+  end
+
   # == Validations
 
   validates_presence_of :title

@@ -61,6 +61,16 @@ module ModelHelpers
     create_model!(Comment, custom, required)
   end
   
+  def create_comment_rating(custom={})
+    required = {
+      :kind      => "comment",
+      :value     => 1,
+      :source_id => get_fake_mongo_object_id,
+    }
+    required[:user_id] = @normal_user.id if @normal_user
+    create_model!(Rating, custom, required)
+  end
+  
   def create_document(custom={})
     required = {
       :text      => "Sample Document",
@@ -118,6 +128,16 @@ module ModelHelpers
     }
     required[:user_id] = @normal_user.id if @normal_user
     new_model!(Comment, custom, required)
+  end
+  
+  def new_comment_rating(custom={})
+    required = {
+      :kind      => "comment",
+      :value     => 1,
+      :source_id => get_fake_mongo_object_id,
+    }
+    required[:user_id] = @normal_user.id if @normal_user
+    new_model!(Rating, custom, required)
   end
   
   def new_document(custom={})
