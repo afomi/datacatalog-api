@@ -1,3 +1,6 @@
+gem 'frequency', '>= 0.1.0'
+require 'frequency'
+
 class Source
 
   include MongoMapper::Document
