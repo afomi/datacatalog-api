@@ -82,6 +82,20 @@ class Source
   def updates_per_year
     Frequency.new(frequency).per_year
   end
+
+  derived_key :note_details
+  def note_details
+    notes.map do |note|
+      {
+        "href" => "/notes/#{note.id}",
+        "text" => note.text,
+        "user" => {
+          "name" => note.user.name,
+          "href" => "/users/#{note.user.id}",
+        }
+      }
+    end
+  end
   
   # == Validations
 

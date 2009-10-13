@@ -192,6 +192,39 @@ class SourcesGetOneControllerTest < RequestTestCase
       end
     end
 
+    context "#{role} API key : 2 notes : get /:id" do
+      before do
+        @notes = [
+          create_note({
+            :text      => "Note 1",
+            :source_id => @id,
+          }),
+          create_note({
+            :text      => "Note 2",
+            :source_id => @id,
+          })
+        ]
+        get "/#{@id}", :api_key => primary_api_key_for(role)
+      end
+
+      use "successful GET source with :id"
+
+      test "body should have correct note_details" do
+        actual = parsed_response_body["note_details"]
+        @notes.each do |note|
+          expected = {
+            "href" => "/notes/#{note.id}",
+            "text" => note.text,
+            "user" => {
+              "name" => "Normal User",
+              "href" => "/users/#{@normal_user.id}"
+            }
+          }
+          assert_include expected, actual
+        end
+      end
+    end
+
   end
 
 end
