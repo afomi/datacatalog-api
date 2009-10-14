@@ -84,7 +84,7 @@ class UsersPostControllerTest < RequestTestCase
     use "unchanged user count"
   end
   
-  context "normal API key : post /" do
+  context "owner API key : post /" do
     before do
       post '/', :api_key => @normal_user.primary_api_key
     end
@@ -92,8 +92,23 @@ class UsersPostControllerTest < RequestTestCase
     use "return 401 because the API key is unauthorized"
     use "unchanged user count"
   end
-
+  
   # - - - - - - - - - -
+  
+  context "owner API key : post / with protected param 'admin'" do
+    before do
+      post '/', {
+        :api_key   => @normal_user.primary_api_key,
+        :name      => "John Doe",
+        :email     => "john.doe@email.com",
+        :admin     => true
+      }
+    end
+  
+    # A normal user cannot create a new user account
+    use "return 401 because the API key is unauthorized"
+    use "unchanged user count"
+  end
 
   context "curator API key : post / with protected param 'admin'" do
     before do
@@ -105,7 +120,9 @@ class UsersPostControllerTest < RequestTestCase
       }
     end
   
-    use "attempted POST user with protected param 'admin'"
+    # A curator user cannot create a new user account
+    use "return 401 because the API key is unauthorized"
+    use "unchanged user count"
   end
   
   context "admin API key : post / with protected param 'admin'" do
@@ -122,19 +139,35 @@ class UsersPostControllerTest < RequestTestCase
   end
   
   # - - - - - - - - - -
+
+  context "owner API key : post / with protected param 'creator_api_key'" do
+    before do
+      post '/', {
+        :api_key         => @normal_user.primary_api_key,
+        :name            => "John Doe",
+        :email           => "john.doe@email.com",
+        :creator_api_key => get_fake_api_key("John Doe")
+      }
+    end
   
+    # A normal user cannot create a new user account
+    use "return 401 because the API key is unauthorized"
+    use "unchanged user count"
+  end  
+
   context "curator API key : post / with protected param 'creator_api_key'" do
     before do
       post '/', {
         :api_key         => @curator_user.primary_api_key,
         :name            => "John Doe",
         :email           => "john.doe@email.com",
-        :admin           => true,
         :creator_api_key => get_fake_api_key("John Doe")
       }
     end
   
-    use "attempted POST user with protected param 'creator_api_key'"
+    # A normal user cannot create a new user account
+    use "return 401 because the API key is unauthorized"
+    use "unchanged user count"
   end
   
   context "admin API key : post / with protected param 'creator_api_key'" do
@@ -143,15 +176,29 @@ class UsersPostControllerTest < RequestTestCase
         :api_key         => @admin_user.primary_api_key,
         :name            => "John Doe",
         :email           => "john.doe@email.com",
-        :admin           => true,
         :creator_api_key => get_fake_api_key("John Doe")
       }
     end
   
     use "attempted POST user with protected param 'creator_api_key'"
   end
-
+  
   # - - - - - - - - - -
+
+  context "owner API key : post / with invalid param 'junk'" do
+    before do
+      post '/', {
+        :api_key => @normal_user.primary_api_key,
+        :name    => "John Doe",
+        :email   => "john.doe@email.com",
+        :junk    => "This is an extra parameter (junk)"
+      }
+    end
+  
+    # A normal user cannot create a new user account
+    use "return 401 because the API key is unauthorized"
+    use "unchanged user count"
+  end  
 
   context "curator API key : post / with invalid param 'junk'" do
     before do
@@ -163,7 +210,9 @@ class UsersPostControllerTest < RequestTestCase
       }
     end
     
-    use "attempted POST user with invalid param 'junk'"
+    # A curator user cannot create a new user account
+    use "return 401 because the API key is unauthorized"
+    use "unchanged user count"
   end
   
   context "admin API key : post / with invalid param 'junk'" do
@@ -180,7 +229,21 @@ class UsersPostControllerTest < RequestTestCase
   end
   
   # - - - - - - - - - -
+
+  context "owner API key : post / with correct params" do
+    before do
+      post '/', {
+        :api_key => @normal_user.primary_api_key,
+        :name    => "John Doe",
+        :email   => "john.doe@email.com",
+      }
+    end
   
+    # A normal user cannot create a new user account
+    use "return 401 because the API key is unauthorized"
+    use "unchanged user count"
+  end  
+
   context "curator API key : post / with correct params" do
     before do
       post '/', {
@@ -190,7 +253,9 @@ class UsersPostControllerTest < RequestTestCase
       }
     end
     
-    use "successful POST user"
+    # A curator user cannot create a new user account
+    use "return 401 because the API key is unauthorized"
+    use "unchanged user count"
   end
   
   context "admin API key : post / with correct params" do

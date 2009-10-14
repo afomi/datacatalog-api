@@ -247,8 +247,8 @@ class UsersKeysPutControllerTest < RequestTestCase
         :key_type => "application"
       }
     end
-    use "return 401 because the API key is unauthorized"
    
+    use "return 404 Not Found"
     use "unchanged api_key count"
   end
    
@@ -358,8 +358,8 @@ class UsersKeysPutControllerTest < RequestTestCase
           }
           @n = n
         end
-        use "attempted PUT users_keys with protected parameter"
 
+        use "attempted PUT users_keys with protected parameter"
       end
 
       context "admin API key : put /:id/keys/:id : protected param 'created_at'" do

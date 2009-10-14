@@ -48,6 +48,23 @@ class UsersKeysGetOneControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
+  context "owner API key : get /:fake_id/keys/:id" do
+    before do
+      get "/#{@fake_id}/keys/#{@api_key_id}",
+        :api_key => @user.api_keys[0].api_key
+    end
+  
+    use "return 404 Not Found"
+  end
+  
+  context "owner API key : get /:fake_id/keys/:fake_id" do
+    before do
+      get "/#{@fake_id}/keys/#{@fake_id}",
+        :api_key => @user.api_keys[0].api_key
+    end
+    
+    use "return 404 Not Found"
+  end
 
   # - - - - - - - - - -
 
@@ -77,23 +94,6 @@ class UsersKeysGetOneControllerTest < RequestTestCase
     use "return 401 because the API key is unauthorized"
   end
 
-  context "owner API key : get /:fake_id/keys/:id" do
-    before do
-      get "/#{@fake_id}/keys/#{@api_key_id}",
-        :api_key => @user.api_keys[0].api_key
-    end
-  
-    use "return 401 because the API key is unauthorized"
-  end
-
-  context "owner API key : get /:fake_id/keys/:fake_id" do
-    before do
-      get "/#{@fake_id}/keys/#{@fake_id}",
-        :api_key => @user.api_keys[0].api_key
-    end
-    
-    use "return 401 because the API key is unauthorized"
-  end
   
   # - - - - - - - - - -
   

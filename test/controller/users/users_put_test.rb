@@ -159,12 +159,25 @@ class UsersPutControllerTest < RequestTestCase
     before do
       put "/#{@fake_id}", :api_key => @normal_user.primary_api_key
     end
-    use "return 401 because the API key is unauthorized"
   
+    use "return 404 not found"
     use "unchanged user count"
   end
   
   # - - - - - - - - - -
+
+  context "owner API key : put /:fake_id with protected param 'admin'" do
+    before do
+      put "/#{@fake_id}", {
+        :api_key   => @user.primary_api_key,
+        :name      => "New Guy",
+        :email     => "new.guy@email.com",
+        :admin     => true
+      }
+    end
+    
+    use "attempted PUT user with :fake_id with protected param 'admin'"
+  end  
 
   context "curator API key : put /:fake_id with protected param 'admin'" do
     before do
@@ -194,6 +207,19 @@ class UsersPutControllerTest < RequestTestCase
   
   # - - - - - - - - - -
 
+  context "owner API key : put /:fake_id with invalid param 'junk'" do
+    before do
+      put "/#{@fake_id}", {
+        :api_key => @user.primary_api_key,
+        :name    => "New Guy",
+        :email   => "new.guy@email.com",
+        :junk    => "This is an extra parameter (junk)"
+      }
+    end
+  
+    use "attempted PUT user with :fake_id with invalid param 'junk'"
+  end  
+
   context "curator API key : put /:fake_id with invalid param 'junk'" do
     before do
       put "/#{@fake_id}", {
@@ -222,6 +248,19 @@ class UsersPutControllerTest < RequestTestCase
   
   # - - - - - - - - - -
 
+  context "owner API key : put /:id with protected param 'admin'" do
+    before do
+      put "/#{@id}", {
+        :api_key   => @user.primary_api_key,
+        :name      => "John Doe",
+        :email     => "john.doe@email.com",
+        :admin     => true
+      }
+    end
+    
+    use "attempted PUT user with :id with protected param 'admin'"
+  end  
+
   context "curator API key : put /:id with protected param 'admin'" do
     before do
       put "/#{@id}", {
@@ -232,7 +271,8 @@ class UsersPutControllerTest < RequestTestCase
       }
     end
     
-    use "attempted PUT user with :id with protected param 'admin'"
+    use "return 401 because the API key is unauthorized"
+    use "unchanged user count"
   end
   
   context "admin API key : put /:id with protected param 'admin'" do
@@ -250,6 +290,19 @@ class UsersPutControllerTest < RequestTestCase
   
   # - - - - - - - - - -
 
+  context "owner API key : put /:id with invalid param 'junk'" do
+    before do
+      put "/#{@id}", {
+        :api_key => @user.primary_api_key,
+        :name    => "John Doe",
+        :email   => "john.doe@email.com",
+        :junk    => "This is an extra parameter (junk)"
+      }
+    end
+  
+    use "attempted PUT user with :id with invalid param 'junk'"
+  end  
+
   context "curator API key : put /:id with invalid param 'junk'" do
     before do
       put "/#{@id}", {
@@ -260,7 +313,8 @@ class UsersPutControllerTest < RequestTestCase
       }
     end
     
-    use "attempted PUT user with :id with invalid param 'junk'"
+    use "return 401 because the API key is unauthorized"
+    use "unchanged user count"
   end
   
   context "admin API key : put /:id with invalid param 'junk'" do
@@ -278,6 +332,18 @@ class UsersPutControllerTest < RequestTestCase
   
   # - - - - - - - - - -
 
+  context "owner API key : put /:fake_id : create : correct params" do
+    before do
+      put "/#{@fake_id}", {
+        :api_key => @user.primary_api_key,
+        :name    => "New Guy",
+        :email   => "new.guy@email.com",
+      }
+    end
+  
+    use "attempted PUT user with :fake_id with correct params"
+  end
+  
   context "curator API key : put /:fake_id : create : correct params" do
     before do
       put "/#{@fake_id}", {
@@ -287,7 +353,8 @@ class UsersPutControllerTest < RequestTestCase
       }
     end
     
-    use "attempted PUT user with :fake_id with correct params"
+    use "return 404 not found"
+    use "unchanged user count"
   end
   
   context "admin API key : put /:fake_id : create : correct params" do
@@ -304,14 +371,25 @@ class UsersPutControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
+  context "owner API key : put /:id without params" do
+    before do
+      put "/#{@id}", {
+        :api_key => @user.primary_api_key
+      }
+    end
+  
+    use "attempted PUT user with :id without params"
+  end
+  
   context "curator API key : put /:id without params" do
     before do
       put "/#{@id}", {
         :api_key => @curator_user.primary_api_key
       }
     end
-    use "attempted PUT user with :id without params"
   
+    use "return 401 because the API key is unauthorized"
+    use "unchanged user count"
   end
   
   context "admin API key : put /:id without params" do
@@ -326,6 +404,18 @@ class UsersPutControllerTest < RequestTestCase
   
   # - - - - - - - - - -
 
+  context "owner API key : put /:id with correct params" do
+    before do
+      put "/#{@id}", {
+        :api_key => @user.primary_api_key,
+        :name    => "New Guy",
+        :email   => "new.guy@email.com",
+      }
+    end
+    
+    use "successful PUT user with :id"
+  end
+  
   context "curator API key : put /:id with correct params" do
     before do
       put "/#{@id}", {
@@ -335,7 +425,8 @@ class UsersPutControllerTest < RequestTestCase
       }
     end
     
-    use "successful PUT user with :id"
+    use "return 401 because the API key is unauthorized"
+    use "unchanged user count"
   end
   
   context "admin API key : put /:id with correct params" do

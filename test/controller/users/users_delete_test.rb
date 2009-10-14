@@ -5,8 +5,8 @@ class UsersDeleteControllerTest < RequestTestCase
   def app; DataCatalog::Users end
 
   before do
-    user = User.create(:text => "Original User")
-    @id = user.id
+    @user = User.create(:text => "Original User")
+    @user.add_api_key!({ :key_type => "primary" })
     @user_count = User.count
     @fake_id = get_fake_mongo_object_id
   end
@@ -25,11 +25,11 @@ class UsersDeleteControllerTest < RequestTestCase
 
     test "body should have correct id" do
       assert_include "id", parsed_response_body
-      assert_equal @id, parsed_response_body["id"]
+      assert_equal @user.id, parsed_response_body["id"]
     end
 
     test "user should be deleted in database" do
-      assert_equal nil, User.find_by_id(@id)
+      assert_equal nil, User.find_by_id(@user.id)
     end
   end
 
@@ -39,7 +39,7 @@ class UsersDeleteControllerTest < RequestTestCase
     use "decremented user count"
 
     test "should be deleted in database" do
-      assert_equal nil, User.find_by_id(@id)
+      assert_equal nil, User.find_by_id(@user.id)
     end
   end
 
@@ -47,7 +47,7 @@ class UsersDeleteControllerTest < RequestTestCase
 
   context "anonymous : delete /" do
     before do
-      delete "/#{@id}"
+      delete "/#{@user.id}"
     end
 
     use "return 401 because the API key is missing"
@@ -56,7 +56,7 @@ class UsersDeleteControllerTest < RequestTestCase
 
   context "incorrect API key : delete /" do
     before do
-      delete "/#{@id}", :api_key => "does_not_exist_in_database"
+      delete "/#{@user.id}", :api_key => "does_not_exist_in_database"
     end
 
     use "return 401 because the API key is invalid"
@@ -65,7 +65,7 @@ class UsersDeleteControllerTest < RequestTestCase
 
   context "normal API key : delete /" do
     before do
-      delete "/#{@id}", :api_key => @normal_user.primary_api_key
+      delete "/#{@user.id}", :api_key => @normal_user.primary_api_key
     end
   
     use "return 401 because the API key is unauthorized"
@@ -94,7 +94,16 @@ class UsersDeleteControllerTest < RequestTestCase
   
   context "curator API key : delete /:id" do
     before do
-      delete "/#{@id}", :api_key => @curator_user.primary_api_key
+      delete "/#{@user.id}", :api_key => @curator_user.primary_api_key
+    end
+    
+    use "return 401 because the API key is unauthorized"
+    use "unchanged user count"
+  end
+
+  context "owner API key : delete /:id" do
+    before do
+      delete "/#{@user.id}", :api_key => @user.primary_api_key
     end
     
     use "successful DELETE user with :id"
@@ -102,27 +111,29 @@ class UsersDeleteControllerTest < RequestTestCase
 
   context "admin API key : delete /:id" do
     before do
-      delete "/#{@id}", :api_key => @admin_user.primary_api_key
+      delete "/#{@user.id}", :api_key => @admin_user.primary_api_key
     end
     
     use "successful DELETE user with :id"
   end
   
   # - - - - - - - - - -
-  context "admin API key : double delete /users" do
   
+  context "owner API key : double delete /users" do
     before do
-      delete "/#{@id}", :api_key => @curator_user.primary_api_key
-      delete "/#{@id}", :api_key => @curator_user.primary_api_key
+      delete "/#{@user.id}", :api_key => @user.primary_api_key
+      delete "/#{@user.id}", :api_key => @user.primary_api_key
     end
     
-    use "attempted double DELETE user with :id"
+    use "return 401 because the API key is invalid"
+    # The owner deleted his own account, including his API key.
+    # Therefore, the second deletion fails because the API key is invalid.
   end
   
   context "admin API key : double delete /users" do
     before do
-      delete "/#{@id}", :api_key => @admin_user.primary_api_key
-      delete "/#{@id}", :api_key => @admin_user.primary_api_key
+      delete "/#{@user.id}", :api_key => @admin_user.primary_api_key
+      delete "/#{@user.id}", :api_key => @admin_user.primary_api_key
     end
     
     use "attempted double DELETE user with :id"

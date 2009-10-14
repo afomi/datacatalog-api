@@ -131,7 +131,7 @@ class UsersKeysPostControllerTest < RequestTestCase
         :api_key => @normal_user.primary_api_key
     end
     
-    use "return 401 because the API key is unauthorized"
+    use "return 404 Not Found"
     use "unchanged api_key count"
   end
   
@@ -141,7 +141,7 @@ class UsersKeysPostControllerTest < RequestTestCase
         :api_key => @user.api_keys[0].api_key
     end
   
-    use "return 401 because the API key is unauthorized"
+    use "return 404 Not Found"
     use "unchanged api_key count"
   end
   
