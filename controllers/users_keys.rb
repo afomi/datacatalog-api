@@ -58,14 +58,12 @@ module DataCatalog
     end
 
     def self.permit_view?(current_user, api_key)
-      user = api_key._root_document
-      current_user.admin || current_user == user
+      current_user.admin || current_user == api_key._root_document
     end
   
     def self.permit_modify?(current_user, api_key)
       return true if api_key.nil?
-      user = api_key._root_document
-      current_user.admin || current_user == user
+      current_user.admin || current_user == api_key._root_document
     end
 
   end
