@@ -1,8 +1,10 @@
 require 'rubygems'
 require 'test/unit'
 require 'rack/test'
-require 'json'
 require 'rr'
+
+gem 'crack', '>= 0.1.4'
+require 'crack/json'
 
 gem 'djsun-context', '>= 0.5.6'
 require 'context'

@@ -19,6 +19,7 @@
 
     gem install rcov
     gem install rack-test
+    gem install crack
     gem install djsun-context
     gem install jeremymcanally-pending
     gem install rr
