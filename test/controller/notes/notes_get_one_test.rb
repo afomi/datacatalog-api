@@ -61,12 +61,33 @@ class NotesGetOneControllerTest < RequestTestCase
 
       use "attempted GET note with :fake_id"
     end
-
+  end
+  
+  %w(curator).each do |role|
     context "#{role} API key : get /:id" do
       before do
         get "/#{@id}", :api_key => primary_api_key_for(role)
       end
 
+      use "return 401 because the API key is unauthorized"
+    end
+  end
+  
+  context "non owner API key" do
+    before do
+      user = create_user_with_primary_key
+      get "/#{@id}", :api_key => user.primary_api_key
+    end
+  
+    use "return 401 because the API key is unauthorized"
+  end
+
+  %w(normal admin).each do |role|
+    context "#{role} API key : get /:id" do
+      before do
+        get "/#{@id}", :api_key => primary_api_key_for(role)
+      end
+  
       use "successful GET note with :id"
     end
   end

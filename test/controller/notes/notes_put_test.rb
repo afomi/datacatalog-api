@@ -102,9 +102,10 @@ class NotesPutControllerTest < RequestTestCase
     use "unchanged note count"
   end
 
-  context "normal API key : put /:id" do
+  context "non owner API key : put /:id" do
     before do
-      put "/#{@id}", :api_key => @normal_user.primary_api_key
+      user = create_user_with_primary_key
+      put "/#{@id}", :api_key => user.primary_api_key
     end
   
     use "return 401 because the API key is unauthorized"
@@ -121,7 +122,7 @@ class NotesPutControllerTest < RequestTestCase
     use "return 401 because the API key is missing"
     use "unchanged note count"
   end
-
+  
   context "incorrect API key : put /:fake_id" do
     before do
       put "/#{@fake_id}", :api_key => "does_not_exist_in_database"
@@ -130,22 +131,58 @@ class NotesPutControllerTest < RequestTestCase
     use "return 401 because the API key is invalid"
     use "unchanged note count"
   end
-
-  context "normal API key : put /:fake_id" do
+  
+  context "non owner API key : put /:fake_id" do
     before do
+      user = create_user_with_primary_key
+      put "/#{@fake_id}", :api_key => user.primary_api_key
+    end
+  
+    use "return 404 Not Found"
+    use "unchanged note count"
+  end
+
+  context "owner API key : put /:fake_id" do
+    before do
+      user = create_user_with_primary_key
       put "/#{@fake_id}", :api_key => @normal_user.primary_api_key
     end
   
-    use "return 401 because the API key is unauthorized"
+    use "return 404 Not Found"
     use "unchanged note count"
   end
 
   # - - - - - - - - - -
 
+  context "non owner API key : put /:fake_id with protected param" do
+    before do
+      user = create_user_with_primary_key
+      put "/#{@fake_id}", {
+        :api_key    => user.primary_api_key,
+        :text       => "New Note",
+        :created_at => Time.now.to_json
+      }
+    end
+    
+    use "attempted PUT note with :fake_id with protected param"
+  end
+
   context "curator API key : put /:fake_id with protected param" do
     before do
       put "/#{@fake_id}", {
         :api_key    => @curator_user.primary_api_key,
+        :text       => "New Note",
+        :created_at => Time.now.to_json
+      }
+    end
+    
+    use "attempted PUT note with :fake_id with protected param"
+  end
+
+  context "owner API key : put /:fake_id with protected param" do
+    before do
+      put "/#{@fake_id}", {
+        :api_key    => @normal_user.primary_api_key,
         :text       => "New Note",
         :created_at => Time.now.to_json
       }
@@ -166,152 +203,94 @@ class NotesPutControllerTest < RequestTestCase
     use "attempted PUT note with :fake_id with protected param"
   end
 
-  # - - - - - - - - - -
+  # ==== Think of a curator as a 'non-owner' in the block below =====
 
-  context "curator API key : put /:fake_id with invalid param" do
-    before do
-      put "/#{@fake_id}", {
-        :api_key => @curator_user.primary_api_key,
-        :text    => "New Note",
-        :junk    => "This is an extra param (junk)"
-      }
+  %w(curator normal admin).each do |role|
+    context "#{role} API key : put /:fake_id with invalid param" do
+      before do
+        put "/#{@fake_id}", {
+          :api_key => primary_api_key_for(role),
+          :text    => "New Note",
+          :junk    => "This is an extra param (junk)"
+        }
+      end
+
+      use "attempted PUT note with :fake_id with invalid param"
     end
+
+    context "#{role} API key : put /:fake_id with correct params" do
+      before do
+        put "/#{@fake_id}", {
+          :api_key => primary_api_key_for(role),
+          :text    => "New Note"
+        }
+      end
+
+      use "attempted PUT note with :fake_id with correct params"
+    end
+  end
+
+  %w(normal admin).each do |role|
+    context "#{role} API key : put /:id with protected param" do
+      before do
+        put "/#{@id}", {
+          :api_key    => primary_api_key_for(role),
+          :text       => "New Note",
+          :updated_at => Time.now.to_json
+        }
+      end
     
-    use "attempted PUT note with :fake_id with invalid param"
-  end
-  
-  context "admin API key : put /:fake_id with invalid param" do
-    before do
-      put "/#{@fake_id}", {
-        :api_key => @admin_user.primary_api_key,
-        :text    => "New Note",
-        :junk    => "This is an extra param (junk)"
-      }
-    end
-  
-    use "attempted PUT note with :fake_id with invalid param"
-  end
-  
-  # - - - - - - - - - -
-
-  context "curator API key : put /:fake_id with correct params" do
-    before do
-      put "/#{@fake_id}", {
-        :api_key => @curator_user.primary_api_key,
-        :text    => "New Note"
-      }
-    end
-    
-    use "attempted PUT note with :fake_id with correct params"
-  end
-    
-  context "admin API key : put /:fake_id with correct params" do
-    before do
-      put "/#{@fake_id}", {
-        :api_key => @admin_user.primary_api_key,
-        :text    => "New Note"
-      }
-    end
-  
-    use "attempted PUT note with :fake_id with correct params"
-  end
-
-  # - - - - - - - - - -
-
-  context "curator API key : put /:id with protected param" do
-    before do
-      put "/#{@id}", {
-        :api_key    => @curator_user.primary_api_key,
-        :text       => "New Note",
-        :updated_at => Time.now.to_json
-      }
-    end
-    
-    use "attempted PUT note with :id with protected param"
-  end
-
-  context "admin API key : put /:id with protected param" do
-    before do
-      put "/#{@id}", {
-        :api_key    => @admin_user.primary_api_key,
-        :text       => "New Note",
-        :updated_at => Time.now.to_json
-      }
-    end
-    
-    use "attempted PUT note with :id with protected param"
-  end
-  
-  # - - - - - - - - - -
-  
-  context "curator API key : put /:id with invalid param" do
-    before do
-      put "/#{@id}", {
-        :api_key => @curator_user.primary_api_key,
-        :text    => "New Note",
-        :junk    => "This is an extra param (junk)"
-      }
-    end
-  
-    use "attempted PUT note with :id with invalid param"
-  end
-
-  context "admin API key : put /:id with invalid param" do
-    before do
-      put "/#{@id}", {
-        :api_key => @admin_user.primary_api_key,
-        :text    => "New Note",
-        :junk    => "This is an extra param (junk)"
-      }
-    end
-  
-    use "attempted PUT note with :id with invalid param"
-  end
-  
-  # - - - - - - - - - -
-
-  context "curator API key : put /:id without params" do
-    before do
-      put "/#{@id}", {
-        :api_key => @curator_user.primary_api_key
-      }
+      use "attempted PUT note with :id with protected param"
     end
 
-    use "attempted PUT note with :id without params"
+    context "#{role} API key : put /:id with invalid param" do
+      before do
+        put "/#{@id}", {
+          :api_key => primary_api_key_for(role),
+          :text    => "New Note",
+          :junk    => "This is an extra param (junk)"
+        }
+      end
+  
+      use "attempted PUT note with :id with invalid param"
+    end
+  
+    context "#{role} API key : put /:id without params" do
+      before do
+        put "/#{@id}", {
+          :api_key => primary_api_key_for(role),
+        }
+      end
+  
+      use "attempted PUT note with :id without params"
+    end
+  end
+  
+  %w(curator).each do |role|
+    context "#{role} API key : put /:id with correct param" do
+      before do
+        put "/#{@id}", {
+          :api_key => primary_api_key_for(role),
+          :text    => "New Note"
+        }
+      end
+      
+      use "return 401 because the API key is unauthorized"
+      use "unchanged note count"
+    end
   end
 
-  context "admin API key : put /:id without params" do
-    before do
-      put "/#{@id}", {
-        :api_key => @admin_user.primary_api_key
-      }
+  %w(normal admin).each do |role|
+    context "#{role} API key : put /:id with correct param" do
+      before do
+        put "/#{@id}", {
+          :api_key => primary_api_key_for(role),
+          :text    => "New Note"
+        }
+      end
+      
+      use "successful PUT note with :id"
     end
-
-    use "attempted PUT note with :id without params"
-  end
-  
-  # - - - - - - - - - -
-  
-  context "curator API key : put /:id with correct param" do
-    before do
-      put "/#{@id}", {
-        :api_key => @curator_user.primary_api_key,
-        :text    => "New Note"
-      }
-    end
-    
-    use "successful PUT note with :id"
-  end
-  
-  context "admin API key : put /:id with correct param" do
-    before do
-      put "/#{@id}", {
-        :api_key => @admin_user.primary_api_key,
-        :text    => "New Note"
-      }
-    end
-    
-    use "successful PUT note with :id"
   end
 
 end

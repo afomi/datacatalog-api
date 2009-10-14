@@ -48,7 +48,7 @@ class NotesDeleteControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context "anonymous : delete /" do
+  context "anonymous : delete /:id" do
     before do
       delete "/#{@id}"
     end
@@ -57,7 +57,7 @@ class NotesDeleteControllerTest < RequestTestCase
     use "unchanged note count"
   end
 
-  context "incorrect API key : delete /" do
+  context "incorrect API key : delete /:id" do
     before do
       delete "/#{@id}", :api_key => "does_not_exist_in_database"
     end
@@ -66,16 +66,25 @@ class NotesDeleteControllerTest < RequestTestCase
     use "unchanged note count"
   end
 
-  context "normal API key : delete /" do
+  context "non owner API key : delete /:id" do
     before do
-      delete "/#{@id}", :api_key => @normal_user.primary_api_key
+      user = create_user_with_primary_key
+      delete "/#{@id}", :api_key => user.primary_api_key
     end
-
+  
     use "return 401 because the API key is unauthorized"
     use "unchanged note count"
   end
 
   # - - - - - - - - - -
+
+  context "owner API key : delete /:fake_id" do
+    before do
+      delete "/#{@fake_id}", :api_key => @normal_user.primary_api_key
+    end
+  
+    use "attempted DELETE note with :fake_id"
+  end
 
   context "curator API key : delete /:fake_id" do
     before do
@@ -84,12 +93,12 @@ class NotesDeleteControllerTest < RequestTestCase
     
     use "attempted DELETE note with :fake_id"
   end
-
+  
   context "admin API key : delete /:fake_id" do
     before do
       delete "/#{@fake_id}", :api_key => @admin_user.primary_api_key
     end
-
+  
     use "attempted DELETE note with :fake_id"
   end
 
@@ -100,9 +109,18 @@ class NotesDeleteControllerTest < RequestTestCase
       delete "/#{@id}", :api_key => @curator_user.primary_api_key
     end
     
+    use "return 401 because the API key is unauthorized"
+    use "unchanged note count"
+  end
+
+  context "owner API key : delete /:id" do
+    before do
+      delete "/#{@id}", :api_key => @normal_user.primary_api_key
+    end
+  
     use "successful DELETE note with :id"
   end
-  
+
   context "admin API key : delete /:id" do
     before do
       delete "/#{@id}", :api_key => @admin_user.primary_api_key
@@ -110,19 +128,29 @@ class NotesDeleteControllerTest < RequestTestCase
     
     use "successful DELETE note with :id"
   end
-
+  
   # - - - - - - - - - -
 
-  context "admin API key : double delete /users" do
+  context "curator API key : double delete /users/:id" do
     before do
       delete "/#{@id}", :api_key => @curator_user.primary_api_key
       delete "/#{@id}", :api_key => @curator_user.primary_api_key
     end
     
-    use "attempted double DELETE note with :id"
+    use "return 401 because the API key is unauthorized"
+    use "unchanged note count"
   end
 
-  context "admin API key : double delete /users" do
+  context "owner API key : double delete /users/:id" do
+    before do
+      delete "/#{@id}", :api_key => @normal_user.primary_api_key
+      delete "/#{@id}", :api_key => @normal_user.primary_api_key
+    end
+    
+    use "attempted double DELETE note with :id"
+  end
+  
+  context "admin API key : double delete /users/:id" do
     before do
       delete "/#{@id}", :api_key => @admin_user.primary_api_key
       delete "/#{@id}", :api_key => @admin_user.primary_api_key

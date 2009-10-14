@@ -8,8 +8,6 @@ class NotesPostControllerTest < RequestTestCase
     @note_count = Note.count
   end
 
-  # - - - - - - - - - -
-
   shared "successful POST to notes" do
     use "return 201 Created"
     use "return timestamps and id in body" 
@@ -31,8 +29,6 @@ class NotesPostControllerTest < RequestTestCase
     end
   end
   
-  # - - - - - - - - - -
-
   context "anonymous : post /" do
     before do
       source = create_source
@@ -57,76 +53,49 @@ class NotesPostControllerTest < RequestTestCase
     use "return 401 because the API key is invalid"
     use "unchanged note count"
   end
-  
-  context "normal API key : post /" do
-    before do
-      source = create_source
-      post "/",
-        :api_key   => @normal_user.primary_api_key,
-        :text      => "Note A",
-        :source_id => source.id
+
+  %w(curator normal admin).each do |role|
+    context "#{role} API key : post / with correct params" do
+      before do
+        source = create_source
+        post "/",
+          :api_key   => primary_api_key_for(role),
+          :text      => "Note A",
+          :source_id => source.id,
+          :updated_at => Time.now.to_json
+      end
+
+      use "return 400 Bad Request"
+      use "unchanged note count"
+      use "return errors hash saying updated_at is invalid"
     end
-    
-    use "return 401 because the API key is unauthorized"
-    use "unchanged note count"
-  end
-  
-  # - - - - - - - - - -
-  
-  context "admin API key : post / with protected param" do
-    before do
-      source = create_source
-      post "/",
-        :api_key    => @admin_user.primary_api_key,
-        :text       => "Note A",
-        :source_id  => source.id,
-        :updated_at => Time.now.to_json
+
+    context "#{role} API key : post / with correct params" do
+      before do
+        source = create_source
+        post "/",
+          :api_key   => primary_api_key_for(role),
+          :text      => "Note A",
+          :source_id => source.id,
+          :junk      => "This is an extra param (junk)"
+      end
+
+      use "return 400 Bad Request"
+      use "unchanged note count"
+      use "return errors hash saying junk is invalid"
     end
-  
-    use "return 400 Bad Request"
-    use "unchanged note count"
-    use "return errors hash saying updated_at is invalid"
-  end
-  
-  context "admin API key : post / with invalid param" do
-    before do
-      source = create_source
-      post "/",
-        :api_key   => @admin_user.primary_api_key,
-        :text      => "Note A",
-        :source_id => source.id,
-        :junk      => "This is an extra param (junk)"
+
+    context "#{role} API key : post / with correct params" do
+      before do
+        source = create_source
+        post "/",
+          :api_key   => primary_api_key_for(role),
+          :text      => "Note A",
+          :source_id => source.id
+      end
+
+      use "successful POST to notes"
     end
-  
-    use "return 400 Bad Request"
-    use "unchanged note count"
-    use "return errors hash saying junk is invalid"
-  end
-  
-  # - - - - - - - - - -
-  
-  context "curator API key : post / with correct params" do
-    before do
-      source = create_source
-      post "/",
-        :api_key   => @curator_user.primary_api_key,
-        :text      => "Note A",
-        :source_id => source.id
-    end
-    
-    use "successful POST to notes"
-  end
-  
-  context "admin API key : post / with correct params" do
-    before do
-      source = create_source
-      post "/",
-        :api_key   => @admin_user.primary_api_key,
-        :text      => "Note A",
-        :source_id => source.id
-    end
-  
-    use "successful POST to notes"
   end
 
 end
