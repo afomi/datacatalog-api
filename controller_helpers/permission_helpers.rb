@@ -6,92 +6,78 @@ module DataCatalog
 
     include StatusCodeHelpers
 
-    def permission_check(default_level, custom_level, user_id)
-      if custom_level && custom_level == :owner
-        require_at_least(custom_level, user_id)
-      elsif custom_level
-        require_at_least(custom_level)
+    def permission_check(args)
+      level        = args[:level]
+      default      = args[:default]
+      override     = args[:override]
+      raise "Bad arguments" if level && (default || override)
+      minimum_level = level || (override || default)
+      verify_permission(minimum_level)
+    end
+      
+    protected
+
+    DEFAULTS = {
+      :admin     => false,
+      :curator   => false,
+      :basic     => false,
+      :anonymous => false
+    }
+
+    def lookup_privileges
+      api_key = params.delete("api_key")
+      return DEFAULTS.merge(:anonymous => true) unless api_key
+      @current_user = User.find_by_api_key(api_key)
+      return DEFAULTS unless @current_user
+      lookup_privileges_for_user(@current_user)
+    end
+    
+    def lookup_privileges_for_user(user)
+      if user.admin
+        DEFAULTS.merge(
+          :admin   => true,
+          :curator => true,
+          :basic   => true
+        )
+      elsif user.curator
+        DEFAULTS.merge(
+          :curator => true,
+          :basic   => true
+        )
       else
-        require_at_least(default_level)
+        DEFAULTS.merge(
+          :basic => true
+        )
       end
     end
+    
+    def privileges
+      return @cached_privileges if @cached_privileges
+      @cached_privileges = lookup_privileges
+    end
 
-    def require_at_least(level, user_id=nil)
-      privileges = privileges_for_api_key(user_id)
-      case level
+    # Verify that a minimum_level of permission exists
+    def verify_permission(minimum_level)
+      p = privileges
+      case minimum_level
       when :anonymous
-        return if privileges[:anonymous]
-        invalid_api_key! unless privileges[:basic]
+        return if p[:anonymous]
+        invalid_api_key! unless p[:basic]
       when :basic
-        missing_api_key! if privileges[:anonymous]
-        invalid_api_key! unless privileges[:basic]
-      when :owner
-        missing_api_key! if privileges[:anonymous]
-        invalid_api_key! unless privileges[:basic]
-        unauthorized_api_key! unless privileges[:owner]
+        missing_api_key! if p[:anonymous]
+        invalid_api_key! unless p[:basic]
       when :curator
-        missing_api_key! if privileges[:anonymous]
-        invalid_api_key! unless privileges[:basic]
-        unauthorized_api_key! unless privileges[:curator]
+        missing_api_key! if p[:anonymous]
+        invalid_api_key! unless p[:basic]
+        unauthorized_api_key! unless p[:curator]
       when :admin
-        missing_api_key! if privileges[:anonymous]
-        invalid_api_key! unless privileges[:basic]
-        unauthorized_api_key! unless privileges[:admin]
+        missing_api_key! if p[:anonymous]
+        invalid_api_key! unless p[:basic]
+        unauthorized_api_key! unless p[:admin]
       else
         raise "Unexpected parameter"
       end
     end
-
-    def privileges_for_api_key(user_id=nil)
-      return @cached_privileges if @cached_privileges
-      @cached_privileges = _privileges_for_api_key(user_id)
-    end
-    
-    protected
-    
-    DEFAULT_PRIVILEGES = {
-      :admin     => false,
-      :curator   => false,
-      :owner     => false,
-      :basic     => false,
-      :anonymous => false
-    }
-    
-    def _privileges_for_api_key(user_id=nil)
-      api_key = params.delete("api_key")
-      unless api_key
-        return DEFAULT_PRIVILEGES.merge(
-          :anonymous => true
-        )
-      end
-      @current_user = User.find_by_api_key(api_key)
-      unless @current_user
-        return DEFAULT_PRIVILEGES
-      end
-      if @current_user.admin
-        return DEFAULT_PRIVILEGES.merge(
-          :admin   => true,
-          :curator => true,
-          :owner   => true,
-          :basic   => true
-        )
-      end
-      if @current_user.curator
-        return DEFAULT_PRIVILEGES.merge(
-          :curator => true,
-          :owner   => true,
-          :basic   => true
-        )
-      end
-      if user_id && user_id == @current_user.id
-        return DEFAULT_PRIVILEGES.merge(
-          :owner => true,
-          :basic => true
-        )
-      end
-      DEFAULT_PRIVILEGES.merge(:basic => true)
-    end
-
   end
 
   if const_defined?("Base")

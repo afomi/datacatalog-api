@@ -21,7 +21,7 @@ module DataCatalog
     ] + ANONYMOUS_MEMBERS
 
     get '/?' do
-      p = privileges_for_api_key
+      p = privileges
       members = if p[:admin] || p[:curator] || p[:basic]
         BASIC_MEMBERS
       elsif p[:anonymous]

@@ -29,7 +29,7 @@ module DataCatalog
     }.to_json
 
     get '/?' do
-      require_at_least(:anonymous)
+      permission_check(:level => :anonymous)
       PROJECT_META_DATA
     end
 

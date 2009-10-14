@@ -3,7 +3,7 @@ module DataCatalog
   class Checkup < Base
 
     get '/?' do
-      privileges = privileges_for_api_key
+      p = privileges
       basic = {
         "anonymous"     => false,
         "valid_api_key" => true,
@@ -17,13 +17,13 @@ module DataCatalog
         })
       end
       hash =
-        if privileges[:anonymous]
+        if p[:anonymous]
           { "anonymous" => true }
-        elsif privileges[:admin]
+        elsif p[:admin]
           basic.merge("admin" => true)
-        elsif privileges[:curator]
+        elsif p[:curator]
           basic.merge("curator" => true)
-        elsif privileges[:basic]
+        elsif p[:basic]
           basic
         else
           { "valid_api_key" => false }
