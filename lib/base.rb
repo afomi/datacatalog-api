@@ -1,4 +1,4 @@
-gem 'rest-sinatra', '>= 0.3.3', '< 0.4.0'
+gem 'rest-sinatra', '>= 0.4.0', '< 0.5.0'
 require 'rest-sinatra'
 
 module DataCatalog
