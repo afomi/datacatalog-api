@@ -5,6 +5,9 @@ module DataCatalog
     resource "sources" do
       model Source
 
+      permission_to_view :basic
+      permission_to_modify :curator
+
       read_only :rating_stats
       read_only :updates_per_year
       read_only :created_at

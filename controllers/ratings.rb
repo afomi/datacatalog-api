@@ -5,6 +5,9 @@ module DataCatalog
     resource "ratings" do
       model Rating
 
+      permission_to_view :basic
+      permission_to_modify :curator
+
       read_only :previous_value
       read_only :user_id
       read_only :created_at

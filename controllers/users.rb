@@ -7,6 +7,9 @@ module DataCatalog
     resource "users" do
       model User
 
+      permission_to_view :basic
+      permission_to_modify :basic
+
       read_only :api_keys
       read_only :admin
       read_only :creator_api_key

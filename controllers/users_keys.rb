@@ -5,11 +5,12 @@ module DataCatalog
     nestable_resource "keys" do
       model ApiKey
 
+      permission_to_view :basic
+      permission_to_modify :basic
+
       read_only :api_key
       read_only :created_at
-
-      permission :owner
-
+      
       callback :before_destroy do
         if @child_document.key_type == "primary"
           error 409, {
