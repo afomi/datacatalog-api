@@ -150,7 +150,7 @@ class UsersPutControllerTest < RequestTestCase
     before do
       put "/#{@fake_id}", :api_key => "does_not_exist_in_database"
     end
-
+  
     use "return 401 because the API key is invalid"
     use "unchanged user count"
   end
@@ -159,8 +159,8 @@ class UsersPutControllerTest < RequestTestCase
     before do
       put "/#{@fake_id}", :api_key => @normal_user.primary_api_key
     end
-
     use "return 401 because the API key is unauthorized"
+  
     use "unchanged user count"
   end
   
@@ -206,7 +206,7 @@ class UsersPutControllerTest < RequestTestCase
     
     use "attempted PUT user with :fake_id with invalid param 'junk'"
   end
-
+  
   context "admin API key : put /:fake_id with invalid param 'junk'" do
     before do
       put "/#{@fake_id}", {
@@ -216,7 +216,7 @@ class UsersPutControllerTest < RequestTestCase
         :junk    => "This is an extra parameter (junk)"
       }
     end
-
+  
     use "attempted PUT user with :fake_id with invalid param 'junk'"
   end
   
@@ -247,7 +247,7 @@ class UsersPutControllerTest < RequestTestCase
     
     use "attempted PUT user with :id with protected param 'admin'"
   end
-
+  
   # - - - - - - - - - -
 
   context "curator API key : put /:id with invalid param 'junk'" do
@@ -272,7 +272,7 @@ class UsersPutControllerTest < RequestTestCase
         :junk    => "This is an extra parameter (junk)"
       }
     end
-
+  
     use "attempted PUT user with :id with invalid param 'junk'"
   end
   
@@ -298,7 +298,7 @@ class UsersPutControllerTest < RequestTestCase
         :email   => "new.guy@email.com",
       }
     end
-
+  
     use "attempted PUT user with :fake_id with correct params"
   end
 
@@ -310,17 +310,17 @@ class UsersPutControllerTest < RequestTestCase
         :api_key => @curator_user.primary_api_key
       }
     end
-
     use "attempted PUT user with :id without params"
+  
   end
-
+  
   context "admin API key : put /:id without params" do
     before do
       put "/#{@id}", {
         :api_key => @admin_user.primary_api_key
       }
     end
-
+  
     use "attempted PUT user with :id without params"
   end
   
@@ -337,7 +337,7 @@ class UsersPutControllerTest < RequestTestCase
     
     use "successful PUT user with :id"
   end
-
+  
   context "admin API key : put /:id with correct params" do
     before do
       put "/#{@id}", {
@@ -346,7 +346,7 @@ class UsersPutControllerTest < RequestTestCase
         :email   => "new.guy@email.com",
       }
     end
-
+  
     use "successful PUT user with :id"
   end
 

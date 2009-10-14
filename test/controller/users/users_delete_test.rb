@@ -67,13 +67,13 @@ class UsersDeleteControllerTest < RequestTestCase
     before do
       delete "/#{@id}", :api_key => @normal_user.primary_api_key
     end
-
+  
     use "return 401 because the API key is unauthorized"
     use "unchanged user count"
   end
-
+  
   # - - - - - - - - - -
-
+  
   context "curator API key : delete /:fake_id" do
     before do
       delete "/#{@fake_id}", :api_key => @curator_user.primary_api_key
@@ -81,17 +81,17 @@ class UsersDeleteControllerTest < RequestTestCase
     
     use "attempted DELETE user with :fake_id"
   end
-
+  
   context "admin API key : delete /:fake_id" do
     before do
       delete "/#{@fake_id}", :api_key => @admin_user.primary_api_key
     end
-
+  
     use "attempted DELETE user with :fake_id"
   end
-
+  
   # - - - - - - - - - -
-
+  
   context "curator API key : delete /:id" do
     before do
       delete "/#{@id}", :api_key => @curator_user.primary_api_key
@@ -99,7 +99,7 @@ class UsersDeleteControllerTest < RequestTestCase
     
     use "successful DELETE user with :id"
   end
-  
+
   context "admin API key : delete /:id" do
     before do
       delete "/#{@id}", :api_key => @admin_user.primary_api_key
@@ -107,10 +107,10 @@ class UsersDeleteControllerTest < RequestTestCase
     
     use "successful DELETE user with :id"
   end
-
+  
   # - - - - - - - - - -
-
   context "admin API key : double delete /users" do
+  
     before do
       delete "/#{@id}", :api_key => @curator_user.primary_api_key
       delete "/#{@id}", :api_key => @curator_user.primary_api_key
@@ -118,7 +118,7 @@ class UsersDeleteControllerTest < RequestTestCase
     
     use "attempted double DELETE user with :id"
   end
-
+  
   context "admin API key : double delete /users" do
     before do
       delete "/#{@id}", :api_key => @admin_user.primary_api_key

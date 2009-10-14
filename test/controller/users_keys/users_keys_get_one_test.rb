@@ -48,6 +48,9 @@ class UsersKeysGetOneControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
+
+  # - - - - - - - - - -
+
   context "anonymous : get /:id/keys/:id" do
     before do
       get "/#{@user.id}/keys/#{@api_key_id}"
@@ -64,7 +67,7 @@ class UsersKeysGetOneControllerTest < RequestTestCase
     
     use "return 401 because the API key is invalid"
   end
-
+  
   context "non owner API key : get /:id/keys/:id" do
     before do
       get "/#{@user.id}/keys/#{@api_key_id}",
@@ -103,7 +106,7 @@ class UsersKeysGetOneControllerTest < RequestTestCase
     use "return 404 Not Found"
     use "return an empty response body"
   end
-
+  
   context "admin API key : get /:fake_id/keys/:id : not found" do
     before do
       get "/#{@fake_id}/keys/#{@api_key_id}",
@@ -123,7 +126,7 @@ class UsersKeysGetOneControllerTest < RequestTestCase
     use "return 404 Not Found"
     use "return an empty response body"
   end
-
+  
   context "admin API key : get /:fake_id/keys/:fake_id : not found" do
     before do
       get "/#{@fake_id}/keys/#{@fake_id}",

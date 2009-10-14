@@ -118,7 +118,7 @@ class RatingsPostControllerTest < RequestTestCase
     use "return errors hash saying junk is invalid"
   end
   
-  # # - - - - - - - - - -
+  # - - - - - - - - - -
   
   context "curator API key : post / with correct params" do
     before do

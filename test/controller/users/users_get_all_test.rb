@@ -103,7 +103,7 @@ class UsersGetAllControllerTest < RequestTestCase
       use "successful GET of 0 added users"
     end
   end
-  
+
   # - - - - - - - - - -
   
   context_ "3 added users" do
@@ -134,7 +134,7 @@ class UsersGetAllControllerTest < RequestTestCase
   
       use "successful GET of 3 added users"
     end
-
+  
     context "admin API key : get /" do
       before do
         get "/", :api_key => @admin_user.primary_api_key

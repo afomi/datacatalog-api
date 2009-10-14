@@ -54,7 +54,7 @@ class RatingsDeleteControllerTest < RequestTestCase
     end
   end
   
-  # # - - - - - - - - - -
+  # - - - - - - - - - -
   
   context "anonymous : delete /" do
     before do

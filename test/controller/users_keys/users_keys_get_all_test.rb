@@ -81,9 +81,7 @@ class UsersKeysGetAllControllerTest < RequestTestCase
     
     use "return 401 because the API key is unauthorized"
   end
-
-  # - - - - - - - - - -
-
+  
   context "curator API key : get /:id/keys" do
     before do
       get "/#{@id}/keys",
@@ -92,7 +90,7 @@ class UsersKeysGetAllControllerTest < RequestTestCase
     
     use "successful GET of 3 api_keys"
   end
-
+  
   context "admin API key : get /:id/keys" do
     before do
       get "/#{@id}/keys",

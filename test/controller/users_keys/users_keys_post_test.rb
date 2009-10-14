@@ -179,7 +179,7 @@ class UsersKeysPostControllerTest < RequestTestCase
         :purpose  => "My special purpose!"
       }
     end
-
+  
     use "attempted POST api_key with missing params"
   end
   
@@ -201,10 +201,10 @@ class UsersKeysPostControllerTest < RequestTestCase
         :junk     => "This is an extra parameter (junk)"
       }
     end
-
+  
     use "attempted POST api_key with invalid param"
   end
-
+  
   context "admin API key : post /:id/keys : extra param 'junk'" do
     before do
       post "/#{@id}/keys", {
@@ -214,7 +214,7 @@ class UsersKeysPostControllerTest < RequestTestCase
         :junk     => "This is an extra parameter (junk)"
       }
     end
-
+  
     use "attempted POST api_key with invalid param"
   end
   
