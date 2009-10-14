@@ -8,7 +8,7 @@ class OrganizationsGetAllControllerTest < RequestTestCase
   
   shared "successful GET of 0 organizations" do
     use "return 200 Ok"
-    use "return an empty response body"
+    use "return an empty list response body"
   end
   
   shared "successful GET of 3 organizations" do

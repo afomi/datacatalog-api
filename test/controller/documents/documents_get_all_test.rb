@@ -8,7 +8,7 @@ class DocumentsGetAllControllerTest < RequestTestCase
   
   shared "successful GET of 0 documents" do
     use "return 200 Ok"
-    use "return an empty response body"
+    use "return an empty list response body"
   end
   
   shared "successful GET of 3 documents" do
