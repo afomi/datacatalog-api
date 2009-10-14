@@ -23,6 +23,10 @@ module DataCatalog
       nested_resource UsersKeys, :association => :api_keys
     end
 
+    def self.permit_modify?(current_user, user)
+      current_user.admin || current_user == user
+    end
+
   end
 
 end
