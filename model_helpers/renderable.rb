@@ -28,3 +28,9 @@ class Array
     '[%s]' % map(&:render).join(',')
   end
 end
+
+class Hash
+  def render
+    to_json
+  end
+end

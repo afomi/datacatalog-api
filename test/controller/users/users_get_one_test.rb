@@ -5,10 +5,8 @@ class UsersGetOneControllerTest < RequestTestCase
   def app; DataCatalog::Users end
 
   before do
-    user = User.create(
-      :text => "User A"
-    )
-    @id = user.id
+    @owner_user = create_user_with_primary_key
+    @id = @owner_user.id
     @fake_id = get_fake_mongo_object_id
   end
 
@@ -24,7 +22,7 @@ class UsersGetOneControllerTest < RequestTestCase
     use "return timestamps and id in body"
   
     test "body should have correct text" do
-      assert_equal "User A", parsed_response_body["text"]
+      assert_equal "Data Mangler", parsed_response_body["name"]
     end
   end
 
@@ -45,41 +43,59 @@ class UsersGetOneControllerTest < RequestTestCase
     
     use "return 401 because the API key is invalid"
   end
-
-  # - - - - - - - - - -
-
-  context "normal API key : get /:fake_id" do
+  
+  context "non owner API key : get /:fake_id" do
     before do
       get "/#{@fake_id}", :api_key => @normal_user.primary_api_key
     end
-    
+
     use "attempted GET user with :fake_id"
   end
 
-  context "admin API key : get /:fake_id" do
-    before do
-      get "/#{@fake_id}", :api_key => @admin_user.primary_api_key
-    end
-    
-    use "attempted GET user with :fake_id"
-  end
-
-  # - - - - - - - - - -
+  %w(normal admin).each do |role|
+    context "#{role} API key : get /:fake_id" do
+      before do
+        get "/#{@fake_id}", :api_key => primary_api_key_for(role)
+      end
   
-  context "normal API key : get /:id" do
+      use "attempted GET user with :fake_id"
+    end
+  end
+  
+  context "non owner API key : get /:id" do
     before do
       get "/#{@id}", :api_key => @normal_user.primary_api_key
     end
-    
+
     use "successful GET user with :id"
+
+    test "body should be sanitized" do
+      assert_not_include "primary_api_key", parsed_response_body
+      assert_not_include "application_api_keys", parsed_response_body
+      assert_not_include "valet_api_keys", parsed_response_body
+      assert_not_include "curator", parsed_response_body
+      assert_not_include "admin", parsed_response_body
+      assert_not_include "email", parsed_response_body
+    end
   end
 
-  context "admin API key : get /:id" do
-    before do
-      get "/#{@id}", :api_key => @admin_user.primary_api_key
+  %w(owner admin).each do |role|
+    context "normal API key : get /:id" do
+      before do
+        get "/#{@id}", :api_key => primary_api_key_for(role)
+      end
+  
+      use "successful GET user with :id"
+
+      test "body should be complete" do
+        assert_include "primary_api_key", parsed_response_body
+        assert_include "application_api_keys", parsed_response_body
+        assert_include "valet_api_keys", parsed_response_body
+        assert_include "curator", parsed_response_body
+        assert_include "admin", parsed_response_body
+        assert_include "email", parsed_response_body
+      end
     end
-    
-    use "successful GET user with :id"
   end
 
 end

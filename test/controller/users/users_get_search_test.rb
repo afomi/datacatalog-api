@@ -11,15 +11,14 @@ class UsersGetSearchControllerTest < RequestTestCase
     assert_not_include "_id", element
   end
   
-  shared "successful GET of users where name is 'User 4'" do
+  shared "successful GET of users where name is 'User 2'" do
     test "body should have 1 top level elements" do
       assert_equal 1, parsed_response_body.length
     end
 
     test "each element should be correct" do
       parsed_response_body.each do |element|
-        assert_equal "User 4", element["name"]
-        assert_equal "user-4@email.com", element["email"]
+        assert_equal "User 2", element["name"]
         assert_shared_attributes element
       end
     end
@@ -30,39 +29,28 @@ class UsersGetSearchControllerTest < RequestTestCase
   context_ "3 added users" do
     before do
       3.times do |n|
-        user = User.new(
-          :name    => "User #{n + 3}",
-          :email   => "user-#{n + 3}@email.com",
-          :curator => false,
-          :admin   => false
+        create_user_with_primary_key(
+          :name    => "User #{n}",
+          :email   => "user-#{n}@email.com"
         )
-        keys = [
-          ApiKey.new({
-            :api_key  => user.generate_api_key,
-            :key_type => "primary",
-            :purpose  => "The primary key"
-          })
-        ]
-        user.api_keys = keys
-        user.save!
       end
     end
 
     # - - - - - - - - - -
 
-    context "anonymous : get / where name is 'User 4'" do
+    context "anonymous : get / where name is 'User 2'" do
       before do
         get "/",
-          :name    => "User 4"
+          :name    => 'User 2'
       end
     
       use "return 401 because the API key is missing"
     end
 
-    context "incorrect API key : get / where name is 'User 4'" do
+    context "incorrect API key : get / where name is 'User 2'" do
       before do
         get "/",
-          :name    => "User 4",
+          :name    => 'User 2',
           :api_key => "does_not_exist_in_database"
       end
     
@@ -71,24 +59,40 @@ class UsersGetSearchControllerTest < RequestTestCase
     
     # - - - - - - - - - -
 
-    context "normal API key : get / where name is 'User 4'" do
+    context "normal API key : get / where name is 'User 2'" do
       before do
         get "/",
-          :name    => "User 4",
+          :name    => 'User 2',
           :api_key => @normal_user.primary_api_key
       end
-    
-      use "successful GET of users where name is 'User 4'"
+      
+      use "successful GET of users where name is 'User 2'"
+
+      test "each element should not expose sensitive values" do
+        parsed_response_body.each do |element|
+          assert_not_include "email", parsed_response_body
+          assert_not_include "curator", parsed_response_body
+          assert_not_include "admin", parsed_response_body
+        end
+      end
     end
 
-    context "admin API key : get / where name is 'User 4'" do
+    context "admin API key : get / where name is 'User 2'" do
       before do
         get "/",
-          :name    => "User 4",
+          :name    => 'User 2',
           :api_key => @admin_user.primary_api_key
       end
     
-      use "successful GET of users where name is 'User 4'"
+      use "successful GET of users where name is 'User 2'"
+
+      test "each element should expose all values" do
+        parsed_response_body.each do |element|
+          assert_equal "user-2@email.com", element["email"]
+          assert_include "curator", element
+          assert_include "admin", element
+        end
+      end
     end
   end
 

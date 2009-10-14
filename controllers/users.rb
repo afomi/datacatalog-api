@@ -23,9 +23,22 @@ module DataCatalog
     end
 
     def self.permit_modify?(current_user, user)
-      current_user.admin || current_user == user
+      owner?(current_user, user)
     end
-
+    
+    def self.sanitize(current_user, user)
+      if owner?(current_user, user)
+        user
+      else
+        {
+          "id"         => user.id,
+          "name"       => user.name,
+          "created_at" => user.created_at,
+          "updated_at" => user.updated_at,
+        }
+      end
+    end
+    
   end
 
 end

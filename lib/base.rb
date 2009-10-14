@@ -25,6 +25,10 @@ module DataCatalog
     def self.sanitize(current_user, model)
       model
     end
+    
+    def self.owner?(current_user, user)
+      current_user.admin || current_user == user
+    end
 
   end
   
