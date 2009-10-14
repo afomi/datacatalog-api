@@ -120,13 +120,6 @@ module ModelHelpers
     required[:user_id] = @normal_user.id if @normal_user
     create_model!(Rating, custom, required)
   end
-
-  def create_just_a_user
-    create_user({
-      :name  => "Data Mangler",
-      :email => "data.mangler@usa.gov"
-    })
-  end
   
   def create_user_with_primary_key(custom={})
     user = create_user(custom)
