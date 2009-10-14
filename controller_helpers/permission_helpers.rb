@@ -1,6 +1,10 @@
+require File.dirname(__FILE__) + '/status_code_helpers'
+
 module DataCatalog
 
   module PermissionHelpers
+
+    include StatusCodeHelpers
 
     def permission_check(default_level, custom_level, user_id)
       if custom_level && custom_level == :owner
@@ -41,18 +45,6 @@ module DataCatalog
     def privileges_for_api_key(user_id=nil)
       return @cached_privileges if @cached_privileges
       @cached_privileges = _privileges_for_api_key(user_id)
-    end
-
-    def missing_api_key!
-      error 401, { "errors" => ["missing_api_key"] }.to_json
-    end
-
-    def invalid_api_key!
-      error 401, { "errors" => ["invalid_api_key"] }.to_json
-    end
-
-    def unauthorized_api_key!
-      error 401, { "errors" => ["unauthorized_api_key"] }.to_json
     end
     
     protected
