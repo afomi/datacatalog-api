@@ -13,7 +13,6 @@ class User
   key :email,           String
   key :curator,         Boolean, :default => false
   key :admin,           Boolean, :default => false
-  key :creator_api_key, String
   timestamps!
 
   # == Indices
@@ -63,9 +62,8 @@ class User
 
   def generate_api_key
     salt = Config.environment_config["api_key_salt"]
-    p1 = "#{Time.now.to_f}#{salt}#{rand(100_000_000)}"
-    p2 = "#{creator_api_key}#{name}#{email}"
-    Digest::SHA1.hexdigest(p1 + p2)
+    s = "#{Time.now.to_f}#{salt}#{rand(100_000_000)}#{name}#{email}"
+    Digest::SHA1.hexdigest(s)
   end
 
   # Example usage:

@@ -32,14 +32,6 @@ class RequestTestCase
     end
   end
 
-  shared "return errors hash saying creator_api_key is invalid" do
-    test "body should say 'creator_api_key' is an invalid param" do
-      assert_include "errors", parsed_response_body
-      assert_include "invalid_params", parsed_response_body["errors"]
-      assert_include "creator_api_key", parsed_response_body["errors"]["invalid_params"]
-    end
-  end
-
   shared "return errors hash saying junk is invalid" do
     test "body should say 'junk' is an invalid param" do
       assert_include "errors", parsed_response_body

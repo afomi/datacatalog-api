@@ -12,7 +12,6 @@ module DataCatalog
 
       read_only :api_keys
       read_only :admin
-      read_only :creator_api_key
       read_only :created_at
       read_only :updated_at
 

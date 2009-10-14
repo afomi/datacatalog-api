@@ -15,11 +15,6 @@ class UsersPostControllerTest < RequestTestCase
     use "return errors hash saying admin is invalid"
   end
 
-  shared "attempted POST user with protected param 'creator_api_key'" do
-    use "return 400 Bad Request"
-    use "return errors hash saying creator_api_key is invalid"
-  end
-
   shared "attempted POST user with invalid param 'junk'" do
     use "return 400 Bad Request"
     use "return errors hash saying junk is invalid"
@@ -136,51 +131,6 @@ class UsersPostControllerTest < RequestTestCase
     end
   
     use "attempted POST user with protected param 'admin'"
-  end
-  
-  # - - - - - - - - - -
-
-  context "owner API key : post / with protected param 'creator_api_key'" do
-    before do
-      post '/', {
-        :api_key         => @normal_user.primary_api_key,
-        :name            => "John Doe",
-        :email           => "john.doe@email.com",
-        :creator_api_key => get_fake_api_key("John Doe")
-      }
-    end
-  
-    # A normal user cannot create a new user account
-    use "return 401 because the API key is unauthorized"
-    use "unchanged user count"
-  end  
-
-  context "curator API key : post / with protected param 'creator_api_key'" do
-    before do
-      post '/', {
-        :api_key         => @curator_user.primary_api_key,
-        :name            => "John Doe",
-        :email           => "john.doe@email.com",
-        :creator_api_key => get_fake_api_key("John Doe")
-      }
-    end
-  
-    # A normal user cannot create a new user account
-    use "return 401 because the API key is unauthorized"
-    use "unchanged user count"
-  end
-  
-  context "admin API key : post / with protected param 'creator_api_key'" do
-    before do
-      post '/', {
-        :api_key         => @admin_user.primary_api_key,
-        :name            => "John Doe",
-        :email           => "john.doe@email.com",
-        :creator_api_key => get_fake_api_key("John Doe")
-      }
-    end
-  
-    use "attempted POST user with protected param 'creator_api_key'"
   end
   
   # - - - - - - - - - -
