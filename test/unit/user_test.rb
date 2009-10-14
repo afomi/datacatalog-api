@@ -2,21 +2,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_unit_helper')
 
 class UserUnitTest < ModelTestCase
 
-  def create_user
-    user = User.create({
-      :name  => "Data Mangler",
-      :email => "data.mangler@usa.gov"
-    })
-  end
-
-  def create_user_with_api_key
-    user = create_user
-    user.add_api_key!({ :key_type => "primary" })
-    user
-  end
-  
-  # - - - - - - - - - -
-
   shared "well formed primary API key" do
     test "primary API key should be 40 characters long" do
       assert_equal 40, @user.primary_api_key.length
@@ -47,7 +32,7 @@ class UserUnitTest < ModelTestCase
     end
     
     test "should save email" do
-      assert_equal "data.mangler@usa.gov", @user.email
+      assert_equal "data.mangler@inter.net", @user.email
     end
   end
 
@@ -55,7 +40,7 @@ class UserUnitTest < ModelTestCase
   
   context "creating a user with an API key" do
     before do
-      @user = create_user_with_api_key
+      @user = create_user_with_primary_key
     end
     
     use "well formed primary API key"
@@ -98,10 +83,7 @@ class UserUnitTest < ModelTestCase
   
   context "creating 2 users with API keys" do
     before do
-      @users = [
-        create_user_with_api_key,
-        create_user_with_api_key
-      ]
+      @users = [create_user_with_primary_key, create_user_with_primary_key]
     end
     
     test "API keys should be unique" do
@@ -111,7 +93,7 @@ class UserUnitTest < ModelTestCase
 
   context "create 10,000 API keys" do
     before do
-      user = User.new({
+      user = new_user({
         :name  => "In Memory Only",
         :email => "in.memory.only@usa.gov"
       })

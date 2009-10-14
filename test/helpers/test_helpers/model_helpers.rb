@@ -121,6 +121,26 @@ module ModelHelpers
     create_model!(Rating, custom, required)
   end
 
+  def create_just_a_user
+    create_user({
+      :name  => "Data Mangler",
+      :email => "data.mangler@usa.gov"
+    })
+  end
+  
+  def create_user_with_primary_key(custom={})
+    user = create_user(custom)
+    user.add_api_key!(:key_type => "primary")
+    user
+  end
+
+  def create_user(custom={})
+    create_model!(User, custom, {
+      :name  => "Data Mangler",
+      :email => "data.mangler@inter.net"
+    })
+  end
+
   def new_category(custom={})
     new_model!(Category, custom, {
       :source_id   => get_fake_mongo_object_id,
@@ -176,6 +196,13 @@ module ModelHelpers
     new_model!(Source, custom, {
       :title => "2005-2007 American Community Survey Three-Year PUMS Housing File",
       :url   => "http://www.data.gov/details/90"
+    })
+  end
+  
+  def new_user(custom={})
+    new_model!(User, custom, {
+      :name  => "Data Mangler",
+      :email => "data.mangler@inter.net"
     })
   end
 
