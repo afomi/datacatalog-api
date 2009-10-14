@@ -5,10 +5,12 @@
 
 # Gem Dependencies
 
-## Production
-
+    # If you have not used gemcutter before:
     gem install gemcutter
     gem tumble
+
+## Production
+
     gem install sinatra
     gem install mongo
     gem install djsun-mongomapper
@@ -17,14 +19,14 @@
 
 ## Testing
 
-    gem install rcov
-    gem install rack-test
     gem install crack
     gem install djsun-context
     gem install jeremymcanally-pending
+    gem install rack-test
+    gem install rcov
     gem install rr
     gem install timecop
-    
+
 # Setting up Config Files
 
 * Create a `config/config.yml`, based off `config/config_example.yml`
