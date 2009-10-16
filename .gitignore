@@ -2,4 +2,4 @@ rcov/*
 config/config.yml
 config.ru
 restart.txt
-
+.DS_Store
