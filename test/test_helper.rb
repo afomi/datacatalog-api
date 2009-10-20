@@ -28,4 +28,4 @@ end
 # If you use `rake test` the database will automatically get dropped.
 # If you are running tests outside of rake (e.g. in TextMate), you
 # might want to drop the database here:
-# Config.drop_database
+Config.drop_database
