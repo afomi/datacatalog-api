@@ -27,12 +27,18 @@ class SourcesGetOneControllerTest < RequestTestCase
     end
 
     test "body should have correct attributes" do
-      assert_include "title",        parsed_response_body
-      assert_include "url",          parsed_response_body
-      assert_include "released",     parsed_response_body
-      assert_include "period_start", parsed_response_body
-      assert_include "period_end",   parsed_response_body
-      assert_include "rating_stats", parsed_response_body
+      assert_include "title"              , parsed_response_body
+      assert_include "slug"               , parsed_response_body
+      assert_include "description"        , parsed_response_body
+      assert_include "type"               , parsed_response_body
+      assert_include "license"            , parsed_response_body
+      assert_include "url"                , parsed_response_body
+      assert_include "documentation_url"  , parsed_response_body
+      assert_include "license_url"        , parsed_response_body
+      assert_include "released"           , parsed_response_body
+      assert_include "period_start"       , parsed_response_body
+      assert_include "period_end"         , parsed_response_body
+      assert_include "rating_stats"       , parsed_response_body
       rating_stats = parsed_response_body["rating_stats"]
       assert_include "count",        rating_stats
       assert_include "average",      rating_stats

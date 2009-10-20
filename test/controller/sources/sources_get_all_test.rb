@@ -21,12 +21,18 @@ class SourcesGetAllControllerTest < RequestTestCase
 
     test "each element should have correct attributes" do
       parsed_response_body.each do |element|
-        assert_include "title"         , element
-        assert_include "url"           , element
-        assert_include "released"      , element
-        assert_include "period_start"  , element
-        assert_include "period_end"    , element
-        assert_include "rating_stats"  , element
+        assert_include "title"              , element
+        assert_include "slug"               , element
+        assert_include "description"        , element
+        assert_include "type"               , element
+        assert_include "license"            , element
+        assert_include "url"                , element
+        assert_include "documentation_url"  , element
+        assert_include "license_url"        , element
+        assert_include "released"           , element
+        assert_include "period_start"       , element
+        assert_include "period_end"         , element
+        assert_include "rating_stats"       , element
         rating_stats = element["rating_stats"]
         assert_include "count",        rating_stats
         assert_include "average",      rating_stats

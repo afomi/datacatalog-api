@@ -9,20 +9,31 @@ class Source
 
   # == Attributes
 
-  key :title,           String
-  key :url,             String
-  key :released,        Time
-  key :period_start,    Time
-  key :period_end,      Time
-  key :frequency,       String
-  key :organization_id, String
-  key :custom,          Hash
-  key :raw,             Hash
+  key :title,               String
+  key :slug,                String 
+  key :description,         String
+  key :type,                String, :default => 'Dataset' # other is 'API'
+  key :license,             String
+  key :url,                 String
+  key :documentation_url,   String
+  key :license_url,         String
+  key :released,            Time
+  key :period_start,        Time
+  key :period_end,          Time
+  key :frequency,           String
+  key :organization_id,     String
+  key :custom,              Hash
+  key :raw,                 Hash
   timestamps!
 
   # == Indices
 
+  ensure_index :title
+  ensure_index :slug
+  ensure_index :type
+  ensure_index :license
   ensure_index :url
+  
 
   # == Associations
 
@@ -112,10 +123,30 @@ class Source
     end
   end
 
+  # == Callbacks
+  before_validation :check_slug
+  
+  def check_slug
+    if self.slug.nil? || self.slug == ""
+      if self.title =~ /[:alnum:]/ 
+        self.slug = slugify(self.title)
+      else
+        self.slug = 'data-source'
+      end
+    end
+    existing_sources = self.class.all(:conditions => {:slug => Regexp.new(self.slug.gsub(/[^a-z0-9\-]+/i,'') || "")})
+    self.slug = self.slug + "-" + existing_sources.length.to_s if existing_sources.length > 0 && !existing_sources.include?(self)
+    true
+  end
+
   # == Validations
 
   validates_presence_of :title
   validates_presence_of :url
+  validates_uniqueness_of :slug
+  validates_format_of :slug, :with => /\A[a-zA-z0-9\-]+\z/, :message => "can only contain alphanumeric characters and dashes"
+  validates_format_of :type, :with => /\A(API|Dataset)\z/, :message => "must be 'API' or 'Dataset'"
+
   validate :validate_url
   include UrlValidator
   validate :validate_period
@@ -141,5 +172,19 @@ class Source
   # == Class Methods
 
   # == Various Instance Methods
-
+  
+  # Adapted from ActiveSupport's parameterize
+  # http://github.com/rails/rails/blob/ea0e41d8fa5a132a2d2771e9785833b7663203ac/activesupport/lib/active_support/inflector.rb#L259
+  def slugify(str, sep = '-')
+    return self.id.to_s if str.nil? || str == ""
+    to_slug = str.dup
+    to_slug.gsub!(/[^a-z0-9]+/i, sep)
+    unless sep.nil? || sep == ''
+      re_sep = Regexp.escape(sep)
+      to_slug.gsub!(/#{re_sep}{2,}/, sep)
+      to_slug.gsub!(/^#{re_sep}|#{re_sep}$/i, '')
+    end
+    return to_slug.downcase
+  end
+  
 end
