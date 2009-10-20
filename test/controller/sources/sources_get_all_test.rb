@@ -78,12 +78,18 @@ class SourcesGetAllControllerTest < RequestTestCase
 
   context_ "3 sources" do
     before do
-      3.times do |n|
+      @sources = 3.times.map do |n|
         Source.create(
           :title => "Source #{n}", 
-          :url   => "http://data.gov/sources/#{n}"
+          :url   => "http://data.gov/sources/#{n}",
+          :slug  => "source-#{n}",
+          :type  => "Dataset"
         )
       end
+    end
+    
+    after do
+      @sources.each { |s| s.destroy }
     end
 
     %w(normal curator admin).each do |role|
