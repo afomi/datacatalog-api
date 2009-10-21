@@ -14,9 +14,11 @@ class Source
   key :description,         String
   key :type,                String, :default => 'Dataset' # other is 'API'
   key :license,             String
+  key :catalog_name,        String
   key :url,                 String
   key :documentation_url,   String
   key :license_url,         String
+  key :catalog_url,         String
   key :released,            Time
   key :period_start,        Time
   key :period_end,          Time

@@ -26,9 +26,11 @@ class SourcesGetAllControllerTest < RequestTestCase
         assert_include "description"        , element
         assert_include "type"               , element
         assert_include "license"            , element
+        assert_include "catalog_name"       , element
         assert_include "url"                , element
         assert_include "documentation_url"  , element
         assert_include "license_url"        , element
+        assert_include "catalog_url"        , element
         assert_include "released"           , element
         assert_include "period_start"       , element
         assert_include "period_end"         , element

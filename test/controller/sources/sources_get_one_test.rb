@@ -32,9 +32,11 @@ class SourcesGetOneControllerTest < RequestTestCase
       assert_include "description"        , parsed_response_body
       assert_include "type"               , parsed_response_body
       assert_include "license"            , parsed_response_body
+      assert_include "catalog_name"       , parsed_response_body
       assert_include "url"                , parsed_response_body
       assert_include "documentation_url"  , parsed_response_body
       assert_include "license_url"        , parsed_response_body
+      assert_include "catalog_url"        , parsed_response_body      
       assert_include "released"           , parsed_response_body
       assert_include "period_start"       , parsed_response_body
       assert_include "period_end"         , parsed_response_body
