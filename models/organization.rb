@@ -7,7 +7,7 @@ class Organization
 
   key :name,           String
   key :acronym,        String
-  key :type,           String, :default => 'Governmental' # or Non-governmental or Company
+  key :org_type,       String, :default => 'Governmental' # or Non-governmental or Company
   key :description,    String
   key :url,            String
   key :source_id,      String
@@ -27,7 +27,7 @@ class Organization
 
   validates_presence_of :name
   validate :validate_url
-  validates_format_of :type, :with => /\A(Governmental|Non-governmental|Company)\z/, 
+  validates_format_of :org_type, :with => /\A(Governmental|Non-governmental|Company)\z/, 
     :message => "must be Governmental, Non-governmental, or Company"
   include UrlValidator
 
