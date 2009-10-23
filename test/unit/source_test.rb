@@ -81,25 +81,25 @@ class SourceUnitTest < ModelTestCase
       use "valid source"
     end
     
-    # context "type" do
-    #   before do
-    #     @source = Source.new(@valid_params)
-    #   end
-    # 
-    #   use "valid source"
-    #   
-    #   test "should be invalid when not 'API' or 'Dataset'" do
-    #     @source.type = "Foobar"
-    #     @source.save
-    #     assert_include :type, @source.errors.errors
-    #     assert_include "must be 'API' or 'Dataset'", @source.errors.errors[:type]
-    #   end
-    #   
-    #   test "should be populated with 'Dataset' when not explicitly set" do
-    #     @source.save
-    #     assert_equal "Dataset", @source.type
-    #   end
-    # end
+    context "type" do
+      before do
+        @source = Source.new(@valid_params)
+      end
+    
+      use "valid source"
+      
+      test "should be invalid when not 'API' or 'Dataset'" do
+        @source.type = "Foobar"
+        @source.save
+        assert_include :type, @source.errors.errors
+        assert_include "must be 'API' or 'Dataset'", @source.errors.errors[:type]
+      end
+      
+      test "should be populated with 'Dataset' when not explicitly set" do
+        @source.save
+        assert_equal "Dataset", @source.type
+      end
+    end
     
     context "slug" do
       context "Source without title" do
