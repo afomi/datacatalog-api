@@ -101,48 +101,46 @@ class SourceUnitTest < ModelTestCase
     #   end
     # end
     
-    # context "slug" do
-    #   before do
-    #     @source = Source.new(@valid_params)
-    #   end
-    #   
-    #   use "valid source"
-    #   
-    #   test "should save when explicitly set" do
-    #     @source.slug = "my-awesome-slug"
-    #     @source.save
-    #     assert_equal "my-awesome-slug", @source.slug
-    #   end
-    #   
-    # 
-    #   test "should mutate into data-source when no valid characters are present in title" do
-    #     @source.title = "%+*"
-    #     @source.save
-    #     assert_match /data-source/, @source.slug
-    #   end      
-    # 
-    #   test "should be invalid on bad characters" do
-    #     @source.slug = "%+*"
-    #     @source.save
-    #     assert_include :slug, @source.errors.errors
-    #     assert_include "can only contain alphanumeric characters and dashes", @source.errors.errors[:slug]
-    #   end      
-    # 
-    #   
-    #   test "should save only alphanumeric characters from title" do
-    #     @source.title = "My Custom Title!%&+!"
-    #     @source.save
-    #     assert_equal "my-custom-title", @source.slug
-    #   end
-    #   
-    #   test "should stay the same after multiple saves" do
-    #     @source.title = "Stay the Same!"
-    #     @source.save
-    #     assert_equal "stay-the-same", @source.slug
-    #     @source.save
-    #     assert_equal "stay-the-same", @source.slug
-    #   end
-    # end
+    context "slug" do
+      before do
+        @source = Source.new(@valid_params)
+      end
+      
+      use "valid source"
+      
+      test "should save when explicitly set" do
+        @source.slug = "my-awesome-slug"
+        @source.save
+        assert_equal "my-awesome-slug", @source.slug
+      end
+    
+      test "should mutate into data-source when no valid characters are present in title" do
+        @source.title = "%+*"
+        @source.save
+        assert_match /data-source/, @source.slug
+      end
+    
+      test "should be invalid on bad characters" do
+        @source.slug = "%+*"
+        @source.save
+        assert_include :slug, @source.errors.errors
+        assert_include "can only contain alphanumeric characters and dashes", @source.errors.errors[:slug]
+      end
+      
+      test "should save only alphanumeric characters from title" do
+        @source.title = "My Custom Title!%&+!"
+        @source.save
+        assert_equal "my-custom-title", @source.slug
+      end
+      
+      test "should stay the same after multiple saves" do
+        @source.title = "Stay the Same!"
+        @source.save
+        assert_equal "stay-the-same", @source.slug
+        @source.save
+        assert_equal "stay-the-same", @source.slug
+      end
+    end
 
     context "frequency" do
       INVALID_FREQUENCIES = %w(
