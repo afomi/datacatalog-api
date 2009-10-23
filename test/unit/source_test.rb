@@ -106,18 +106,16 @@ class SourceUnitTest < ModelTestCase
         @source = Source.new(@valid_params)
       end
       
-      use "valid source"
-      
       test "should save when explicitly set" do
         @source.slug = "my-awesome-slug"
         @source.save
         assert_equal "my-awesome-slug", @source.slug
       end
     
-      test "should mutate into data-source when no valid characters are present in title" do
+      test "should generate something when title has no valid characters" do
         @source.title = "%+*"
         @source.save
-        assert_match /data-source/, @source.slug
+        assert_not_equal "", @source.slug
       end
     
       test "should be invalid on bad characters" do
@@ -140,6 +138,15 @@ class SourceUnitTest < ModelTestCase
         @source.save
         assert_equal "stay-the-same", @source.slug
       end
+      
+      test "should add numeric suffix if duplicate exists" do
+        @source.title = "Common Title"
+        @source.save
+        @new_source = Source.new(@valid_params)
+        @new_source.title = "Common Title"
+        assert_equal true, @new_source.save
+        assert_equal "common-title-2", @new_source.slug
+      end
     end
 
     context "frequency" do
@@ -147,19 +154,19 @@ class SourceUnitTest < ModelTestCase
         biweekly
         bimonthly
       )
-
+  
       INVALID_FREQUENCIES.each do |term|
         context "#{term} frequency" do
           before do
             @source = Source.new(@valid_params.merge(
               :frequency => term))
           end
-
+  
           use "invalid source"
           use "source.frequency is invalid"
         end
       end
-
+  
       VALID_FREQUENCIES = %w(
         weekly
         monthly
@@ -169,19 +176,19 @@ class SourceUnitTest < ModelTestCase
         yearly
         unknown
       )
-
+  
       VALID_FREQUENCIES.each do |term|
         context "#{term} frequency" do
           before do
             @source = Source.new(@valid_params.merge(
               :frequency => term))
           end
-
+  
           use "valid source"
         end
       end
     end
-
+  
     context "period" do
       context "period_start without period_end" do
         before do
@@ -189,20 +196,20 @@ class SourceUnitTest < ModelTestCase
             :period_start => Time.local(2009, 3, 1)
           ))
         end
-
+  
         use "invalid source"
       end
-
+  
       context "period_end without period_start" do
         before do
           @source = Source.new(@valid_params.merge(
             :period_end   => Time.local(2007, 3, 5)
           ))
         end
-
+  
         use "invalid source"
       end
-
+  
       context "period_end before period_start" do
         before do
           @source = Source.new(@valid_params.merge(
@@ -210,10 +217,10 @@ class SourceUnitTest < ModelTestCase
             :period_end   => Time.local(2007, 3, 5)
           ))
         end
-
+  
         use "invalid source"
       end
-
+  
       context "period_start before period_end" do
         before do
           @source = Source.new(@valid_params.merge(
@@ -221,10 +228,10 @@ class SourceUnitTest < ModelTestCase
             :period_end   => Time.local(2009, 3, 1)
           ))
         end
-
+  
         use "valid source"
       end
-
+  
       # PENDING
       # context "period with strings" do
       #   before do
@@ -237,51 +244,51 @@ class SourceUnitTest < ModelTestCase
       #   use "invalid source"
       # end
     end
-
+  
     context "url" do
       context "missing" do
         before do
           @source = Source.new(@valid_params.merge(:url => ""))
         end
-
+  
         use "invalid source"
         use "source.url can't be empty"
       end
-
+  
       context "http with port" do
         before do
           @source = Source.new(@valid_params.merge(
             :url => "http://www.data.gov:80/details/12"))
         end
-
+  
         use "valid source"
       end
-
+  
       context "ftp" do
         before do
           @source = Source.new(@valid_params.merge(
             :url => "ftp://data.gov/12"))
         end
-
+  
         use "valid source"
       end
-
+  
       context "https" do
         before do
           @source = Source.new(@valid_params.merge(
             :url => "https://sekret.com/1999"))
         end
-
+  
         use "invalid source"
         use "source.url must be http or ftp"
       end
-
+  
       context "relative" do
         before do
           @source = Source.new(@valid_params.merge(
            :url => "/source/1999"))
         end
-
+  
         use "invalid source"
         use "source.url must be absolute"
       end

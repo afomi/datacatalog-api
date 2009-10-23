@@ -35,7 +35,6 @@ class Source
   ensure_index :type
   ensure_index :license
   ensure_index :url
-  
 
   # == Associations
 
@@ -129,15 +128,11 @@ class Source
   before_validation :check_slug
   
   def check_slug
-    if self.slug.nil? || self.slug == ""
-      if self.title =~ /[:alnum:]/ 
-        self.slug = slugify(self.title)
-      else
-        self.slug = 'data-source'
-      end
+    self.slug = Slug.make(title, self) if slug.blank?
+    existing = self.class.all(:conditions => { :slug => slug })
+    if existing.length > 0 && !existing.include?(self)
+      self.slug += "-#{existing.length + 1}"
     end
-    existing_sources = self.class.all(:conditions => {:slug => Regexp.new(self.slug.gsub(/[^a-z0-9\-]+/i,'') || "")})
-    self.slug = self.slug + "-" + existing_sources.length.to_s if existing_sources.length > 0 && !existing_sources.include?(self)
     true
   end
 
@@ -174,19 +169,5 @@ class Source
   # == Class Methods
 
   # == Various Instance Methods
-  
-  # Adapted from ActiveSupport's parameterize
-  # http://github.com/rails/rails/blob/ea0e41d8fa5a132a2d2771e9785833b7663203ac/activesupport/lib/active_support/inflector.rb#L259
-  def slugify(str, sep = '-')
-    return self.id.to_s if str.nil? || str == ""
-    to_slug = str.dup
-    to_slug.gsub!(/[^a-z0-9]+/i, sep)
-    unless sep.nil? || sep == ''
-      re_sep = Regexp.escape(sep)
-      to_slug.gsub!(/#{re_sep}{2,}/, sep)
-      to_slug.gsub!(/^#{re_sep}|#{re_sep}$/i, '')
-    end
-    return to_slug.downcase
-  end
   
 end
