@@ -67,6 +67,11 @@ class NoteUnitTest < ModelTestCase
       }
     end
     
+    after do
+      @source.destroy
+      @user.destroy
+    end
+    
     context "correct params" do
       before do
         @note = Note.new(@valid_params)

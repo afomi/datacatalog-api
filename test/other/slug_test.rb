@@ -22,17 +22,17 @@ class SluggableUnitTest < Test::Unit::TestCase
     end
     
     test "empty string with doc id fallback" do
-      mock(@doc).id { 42 }
+      stub(@doc).id { 42 }
       assert_equal "42", Slug.make("", @doc)
     end
     
     test "empty string with nil fallback" do
-      mock(@doc).id { nil }
+      stub(@doc).id { nil }
       assert_not_equal "", Slug.make("", @doc)
     end
 
     test "string with weird characters" do
-      mock(@doc).id { 42 }
+      stub(@doc).id { 42 }
       assert_equal "42", Slug.make('!!!@!!!', @doc)
     end
   end

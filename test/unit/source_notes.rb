@@ -29,6 +29,12 @@ class SourceNotesUnitTest < ModelTestCase
       end
     end
     
+    after do
+      @notes.each { |x| x.destroy }
+      @source.destroy
+      @user.destroy
+    end
+    
     test "#notes should return 3 objects" do
       assert_equal 3, @source.notes.length
     end

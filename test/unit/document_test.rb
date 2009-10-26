@@ -67,6 +67,11 @@ class DocumentUnitTest < ModelTestCase
       }
     end
     
+    after do
+      @user.destroy
+      @source.destroy
+    end
+    
     context "correct params" do
       before do
         @document = Document.new(@valid_params)

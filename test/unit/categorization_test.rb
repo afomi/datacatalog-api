@@ -7,6 +7,10 @@ class CategorizationUnitTest < ModelTestCase
       [Categorization, Category, Source].each { |m| m.destroy_all }
       @source = create_source
     end
+    
+    after do
+      @source.destroy
+    end
   
     context "with no Categorizations" do
       test "#categorizations should be empty" do

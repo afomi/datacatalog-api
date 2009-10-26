@@ -5,7 +5,7 @@ class RatingAssociationsUnitTest < ModelTestCase
   context "Rating.create : source" do
     before do
       @user = create_normal_user
-      @source = Source.create(
+      @source = create_source(
         :title => "The Original Data Source",
         :url   => "http://data.gov/original"
       )
@@ -16,6 +16,12 @@ class RatingAssociationsUnitTest < ModelTestCase
         :user_id   => @user.id,
         :source_id => @source.id
       )
+    end
+    
+    after do
+      @rating.destroy
+      @source.destroy
+      @user.destroy
     end
 
     test "user should be valid" do
@@ -50,7 +56,7 @@ class RatingAssociationsUnitTest < ModelTestCase
       assert_include @rating, ratings
     end
   end
-
+  
   context "Rating.create : comment" do
     before do
       @user = create_normal_user
@@ -66,15 +72,21 @@ class RatingAssociationsUnitTest < ModelTestCase
         :comment_id => @comment.id
       )
     end
-
+  
+    after do
+      @rating.destroy
+      @comment.destroy
+      @user.destroy
+    end
+  
     test "user should be valid" do
       assert @user.valid?
     end
-
+  
     test "comment should be valid" do
       assert @comment.valid?
     end
-
+  
     test "rating should be valid" do
       assert @rating.valid?
     end
@@ -82,7 +94,7 @@ class RatingAssociationsUnitTest < ModelTestCase
     test "rating.user should be correct" do
       assert_equal @user, @rating.user
     end
-
+  
     test "rating.comment should be correct" do
       assert_equal @comment, @rating.comment
     end
@@ -92,12 +104,12 @@ class RatingAssociationsUnitTest < ModelTestCase
       assert_equal 1, ratings.length
       assert_include @rating, ratings
     end
-
+  
     test "comment.ratings should be correct" do
       ratings = @comment.ratings.all
       assert_equal 1, ratings.length
       assert_include @rating, ratings
     end
   end
-
+  
 end

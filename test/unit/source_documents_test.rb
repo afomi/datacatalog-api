@@ -8,6 +8,10 @@ class SourceDocumentsUnitTest < ModelTestCase
       @source = create_source
     end
     
+    after do
+      @source.destroy
+    end
+    
     test "#documents should return []" do
       assert_equal [], @source.documents
     end
@@ -27,6 +31,12 @@ class SourceDocumentsUnitTest < ModelTestCase
           :user_id   => @user.id
         )
       end
+    end
+    
+    after do
+      @documents.each { |x| x.destroy }
+      @source.destroy
+      @user.destroy
     end
     
     test "#documents should return 3 objects" do

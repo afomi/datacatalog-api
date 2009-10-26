@@ -5,10 +5,15 @@ class RatingAggregatesUnitTest < ModelTestCase
   context "Rating about a Source" do
     before do
       @user = create_normal_user
-      @source = Source.create(
+      @source = create_source(
         :title => "Annual Electric Generator Report",
         :url   => "http://www.data.gov/details/858"
       )
+    end
+    
+    after do
+      @source.destroy
+      @user.destroy
     end
     
     test "ratings total is 0" do

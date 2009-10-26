@@ -16,7 +16,7 @@ class SourceRatingsUnitTest < ModelTestCase
     end
   
   end
-
+  
   context "source with 5 ratings" do
   
     before do

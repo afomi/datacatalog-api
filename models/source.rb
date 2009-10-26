@@ -10,7 +10,7 @@ class Source
   # == Attributes
 
   key :title,               String
-  key :slug,                String 
+  key :slug,                String
   key :description,         String
   key :type,                String, :default => 'Dataset' # other is 'API'
   key :license,             String
@@ -125,15 +125,20 @@ class Source
   end
 
   # == Callbacks
-  before_validation :check_slug
   
-  def check_slug
-    self.slug = Slug.make(title, self) if slug.blank?
-    existing = self.class.all(:conditions => { :slug => slug })
-    if existing.length > 0 && !existing.include?(self)
-      self.slug += "-#{existing.length + 1}"
+  before_create :generate_slug
+  
+  def generate_slug
+    return if title.blank?
+    default = Slug.make(title, self)
+    self.slug = default if slug.blank?
+    n = 2
+    loop do
+      existing = self.class.first(:slug => slug)
+      break unless existing
+      self.slug = "#{default}-#{n}"
+      n += 1
     end
-    true
   end
 
   # == Validations
@@ -141,7 +146,12 @@ class Source
   validates_presence_of :title
   validates_presence_of :url
   validates_uniqueness_of :slug
-  validates_format_of :slug, :with => /\A[a-zA-z0-9\-]+\z/, :message => "can only contain alphanumeric characters and dashes"
+
+  validates_format_of :slug,
+    :with      => /\A[a-zA-z0-9\-]+\z/,
+    :message   => "can only contain alphanumeric characters and dashes",
+    :allow_nil => true
+
   validates_format_of :type, :with => /\A(API|Dataset)\z/, :message => "must be 'API' or 'Dataset'"
 
   validate :validate_url

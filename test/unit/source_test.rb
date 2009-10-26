@@ -102,53 +102,98 @@ class SourceUnitTest < ModelTestCase
     # end
     
     context "slug" do
-      before do
-        @source = Source.new(@valid_params)
+      context "Source without title" do
+        before do
+          @source = Source.new(@valid_params.delete_if { |k, v| k == :title })
+        end
+        
+        test "do not set slug if title blank" do
+          assert_equal false, @source.valid?
+          assert_equal nil, @source.slug
+        end
+        
+        test "set slug after title is set and source saved" do
+          @source.title = "Wetlands Protection"
+          assert_equal true, @source.save
+          assert_equal "wetlands-protection", @source.slug
+        end
       end
       
-      test "should save when explicitly set" do
-        @source.slug = "my-awesome-slug"
-        @source.save
-        assert_equal "my-awesome-slug", @source.slug
-      end
-    
-      test "should generate something when title has no valid characters" do
-        @source.title = "%+*"
-        @source.save
-        assert_not_equal "", @source.slug
-      end
-    
-      test "should be invalid on bad characters" do
-        @source.slug = "%+*"
-        @source.save
-        assert_include :slug, @source.errors.errors
-        assert_include "can only contain alphanumeric characters and dashes", @source.errors.errors[:slug]
-      end
+      context "Source with valid params" do
+        before do
+          @source = Source.new(@valid_params)
+        end
       
-      test "should save only alphanumeric characters from title" do
-        @source.title = "My Custom Title!%&+!"
-        @source.save
-        assert_equal "my-custom-title", @source.slug
-      end
-      
-      test "should stay the same after multiple saves" do
-        @source.title = "Stay the Same!"
-        @source.save
-        assert_equal "stay-the-same", @source.slug
-        @source.save
-        assert_equal "stay-the-same", @source.slug
-      end
-      
-      test "should add numeric suffix if duplicate exists" do
-        @source.title = "Common Title"
-        @source.save
-        @new_source = Source.new(@valid_params)
-        @new_source.title = "Common Title"
-        assert_equal true, @new_source.save
-        assert_equal "common-title-2", @new_source.slug
+        test "should save when explicitly set" do
+          @source.slug = "my-awesome-slug"
+          @source.save
+          assert_equal "my-awesome-slug", @source.slug
+        end
+
+        test "should generate something when title has no valid characters" do
+          @source.title = "%+*"
+          @source.save
+          assert_not_equal "", @source.slug
+        end
+
+        test "should be invalid on bad characters" do
+          @source.slug = "%+*"
+          @source.save
+          assert_include :slug, @source.errors.errors
+          assert_include "can only contain alphanumeric characters and dashes", @source.errors.errors[:slug]
+        end
+
+        test "should save only alphanumeric characters from title" do
+          @source.title = "My Custom Title!%&+!"
+          @source.save
+          assert_equal "my-custom-title", @source.slug
+        end
+              
+        test "should stay the same after multiple saves" do
+          @source.title = "Stay the Same!"
+          @source.save
+          assert_equal "stay-the-same", @source.slug
+          @source.save
+          assert_equal "stay-the-same", @source.slug
+        end
+
+        test "should not allow duplicate slug" do
+          @source.slug = "in-use"
+          @source.save
+          @new_source = Source.new(@valid_params)
+          @new_source.slug = "in-use"
+          assert_equal false, @new_source.valid?
+          expected = { :slug => ["has already been taken"] }
+          assert_equal expected, @new_source.errors.errors
+        end
+
+        test "should prevent duplicate slugs" do
+          @source.title = "Common Title"
+          @source.save
+
+          s = Source.new(@valid_params)
+          s.title = "Common Title"
+          assert_equal true, s.save
+          assert_equal "common-title-2", s.slug
+          assert_equal true, s.valid?
+
+          s = Source.new(@valid_params)
+          s.title = "Common Title"
+          assert_equal true, s.save
+          assert_equal "common-title-3", s.slug
+          assert_equal true, s.valid?
+        end
+
+        # test "should prevent duplicate slugs" do
+        #   @source.title = "Common Title"
+        #   @source.save
+        #   create_source(@valid_params.merge(:title => "Common Title"))
+        #   
+        # end
+        
       end
     end
-
+  
     context "frequency" do
       INVALID_FREQUENCIES = %w(
         biweekly

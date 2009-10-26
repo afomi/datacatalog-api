@@ -8,6 +8,10 @@ class SourceCommentsUnitTest < ModelTestCase
       @source = create_source
     end
     
+    after do
+      @source.destroy
+    end
+    
     test "#comments should return []" do
       assert_equal [], @source.comments
     end
@@ -27,6 +31,12 @@ class SourceCommentsUnitTest < ModelTestCase
           :user_id   => @user.id
         )
       end
+    end
+    
+    after do
+      @comments.each { |x| x.destroy }
+      @source.destroy
+      @user.destroy
     end
     
     test "#comments should return 3 objects" do
