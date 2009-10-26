@@ -183,13 +183,6 @@ class SourceUnitTest < ModelTestCase
           assert_equal "common-title-3", s.slug
           assert_equal true, s.valid?
         end
-
-        # test "should prevent duplicate slugs" do
-        #   @source.title = "Common Title"
-        #   @source.save
-        #   create_source(@valid_params.merge(:title => "Common Title"))
-        #   
-        # end
         
       end
     end
