@@ -63,6 +63,76 @@ class OrganizationUnitTest < ModelTestCase
       use "invalid organization"
       use "organization.name can't be empty"
     end
+    
+    context "slug" do
+      
+      context "creation" do 
+        before do
+          @organization = Organization.new(:name => "Department of State")
+        end
+      
+        test "do not set slug if name blank" do
+          @organization.name = ""
+          assert_equal false, @organization.valid?
+          assert_equal nil, @organization.slug
+        end
+
+        test "set slug to acronym if acronym is set" do
+          @organization.acronym = "DOS"
+          assert_equal true, @organization.save
+          assert_equal "dos", @organization.slug
+        end  
+
+        test "set slug to name if name is set but not acronym" do
+          @organization.acronym = ""
+          assert_equal true, @organization.save
+          assert_equal "department-of-state", @organization.slug
+        end
+      end
+      
+      context "update" do
+        before do
+          @organization = Organization.new(:name => "Department of Agriculture", :acronym => "USDA")
+        end
+        
+        test "should stay the same after multiple saves" do
+          @organization.save
+          assert_equal "usda", @organization.slug
+          @organization.save
+          assert_equal "usda", @organization.slug
+        end
+
+        test "should not allow duplicate slug" do
+          @organization.slug = "in-use"
+          @organization.save
+          @new_organization = Organization.new(@valid_params)
+          @new_organization.slug = "in-use"
+          assert_equal false, @new_organization.valid?
+          expected = { :slug => ["has already been taken"] }
+          assert_equal expected, @new_organization.errors.errors
+        end
+
+        test "should prevent duplicate slugs" do
+          @organization.name = "Common Name"
+          @organization.acronym = ""
+          @organization.save
+        
+          o2 = Organization.new(@valid_params)
+          o2.name = "Common Name"
+          assert_equal true, o2.save
+          assert_equal "common-name-2", o2.slug
+          assert_equal true, o2.valid?
+        
+          o3 = Organization.new(@valid_params)
+          o3.name = "Common Name"
+          assert_equal true, o3.save
+          assert_equal "common-name-3", o3.slug
+          assert_equal true, o3.valid?
+        end
+        
+      end
+      
+    end
 
     context "url" do
       context "http with port" do
