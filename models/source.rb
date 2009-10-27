@@ -126,7 +126,12 @@ class Source
 
   # == Callbacks
   
+  before_validation :handle_blank_slug
   before_create :generate_slug
+  
+  def handle_blank_slug
+    self.slug = nil if self.slug.blank?
+  end
   
   def generate_slug
     return if title.blank?

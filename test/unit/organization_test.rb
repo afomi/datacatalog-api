@@ -76,6 +76,11 @@ class OrganizationUnitTest < ModelTestCase
           assert_equal false, @organization.valid?
           assert_equal nil, @organization.slug
         end
+        
+        test "set slug to title when using create" do
+          @organization = Organization.create(:name => "Department of Justice", :slug => "")
+          assert_equal "department-of-justice", @organization.slug
+        end
 
         test "set slug to acronym if acronym is set" do
           @organization.acronym = "DOS"
