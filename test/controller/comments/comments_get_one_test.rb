@@ -18,7 +18,6 @@ class CommentsGetOneControllerTest < RequestTestCase
     end
     
     use "return 200 Ok"
-    use "return timestamps and id in body"
   
     test "body should have correct text" do
       assert_equal "Comment A", parsed_response_body["text"]

@@ -17,6 +17,8 @@ module DataCatalog
     property :source_id
     property :user_id
     property :rating_stats, :w => :nobody
+    
+    # == Callbacks
 
     callback :before_create do |action|
       raise "expecting current_user" unless action.current_user
