@@ -6,7 +6,6 @@
 class Document
 
   include MongoMapper::Document
-  include Renderable
 
   # == Attributes
 
@@ -22,8 +21,6 @@ class Document
   
   belongs_to :source
   belongs_to :user
-
-  # == Derived Fields
 
   # == Validations
   
