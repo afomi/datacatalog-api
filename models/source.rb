@@ -4,7 +4,6 @@ require 'frequency'
 class Source
 
   include MongoMapper::Document
-  include Renderable
   include Ratable
 
   # == Attributes
