@@ -28,7 +28,7 @@ class NotesGetSearchControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context_ "6 notes" do
+  context "6 notes" do
     before :all do
       @sources = (0 ... 3).map { |n| create_source }
       6.times do |n|

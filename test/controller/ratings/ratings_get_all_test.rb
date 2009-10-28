@@ -56,7 +56,7 @@ class RatingsGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context_ "0 ratings" do
+  context "0 ratings" do
     context "normal API key : get /" do
       before do
         get "/", :api_key => @normal_user.primary_api_key
@@ -76,7 +76,7 @@ class RatingsGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context_ "7 ratings" do
+  context "7 ratings" do
     before do
       5.times do |n|
         source = Source.create(

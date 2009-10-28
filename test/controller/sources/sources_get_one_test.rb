@@ -48,20 +48,20 @@ class SourcesGetOneControllerTest < RequestTestCase
     end
   end
 
-  context_ "get /:id" do
+  context "get /:id" do
     context "anonymous" do
       before do
         get "/#{@id}"
       end
-
+      
       use "return 401 because the API key is missing"
     end
-
+  
     context "incorrect API key" do
       before do
         get "/#{@id}", :api_key => "does_not_exist_in_database"
       end
-
+    
       use "return 401 because the API key is invalid"
     end
   end
@@ -71,10 +71,10 @@ class SourcesGetOneControllerTest < RequestTestCase
       before do
         get "/#{@fake_id}", :api_key => primary_api_key_for(role)
       end
-
+      
       use "attempted GET source with :fake_id"
     end
-
+  
     context "#{role} API key : get /:id" do
       before do
         get "/#{@id}", :api_key => primary_api_key_for(role)
@@ -96,11 +96,11 @@ class SourcesGetOneControllerTest < RequestTestCase
         end
         get "/#{@id}", :api_key => primary_api_key_for(role)
       end
-
+      
       use "successful GET source with :id"
-
-      test "body should have correct category_details" do
-        actual = parsed_response_body["category_details"]
+      
+      test "body should have correct categories" do
+        actual = parsed_response_body["categories"]
         @categories.each do |category|
           expected = {
             "href" => "/categories/#{category.id}",
@@ -133,11 +133,11 @@ class SourcesGetOneControllerTest < RequestTestCase
         end
         get "/#{@id}", :api_key => primary_api_key_for(role)
       end
-
+      
       use "successful GET source with :id"
-
-      test "body should have correct comment_details" do
-        actual = parsed_response_body["comment_details"]
+      
+      test "body should have correct comments" do
+        actual = parsed_response_body["comments"]
         @comments.each do |comment|
           expected = {
             "href" => "/comments/#{comment.id}",
@@ -156,7 +156,7 @@ class SourcesGetOneControllerTest < RequestTestCase
         end
       end
     end
-
+      
     context "#{role} API key : 2 documents : get /:id" do
       before do
         @documents = [
@@ -171,11 +171,11 @@ class SourcesGetOneControllerTest < RequestTestCase
         ]
         get "/#{@id}", :api_key => primary_api_key_for(role)
       end
-
+      
       use "successful GET source with :id"
-
-      test "body should have correct document_details" do
-        actual = parsed_response_body["document_details"]
+      
+      test "body should have correct documents" do
+        actual = parsed_response_body["documents"]
         @documents.each do |document|
           expected = {
             "href" => "/documents/#{document.id}",
@@ -189,7 +189,7 @@ class SourcesGetOneControllerTest < RequestTestCase
         end
       end
     end
-
+      
     context "#{role} API key : 2 notes : get /:id" do
       before do
         @notes = [
@@ -204,11 +204,11 @@ class SourcesGetOneControllerTest < RequestTestCase
         ]
         get "/#{@id}", :api_key => primary_api_key_for(role)
       end
-
+      
       use "successful GET source with :id"
-
-      test "body should have correct note_details" do
-        actual = parsed_response_body["note_details"]
+      
+      test "body should have correct notes" do
+        actual = parsed_response_body["notes"]
         @notes.each do |note|
           expected = {
             "href" => "/notes/#{note.id}",
@@ -252,23 +252,23 @@ class SourcesGetOneControllerTest < RequestTestCase
         ]
         get "/#{@id}", :api_key => primary_api_key_for(role)
       end
-
+      
       use "successful GET source with :id"
-
+      
       test "body should have correct ratings total" do
         assert_equal 6, parsed_response_body["rating_stats"]["total"]
       end
-
+      
       test "body should have correct ratings count" do
         assert_equal 2, parsed_response_body["rating_stats"]["count"]
       end
-
+      
       test "body should have correct ratings average" do
         assert_equal 3.0, parsed_response_body["rating_stats"]["average"]
       end
-
-      test "body should have correct rating_details" do
-        actual = parsed_response_body["rating_details"]
+      
+      test "body should have correct ratings" do
+        actual = parsed_response_body["ratings"]
         assert_equal 2, actual.length
         @source_ratings.each do |rating|
           expected = {

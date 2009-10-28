@@ -44,8 +44,8 @@ module DataCatalog
 
   end
 
-  if const_defined?("Base")
-    class Base
+  if const_defined?("OldBase")
+    class OldBase
       helpers SearchHelpers
     end
   end

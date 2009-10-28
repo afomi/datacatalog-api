@@ -59,6 +59,13 @@ class User
   end
 
   # == Various Instance Methods
+  
+  def role
+    if admin then "admin"
+    elsif curator then "curator"
+    else "basic"
+    end
+  end
 
   def generate_api_key
     salt = Config.environment_config["api_key_salt"]

@@ -27,17 +27,4 @@ class RequestTestCase < Test::Unit::TestCase
     instance_variable_get("@#{role}_user").primary_api_key
   end
 
-  class << self
-    
-    alias context_ context
-
-    def context(name, &block)
-      klass = context_(name, &block)
-      klass.class_eval do
-        use "return JSON"
-      end
-    end
-    
-  end
-
 end

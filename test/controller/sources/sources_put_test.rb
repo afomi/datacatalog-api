@@ -21,15 +21,13 @@ class SourcesPutControllerTest < RequestTestCase
   end
 
   shared "attempted PUT source with :fake_id with protected param" do
-    use "return 404 Not Found"
-    use "return an empty response body"
+    use "return 400 Bad Request"
     use "unchanged source count"
     use "unchanged source text in database"
   end
 
   shared "attempted PUT source with :fake_id with invalid param" do
-    use "return 404 Not Found"
-    use "return an empty response body"
+    use "return 400 Bad Request"
     use "unchanged source count"
     use "unchanged source text in database"
   end
@@ -65,12 +63,8 @@ class SourcesPutControllerTest < RequestTestCase
     use "return 400 Bad Request"
     use "unchanged source count"
     
-    test "body should say 'no_params_to_save'" do
-      assert_include "no_params_to_save", parsed_response_body["errors"]
-    end
-
-    test "return help_text saying params are needed" do
-      assert_include "cannot save without parameters", parsed_response_body["help_text"]
+    test "body should say 'no_params'" do
+      assert_include "no_params", parsed_response_body["errors"]
     end
   end
 
@@ -111,7 +105,7 @@ class SourcesPutControllerTest < RequestTestCase
     raise "Source expected to be valid" unless source.valid?
   end
 
-  context_ "put /:id" do
+  context "put /:id" do
     context "anonymous" do
       before do
         put "/#{@id}"
@@ -140,7 +134,7 @@ class SourcesPutControllerTest < RequestTestCase
     end
   end
   
-  context_ "put /:fake_id" do
+  context "put /:fake_id" do
     context "anonymous" do
       before do
         put "/#{@fake_id}"

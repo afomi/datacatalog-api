@@ -48,7 +48,7 @@ class SourcesGetAllControllerTest < RequestTestCase
     end
   end
   
-  context_ "get /" do
+  context "get /" do
     context "anonymous" do
       before do
         get "/"
@@ -66,7 +66,7 @@ class SourcesGetAllControllerTest < RequestTestCase
     end
   end
 
-  context_ "0 sources" do
+  context "0 sources" do
     %w(normal curator admin).each do |role|
       context "#{role} API key : get /" do
         before do
@@ -78,7 +78,7 @@ class SourcesGetAllControllerTest < RequestTestCase
     end
   end
 
-  context_ "3 sources" do
+  context "3 sources" do
     before do
       @sources = 3.times.map do |n|
         Source.create(

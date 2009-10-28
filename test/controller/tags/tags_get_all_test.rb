@@ -53,7 +53,7 @@ class TagsGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context_ "0 tags" do
+  context "0 tags" do
     context "normal API key : get /" do
       before do
         get "/", :api_key => @normal_user.primary_api_key
@@ -73,7 +73,7 @@ class TagsGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context_ "3 tags" do
+  context "3 tags" do
     before do
       3.times do |n|
         Tag.create(

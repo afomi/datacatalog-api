@@ -1,6 +1,6 @@
 module DataCatalog
 
-  class Root < Base
+  class Root < OldBase
     
     PROJECT_META_DATA = {
       "name"    => "National Data Catalog API",

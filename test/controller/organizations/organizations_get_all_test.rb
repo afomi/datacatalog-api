@@ -54,7 +54,7 @@ class OrganizationsGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context_ "0 organizations" do
+  context "0 organizations" do
     context "normal API key : get /" do
       before do
         get "/", :api_key => @normal_user.primary_api_key
@@ -74,7 +74,7 @@ class OrganizationsGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context_ "3 organizations" do
+  context "3 organizations" do
     before do
       3.times do |n|
         Organization.create(

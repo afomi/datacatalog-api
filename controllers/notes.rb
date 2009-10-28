@@ -1,6 +1,6 @@
 module DataCatalog
 
-  class Notes < Base
+  class Notes < OldBase
 
     resource "notes" do
       model Note

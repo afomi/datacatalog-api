@@ -47,7 +47,7 @@ class RootControllerTest < RequestTestCase
     end
   end
   
-  context_ "get /" do
+  context "get /" do
     context "anonymous" do
       before :all do
         get '/'

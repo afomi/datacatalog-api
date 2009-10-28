@@ -51,7 +51,7 @@ class SourcesPostControllerTest < RequestTestCase
 
   end
 
-  context_ "post /" do
+  context "post /" do
     context "anonymous" do
       before do
         post "/"

@@ -25,7 +25,7 @@ class UsersKeysGetSearchControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context_ "1 added user" do
+  context "1 added user" do
     before do
       @user = User.new(
         :name    => "Added User",

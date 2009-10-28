@@ -26,7 +26,7 @@ class UsersGetSearchControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context_ "3 added users" do
+  context "3 added users" do
     before do
       3.times do |n|
         create_user_with_primary_key(

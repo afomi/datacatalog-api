@@ -1,6 +1,6 @@
 module DataCatalog
 
-  class UsersKeys < Base
+  class UsersKeys < OldBase
 
     nestable_resource "keys" do
       model ApiKey

@@ -1,8 +1,15 @@
 class RequestTestCase
 
   shared "return an empty response body" do
-    test "should return nil" do
-      assert_equal nil, parsed_response_body
+    test "should return empty response body" do
+      # TODO: the following line is only temporary
+      assert_equal true, last_response.body == "" || last_response.body == "null"
+
+      # TODO: the following line is probably what I want:
+      # assert_equal "", last_response.body
+      
+      # TODO: this line is the old way
+      # assert_equal "null", last_response.body
     end
   end
 

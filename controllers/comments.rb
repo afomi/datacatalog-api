@@ -1,6 +1,6 @@
 module DataCatalog
   
-  class Comments < Base
+  class Comments < OldBase
     
     resource "comments" do
       model Comment

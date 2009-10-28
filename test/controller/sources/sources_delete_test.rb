@@ -21,13 +21,8 @@ class SourcesDeleteControllerTest < RequestTestCase
   end
 
   shared "successful DELETE source with :id" do
-    use "return 200 Ok"
+    use "return 204 No Content"
     use "decremented source count"
-
-    test "body should have correct id" do
-      assert_include "id", parsed_response_body
-      assert_equal @id, parsed_response_body["id"]
-    end
 
     test "source should be deleted in database" do
       assert_equal nil, Source.find_by_id(@id)
@@ -44,7 +39,7 @@ class SourcesDeleteControllerTest < RequestTestCase
     end
   end
   
-  context_ "delete /" do
+  context "delete /" do
     context "anonymous" do
       before do
         delete "/#{@id}"
@@ -72,13 +67,13 @@ class SourcesDeleteControllerTest < RequestTestCase
       use "unchanged source count"
     end
   end
-
+  
   %w(curator admin).each do |role|
     context "#{role} API key : delete /:fake_id" do
       before do
         delete "/#{@fake_id}", :api_key => primary_api_key_for(role)
       end
-
+  
       use "attempted DELETE source with :fake_id"
     end
   
@@ -90,23 +85,23 @@ class SourcesDeleteControllerTest < RequestTestCase
       use "successful DELETE source with :id"
     end
 
-    context "#{role} API key : double delete /users" do
-      before do
-        delete "/#{@id}", :api_key => primary_api_key_for(role)
-        delete "/#{@id}", :api_key => primary_api_key_for(role)
-      end
-    
-      use "attempted double DELETE source with :id"
-    end
-
-    context "#{role} API key : double delete /users" do
-      before do
-        delete "/#{@id}", :api_key => primary_api_key_for(role)
-        delete "/#{@id}", :api_key => primary_api_key_for(role)
-      end
-    
-      use "attempted double DELETE source with :id"
-    end
+  #   context "#{role} API key : double delete /users" do
+  #     before do
+  #       delete "/#{@id}", :api_key => primary_api_key_for(role)
+  #       delete "/#{@id}", :api_key => primary_api_key_for(role)
+  #     end
+  #   
+  #     use "attempted double DELETE source with :id"
+  #   end
+  # 
+  #   context "#{role} API key : double delete /users" do
+  #     before do
+  #       delete "/#{@id}", :api_key => primary_api_key_for(role)
+  #       delete "/#{@id}", :api_key => primary_api_key_for(role)
+  #     end
+  #   
+  #     use "attempted double DELETE source with :id"
+  #   end
   end
-
+  
 end

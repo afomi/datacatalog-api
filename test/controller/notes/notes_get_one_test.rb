@@ -35,7 +35,7 @@ class NotesGetOneControllerTest < RequestTestCase
     end
   end
 
-  context_ "get /:id" do
+  context "get /:id" do
     context "anonymous" do
       before do
         get "/#{@id}"

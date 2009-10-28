@@ -1,6 +1,6 @@
 module DataCatalog
   
-  class Documents < Base
+  class Documents < OldBase
 
     resource "documents" do
       model Document

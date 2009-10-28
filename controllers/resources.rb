@@ -1,6 +1,6 @@
 module DataCatalog
 
-  class Resources < Base
+  class Resources < OldBase
     
     ANONYMOUS_MEMBERS = [
       { "href" => "/" },

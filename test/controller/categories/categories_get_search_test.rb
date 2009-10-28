@@ -27,7 +27,7 @@ class CategoriesGetSearchControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context_ "6 categories" do
+  context "6 categories" do
     before do
       6.times do |n|
         k = (n % 3) + 1

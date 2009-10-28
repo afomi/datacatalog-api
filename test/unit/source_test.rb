@@ -183,7 +183,6 @@ class SourceUnitTest < ModelTestCase
           assert_equal "common-title-3", s.slug
           assert_equal true, s.valid?
         end
-        
       end
     end
   

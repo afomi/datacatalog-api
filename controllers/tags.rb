@@ -1,6 +1,6 @@
 module DataCatalog
 
-  class Tags < Base
+  class Tags < OldBase
 
     resource "tags" do
       model Tag

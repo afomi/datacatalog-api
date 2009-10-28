@@ -59,7 +59,7 @@ class CommentsGetAllControllerTest < RequestTestCase
   
   # - - - - - - - - - -
 
-  context_ "0 comments" do
+  context "0 comments" do
     context "normal API key : get /" do
       before do
         get "/", :api_key => @normal_user.primary_api_key
@@ -79,7 +79,7 @@ class CommentsGetAllControllerTest < RequestTestCase
   
   # - - - - - - - - - -
 
-  context_ "3 comments" do
+  context "3 comments" do
     before do
       3.times do |n|
         Comment.create(

@@ -177,7 +177,7 @@ class UsersKeysPutControllerTest < RequestTestCase
   # -----------------------------
 
   3.times do |n|
-    context_ "API key #{n}" do
+    context "API key #{n}" do
       context "anonymous : put /:id/keys/:id with correct params" do
         before do
           put "/#{@user.id}/keys/#{@keys[n].id}", {
@@ -255,7 +255,7 @@ class UsersKeysPutControllerTest < RequestTestCase
   # - - - - - - - - - -
    
   3.times do |n|
-    context_ "API key #{n}" do
+    context "API key #{n}" do
       context "owner API key : put /:id/keys/:fake_id without params" do
         before do
           put "/#{@user.id}/keys/#{@fake_id}", {
@@ -311,7 +311,7 @@ class UsersKeysPutControllerTest < RequestTestCase
   # - - - - - - - - - -
    
   3.times do |n|
-    context_ "API key #{n}" do
+    context "API key #{n}" do
       context "admin API key : put /:fake_id/keys/:id with correct params" do
         before do
           put "/#{@fake_id}/keys/#{@keys[n].id}", {
@@ -343,7 +343,7 @@ class UsersKeysPutControllerTest < RequestTestCase
   end
   
   3.times do |n|
-    context_ "API key #{n}" do
+    context "API key #{n}" do
       # --------------------------------------------------------------
       # This section is a placeholder for handling missing parameters.
       # --------------------------------------------------------------

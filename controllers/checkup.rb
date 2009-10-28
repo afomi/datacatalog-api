@@ -1,6 +1,6 @@
 module DataCatalog
 
-  class Checkup < Base
+  class Checkup < OldBase
 
     get '/?' do
       p = privileges

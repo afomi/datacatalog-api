@@ -1,6 +1,6 @@
 module DataCatalog
 
-  class Ratings < Base
+  class Ratings < OldBase
 
     resource "ratings" do
       model Rating

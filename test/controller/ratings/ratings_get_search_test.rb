@@ -68,7 +68,7 @@ class RatingsGetSearchControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context_ "7 ratings" do
+  context "7 ratings" do
     before do
       5.times do |n|
         source = Source.create(

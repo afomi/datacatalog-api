@@ -28,7 +28,7 @@ class TagsGetSearchControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context_ "6 tags" do
+  context "6 tags" do
     before do
       @user_id       = "4aa677bb25b7e70733000001"
       @source_base   = "200077d325b7e7073300000"

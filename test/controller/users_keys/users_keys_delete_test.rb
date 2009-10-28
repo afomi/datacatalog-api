@@ -62,7 +62,7 @@ class UsersKeysDeleteControllerTest < RequestTestCase
   # - - - - - - - - - -
 
   (0 ... 3).each do |n|
-    context_ "API key #{n}" do
+    context "API key #{n}" do
       context "anonymous : delete /:id/keys/:id" do
         before do
           delete "/#{@user.id}/keys/#{@keys[n].id}"
@@ -134,7 +134,7 @@ class UsersKeysDeleteControllerTest < RequestTestCase
   # - - - - - - - - - -
   
   [0].each do |n|
-    context_ "Primary API key" do
+    context "Primary API key" do
       context "owner API key : delete /:id/keys/:id" do
         before do
           delete "/#{@user.id}/keys/#{@keys[n].id}",
@@ -162,7 +162,7 @@ class UsersKeysDeleteControllerTest < RequestTestCase
   # - - - - - - - - - -
   
   (1 ... 3).each do |n|
-    context_ "API key #{n}" do
+    context "API key #{n}" do
       context "owner API key : delete /:id/keys/:id" do
         before do
           delete "/#{@user.id}/keys/#{@keys[n].id}",

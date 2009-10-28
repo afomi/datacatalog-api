@@ -53,7 +53,7 @@ class DocumentsGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context_ "0 documents" do
+  context "0 documents" do
     context "normal API key : get /" do
       before do
         get "/", :api_key => @normal_user.primary_api_key
@@ -73,7 +73,7 @@ class DocumentsGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context_ "3 documents" do
+  context "3 documents" do
     before do
       3.times do |n|
         source = create_source

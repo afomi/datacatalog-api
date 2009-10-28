@@ -1,6 +1,6 @@
 module DataCatalog
 
-  class Categories < Base
+  class Categories < OldBase
     
     resource "categories" do
       model Category

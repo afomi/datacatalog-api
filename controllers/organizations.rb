@@ -1,6 +1,6 @@
 module DataCatalog
 
-  class Organizations < Base
+  class Organizations < OldBase
   
     resource "organizations" do
       model Organization

@@ -103,7 +103,7 @@ class UsersGetAllControllerTest < RequestTestCase
     use "return 401 because the API key is invalid"
   end
 
-  context_ "0 added users" do
+  context "0 added users" do
     context "normal API key : get /" do
       before do
         get "/", :api_key => @normal_user.primary_api_key
@@ -131,7 +131,7 @@ class UsersGetAllControllerTest < RequestTestCase
     end
   end
   
-  context_ "3 added users" do
+  context "3 added users" do
     before :all do
       3.times do |n|
         create_user_with_primary_key(

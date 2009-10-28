@@ -24,7 +24,7 @@ class SourcesGetSearchControllerTest < RequestTestCase
     end
   end
 
-  context_ "3 sources" do
+  context "3 sources" do
     before do
       3.times do |n|
         assert Source.create(
@@ -34,11 +34,11 @@ class SourcesGetSearchControllerTest < RequestTestCase
       end
     end
     
-    context_ "get / where url is source #3" do
+    context "get / where url is source #3" do
       context "anonymous" do
         before do
           get "/",
-            :url     => "http://data.gov/sources/3"
+            :filter => "url=http://data.gov/sources/3"
         end
 
         use "return 401 because the API key is missing"
@@ -47,7 +47,7 @@ class SourcesGetSearchControllerTest < RequestTestCase
       context "invalid API key" do
         before do
           get "/",
-            :url     => "http://data.gov/sources/3",
+            :filter  => "url=http://data.gov/sources/3",
             :api_key => "does_not_exist_in_database"
         end
 
@@ -59,7 +59,7 @@ class SourcesGetSearchControllerTest < RequestTestCase
       context "#{role} API key : get / where url is source #3" do
         before do
           get "/",
-            :url     => "http://data.gov/sources/3",
+            :filter  => "url=http://data.gov/sources/3",
             :api_key => primary_api_key_for(role)
         end
 

@@ -53,7 +53,7 @@ class NotesGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context_ "0 notes" do
+  context "0 notes" do
     context "normal API key : get /" do
       before do
         get "/", :api_key => @normal_user.primary_api_key
@@ -73,7 +73,7 @@ class NotesGetAllControllerTest < RequestTestCase
 
   # - - - - - - - - - -
 
-  context_ "3 notes" do
+  context "3 notes" do
     before do
       3.times do |n|
         source = create_source
