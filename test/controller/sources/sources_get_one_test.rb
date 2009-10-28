@@ -5,7 +5,7 @@ class SourcesGetOneControllerTest < RequestTestCase
   def app; DataCatalog::Sources end
 
   before do
-    source = Source.create(
+    @source = Source.create(
       :title => "The Original Data Source",
       :url   => "http://data.gov/original"
     )
@@ -16,6 +16,9 @@ class SourcesGetOneControllerTest < RequestTestCase
   shared "attempted GET source with :fake_id" do
     use "return 404 Not Found"
     use "return an empty response body"
+  
+  after do
+    @source.destroy
   end
 
   shared "successful GET source with :id" do
@@ -88,13 +91,18 @@ class SourcesGetOneControllerTest < RequestTestCase
         @categories = %w(Energy Finance Poverty).map do |name|
           create_category(:name => name)
         end
-        @categories.each do |category|
+        @categorizations = @categories.map do |category|
           create_categorization(
             :category_id => category.id,
-            :source_id   => @id
+            :source_id   => @source.id
           )
         end
-        get "/#{@id}", :api_key => primary_api_key_for(role)
+        get "/#{@source.id}", :api_key => primary_api_key_for(role)
+      end
+      
+      after do
+        @categorizations.each { |x| x.destroy }
+        @categories.each { |x| x.destroy }
       end
       
       use "successful GET source with :id"
@@ -116,22 +124,28 @@ class SourcesGetOneControllerTest < RequestTestCase
         @comments = [
           create_comment({
             :text      => "Comment 1",
-            :source_id => @id,
+            :source_id => @source.id,
           }),
           create_comment({
             :text      => "Comment 2",
-            :source_id => @id,
+            :source_id => @source.id,
           })
         ]
+        @ratings = []
         @comments.each do |comment|
           [0, 1].each do |value|
-            create_comment_rating({
+            @ratings << create_comment_rating({
               :value      => value,
               :comment_id => comment.id
             })
           end
         end
-        get "/#{@id}", :api_key => primary_api_key_for(role)
+        get "/#{@source.id}", :api_key => primary_api_key_for(role)
+      end
+      
+      after do
+        @ratings.each { |x| x.destroy }
+        @comments.each { |x| x.destroy }
       end
       
       use "successful GET source with :id"
@@ -162,14 +176,18 @@ class SourcesGetOneControllerTest < RequestTestCase
         @documents = [
           create_document({
             :text      => "Document 1",
-            :source_id => @id,
+            :source_id => @source.id,
           }),
           create_document({
             :text      => "Document 2",
-            :source_id => @id,
+            :source_id => @source.id,
           })
         ]
-        get "/#{@id}", :api_key => primary_api_key_for(role)
+        get "/#{@source.id}", :api_key => primary_api_key_for(role)
+      end
+      
+      after do
+        @documents.each { |x| x.destroy }
       end
       
       use "successful GET source with :id"
@@ -195,14 +213,18 @@ class SourcesGetOneControllerTest < RequestTestCase
         @notes = [
           create_note({
             :text      => "Note 1",
-            :source_id => @id,
+            :source_id => @source.id,
           }),
           create_note({
             :text      => "Note 2",
-            :source_id => @id,
+            :source_id => @source.id,
           })
         ]
-        get "/#{@id}", :api_key => primary_api_key_for(role)
+        get "/#{@source.id}", :api_key => primary_api_key_for(role)
+      end
+      
+      after do
+        @notes.each { |x| x.destroy }
       end
       
       use "successful GET source with :id"
@@ -228,29 +250,35 @@ class SourcesGetOneControllerTest < RequestTestCase
         @source_ratings = [
           create_source_rating(
             :value     => 1,
-            :source_id => @id
+            :source_id => @source.id
           ),
           create_source_rating(
             :value     => 5,
-            :source_id => @id
+            :source_id => @source.id
           )
         ]
         # Just to make sure comment ratings don't get included
         # in source.ratings.
-        comment = create_comment(
-          :source_id => @id
+        @comment = create_comment(
+          :source_id => @source.id
         )
         @comment_ratings = [
           create_comment_rating(
             :value      => 0,
-            :comment_id => comment.id
+            :comment_id => @comment.id
           ),
           create_comment_rating(
             :value      => 1,
-            :comment_id => comment.id
+            :comment_id => @comment.id
           )
         ]
-        get "/#{@id}", :api_key => primary_api_key_for(role)
+        get "/#{@source.id}", :api_key => primary_api_key_for(role)
+      end
+      
+      after do
+        @comment_ratings.each { |x| x.destroy }
+        @comment.destroy
+        @source_ratings.each { |x| x.destroy }
       end
       
       use "successful GET source with :id"
