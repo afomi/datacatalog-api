@@ -9,13 +9,7 @@ class SourcesGetOneControllerTest < RequestTestCase
       :title => "The Original Data Source",
       :url   => "http://data.gov/original"
     )
-    @id = source.id
-    @fake_id = get_fake_mongo_object_id
   end
-
-  shared "attempted GET source with :fake_id" do
-    use "return 404 Not Found"
-    use "return an empty response body"
   
   after do
     @source.destroy
@@ -51,41 +45,7 @@ class SourcesGetOneControllerTest < RequestTestCase
     end
   end
 
-  context "get /:id" do
-    context "anonymous" do
-      before do
-        get "/#{@id}"
-      end
-      
-      use "return 401 because the API key is missing"
-    end
-  
-    context "incorrect API key" do
-      before do
-        get "/#{@id}", :api_key => "does_not_exist_in_database"
-      end
-    
-      use "return 401 because the API key is invalid"
-    end
-  end
-
-  %w(normal curator admin).each do |role|
-    context "#{role} API key : get /:fake_id" do
-      before do
-        get "/#{@fake_id}", :api_key => primary_api_key_for(role)
-      end
-      
-      use "attempted GET source with :fake_id"
-    end
-  
-    context "#{role} API key : get /:id" do
-      before do
-        get "/#{@id}", :api_key => primary_api_key_for(role)
-      end
-
-      use "successful GET source with :id"
-    end
-
+  %w(normal).each do |role|
     context "#{role} API key : 3 categorizations : get /:id" do
       before do
         @categories = %w(Energy Finance Poverty).map do |name|
