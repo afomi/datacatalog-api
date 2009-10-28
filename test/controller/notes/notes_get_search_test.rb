@@ -4,34 +4,10 @@ class NotesGetSearchControllerTest < RequestTestCase
 
   def app; DataCatalog::Notes end
   
-  def assert_shared_attributes(element)
-    assert_include "created_at", element
-    assert_include "updated_at", element
-    assert_include "id", element
-    assert_not_include "_id", element
-  end
-  
-  shared "successful GET of notes where text is 'Note 2'" do
-    test "body should have 2 top level elements" do
-      assert_equal 2, parsed_response_body.length
-    end
-
-    test "each element should be correct" do
-      parsed_response_body.each do |element|
-        assert_equal 'Note 2', element["text"]
-        assert_equal @normal_user.id, element["user_id"]
-        assert_equal @sources[2].id, element["source_id"]
-        assert_shared_attributes element
-      end
-    end
-  end
-
-  # - - - - - - - - - -
-
   context "6 notes" do
-    before :all do
+    before do
       @sources = (0 ... 3).map { |n| create_source }
-      6.times do |n|
+      @notes = 6.times.map do |n|
         k = n % 3
         create_note(
           :text      => "Note #{k}",
@@ -40,48 +16,32 @@ class NotesGetSearchControllerTest < RequestTestCase
         )
       end
     end
-
-    # - - - - - - - - - -
-
-    context "anonymous : get / where text is 'Note 2'" do
-      before do
-        get "/",
-          :text    => "Note 2"
-      end
     
-      use "return 401 because the API key is missing"
+    after do
+      @notes.each { |x| x.destroy }
+      @sources.each { |x| x.destroy }
     end
-    
-    context "incorrect API key : get / where text is 'Note 2'" do
-      before do
-        get "/",
-          :text    => 'Note 2',
-          :api_key => "does_not_exist_in_database"
-      end
-    
-      use "return 401 because the API key is invalid"
-    end
-    
-    # - - - - - - - - - -
 
     context "normal API key : get / where text is 'Note 2'" do
       before do
         get "/",
-          :text    => 'Note 2',
-          :api_key => @normal_user.primary_api_key
+          :api_key => @normal_user.primary_api_key,
+          :filter  => "text:'Note 2'"
       end
+      
+      use "return 200 OK"
     
-      use "successful GET of notes where text is 'Note 2'"
-    end
-
-    context "admin API key : get / where text is 'Note 2'" do
-      before do
-        get "/",
-          :text    => 'Note 2',
-          :api_key => @admin_user.primary_api_key
+      test "body should have 2 top level elements" do
+        assert_equal 2, parsed_response_body.length
       end
-    
-      use "successful GET of notes where text is 'Note 2'"
+      
+      test "each element should be correct" do
+        parsed_response_body.each do |element|
+          assert_equal 'Note 2', element["text"]
+          assert_equal @normal_user.id, element["user_id"]
+          assert_equal @sources[2].id, element["source_id"]
+        end
+      end
     end
   end
 

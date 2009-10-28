@@ -5,7 +5,6 @@
 class Note
 
   include MongoMapper::Document
-  include Renderable
 
   # == Attributes
 
@@ -20,8 +19,6 @@ class Note
 
   belongs_to :source
   belongs_to :user
-
-  # == Derived Attributes
 
   # == Validations
 
