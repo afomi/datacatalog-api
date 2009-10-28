@@ -1,7 +1,6 @@
 class Category
 
   include MongoMapper::Document
-  include Renderable
 
   # == Attributes
 
@@ -16,15 +15,6 @@ class Category
 
   def sources
     categorizations.map(&:source)
-  end
-
-  # == Derived Fields
-  
-  derived_key :source_ids
-  def source_ids
-    categorizations.map do |categorization|
-      categorization.source.id
-    end
   end
 
   # == Validations

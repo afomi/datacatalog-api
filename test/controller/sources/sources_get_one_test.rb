@@ -17,27 +17,42 @@ class SourcesGetOneControllerTest < RequestTestCase
 
   shared "successful GET source with :id" do
     use "return 200 Ok"
-    use "return timestamps and id in body"
 
     test "body should have correct text" do
       assert_equal "http://data.gov/original", parsed_response_body["url"]
     end
+    
+    doc_properties %w(
+      catalog_name
+      catalog_url
+      categories
+      comments
+      created_at
+      custom
+      description
+      documentation_url
+      documents
+      frequency
+      id
+      license
+      license_url
+      notes
+      organization_id
+      period_end
+      period_start
+      ratings
+      rating_stats
+      raw
+      released
+      slug
+      source_type
+      title
+      updated_at
+      updates_per_year
+      url
+    )
 
-    test "body should have correct attributes" do
-      assert_include "title"              , parsed_response_body
-      assert_include "slug"               , parsed_response_body
-      assert_include "description"        , parsed_response_body
-      assert_include "source_type"        , parsed_response_body
-      assert_include "license"            , parsed_response_body
-      assert_include "catalog_name"       , parsed_response_body
-      assert_include "url"                , parsed_response_body
-      assert_include "documentation_url"  , parsed_response_body
-      assert_include "license_url"        , parsed_response_body
-      assert_include "catalog_url"        , parsed_response_body      
-      assert_include "released"           , parsed_response_body
-      assert_include "period_start"       , parsed_response_body
-      assert_include "period_end"         , parsed_response_body
-      assert_include "rating_stats"       , parsed_response_body
+    test "body should have rating stats" do
       rating_stats = parsed_response_body["rating_stats"]
       assert_include "count",        rating_stats
       assert_include "average",      rating_stats
