@@ -2,7 +2,6 @@
 class Comment
 
   include MongoMapper::Document
-  include Renderable
   include Ratable
 
   # == Attributes
@@ -19,8 +18,6 @@ class Comment
   belongs_to :source
   belongs_to :user
   many :ratings
-
-  # == Derived Fields
 
   # == Validations
 

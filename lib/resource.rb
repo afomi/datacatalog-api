@@ -9,6 +9,8 @@ module DataCatalog
         include SinatraResource::Resource
       end
       includee.helpers do
+        attr_accessor :current_user
+
         def before_authorization(action, role, resource_config)
           unless role
             error 401, convert(body_for(:errors, ["invalid_api_key"]))
@@ -31,6 +33,7 @@ module DataCatalog
           api_key = lookup_api_key
           return :anonymous unless api_key
           user = user_for(api_key)
+          self.current_user = user
           return nil unless user
           return :owner if document && owner?(user, document)
           user.role.intern
