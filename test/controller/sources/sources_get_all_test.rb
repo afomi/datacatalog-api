@@ -47,27 +47,9 @@ class SourcesGetAllControllerTest < RequestTestCase
       end
     end
   end
-  
-  context "get /" do
-    context "anonymous" do
-      before do
-        get "/"
-      end
-
-      use "return 401 because the API key is missing"
-    end
-
-    context "incorrect API key" do
-      before do
-        get "/", :api_key => "does_not_exist_in_database"
-      end
-
-      use "return 401 because the API key is invalid"
-    end
-  end
 
   context "0 sources" do
-    %w(normal curator admin).each do |role|
+    %w(normal).each do |role|
       context "#{role} API key : get /" do
         before do
           get "/", :api_key => primary_api_key_for(role)
@@ -81,7 +63,7 @@ class SourcesGetAllControllerTest < RequestTestCase
   context "3 sources" do
     before do
       @sources = 3.times.map do |n|
-        Source.create(
+        create_source(
           :title => "Source #{n}", 
           :url   => "http://data.gov/sources/#{n}",
           :slug  => "source-#{n}",
@@ -94,7 +76,7 @@ class SourcesGetAllControllerTest < RequestTestCase
       @sources.each { |s| s.destroy }
     end
 
-    %w(normal curator admin).each do |role|
+    %w(normal).each do |role|
       context "#{role} API key : get /" do
         before do
           get "/", :api_key => primary_api_key_for(role)
