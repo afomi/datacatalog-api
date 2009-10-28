@@ -13,7 +13,7 @@ class CommentsDeleteControllerTest < RequestTestCase
     @comment_count = Comment.count
   end
 
-  %w(curator).each do |role|
+  %w(admin).each do |role|
     context "#{role} API key : delete /:id" do
       before do
         delete "/#{@comment.id}", :api_key => primary_api_key_for(role)

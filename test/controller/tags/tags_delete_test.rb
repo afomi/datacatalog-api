@@ -9,7 +9,7 @@ class TagsDeleteControllerTest < RequestTestCase
     @tag_count = Tag.count
   end
   
-  %w(curator).each do |role|
+  %w(admin).each do |role|
     context "#{role} API key : delete /:id" do
       before do
         delete "/#{@tag.id}", :api_key => primary_api_key_for(role)

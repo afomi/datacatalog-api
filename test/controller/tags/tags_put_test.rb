@@ -13,10 +13,10 @@ class TagsPutControllerTest < RequestTestCase
     @tag.destroy
   end
 
-  context "curator API key : put /:id with correct param" do
+  context "admin API key : put /:id with correct param" do
     before do
       put "/#{@tag.id}", {
-        :api_key => @curator_user.primary_api_key,
+        :api_key => @admin_user.primary_api_key,
         :text    => "New Tag"
       }
     end
