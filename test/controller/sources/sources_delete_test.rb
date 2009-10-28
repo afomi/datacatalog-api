@@ -12,22 +12,18 @@ class SourcesDeleteControllerTest < RequestTestCase
     @source_count = Source.count
   end
 
-  shared "successful DELETE source with :id" do
-    use "return 204 No Content"
-    use "decremented source count"
-
-    test "source should be deleted in database" do
-      assert_equal nil, Source.find_by_id(@source.id)
-    end
-  end
-  
   %w(curator).each do |role|
     context "#{role} API key : delete /:id" do
       before do
         delete "/#{@source.id}", :api_key => primary_api_key_for(role)
       end
     
-      use "successful DELETE source with :id"
+      use "return 204 No Content"
+      use "decremented source count"
+
+      test "source should be deleted in database" do
+        assert_equal nil, Source.find_by_id(@source.id)
+      end
     end
   end
   

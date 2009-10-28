@@ -133,6 +133,14 @@ module ModelHelpers
       :email => "data.mangler@inter.net"
     })
   end
+  
+  def create_tag(custom={})
+    create_model!(Tag, custom, {
+      :text => "Sample Tag"
+    })
+  end
+  
+  # -----
 
   def new_category(custom={})
     new_model!(Category, custom, {
@@ -189,6 +197,12 @@ module ModelHelpers
     new_model!(Source, custom, {
       :title => "2005-2007 American Community Survey Three-Year PUMS Housing File",
       :url   => "http://www.data.gov/details/90"
+    })
+  end
+
+  def new_tag(custom={})
+    new_model!(Tag, custom, {
+      :text => "Sample Tag"
     })
   end
   
