@@ -24,7 +24,7 @@ class SourcesGetAllControllerTest < RequestTestCase
         assert_include "title"              , element
         assert_include "slug"               , element
         assert_include "description"        , element
-        assert_include "type"               , element
+        assert_include "source_type"        , element
         assert_include "license"            , element
         assert_include "catalog_name"       , element
         assert_include "url"                , element
@@ -67,7 +67,7 @@ class SourcesGetAllControllerTest < RequestTestCase
           :title => "Source #{n}", 
           :url   => "http://data.gov/sources/#{n}",
           :slug  => "source-#{n}",
-          :type  => "Dataset"
+          :source_type  => "Dataset"
         )
       end
     end

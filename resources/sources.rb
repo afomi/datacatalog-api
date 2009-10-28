@@ -16,7 +16,7 @@ module DataCatalog
     property :title
     property :slug
     property :description
-    property :type
+    property :source_type
     property :license
     property :catalog_name
     property :url

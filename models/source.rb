@@ -12,7 +12,7 @@ class Source
   key :title,               String
   key :slug,                String
   key :description,         String
-  key :type,                String, :default => 'Dataset' # other is 'API'
+  key :source_type,         String, :default => 'Dataset' # other is 'API'
   key :license,             String
   key :catalog_name,        String
   key :url,                 String
@@ -32,7 +32,7 @@ class Source
 
   ensure_index :title
   ensure_index :slug
-  ensure_index :type
+  ensure_index :source_type
   ensure_index :license
   ensure_index :url
 
@@ -82,7 +82,7 @@ class Source
     :message   => "can only contain alphanumeric characters and dashes",
     :allow_nil => true
 
-  validates_format_of :type, :with => /\A(API|Dataset)\z/, :message => "must be 'API' or 'Dataset'"
+  validates_format_of :source_type, :with => /\A(API|Dataset)\z/, :message => "must be 'API' or 'Dataset'"
 
   validate :validate_url
   include UrlValidator

@@ -27,7 +27,7 @@ class SourcesGetOneControllerTest < RequestTestCase
       assert_include "title"              , parsed_response_body
       assert_include "slug"               , parsed_response_body
       assert_include "description"        , parsed_response_body
-      assert_include "type"               , parsed_response_body
+      assert_include "source_type"        , parsed_response_body
       assert_include "license"            , parsed_response_body
       assert_include "catalog_name"       , parsed_response_body
       assert_include "url"                , parsed_response_body
