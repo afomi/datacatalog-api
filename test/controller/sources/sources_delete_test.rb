@@ -11,10 +11,6 @@ class SourcesDeleteControllerTest < RequestTestCase
     )
     @source_count = Source.count
   end
-  
-  after do
-    @source.destroy
-  end
 
   shared "successful DELETE source with :id" do
     use "return 204 No Content"
@@ -25,7 +21,7 @@ class SourcesDeleteControllerTest < RequestTestCase
     end
   end
   
-  %w(curator admin).each do |role|
+  %w(curator).each do |role|
     context "#{role} API key : delete /:id" do
       before do
         delete "/#{@source.id}", :api_key => primary_api_key_for(role)
