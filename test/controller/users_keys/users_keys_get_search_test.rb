@@ -47,42 +47,36 @@ class UsersKeysGetSearchControllerTest < RequestTestCase
       @user.save!
     end
 
-    # TODO: Search is broken in sinatra_resource 0.3.3
-    #
-    # context "non owner API key : get / where key_type is valet'" do
-    #   before do
-    #     get "/#{@user.id}/keys",
-    #       :api_key  => @normal_user.primary_api_key,
-    #       :filter   => "key_type=valet"
-    #   end
-    # 
-    #   use "return 200 Ok"
-    #   use "return an empty list response body"
-    # end
+    context "non owner API key : get / where key_type is valet'" do
+      before do
+        get "/#{@user.id}/keys",
+          :api_key  => @normal_user.primary_api_key,
+          :filter   => "key_type=valet"
+      end
     
-    # TODO: Search is broken in sinatra_resource 0.3.3
-    #
-    # context "owner API key : get / where key_type is valet'" do
-    #   before do
-    #     get "/#{@user.id}/keys",
-    #       :api_key  => @user.primary_api_key,
-    #       :filter   => "key_type=valet"
-    #   end
-    # 
-    #   use "successful GET of users_keys where key_type is valet"
-    # end
+      use "return 200 Ok"
+      use "return an empty list response body"
+    end
+    
+    context "owner API key : get / where key_type is valet'" do
+      before do
+        get "/#{@user.id}/keys",
+          :api_key  => @user.primary_api_key,
+          :filter   => "key_type=valet"
+      end
+    
+      use "successful GET of users_keys where key_type is valet"
+    end
 
-    # TODO: Search is broken in sinatra_resource 0.3.3
-    #
-    # context "admin API key : get / where key_type is valet" do
-    #   before do
-    #     get "/#{@user.id}/keys",
-    #       :api_key  => @admin_user.primary_api_key,
-    #       :filter   => "key_type=valet"
-    #   end
-    # 
-    #   use "successful GET of users_keys where key_type is valet"
-    # end
+    context "admin API key : get / where key_type is valet" do
+      before do
+        get "/#{@user.id}/keys",
+          :api_key  => @admin_user.primary_api_key,
+          :filter   => "key_type=valet"
+      end
+    
+      use "successful GET of users_keys where key_type is valet"
+    end
   end
 
 end
