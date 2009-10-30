@@ -1,4 +1,4 @@
-gem 'sinatra_resource', '>= 0.3.1', '< 0.4.0'
+gem 'sinatra_resource', '>= 0.3.3', '< 0.4.0'
 require 'sinatra_resource'
 
 module DataCatalog
