@@ -5,11 +5,11 @@ class UsersKeysGetAllControllerTest < RequestTestCase
   def app; DataCatalog::Users end
   
   before do
-    user = User.create({
+    @user = create_user(
       :name    => "Example User",
       :email   => "example.user@email.com",
       :purpose => "User account for Web application"
-    })
+    )
     @keys = [
       ApiKey.new({
         :api_key  => get_fake_api_key("1"),
@@ -27,14 +27,34 @@ class UsersKeysGetAllControllerTest < RequestTestCase
         :purpose  => "Valet key #2"
       })
     ]
-    user.api_keys = @keys
-    user.save!
-    @id = user.id
+    @user.api_keys = @keys
+    @user.save!
+  end
+  
+  after do
+    @user.destroy
   end
 
-  # - - - - - - - - - -
+  %w(normal curator).each do |role|
+    context "#{role} API key : get /:id/keys" do
+      before do
+        get "/#{@user.id}/keys",
+          :api_key => primary_api_key_for(role)
+      end
+
+      use "return 200 Ok"
+      use "return an empty list response body"
+      # This does not seem intuitive. However, it is consistent with:
+      # 1. Users     having `permission :read => :basic`
+      # 2. UsersKeys having `permission :list => :basic`
+    end
+  end
   
-  shared "successful GET of 3 api_keys" do
+  context "admin API key : get /:id/keys" do
+    before do
+      get "/#{@user.id}/keys",
+        :api_key => @admin_user.primary_api_key
+    end
     
     use "return 200 Ok"
     
@@ -52,58 +72,6 @@ class UsersKeysGetAllControllerTest < RequestTestCase
         assert_not_include "_id", element
       end
     end
-  end
-  
-  # - - - - - - - - - -
-  
-  context "anonymous : get /:id/keys" do
-    before do
-      get "/#{@id}/keys"
-    end
-    
-    use "return 401 because the API key is missing"
-  end
-  
-  context "incorrect API key : get /:id/keys" do
-    before do
-      get "/#{@id}/keys",
-        :api_key => "does_not_exist_in_database"
-    end
-    
-    use "return 401 because the API key is invalid"
-  end
-  
-  context "normal API key : get /:id/keys" do
-    before do
-      get "/#{@id}/keys",
-        :api_key => @normal_user.primary_api_key
-    end
-    
-    use "return 200 Ok"
-    use "return an empty list response body"
-    # TODO: Is this how we want to handle this?
-    # Returning 401 seems more appropriate
-  end
-  
-  context "curator API key : get /:id/keys" do
-    before do
-      get "/#{@id}/keys",
-        :api_key => @curator_user.primary_api_key
-    end
-    
-    # TODO: Is this how we want to handle this?
-    # Returning 401 seems more appropriate
-    use "return 200 Ok"
-    use "return an empty list response body"
-  end
-  
-  context "admin API key : get /:id/keys" do
-    before do
-      get "/#{@id}/keys",
-        :api_key => @admin_user.primary_api_key
-    end
-    
-    use "successful GET of 3 api_keys"
   end
   
 end

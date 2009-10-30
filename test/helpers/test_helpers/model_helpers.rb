@@ -51,7 +51,7 @@ module ModelHelpers
   end
   
   # == Factories
-
+  
   def create_category(custom={})
     create_model!(Category, custom, {
       :source_id   => get_fake_mongo_object_id,
@@ -141,6 +141,13 @@ module ModelHelpers
   end
   
   # -----
+
+  def new_api_key(custom={})
+    new_model!(ApiKey, custom, {
+      :api_key  => "",
+      :key_type => ""
+    })
+  end
 
   def new_category(custom={})
     new_model!(Category, custom, {

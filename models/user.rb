@@ -3,7 +3,6 @@ require 'digest/sha1'
 class User
   
   include MongoMapper::Document
-  include Renderable
 
   class InconsistentState < RuntimeError; end
 
@@ -25,30 +24,6 @@ class User
   many :api_keys
   many :ratings
 
-  # == Derived Fields
-
-  derived_key :application_api_keys
-  def application_api_keys
-    objects = api_keys.select { |k| k.key_type == "application" }
-    objects.map { |k| k.api_key }
-  end
-
-  derived_key :primary_api_key
-  def primary_api_key
-    keys = api_keys.select { |k| k.key_type == "primary" }
-    case keys.length
-    when 0 then nil
-    when 1 then keys[0][:api_key]
-    else raise InconsistentState, "More than one primary API key found"
-    end
-  end
-
-  derived_key :valet_api_keys
-  def valet_api_keys
-    objects = api_keys.select { |k| k.key_type == "valet" }
-    objects.map { |k| k.api_key }
-  end
-
   # == Validations
 
   # == Class Methods
@@ -59,7 +34,24 @@ class User
   end
 
   # == Various Instance Methods
-  
+
+  def application_api_keys
+    api_keys.select { |k| k.key_type == "application" }.map(&:api_key)
+  end
+
+  def primary_api_key
+    keys = api_keys.select { |k| k.key_type == "primary" }
+    case keys.length
+    when 0 then nil
+    when 1 then keys[0][:api_key]
+    else raise InconsistentState, "More than one primary API key found"
+    end
+  end
+
+  def valet_api_keys
+    api_keys.select { |k| k.key_type == "valet" }.map(&:api_key)
+  end  
+
   def role
     if admin then "admin"
     elsif curator then "curator"

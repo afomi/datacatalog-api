@@ -32,11 +32,8 @@ class UsersKeysPutControllerTest < RequestTestCase
     @user.save!
 
     @api_key_count = @user.api_keys.length
-    @fake_id = get_fake_mongo_object_id
   end
  
-  # - - - - - - - - - -
-
   def lookup_user_and_api_key
     raise "@n must be defined" unless @n
     user = User.find_by_id(@user.id)
@@ -94,57 +91,37 @@ class UsersKeysPutControllerTest < RequestTestCase
       assert_equal "application", api_key.key_type
     end
   end
- 
-  shared "attempted PUT users_keys with protected parameter" do
-    use "return 400 Bad Request"
-    use "unchanged api_key count"
-    use "unchanged created_at in database"
-    use "unchanged purpose in database"
-    use "return errors hash saying created_at is invalid"
-  end
- 
-  shared "attempted PUT users_keys with invalid parameter" do
-    use "return 400 Bad Request"
-    use "unchanged api_key count"
-    use "unchanged created_at in database"
-    use "unchanged purpose in database"
-    use "return errors hash saying junk is invalid"
-  end
- 
+
   shared "attempted PUT users_keys with invalid key_type" do
     use "return 400 Bad Request"
     use "unchanged api_key count"
     use "unchanged created_at in database"
     use "unchanged purpose in database"
     use "return errors hash saying key_type has invalid value"
-
+  
     test "return help_text saying you can't change a primary key's key_type" do
       assert_include "valid values for key_type are 'application' or 'valet'", parsed_response_body["help_text"]
     end
   end
- 
+  
   shared "attempted PUT users_keys with invalid change to key_type" do
     use "return 400 Bad Request"
     use "unchanged api_key count"
     use "unchanged created_at in database"
     use "unchanged key_type in database"
     use "return errors hash saying key_type has invalid value"
-
+  
     test "return help_text saying you can't change a primary key's key_type" do
       assert_include "cannot change the key_type of a primary key", parsed_response_body["help_text"]
     end
   end
- 
+  
   shared "attempted PUT users_keys with :id without params" do
     use "return 400 Bad Request"
     use "unchanged api_key count"
- 
-    test "body should say 'no_params_to_save'" do
-      assert_include "no_params_to_save", parsed_response_body["errors"]
-    end
- 
-    test "return help_text saying params are needed" do
-      assert_include "cannot save without parameters", parsed_response_body["help_text"]
+  
+    test "body should say 'no_params'" do
+      assert_include "no_params", parsed_response_body["errors"]
     end
   end
 
@@ -175,264 +152,14 @@ class UsersKeysPutControllerTest < RequestTestCase
   # -----------------------------
   # Tests that apply for all keys
   # -----------------------------
-
+ 
   3.times do |n|
     context "API key #{n}" do
-      context "anonymous : put /:id/keys/:id with correct params" do
-        before do
-          put "/#{@user.id}/keys/#{@keys[n].id}", {
-            :key_type => "application"
-          }
-        end
-   
-        use "return 401 because the API key is missing"
-        use "unchanged api_key count"
-      end
-   
-      context "incorrect API key : put /:id/keys/:id with correct params" do
-        before do
-          put "/#{@user.id}/keys/#{@keys[n].id}", {
-            :api_key  => "does_not_exist_in_database",
-            :key_type => "application"
-          }
-        end
-   
-        use "return 401 because the API key is invalid"
-        use "unchanged api_key count"
-      end
-   
-      context "non owner API key : put /:id/keys/:id with correct params" do
-        before do
-          put "/#{@user.id}/keys/#{@keys[n].id}", {
-            :api_key  => @normal_user.primary_api_key,
-            :key_type => "application"
-          }
-        end
-   
-        use "return 401 because the API key is unauthorized"
-        use "unchanged api_key count"
-      end
-    end
-  end
-  
-  # - - - - - - - - - -
-  
-  context "anonymous : put /:fake_id/keys/:fake_id with correct params" do
-    before do
-      put "/#{@fake_id}/keys/#{@fake_id}", {
-        :key_type => "application"
-      }
-    end
-   
-    use "return 401 because the API key is missing"
-    use "unchanged api_key count"
-  end
-   
-  context "incorrect API key : put /:fake_id/keys/:fake_id with correct params" do
-    before do
-      put "/#{@fake_id}/keys/#{@fake_id}", {
-        :api_key  => "does_not_exist_in_database",
-        :key_type => "application"
-      }
-    end
-   
-    use "return 401 because the API key is invalid"
-    use "unchanged api_key count"
-  end
-   
-  context "normal API key : put /:fake_id/keys/:fake_id with correct params" do
-    before do
-      put "/#{@fake_id}/keys/#{@fake_id}", {
-        :api_key  => @normal_user.primary_api_key,
-        :key_type => "application"
-      }
-    end
-   
-    use "return 404 Not Found"
-    use "unchanged api_key count"
-  end
-   
-  # - - - - - - - - - -
-   
-  3.times do |n|
-    context "API key #{n}" do
-      context "owner API key : put /:id/keys/:fake_id without params" do
-        before do
-          put "/#{@user.id}/keys/#{@fake_id}", {
-            :api_key  => @user.api_keys[n].api_key
-          }
-        end
-   
-        use "return 404 Not Found"
-        use "return an empty response body"
-        use "unchanged api_key count"
-      end
-   
-      context "owner API key : put /:id/keys/:fake_id with correct params" do
-        before do
-          put "/#{@user.id}/keys/#{@fake_id}", {
-            :api_key  => @user.api_keys[n].api_key,
-            :key_type => "application"
-          }
-        end
-  
-        use "return 404 Not Found"
-        use "return an empty response body"
-        use "unchanged api_key count"
-      end
-    end
-  end
-   
-  context "admin API key : put /:id/keys/:fake_id without params" do
-    before do
-      put "/#{@user.id}/keys/#{@fake_id}", {
-        :api_key  => @admin_user.primary_api_key
-      }
-    end
-   
-    use "return 404 Not Found"
-    use "return an empty response body"
-    use "unchanged api_key count"
-  end
-   
-  context "admin API key : put /:id/keys/:fake_id with correct params" do
-    before do
-      put "/#{@user.id}/keys/#{@fake_id}", {
-        :api_key  => @admin_user.primary_api_key,
-        :key_type => "application"
-      }
-    end
-   
-    use "return 404 Not Found"
-    use "return an empty response body"
-    use "unchanged api_key count"
-  end
-   
-  # - - - - - - - - - -
-   
-  3.times do |n|
-    context "API key #{n}" do
-      context "admin API key : put /:fake_id/keys/:id with correct params" do
-        before do
-          put "/#{@fake_id}/keys/#{@keys[n].id}", {
-            :api_key  => @admin_user.primary_api_key,
-            :key_type => "application"
-          }
-        end
-   
-        use "return 404 Not Found"
-        use "return an empty response body"
-        use "unchanged api_key count"
-      end
-    end
-  end
-   
-  # - - - - - - - - - -
-  
-  context "admin API key : put /:fake_id/keys/:fake_id with correct params" do
-    before do
-      put "/#{@fake_id}/keys/#{@fake_id}", {
-        :api_key  => @admin_user.primary_api_key,
-        :key_type => "application"
-      }
-    end
-  
-    use "return 404 Not Found"
-    use "return an empty response body"
-    use "unchanged api_key count"
-  end
-  
-  3.times do |n|
-    context "API key #{n}" do
-      # --------------------------------------------------------------
-      # This section is a placeholder for handling missing parameters.
-      # --------------------------------------------------------------
-  
-      context "owner API key : put /:id/keys/:id : protected param 'created_at'" do
-        before do
-          @original_created_at = @user.api_keys[n].created_at.dup
-          put "/#{@user.id}/keys/#{@keys[n].id}", {
-            :api_key    => @user.api_keys[n].api_key,
-            :purpose    => "Updated purpose",
-            :created_at => (Time.now + 10).to_json
-          }
-          @n = n
-        end
-
-        use "attempted PUT users_keys with protected parameter"
-      end
-
-      context "admin API key : put /:id/keys/:id : protected param 'created_at'" do
-        before do
-          @original_created_at = @user.api_keys[n].created_at.dup
-          put "/#{@user.id}/keys/#{@keys[n].id}", {
-            :api_key    => @admin_user.primary_api_key,
-            :key_type   => "application",
-            :purpose    => "Updated purpose",
-            :created_at => (Time.now + 10).to_json
-          }
-          @n = n
-        end
-      
-        use "attempted PUT users_keys with protected parameter"
-      end
-
-      # - - - - - - - - - -
-
-      context "owner API key : put /:id/keys/:id : extra param 'junk'" do
-        before do
-          stubbed_time = Time.now + 10
-          stub(Time).now { stubbed_time }
-          @original_created_at = @user.api_keys[n].created_at.dup
-          put "/#{@user.id}/keys/#{@keys[n].id}", {
-            :api_key  => @user.api_keys[n].api_key,
-            :key_type => "application",
-            :purpose  => "Updated purpose",
-            :junk     => "This is an extra parameter (junk)"
-          }
-          @n = n
-        end
-      
-        use "attempted PUT users_keys with invalid parameter"
-      end
-      
-      context "admin API key : put /:id/keys/:id : extra param 'junk'" do
-        before do
-          stubbed_time = Time.now + 10
-          stub(Time).now { stubbed_time }
-          @original_created_at = @user.api_keys[n].created_at.dup
-          put "/#{@user.id}/keys/#{@keys[n].id}", {
-            :api_key  => @admin_user.primary_api_key,
-            :key_type => "application",
-            :purpose  => "Updated purpose",
-            :junk     => "This is an extra parameter (junk)"
-          }
-          @n = n
-        end
-      
-        use "attempted PUT users_keys with invalid parameter"
-      end
-
-      # - - - - - - - - - -
-
-      context "owner API key : put /:id/keys/:id : update purpose : correct params" do
+      context "owner API key : put /:id/keys/:id : update purpose" do
         before do
           @original_created_at = @user.api_keys[n].created_at.dup
           put "/#{@user.id}/keys/#{@keys[n].id}", {
             :api_key => @user.api_keys[n].api_key,
-            :purpose => "Updated purpose"
-          }
-          @n = n
-        end
-      
-        use "successful PUT users_keys : update purpose"
-      end
-      
-      context "admin API key : put /:id/keys/:id : update purpose : correct params" do
-        before do
-          @original_created_at = @user.api_keys[n].created_at.dup
-          put "/#{@user.id}/keys/#{@keys[n].id}", {
-            :api_key => @admin_user.primary_api_key,
             :purpose => "Updated purpose"
           }
           @n = n
@@ -461,39 +188,11 @@ class UsersKeysPutControllerTest < RequestTestCase
       use "attempted PUT users_keys with invalid change to key_type"
     end
   
-    context "admin API key : put /:id/keys/:id : changing primary to application not ok" do
-      before do
-        @original_created_at = @user.api_keys[n].created_at.dup
-        put "/#{@user.id}/keys/#{@keys[n].id}", {
-          :api_key  => @admin_user.primary_api_key,
-          :key_type => "application"
-        }
-        @n = n
-      end
-  
-      use "attempted PUT users_keys with invalid change to key_type"
-    end
-  
-    # - - - - - - - - - -
-  
     context "owner API key : put /:id/keys/:id : changing primary to valet not ok" do
       before do
         @original_created_at = @user.api_keys[n].created_at.dup
         put "/#{@user.id}/keys/#{@keys[n].id}", {
           :api_key  => @user.api_keys[n].api_key,
-          :key_type => "valet"
-        }
-        @n = n
-      end
-  
-      use "attempted PUT users_keys with invalid change to key_type"
-    end
-  
-    context "admin API key : put /:id/keys/:id : changing primary to valet not ok" do
-      before do
-        @original_created_at = @user.api_keys[n].created_at.dup
-        put "/#{@user.id}/keys/#{@keys[n].id}", {
-          :api_key  => @admin_user.primary_api_key,
           :key_type => "valet"
         }
         @n = n
@@ -521,21 +220,6 @@ class UsersKeysPutControllerTest < RequestTestCase
       use "attempted PUT users_keys with invalid key_type"
     end
   
-    context "admin API key : put /:id/keys/:id : invalid key_type" do
-      before do
-        @original_created_at = @user.api_keys[n].created_at.dup
-        put "/#{@user.id}/keys/#{@keys[n].id}", {
-          :api_key  => @admin_user.primary_api_key,
-          :key_type => "wrong"
-        }
-        @n = n
-      end
-  
-      use "attempted PUT users_keys with invalid key_type"
-    end
-  
-    # - - - - - - - - - -
-  
     context "owner API key : put /:id/keys/:id without params" do
       before do
         put "/#{@user.id}/keys/#{@keys[n].id}", {
@@ -546,19 +230,7 @@ class UsersKeysPutControllerTest < RequestTestCase
       use "attempted PUT users_keys with :id without params"
     end
   
-    context "admin API key : put /:id/keys/:id without params" do
-      before do
-        put "/#{@user.id}/keys/#{@keys[n].id}", {
-          :api_key => @admin_user.primary_api_key
-        }
-      end
-  
-      use "attempted PUT users_keys with :id without params"
-    end
-  
-    # - - - - - - - - - -
-  
-    context "owner API key : put /:id/keys : update key_type : correct params" do
+    context "owner API key : put /:id/keys : update key_type" do
       before do
         @original_created_at = @user.api_keys[n].created_at.dup
         put "/#{@user.id}/keys/#{@keys[n].id}", {
@@ -571,40 +243,11 @@ class UsersKeysPutControllerTest < RequestTestCase
       use "successful PUT users_keys : update key_type to application"
     end
   
-    context "admin API key : put /:id/keys/:id : update key_type : correct params" do
+    context "owner API key : put /:id/keys/:id : full update" do
       before do
         @original_created_at = @user.api_keys[n].created_at.dup
         put "/#{@user.id}/keys/#{@keys[n].id}", {
-          :api_key  => @admin_user.primary_api_key,
-          :key_type => "application"
-        }
-        @n = n
-      end
-  
-      use "successful PUT users_keys : update key_type to application"
-    end
-  
-    # - - - - - - - - - -
-  
-    context "owner API key : put /:id/keys/:id : full update : correct params" do
-      before do
-        @original_created_at = @user.api_keys[n].created_at.dup
-        put "/#{@user.id}/keys/#{@keys[n].id}", {
-          :api_key  => @admin_user.primary_api_key,
-          :key_type => "application",
-          :purpose  => "Updated purpose"
-        }
-        @n = n
-      end
-  
-      use "successful PUT users_keys : full update"
-    end
-  
-    context "admin API key : put /:id/keys/:id : full update : correct params" do
-      before do
-        @original_created_at = @user.api_keys[n].created_at.dup
-        put "/#{@user.id}/keys/#{@keys[n].id}", {
-          :api_key  => @admin_user.primary_api_key,
+          :api_key  => @user.primary_api_key,
           :key_type => "application",
           :purpose  => "Updated purpose"
         }

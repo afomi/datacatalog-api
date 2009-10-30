@@ -10,7 +10,6 @@ class UsersGetAllControllerTest < RequestTestCase
         assert_include "created_at", element
         assert_include "updated_at", element
         assert_include "id", element
-        assert_not_include "_id", element
       end
     end
   end

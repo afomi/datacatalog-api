@@ -1,7 +1,6 @@
 class ApiKey
   
   include MongoMapper::EmbeddedDocument
-  include Renderable
 
   # == Attributes
 
@@ -14,9 +13,10 @@ class ApiKey
 
   # == Associations
 
-  # == Derived Fields
-
   # == Validations
+  
+  # TODO: add api_key
+  # TODO: add key_type
   
   # == Class Methods
 
@@ -24,7 +24,9 @@ class ApiKey
 
   def initialize(attrs={})
     super
-    write_attribute('created_at', Time.now.utc) unless read_attribute('created_at')
+    unless read_attribute('created_at')
+      write_attribute('created_at', Time.now.utc)
+    end
   end
 
 end
