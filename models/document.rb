@@ -13,6 +13,7 @@ class Document
   key :source_id,   String
   key :user_id,     String
   key :previous_id, String
+  key :next_id,     String
   timestamps!
 
   # == Indices
@@ -42,5 +43,23 @@ class Document
   # == Class Methods
 
   # == Various Instance Methods
+
+  # Creates a new Document version based on +self+.
+  #
+  # Note: does not save the current document, by design.
+  def create_new_version!
+    if self.new?
+      raise DataCatalog::Error, "document must be saved before versioning"
+    end
+    unless self.id
+      raise DataCatalog::Error, "expected document to have an id"
+    end
+    copy = self.dup
+    copy.id = Mongo::ObjectID.new.to_s
+    copy.next_id = self.id
+    copy.save!
+    self.previous_id = copy.id
+    copy
+  end
 
 end
