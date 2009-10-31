@@ -5,147 +5,76 @@ class RatingsPostControllerTest < RequestTestCase
   def app; DataCatalog::Ratings end
 
   before do
-    @rating_count = Rating.count
-    source = Source.create(
+    @source = create_source(
       :title => "Multifactor Productivity",
       :url   => "http://www.data.gov/details/332"
     )
-    @id = source.id
+    @comment = create_comment(:source_id => @source.id)
+    @rating_count = Rating.count
   end
-
-  # - - - - - - - - - -
 
   shared "successful POST to ratings" do
     use "return 201 Created"
-    use "return timestamps and id in body"
     use "incremented rating count"
-      
+
     test "location header should point to new resource" do
       assert_include "Location", last_response.headers
       new_uri = "http://localhost:4567/ratings/" + parsed_response_body["id"]
       assert_equal new_uri, last_response.headers["Location"]
     end
+  end
+  
+  context "basic API key : post / to create a source rating" do
+    before do
+      post "/", {
+        :api_key   => @normal_user.primary_api_key,
+        :kind      => "source",
+        :source_id => @source.id,
+        :text      => "Rating A",
+        :value     => 5
+      }
+    end
+    
+    use "successful POST to ratings"
+    
+    test "body should have correct values" do
+      r = parsed_response_body
+      assert_equal @source.id, r['source_id']
+      assert_equal "Rating A", r['text']
+      assert_equal 5, r['value']
+    end
+
+    test "document in database should be correct" do
+      rating = Rating.find_by_id(parsed_response_body["id"])
+      assert_equal @source.id, rating.source_id
+      assert_equal "Rating A", rating.text
+      assert_equal 5, rating.value
+    end
+  end
+  
+  context "basic API key : post / to create a comment rating" do
+    before do
+      post "/", {
+        :api_key    => @normal_user.primary_api_key,
+        :kind       => "comment",
+        :comment_id => @comment.id,
+        :value      => 1
+      }
+    end
+    
+    use "successful POST to ratings"
     
     test "body should have correct text" do
-      assert_equal "Rating A", parsed_response_body["text"]
+      r = parsed_response_body
+      assert_equal @comment.id, r['comment_id']
+      assert_equal 1, r['value']
     end
     
     test "text should be correct in database" do
       rating = Rating.find_by_id(parsed_response_body["id"])
-      assert_equal "Rating A", rating.text
+      assert_equal @comment.id, rating.comment_id
+      assert_equal 1, rating.value
     end
-  end
-  
-  # - - - - - - - - - -
-
-  context "anonymous : post /" do
-    before do
-      post "/"
-    end
-    
-    use "return 401 because the API key is missing"
-    use "unchanged rating count"
-  end
-  
-  context "incorrect API key : post /" do
-    before do
-      post "/", :api_key => "does_not_exist_in_database"
-    end
-    
-    use "return 401 because the API key is invalid"
-    use "unchanged rating count"
-  end
-  
-  context "normal API key : post /" do
-    before do
-      post "/", :api_key => @normal_user.primary_api_key
-    end
-    
-    use "return 401 because the API key is unauthorized"
-    use "unchanged rating count"
-  end
-  
-  # - - - - - - - - - -
-  
-  context "admin API key : post / with protected param 'updated_at'" do
-    before do
-      post "/", {
-        :api_key    => @admin_user.primary_api_key,
-        :kind       => "source",
-        :source_id  => @id,
-        :text       => "Rating A",
-        :updated_at => Time.now.to_json,
-        :value      => 5
-      }
-    end
-  
-    use "return 400 Bad Request"
-    use "unchanged rating count"
-    use "return errors hash saying updated_at is invalid"
-  end
-  
-  context "admin API key : post / with protected param 'user_id'" do
-    before do
-      post "/", {
-        :api_key    => @admin_user.primary_api_key,
-        :kind       => "source",
-        :source_id  => @id,
-        :text       => "Rating A",
-        :user_id    => get_fake_mongo_object_id,
-        :value      => 5
-      }
-    end
-  
-    use "return 400 Bad Request"
-    use "unchanged rating count"
-    use "return errors hash saying user_id is invalid"
-  end
-  
-  context "admin API key : post / with invalid param" do
-    before do
-      post "/", {
-        :api_key   => @admin_user.primary_api_key,
-        :junk      => "This is an extra param (junk)",
-        :kind      => "source",
-        :source_id => @id,
-        :text      => "Rating A",
-        :value     => 5
-      }
-    end
-  
-    use "return 400 Bad Request"
-    use "unchanged rating count"
-    use "return errors hash saying junk is invalid"
-  end
-  
-  # - - - - - - - - - -
-  
-  context "curator API key : post / with correct params" do
-    before do
-      post "/", {
-        :api_key   => @curator_user.primary_api_key,
-        :kind      => "source",
-        :source_id => @id,
-        :text      => "Rating A",
-        :value     => 5
-      }
-    end
-    
-    use "successful POST to ratings"
-  end
-  
-  context "admin API key : post / with correct params" do
-    before do
-      post "/", {
-        :api_key   => @admin_user.primary_api_key,
-        :kind      => "source",
-        :value     => 5,
-        :text      => "Rating A",
-        :source_id => @id
-      }
-    end
-  
-    use "successful POST to ratings"
   end
 
 end

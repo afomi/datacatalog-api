@@ -8,7 +8,6 @@
 class Rating
 
   include MongoMapper::Document
-  include Renderable
 
   # == Attributes
 
@@ -28,8 +27,6 @@ class Rating
   belongs_to :user
   belongs_to :source
   belongs_to :comment
-
-  # == Derived Attributes
 
   # == Validations
 

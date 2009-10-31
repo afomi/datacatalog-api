@@ -9,7 +9,7 @@ module RequestHelpers
   end
   
   module ClassMethods
-    
+
     def doc_properties(correct)
       test "document should only have correct attributes" do
         assert_properties(correct, parsed_response_body)

@@ -5,97 +5,56 @@ class RatingsGetOneControllerTest < RequestTestCase
   def app; DataCatalog::Ratings end
 
   before do
-    source = Source.create(
+    @user = create_user_with_primary_key
+    @source = create_source(
       :title => "Consumer Expenditure Survey",
       :url   => "http://www.data.gov/details/319"
     )
-    rating = Rating.create(
-      :kind      => "source",
+    @rating = create_source_rating(
       :value     => 5,
       :text      => "Rating A",
-      :user_id   => @normal_user.id,
-      :source_id => source.id
+      :user_id   => @user.id,
+      :source_id => @source.id
     )
-    @id = rating.id
-    @fake_id = get_fake_mongo_object_id
+  end
+  
+  after do
+    @rating.destroy
+    @source.destroy
+    @user.destroy
   end
 
-  # - - - - - - - - - -
-
-  shared "attempted GET rating with :fake_id" do
-    use "return 404 Not Found"
-    use "return an empty response body"
+  context "basic API key : get /:id" do
+    before do
+      get "/#{@rating.id}", :api_key => @normal_user.primary_api_key
+    end
+    
+    use "return 401 because the API key is unauthorized"
   end
 
-  shared "successful GET rating with :id" do
+  context "owner API key : get /:id" do
+    before do
+      get "/#{@rating.id}", :api_key => @user.primary_api_key
+    end
+    
     use "return 200 Ok"
-    use "return timestamps and id in body"
   
     test "body should have correct text" do
       assert_equal "Rating A", parsed_response_body["text"]
     end
 
-    test "body should have source_id" do
-      assert_include "source_id", parsed_response_body
-    end
-    
-    test "body should have user_id" do
-      assert_include "user_id", parsed_response_body
-    end
-  end
-
-  # - - - - - - - - - -
-
-  context "anonymous : get /:id" do
-    before do
-      get "/#{@id}"
-    end
-    
-    use "return 401 because the API key is missing"
-  end
-  
-  context "incorrect API key : get /:id" do
-    before do
-      get "/#{@id}", :api_key => "does_not_exist_in_database"
-    end
-    
-    use "return 401 because the API key is invalid"
-  end
-
-  # - - - - - - - - - -
-
-  context "normal API key : get /:fake_id" do
-    before do
-      get "/#{@fake_id}", :api_key => @normal_user.primary_api_key
-    end
-    
-    use "attempted GET rating with :fake_id"
-  end
-
-  context "admin API key : get /:fake_id" do
-    before do
-      get "/#{@fake_id}", :api_key => @admin_user.primary_api_key
-    end
-    
-    use "attempted GET rating with :fake_id"
-  end
-
-  # - - - - - - - - - -
-  
-  context "normal API key : get /:id" do
-    before do
-      get "/#{@id}", :api_key => @normal_user.primary_api_key
-    end
-    
-    use "successful GET rating with :id"
-  end
-
-  context "admin API key : get /:id" do
-    before do
-      get "/#{@id}", :api_key => @admin_user.primary_api_key
-    end
-    
-    use "successful GET rating with :id"
+    doc_properties %w(
+      kind
+      user_id
+      source_id
+      comment_id
+      value
+      previous_value
+      text
+      id
+      created_at
+      updated_at
+    )
   end
 
 end

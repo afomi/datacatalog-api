@@ -18,4 +18,12 @@ class RequestTestCase
     end
   end
   
+  shared "rating unchanged" do
+    test "should not change rating in database" do
+      assert_equal @rating_copy, Rating.find_by_id(@rating.id)
+      # TODO: use reload
+    end
+  end
+  
+  
 end
