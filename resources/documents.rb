@@ -18,8 +18,8 @@ module DataCatalog
     
     property :text
     property :source_id
-    property :user_id
     property :previous_id
+    property :user_id,     :w => :nobody
 
     # == Callbacks
 
