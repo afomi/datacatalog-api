@@ -5,95 +5,43 @@ class OrganizationsGetOneControllerTest < RequestTestCase
   def app; DataCatalog::Organizations end
 
   before do
-    organization = Organization.create(
+    @user = create_user_with_primary_key
+    @organization = create_organization(
       :name      => "Organization A",
-      :user_id   => get_fake_mongo_object_id,
-      :source_id => get_fake_mongo_object_id
+      :user_id   => @user.id
     )
-    @id = organization.id
-    @fake_id = get_fake_mongo_object_id
-  end
-
-  # - - - - - - - - - -
-
-  shared "attempted GET organization with :fake_id" do
-    use "return 404 Not Found"
-    use "return an empty response body"
-  end
-
-  shared "successful GET organization with :id" do
-    use "return 200 Ok"
-    use "return timestamps and id in body"
-  
-    test "body should have correct name" do
-      assert_equal "Organization A", parsed_response_body["name"]
-    end
-
-    test "body should have source_id" do
-      assert_include "source_id", parsed_response_body
-    end
-    
-    test "body should have user_id" do
-      assert_include "user_id", parsed_response_body
-    end
-
-    test "body should have needs_curation" do
-      assert_include "needs_curation", parsed_response_body
-    end
-  end
-
-  # - - - - - - - - - -
-
-  context "anonymous : get /:id" do
-    before do
-      get "/#{@id}"
-    end
-    
-    use "return 401 because the API key is missing"
   end
   
-  context "incorrect API key : get /:id" do
-    before do
-      get "/#{@id}", :api_key => "does_not_exist_in_database"
-    end
-    
-    use "return 401 because the API key is invalid"
+  after do
+    @organization.destroy
+    @user.destroy
   end
 
-  # - - - - - - - - - -
-
-  context "normal API key : get /:fake_id" do
-    before do
-      get "/#{@fake_id}", :api_key => @normal_user.primary_api_key
-    end
-    
-    use "attempted GET organization with :fake_id"
-  end
-
-  context "admin API key : get /:fake_id" do
-    before do
-      get "/#{@fake_id}", :api_key => @admin_user.primary_api_key
-    end
-    
-    use "attempted GET organization with :fake_id"
-  end
-
-  # - - - - - - - - - -
-  
   context "normal API key : get /:id" do
     before do
-      get "/#{@id}", :api_key => @normal_user.primary_api_key
+      get "/#{@organization.id}", :api_key => @normal_user.primary_api_key
     end
     
-    use "successful GET organization with :id"
-  end
+    use "return 200 Ok"
+  
+    test "body should have correct values" do
+      assert_equal "Organization A", parsed_response_body["name"]
+      assert_equal @user.id, parsed_response_body["user_id"]
+    end
+    
+    doc_properties %w(
+      name
+      acronym
+      org_type
+      description
+      slug
+      url
+      user_id
+      id
+      created_at
+      updated_at
+    )
 
-  context "admin API key : get /:id" do
-    before do
-      get "/#{@id}", :api_key => @admin_user.primary_api_key
-    end
-    
-    use "successful GET organization with :id"
   end
 
 end

@@ -6,13 +6,30 @@ class OrganizationsPostControllerTest < RequestTestCase
 
   before do
     @organization_count = Organization.count
+    @valid_params = {
+      :name     => "Organization A",
+      :org_type => "governmental",
+    }
   end
 
-  # - - - - - - - - - -
+  context "basic API key : post /" do
+    before do
+      post "/", {
+        :api_key  => @normal_user.primary_api_key
+      }.merge(@valid_params)
+    end
 
-  shared "successful POST to organizations" do
+    use "return 401 because the API key is unauthorized"
+  end
+  
+  context "curator API key : post /" do
+    before do
+      post "/", {
+        :api_key  => @curator_user.primary_api_key
+      }.merge(@valid_params)
+    end
+
     use "return 201 Created"
-    use "return timestamps and id in body" 
     use "incremented organization count"
       
     test "location header should point to new resource" do
@@ -21,97 +38,19 @@ class OrganizationsPostControllerTest < RequestTestCase
       assert_equal new_uri, last_response.headers["Location"]
     end
     
-    test "body should have correct name" do
-      assert_equal "Organization A", parsed_response_body["name"]
+    test "body should have correct values" do
+      @valid_params.each do |key, value|
+        assert_equal value, parsed_response_body[key.to_s]
+      end
     end
     
-    test "name should be correct in database" do
+    test "values should be correct in database" do
       organization = Organization.find_by_id(parsed_response_body["id"])
-      assert_equal "Organization A", organization.name
+      # TODO: use reload
+      @valid_params.each do |key, value|
+        assert_equal value, organization[key]
+      end
     end
-  end
-  
-  # - - - - - - - - - -
-
-  context "anonymous : post /" do
-    before do
-      post "/"
-    end
-    
-    use "return 401 because the API key is missing"
-    use "unchanged organization count"
-  end
-  
-  context "incorrect API key : post /" do
-    before do
-      post "/", :api_key => "does_not_exist_in_database"
-    end
-    
-    use "return 401 because the API key is invalid"
-    use "unchanged organization count"
-  end
-  
-  context "normal API key : post /" do
-    before do
-      post "/", :api_key => @normal_user.primary_api_key
-    end
-    
-    use "return 401 because the API key is unauthorized"
-    use "unchanged organization count"
-  end
-  
-  # - - - - - - - - - -
-
-  context "admin API key : post / with protected param" do
-    before do
-      post "/", {
-        :api_key    => @admin_user.primary_api_key,
-        :name       => "Organization A",
-        :updated_at => Time.now.to_json
-      }
-    end
-  
-    use "return 400 Bad Request"
-    use "unchanged organization count"
-    use "return errors hash saying updated_at is invalid"
-  end
-  
-  context "admin API key : post / with invalid param" do
-    before do
-      post "/", {
-        :api_key => @admin_user.primary_api_key,
-        :name    => "Organization A",
-        :junk    => "This is an extra param (junk)"
-      }
-    end
-  
-    use "return 400 Bad Request"
-    use "unchanged organization count"
-    use "return errors hash saying junk is invalid"
-  end
-  
-  # - - - - - - - - - -
-  
-  context "curator API key : post / with correct params" do
-    before do
-      post "/", {
-        :api_key => @curator_user.primary_api_key,
-        :name    => "Organization A",
-      }
-    end
-    
-    use "successful POST to organizations"
-  end
-  
-  context "admin API key : post / with correct params" do
-    before do
-      post "/", {
-        :api_key => @admin_user.primary_api_key,
-        :name    => "Organization A",
-      }
-    end
-
-    use "successful POST to organizations"
   end
 
 end

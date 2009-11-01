@@ -94,6 +94,16 @@ module ModelHelpers
     create_model!(Document, custom, required)
   end
   
+  def create_organization(custom={})
+    required = {
+      :name     => "Sample Organization",
+      :url      => "http://name.org",
+      :org_type => "governmental"
+    }
+    required[:user_id] = @normal_user.id if @normal_user
+    create_model!(Organization, custom, required)
+  end
+  
   def create_note(custom={})
     required = {
       :text      => "Sample Note",

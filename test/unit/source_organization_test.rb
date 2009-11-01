@@ -18,7 +18,8 @@ class SourceOrganizationUnitTest < ModelTestCase
   context "source with an organization" do
     before do
       @organization = Organization.create(
-        :name => "Department of Commerce"
+        :name     => "Department of Commerce",
+        :org_type => "governmental"
       )
       @source = Source.create(
         :title        => "2005-2007 American Community Survey Three-Year PUMS Housing File",

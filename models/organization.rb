@@ -1,19 +1,22 @@
 class Organization
 
   include MongoMapper::Document
-  include Renderable
+  
+  ORG_TYPES = %w(
+    governmental
+    not-for-profit
+    commercial
+  )
 
   # == Attributes
 
   key :name,           String
   key :acronym,        String
-  key :org_type,       String, :default => 'Governmental' # or Non-governmental or Company
+  key :org_type,       String
   key :description,    String
   key :slug,           String
   key :url,            String
-  key :source_id,      String
   key :user_id,        String
-  key :needs_curation, Boolean, :default => false
   timestamps!
 
   # == Indices
@@ -22,11 +25,28 @@ class Organization
 
   many :sources
 
-  # == Derived Attributes
+  # == Validations
+
+  include UrlValidator
+
+  validates_presence_of :name
+  validate :validate_url
+  validate :validate_org_type
+  validates_uniqueness_of :slug
+  validates_format_of :slug,
+    :with      => /\A[a-zA-z0-9\-]+\z/,
+    :message   => "can only contain alphanumeric characters and dashes",
+    :allow_nil => true
+
+  def validate_org_type
+    unless ORG_TYPES.include?(org_type)
+      errors.add(:org_type, "must be one of: #{ORG_TYPES.join(', ')}")
+    end
+  end
 
   # == Callbacks
 
-  before_validation :handle_blank_slug  
+  before_validation :handle_blank_slug
   before_create :generate_slug
   
   def handle_blank_slug
@@ -46,21 +66,6 @@ class Organization
       n += 1
     end
   end
-
-  # == Validations
-
-  validates_presence_of :name
-  validate :validate_url
-  validates_format_of :org_type, :with => /\A(Governmental|Non-governmental|Company)\z/, 
-    :message => "must be Governmental, Non-governmental, or Company"
-  include UrlValidator
-
-  validates_uniqueness_of :slug
-
-  validates_format_of :slug,
-    :with      => /\A[a-zA-z0-9\-]+\z/,
-    :message   => "can only contain alphanumeric characters and dashes",
-    :allow_nil => true
 
   # == Class Methods
 
