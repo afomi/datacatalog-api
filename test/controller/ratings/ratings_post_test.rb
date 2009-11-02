@@ -45,7 +45,7 @@ class RatingsPostControllerTest < RequestTestCase
     end
 
     test "document in database should be correct" do
-      rating = Rating.find_by_id(parsed_response_body["id"])
+      rating = Rating.find_by_id!(parsed_response_body["id"])
       assert_equal @source.id, rating.source_id
       assert_equal "Rating A", rating.text
       assert_equal 5, rating.value
@@ -71,7 +71,7 @@ class RatingsPostControllerTest < RequestTestCase
     end
     
     test "text should be correct in database" do
-      rating = Rating.find_by_id(parsed_response_body["id"])
+      rating = Rating.find_by_id!(parsed_response_body["id"])
       assert_equal @comment.id, rating.comment_id
       assert_equal 1, rating.value
     end

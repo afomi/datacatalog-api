@@ -38,17 +38,17 @@ class UsersKeysPostControllerTest < RequestTestCase
     end
       
     test "API key should be different from primary key" do
-      user = User.find_by_id(@user.id)
+      user = User.find_by_id!(@user.id)
       assert_not_equal user.api_keys[0].api_key, parsed_response_body["api_key"]
     end
     
     test "purpose should be correct in database" do
-      user = User.find_by_id(@user.id)
+      user = User.find_by_id!(@user.id)
       assert_equal "My special purpose!", user.api_keys[1]["purpose"]
     end
       
     test "key_type should be correct in database" do
-      user = User.find_by_id(@user.id)
+      user = User.find_by_id!(@user.id)
       assert_equal "application", user.api_keys[1]["key_type"]
     end
   end

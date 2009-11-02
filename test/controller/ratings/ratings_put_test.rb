@@ -45,7 +45,7 @@ class RatingsPutControllerTest < RequestTestCase
     use "unchanged rating count"
   
     test "text should be updated in database" do
-      rating = Rating.find_by_id(@rating.id)
+      rating = Rating.find_by_id!(@rating.id)
       assert_equal "New Rating", rating.text
     end
   end

@@ -32,7 +32,7 @@ class CommentsPostControllerTest < RequestTestCase
     end
     
     test "text should be correct in database" do
-      comment = Comment.find_by_id(parsed_response_body["id"])
+      comment = Comment.find_by_id!(parsed_response_body["id"])
       assert_equal "Comment A", comment.text
     end
   end

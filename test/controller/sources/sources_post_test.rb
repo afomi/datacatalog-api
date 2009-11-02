@@ -24,7 +24,7 @@ class SourcesPostControllerTest < RequestTestCase
     end
     
     test "text should be correct in database" do
-      source = Source.find_by_id(parsed_response_body["id"])
+      source = Source.find_by_id!(parsed_response_body["id"])
       assert_equal "http://data.gov/original", source.url
     end
 
@@ -68,7 +68,7 @@ class SourcesPostControllerTest < RequestTestCase
       use "successful POST to sources"
 
       test "custom field should be correct in database" do
-        source = Source.find_by_id(parsed_response_body["id"])
+        source = Source.find_by_id!(parsed_response_body["id"])
         assert_equal "custom 1",      source.custom["0"]["label"]
         assert_equal "description 1", source.custom["0"]["description"]
         assert_equal "string",        source.custom["0"]["type"]
@@ -96,7 +96,7 @@ class SourcesPostControllerTest < RequestTestCase
       use "successful POST to sources"
 
       test "custom field 1 should be correct in database" do
-        source = Source.find_by_id(parsed_response_body["id"])
+        source = Source.find_by_id!(parsed_response_body["id"])
         assert_equal "custom 1",      source.custom["0"]["label"]
         assert_equal "description 1", source.custom["0"]["description"]
         assert_equal "string",        source.custom["0"]["type"]
@@ -104,7 +104,7 @@ class SourcesPostControllerTest < RequestTestCase
       end
 
       test "custom field 2 should be correct in database" do
-        source = Source.find_by_id(parsed_response_body["id"])
+        source = Source.find_by_id!(parsed_response_body["id"])
         assert_equal "custom 2",      source.custom["1"]["label"]
         assert_equal "description 2", source.custom["1"]["description"]
         assert_equal "integer",       source.custom["1"]["type"]

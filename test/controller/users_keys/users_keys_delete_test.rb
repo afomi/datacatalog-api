@@ -52,7 +52,7 @@ class UsersKeysDeleteControllerTest < RequestTestCase
   shared "API key deleted from database" do
     test "API key should be deleted in database" do
       raise "@n must be defined" unless @n
-      user = User.find_by_id(@user.id)
+      user = User.find_by_id!(@user.id)
       api_key = user.api_keys.detect { |x| x.id == @keys[@n].id }
       assert_equal nil, api_key
     end

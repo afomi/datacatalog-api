@@ -37,7 +37,7 @@ class RatingAggregatesUnitTest < ModelTestCase
           :source_id => @source.id
         )
         raise "Must be valid" unless @rating.valid?
-        @source = Source.find_by_id(@source.id)
+        @source = Source.find_by_id!(@source.id)
       end
 
       test "updates ratings total" do
@@ -56,7 +56,7 @@ class RatingAggregatesUnitTest < ModelTestCase
         before do
           @rating.value = 2
           @rating.save!
-          @source = Source.find_by_id(@source.id)
+          @source = Source.find_by_id!(@source.id)
         end
 
         test "updates ratings total" do
@@ -76,7 +76,7 @@ class RatingAggregatesUnitTest < ModelTestCase
       context "deleted Rating" do
         before do
           @rating.destroy
-          @source = Source.find_by_id(@source.id)
+          @source = Source.find_by_id!(@source.id)
         end
       
         test "updates ratings total" do
@@ -127,7 +127,7 @@ class RatingAggregatesUnitTest < ModelTestCase
           :user_id    => @user.id,
           :comment_id => @comment.id
         )
-        @comment = Comment.find_by_id(@comment.id)
+        @comment = Comment.find_by_id!(@comment.id)
       end
   
       test "updates ratings total" do
@@ -146,7 +146,7 @@ class RatingAggregatesUnitTest < ModelTestCase
         before do
           @rating.value = 0
           @rating.save!
-          @comment = Comment.find_by_id(@comment.id)
+          @comment = Comment.find_by_id!(@comment.id)
         end
 
         test "updates ratings total" do
@@ -165,7 +165,7 @@ class RatingAggregatesUnitTest < ModelTestCase
       context "deleted Rating" do
         before do
           @rating.destroy
-          @comment = Comment.find_by_id(@comment.id)
+          @comment = Comment.find_by_id!(@comment.id)
         end
       
         test "updates ratings total" do

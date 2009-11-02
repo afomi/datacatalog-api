@@ -25,7 +25,7 @@ class CommentsPutControllerTest < RequestTestCase
     use "unchanged comment count"
 
     test "text should be updated in database" do
-      comment = Comment.find_by_id(@comment.id)
+      comment = Comment.find_by_id!(@comment.id)
       assert_equal "New Comment", comment.text
     end
   end

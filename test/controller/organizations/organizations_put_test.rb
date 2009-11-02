@@ -58,7 +58,7 @@ class OrganizationsPutControllerTest < RequestTestCase
     use "unchanged organization count"
   
     test "name should be updated in database" do
-      organization = Organization.find_by_id(@organization.id)
+      organization = Organization.find_by_id!(@organization.id)
       assert_equal "New Organization", organization.name
     end
   end

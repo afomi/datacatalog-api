@@ -32,7 +32,7 @@ class NotesPutControllerTest < RequestTestCase
       use "unchanged note count"
 
       test "text should be updated in database" do
-        note = Note.find_by_id(@note.id)
+        note = Note.find_by_id!(@note.id)
         assert_equal "New Note", note.text
       end
     end

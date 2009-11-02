@@ -24,7 +24,7 @@ class NotesPostControllerTest < RequestTestCase
     end
     
     test "text should be correct in database" do
-      note = Note.find_by_id(parsed_response_body["id"])
+      note = Note.find_by_id!(parsed_response_body["id"])
       assert_equal "Note A", note.text
     end
   end

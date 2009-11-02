@@ -47,12 +47,12 @@ class UsersPostControllerTest < RequestTestCase
     end
     
     test "name should be correct in database" do
-      user = User.find_by_id(parsed_response_body["id"])
+      user = User.find_by_id!(parsed_response_body["id"])
       assert_equal "John Doe", user.name
     end
 
     test "email should be correct in database" do
-      user = User.find_by_id(parsed_response_body["id"])
+      user = User.find_by_id!(parsed_response_body["id"])
       assert_equal "john.doe@email.com", user.email
     end
   end

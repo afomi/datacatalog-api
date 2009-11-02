@@ -34,12 +34,12 @@ class UsersPutControllerTest < RequestTestCase
     use "unchanged user count"
     
     test "name should be updated in database" do
-      user = User.find_by_id(@user.id)
+      user = User.find_by_id!(@user.id)
       assert_equal "New Guy", user.name
     end
       
     test "email should be updated in database" do
-      user = User.find_by_id(@user.id)
+      user = User.find_by_id!(@user.id)
       assert_equal "new.guy@email.com", user.email
     end
 

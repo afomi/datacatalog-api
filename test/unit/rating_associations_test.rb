@@ -41,7 +41,7 @@ class RatingAssociationsUnitTest < ModelTestCase
     end
 
     test "rating.source should be correct" do
-      @source = Source.find_by_id(@source.id)
+      @source = Source.find_by_id!(@source.id)
       assert_equal @source, @rating.source
     end
     

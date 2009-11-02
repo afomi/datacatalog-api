@@ -22,13 +22,13 @@ class SourcesPutControllerTest < RequestTestCase
     use "unchanged source count"
 
     test "url should be updated in database" do
-      source = Source.find_by_id(@source.id)
+      source = Source.find_by_id!(@source.id)
       assert_equal "http://data.gov/updated", source.url
     end
   end
 
   def create_source_with_three_custom_fields
-    source = Source.find_by_id(@source.id)
+    source = Source.find_by_id!(@source.id)
     source.custom = {
       "0" => {
         "label"       => "custom 0",
@@ -80,7 +80,7 @@ class SourcesPutControllerTest < RequestTestCase
       use "successful PUT to sources"
     
       test "custom field should be correct in database" do
-        source = Source.find_by_id(@source.id)
+        source = Source.find_by_id!(@source.id)
         assert_equal "custom 1",      source.custom["0"]["label"]
         assert_equal "description 1", source.custom["0"]["description"]
         assert_equal "string",        source.custom["0"]["type"]
@@ -107,14 +107,14 @@ class SourcesPutControllerTest < RequestTestCase
       use "successful PUT to sources"
     
       test "should have 2 custom fields" do
-        source = Source.find_by_id(@source.id)
+        source = Source.find_by_id!(@source.id)
         assert_equal 2, source.custom.length
         assert_include "0", source.custom
         assert_include "1", source.custom
       end
       
       test "custom field 0 should be correct in database" do
-        source = Source.find_by_id(@source.id)
+        source = Source.find_by_id!(@source.id)
         assert_equal "custom 1",      source.custom["0"]["label"]
         assert_equal "description 1", source.custom["0"]["description"]
         assert_equal "string",        source.custom["0"]["type"]
@@ -122,7 +122,7 @@ class SourcesPutControllerTest < RequestTestCase
       end
     
       test "custom field 1 should be correct in database" do
-        source = Source.find_by_id(@source.id)
+        source = Source.find_by_id!(@source.id)
         assert_equal "custom 2",      source.custom["1"]["label"]
         assert_equal "description 2", source.custom["1"]["description"]
         assert_equal "integer",       source.custom["1"]["type"]
@@ -140,7 +140,7 @@ class SourcesPutControllerTest < RequestTestCase
       end
     
       test "should have 3 custom fields" do
-        source = Source.find_by_id(@source.id)
+        source = Source.find_by_id!(@source.id)
         assert_equal 3, source.custom.length
         3.times do |n|
           assert_include n.to_s, source.custom
@@ -148,7 +148,7 @@ class SourcesPutControllerTest < RequestTestCase
       end
     
       test "custom field 0 should be correct in database" do
-        source = Source.find_by_id(@source.id)
+        source = Source.find_by_id!(@source.id)
         assert_equal "custom 0",      source.custom["0"]["label"]
         assert_equal "description 0", source.custom["0"]["description"]
         assert_equal "string",        source.custom["0"]["type"]
@@ -156,7 +156,7 @@ class SourcesPutControllerTest < RequestTestCase
       end
     
       test "custom field 1 should be correct in database" do
-        source = Source.find_by_id(@source.id)
+        source = Source.find_by_id!(@source.id)
         assert_equal "custom 1",      source.custom["1"]["label"]
         assert_equal "description 1", source.custom["1"]["description"]
         assert_equal "integer",       source.custom["1"]["type"]
@@ -164,7 +164,7 @@ class SourcesPutControllerTest < RequestTestCase
       end
     
       test "custom field 2 should be correct in database" do
-        source = Source.find_by_id(@source.id)
+        source = Source.find_by_id!(@source.id)
         assert_equal "custom 2",      source.custom["2"]["label"]
         assert_equal "description 2", source.custom["2"]["description"]
         assert_equal "date",          source.custom["2"]["type"]
@@ -182,7 +182,7 @@ class SourcesPutControllerTest < RequestTestCase
       end
       
       test "should have 3 custom fields" do
-        source = Source.find_by_id(@source.id)
+        source = Source.find_by_id!(@source.id)
         assert_equal 3, source.custom.length
         assert_include "0", source.custom
         assert_include "1", source.custom
@@ -190,7 +190,7 @@ class SourcesPutControllerTest < RequestTestCase
       end
     
       test "custom field 0 should be correct in database" do
-        source = Source.find_by_id(@source.id)
+        source = Source.find_by_id!(@source.id)
         assert_equal "custom 0",      source.custom["0"]["label"]
         assert_equal "description 0", source.custom["0"]["description"]
         assert_equal "string",        source.custom["0"]["type"]
@@ -198,12 +198,12 @@ class SourcesPutControllerTest < RequestTestCase
       end
 
       test "custom field 1 should be correct in database" do
-        source = Source.find_by_id(@source.id)
+        source = Source.find_by_id!(@source.id)
         assert_equal nil, source.custom[1]
       end
     
       test "custom field 2 should be correct in database" do
-        source = Source.find_by_id(@source.id)
+        source = Source.find_by_id!(@source.id)
         assert_equal "custom 2",      source.custom["2"]["label"]
         assert_equal "description 2", source.custom["2"]["description"]
         assert_equal "date",          source.custom["2"]["type"]

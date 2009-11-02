@@ -24,7 +24,7 @@ class CategoriesPutControllerTest < RequestTestCase
     use "unchanged category count"
 
     test "text should be updated in database" do
-      category = Category.find_by_id(@category.id)
+      category = Category.find_by_id!(@category.id)
       assert_equal "New Category", category.name
     end
   end

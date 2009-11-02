@@ -30,7 +30,7 @@ class CategoriesPostControllerTest < RequestTestCase
     end
     
     test "name should be correct in database" do
-      category = Category.find_by_id(parsed_response_body["id"])
+      category = Category.find_by_id!(parsed_response_body["id"])
       assert_equal "Category A", category.name
     end
   end

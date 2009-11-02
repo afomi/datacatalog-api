@@ -36,7 +36,7 @@ class UsersKeysPutControllerTest < RequestTestCase
  
   def lookup_user_and_api_key
     raise "@n must be defined" unless @n
-    user = User.find_by_id(@user.id)
+    user = User.find_by_id!(@user.id)
     api_key = user.api_keys.detect { |x| x.id == @keys[@n].id }
     [user, api_key]
   end
@@ -45,7 +45,7 @@ class UsersKeysPutControllerTest < RequestTestCase
     test "created_at should be unchanged in database" do
       raise "@n must be defined" unless @n
       raise "@original_created_at must be defined" unless @original_created_at
-      user = User.find_by_id(@user.id)
+      user = User.find_by_id!(@user.id)
       assert_equal_json_times @original_created_at, user.api_keys[@n].created_at
     end
   end

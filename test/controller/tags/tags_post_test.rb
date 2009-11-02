@@ -31,7 +31,7 @@ class TagsPostControllerTest < RequestTestCase
     end
     
     test "text should be correct in database" do
-      tag = Tag.find_by_id(parsed_response_body["id"])
+      tag = Tag.find_by_id!(parsed_response_body["id"])
       assert_equal "Tag A", tag.text
     end
   end

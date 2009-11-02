@@ -36,7 +36,7 @@ class DocumentsPostControllerTest < RequestTestCase
     end
     
     test "text should be correct in database" do
-      document = Document.find_by_id(parsed_response_body["id"])
+      document = Document.find_by_id!(parsed_response_body["id"])
       assert_equal "Document A", document.text
     end
   end

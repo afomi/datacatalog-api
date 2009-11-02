@@ -25,7 +25,7 @@ class TagsPutControllerTest < RequestTestCase
     use "unchanged tag count"
 
     test "text should be updated in database" do
-      tag = Tag.find_by_id(@tag.id)
+      tag = Tag.find_by_id!(@tag.id)
       assert_equal "New Tag", tag.text
     end
   end
