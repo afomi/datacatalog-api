@@ -9,8 +9,7 @@ class RatingAssociationsUnitTest < ModelTestCase
         :title => "The Original Data Source",
         :url   => "http://data.gov/original"
       )
-      @rating = Rating.create(
-        :kind      => "source",
+      @rating = create_source_rating(
         :value     => 4,
         :text      => "An explanation",
         :user_id   => @user.id,
@@ -61,13 +60,13 @@ class RatingAssociationsUnitTest < ModelTestCase
   context "Rating.create : comment" do
     before do
       @user = create_normal_user
-      @comment = Comment.create(
+      @source = create_source
+      @comment = create_comment(
         :text      => "Just a comment",
         :user_id   => @user.id,
-        :source_id => Mongo::ObjectID.new.to_s
+        :source_id => @source.id
       )
-      @rating = Rating.create(
-        :kind       => "comment",
+      @rating = create_comment_rating(
         :value      => 1,
         :user_id    => @user.id,
         :comment_id => @comment.id
@@ -77,6 +76,7 @@ class RatingAssociationsUnitTest < ModelTestCase
     after do
       @rating.destroy
       @comment.destroy
+      @source.destroy
       @user.destroy
     end
   
@@ -97,7 +97,7 @@ class RatingAssociationsUnitTest < ModelTestCase
     end
   
     test "rating.comment should be correct" do
-      @comment = Comment.find_by_id(@comment.id)
+      @comment = Comment.find_by_id!(@comment.id)
       assert_equal @comment, @rating.comment
     end
     

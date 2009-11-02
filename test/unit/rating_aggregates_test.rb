@@ -97,7 +97,7 @@ class RatingAggregatesUnitTest < ModelTestCase
   context "Rating about a Comment" do
     before do
       @user = create_normal_user
-      @source = Source.create(
+      @source = create_source(
         :title => "Annual Electric Generator Report",
         :url   => "http://www.data.gov/details/858"
       )

@@ -3,40 +3,46 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_unit_helper')
 class SourceRatingsUnitTest < ModelTestCase
   
   context "source with no ratings" do
-  
     before do
-      @source = Source.create(
+      @source = create_source(
         :title => "2005-2007 American Community Survey Three-Year PUMS Housing File",
         :url   => "http://www.data.gov/details/90"
       )
     end
     
+    after do
+      @source.destroy
+    end
+    
     test "#ratings should return []" do
       assert_equal [], @source.ratings
     end
-  
   end
   
   context "source with 5 ratings" do
-  
     before do
-      @user = create_normal_user
-      @source = Source.create(
+      @user = create_user
+      @source = create_source(
         :title => "2005-2007 American Community Survey Three-Year PUMS Housing File",
         :url   => "http://www.data.gov/details/90"
       )
-      @ratings = []
-      5.times do |n|
-        @ratings << Rating.create(
+      @ratings = 5.times.map do |n|
+        Rating.create!(
           :kind      => "source",
           :value     => n + 1,
-          :text      => "source rating #{n + 1}",
-          :user_id   => @user.id
+          :text      => "Source Rating #{n + 1}",
+          :user_id   => @user.id,
+          :source_id => @source.id
         )
       end
       @source.ratings = @ratings
-      @ratings.each { |r| assert r.valid? }
       @source.save!
+    end
+    
+    after do
+      @source.destroy
+      @ratings.each { |x| x.destroy }
+      @user.destroy
     end
     
     test "#ratings should return 5 objects" do
@@ -53,17 +59,11 @@ class SourceRatingsUnitTest < ModelTestCase
       end
     end
     
-    # This behavior probably will be changing soon in MongoMapper
-    #
-    # * find will return nil and find! will raise exception
-    # * wherever find is called it should behave the same whether
-    #   associations or plain old documents
     test "finding fake_id should raise exception" do
       assert_raise MongoMapper::DocumentNotFound do
         @source.ratings.find(get_fake_mongo_object_id)
       end
     end
-  
   end
   
 end

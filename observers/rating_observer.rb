@@ -8,12 +8,12 @@ class RatingObserver < MongoMapper::Observer
     count = (doc.rating_stats[:count] += 1)
     total = (doc.rating_stats[:total] += rating.value)
     doc.rating_stats[:average] = total.to_f / count
-    doc.save
+    doc.save!
   end
   
   def before_update(rating)
     rating_from_db = Rating.find_by_id(rating.id)
-    rating.previous_value = rating_from_db.value
+    rating.previous_value = rating_from_db.value if rating_from_db
   end
   
   def after_update(rating)
