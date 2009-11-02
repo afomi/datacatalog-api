@@ -1,4 +1,3 @@
-# TODO: use get_fake_mongo_object_id instead of Mongo::ObjectID.new.to_s
 require File.expand_path(File.dirname(__FILE__) + '/../test_unit_helper')
 
 class RatingUnitTest < ModelTestCase
