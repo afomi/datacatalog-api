@@ -14,7 +14,7 @@
     gem install sinatra
     gem install mongo
     gem install djsun-mongomapper
-    gem install rest-sinatra
+    gem install sinatra_resource
     gem install frequency
 
 ## Testing

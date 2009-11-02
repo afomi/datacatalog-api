@@ -45,7 +45,7 @@ class NotesPostControllerTest < RequestTestCase
     before do
       source = create_source
       post "/",
-        :api_key   => "does_not_exist_in_database",
+        :api_key   => BAD_API_KEY,
         :text      => "Note A",
         :source_id => source.id
     end

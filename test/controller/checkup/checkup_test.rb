@@ -6,8 +6,6 @@ class CheckupTest < RequestTestCase
     DataCatalog::Checkup
   end
 
-  # - - - - - - - - - -
-
   shared "anonymous" do
     test "should indicate anonymous credentials" do
       assert_include "anonymous", parsed_response_body
@@ -22,21 +20,27 @@ class CheckupTest < RequestTestCase
     end
   end
 
-  shared "valid API key" do
-    test "should indicate valid API key" do
-      assert_include "valid_api_key", parsed_response_body
-      assert_equal true, parsed_response_body["valid_api_key"]
-    end
-  end
-
   shared "invalid API key" do
     test "should indicate invalid API key" do
-      assert_include "valid_api_key", parsed_response_body
-      assert_equal false, parsed_response_body["valid_api_key"]
+      assert_include "api_key", parsed_response_body
+      assert_equal "invalid", parsed_response_body["api_key"]
     end
   end
 
-  # - - - - - - - - - -
+  shared "no API key" do
+    test "should indicate no API key" do
+      assert_include "api_key", parsed_response_body
+      assert_equal "none", parsed_response_body["api_key"]
+    end
+  end
+
+  shared "valid API key" do
+    test "should indicate valid API key" do
+      assert_include "api_key", parsed_response_body
+      assert_equal "valid", parsed_response_body["api_key"]
+    end
+  end
+
   
   context "anonymous : get /" do
     before do
@@ -45,6 +49,7 @@ class CheckupTest < RequestTestCase
 
     use "return 200 OK"
     use "anonymous"
+    use "no API key"
     
     test "should not have a user" do
       assert_not_include "user", parsed_response_body
@@ -53,7 +58,7 @@ class CheckupTest < RequestTestCase
   
   context "incorrect API key : get /" do
     before do
-      get '/', :api_key => "does_not_exist_in_database"
+      get '/', :api_key => BAD_API_KEY
     end
   
     use "return 200 OK"

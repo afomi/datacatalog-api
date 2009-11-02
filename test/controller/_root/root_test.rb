@@ -1,18 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_controller_helper')
 
 # The root action(s) provide basic information about the API.
-#
-# Passing an API key as a parameter is not allowed. Why not?
-#
-# * There is nothing about 'get /' that involves authentication. Checking
-#   authentication wouldn't serve any purpose. Not checking means that
-#   this action can be very simple.
-#
-# * On the other hand, accepting an API key parameter would imply that the
-#   web service does some sort of verification. Doing that verification
-#   would make the action more complicated and would also slow it down
-#   (since we would need to lookup the API key.)
-
 class RootControllerTest < RequestTestCase
 
   def app; DataCatalog::Root end
@@ -58,7 +46,7 @@ class RootControllerTest < RequestTestCase
 
     context "incorrect API key" do
       before :all do
-        get '/', :api_key => "does_not_exist_in_database"
+        get '/', :api_key => BAD_API_KEY
       end
 
       use "return 401 because the API key is invalid"

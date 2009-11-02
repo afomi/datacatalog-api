@@ -8,7 +8,9 @@ module DataCatalog
       includee.instance_eval do
         include SinatraResource::Resource
       end
+      
       includee.helpers do
+
         attr_accessor :current_user
 
         def before_authorization(action, role, resource_config)
@@ -20,15 +22,23 @@ module DataCatalog
           end
         end
 
+        # Required for SinatraResource
         def convert(object)
           object == "" ? "" : object.to_json
         end
-        
+
         def full_uri(path)
           base_uri = Config.environment_config["base_uri"]
           URI.join(base_uri, path).to_s
         end
 
+        def invalid_api_key!
+          error 401, convert({
+            "errors" => ["invalid_api_key"]
+          })
+        end
+
+        # Required for SinatraResource
         def lookup_role(document=nil)
           api_key = lookup_api_key
           return :anonymous unless api_key
@@ -68,6 +78,7 @@ module DataCatalog
           raise "API key found, but user has no role" unless user.role
           user
         end
+
       end
     end
 

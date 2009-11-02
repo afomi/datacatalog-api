@@ -1,6 +1,7 @@
 module DataCatalog
 
-  class Resources < OldBase
+  class Resources < Base
+    include Resource
     
     ANONYMOUS_MEMBERS = [
       { "href" => "/" },
@@ -21,18 +22,20 @@ module DataCatalog
     ] + ANONYMOUS_MEMBERS
 
     get '/?' do
-      p = privileges
-      members = if p[:admin] || p[:curator] || p[:basic]
-        BASIC_MEMBERS
-      elsif p[:anonymous]
-        ANONYMOUS_MEMBERS
-      else
+      members = case lookup_role
+      when nil
         invalid_api_key!
+      when :anonymous
+        ANONYMOUS_MEMBERS
+      when :basic, :curator, :admin
+        BASIC_MEMBERS
+      else
+        raise Error, "unexpected role"
       end
-      {
+      convert({
         "members" => members,
         "next"    => nil
-      }.to_json
+      })
     end
 
   end

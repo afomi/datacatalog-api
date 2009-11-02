@@ -96,7 +96,7 @@ class UsersGetAllControllerTest < RequestTestCase
   
   context "incorrect API key : get /" do
     before do
-      get "/", :api_key => "does_not_exist_in_database"
+      get "/", :api_key => BAD_API_KEY
     end
     
     use "return 401 because the API key is invalid"

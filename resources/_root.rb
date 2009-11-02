@@ -1,8 +1,9 @@
 module DataCatalog
 
-  class Root < OldBase
+  class Root < Base
+    include Resource
     
-    PROJECT_META_DATA = {
+    META = {
       "name"    => "National Data Catalog API",
       "version" => "0.3.0",
       "resource_directory" => {
@@ -26,11 +27,17 @@ module DataCatalog
           "href" => "http://github.com/sunlightlabs/datacatalog-api/blob/master/doc/resources.md"
         },
       },
-    }.to_json
+    }
 
     get '/?' do
-      permission_check(:level => :anonymous)
-      PROJECT_META_DATA
+      case lookup_role
+      when nil
+        invalid_api_key!
+      when :anonymous, :basic, :curator, :admin
+        convert(META)
+      else
+        raise Error, "unexpected role"
+      end
     end
 
   end

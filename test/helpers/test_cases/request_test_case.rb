@@ -1,3 +1,5 @@
+require 'digest/sha1'
+
 class RequestTestCase < Test::Unit::TestCase
 
   include Rack::Test::Methods
@@ -26,5 +28,7 @@ class RequestTestCase < Test::Unit::TestCase
   def primary_api_key_for(role)
     instance_variable_get("@#{role}_user").primary_api_key
   end
+
+  BAD_API_KEY = Digest::SHA1.hexdigest("invalid api key")
 
 end
