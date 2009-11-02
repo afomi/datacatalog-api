@@ -13,7 +13,7 @@ class RootControllerTest < RequestTestCase
     end
     
     test "body has correct version" do
-      assert_equal "0.3.0", parsed_response_body["version"]
+      assert_equal "0.4.0", parsed_response_body["version"]
     end
     
     test "body has list of resources" do
