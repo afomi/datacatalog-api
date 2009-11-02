@@ -3,6 +3,11 @@ module DataCatalog
   class Resources < Base
     include Resource
     
+    # TODO: It should be possible for sinatra_resource to generate this
+    # resource (a resource that lists other resources) automatically.
+    # It would just need to look at the permissions. A good place to tie
+    # in would be the `build` method.
+    
     ANONYMOUS_MEMBERS = [
       { "href" => "/" },
       { "href" => "/checkup" },
