@@ -17,7 +17,7 @@ class SourceOrganizationUnitTest < ModelTestCase
 
   context "source with an organization" do
     before do
-      @organization = Organization.create(
+      @organization = create_organization(
         :name     => "Department of Commerce",
         :org_type => "governmental"
       )

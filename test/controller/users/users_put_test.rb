@@ -5,10 +5,10 @@ class UsersPutControllerTest < RequestTestCase
   def app; DataCatalog::Users end
 
   before :all do
-    @user = User.create({
+    @user = create_user(
       :name    => "Original Guy",
-      :email   => "original.guy@email.com",
-    })
+      :email   => "original.guy@email.com"
+    )
     @user.add_api_key!({ :key_type => "primary" })
     @user_count = User.count
   end

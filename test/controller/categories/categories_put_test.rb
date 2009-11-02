@@ -5,7 +5,7 @@ class CategoriesPutControllerTest < RequestTestCase
   def app; DataCatalog::Categories end
 
   before :all do
-    @category = Category.create(
+    @category = create_category(
       :name => "Original Category"
     )
     @category_count = Category.count

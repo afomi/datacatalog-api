@@ -5,11 +5,11 @@ class UsersKeysPutControllerTest < RequestTestCase
   def app; DataCatalog::Users end
 
   before :all do
-    @user = User.create({
+    @user = create_user(
       :name    => "Example User",
       :email   => "example.user@email.com",
       :purpose => "User account for Web application"
-    })
+    )
 
     @keys = [
       ApiKey.new({

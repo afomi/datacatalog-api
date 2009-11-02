@@ -124,7 +124,7 @@ class RatingUnitTest < ModelTestCase
         :title => "Worldwide M5+ Earthquakes, Past 7 Days",
         :url   => "http://www.data.gov/details/31"
       )
-      @comment = Comment.create(
+      @comment = create_comment(
         :text      => "Original Comment",
         :user_id   => @user.id,
         :source_id => @source.id

@@ -5,7 +5,7 @@ class CommentsPutControllerTest < RequestTestCase
   def app; DataCatalog::Comments end
 
   before :all do
-    @comment = Comment.create(
+    @comment = create_comment(
       :text      => "Original Comment",
       :user_id   => get_fake_mongo_object_id,
       :source_id => get_fake_mongo_object_id

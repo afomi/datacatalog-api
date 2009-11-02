@@ -6,7 +6,7 @@ class OrganizationsPutControllerTest < RequestTestCase
 
   before do
     @user = create_user_with_primary_key
-    @organization = Organization.create(
+    @organization = create_organization(
       :name     => "Original Organization",
       :org_type => "governmental",
       :user_id  => @user.id

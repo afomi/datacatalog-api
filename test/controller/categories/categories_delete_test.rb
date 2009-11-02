@@ -5,7 +5,7 @@ class CategoriesDeleteControllerTest < RequestTestCase
   def app; DataCatalog::Categories end
 
   before do
-    @category = Category.create(:name => "Original Category")
+    @category = create_category(:name => "Original Category")
     @category_count = Category.count
   end
   

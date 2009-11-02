@@ -101,7 +101,7 @@ class RatingAggregatesUnitTest < ModelTestCase
         :title => "Annual Electric Generator Report",
         :url   => "http://www.data.gov/details/858"
       )
-      @comment = Comment.create(
+      @comment = create_comment(
         :text      => "Original Comment",
         :user_id   => @user.id,
         :source_id => @source.id
@@ -122,13 +122,11 @@ class RatingAggregatesUnitTest < ModelTestCase
 
     context "new Rating" do
       before do
-        @rating = Rating.create(
-          :kind       => "comment",
+        @rating = create_comment_rating(
           :value      => 1,
           :user_id    => @user.id,
           :comment_id => @comment.id
         )
-        raise "Must be valid" unless @rating.valid?
         @comment = Comment.find_by_id(@comment.id)
       end
   
