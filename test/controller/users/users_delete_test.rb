@@ -5,7 +5,7 @@ class UsersDeleteControllerTest < RequestTestCase
   def app; DataCatalog::Users end
 
   before do
-    @user = User.create(:text => "Original User")
+    @user = create_user(:name => "Original User")
     @user.add_api_key!({ :key_type => "primary" })
     @user_count = User.count
   end
