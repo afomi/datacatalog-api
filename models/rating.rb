@@ -82,16 +82,13 @@ class Rating
     case self.kind
     when "comment" then self.comment
     when "source"  then self.source
+    else raise "Invalid kind of rating"
     end
   end
   
   def find_rated_document!
-    doc = case self.kind
-    when "comment" then self.comment
-    when "source"  then self.source
-    else raise "Invalid kind of rating"
-    end
-    raise "Associated #{self.kind} not found" if doc.nil?
+    doc = find_rated_document
+    raise Error, "Associated #{self.kind} not found" if doc.nil?
     doc
   end
 
