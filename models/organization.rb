@@ -2,12 +2,6 @@ class Organization
 
   include MongoMapper::Document
   
-  ORG_TYPES = %w(
-    governmental
-    not-for-profit
-    commercial
-  )
-
   # == Attributes
 
   key :name,           String
@@ -37,6 +31,12 @@ class Organization
     :with      => /\A[a-zA-z0-9\-]+\z/,
     :message   => "can only contain alphanumeric characters and dashes",
     :allow_nil => true
+
+  ORG_TYPES = %w(
+    commercial
+    governmental
+    not-for-profit
+  )
 
   def validate_org_type
     unless ORG_TYPES.include?(org_type)

@@ -66,7 +66,7 @@ class OrganizationUnitTest < ModelTestCase
       test "invalid org_type" do
         @organization.valid?
         expected = { :org_type => [
-          "must be one of: governmental, not-for-profit, commercial"] }
+          "must be one of: commercial, governmental, not-for-profit"] }
         assert_equal expected, @organization.errors.errors
       end
     end
