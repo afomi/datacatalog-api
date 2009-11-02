@@ -48,28 +48,6 @@ class Source
     categorizations.map(&:category)
   end
 
-  # == Callbacks
-  
-  before_validation :handle_blank_slug
-  before_create :generate_slug
-  
-  def handle_blank_slug
-    self.slug = nil if self.slug.blank?
-  end
-  
-  def generate_slug
-    return if title.blank?
-    default = Slug.make(title, self)
-    self.slug = default if slug.blank?
-    n = 2
-    loop do
-      existing = self.class.first(:slug => slug)
-      break unless existing
-      self.slug = "#{default}-#{n}"
-      n += 1
-    end
-  end
-
   # == Validations
 
   validates_presence_of :title
@@ -102,6 +80,28 @@ class Source
   def validate_frequency
     if frequency && !Frequency.new(frequency).valid?
       errors.add(:frequency, "is invalid")
+    end
+  end
+
+  # == Callbacks
+  
+  before_validation :handle_blank_slug
+  before_create :generate_slug
+  
+  def handle_blank_slug
+    self.slug = nil if self.slug.blank?
+  end
+  
+  def generate_slug
+    return if title.blank?
+    default = Slug.make(title, self)
+    self.slug = default if slug.blank?
+    n = 2
+    loop do
+      existing = self.class.first(:slug => slug)
+      break unless existing
+      self.slug = "#{default}-#{n}"
+      n += 1
     end
   end
 
