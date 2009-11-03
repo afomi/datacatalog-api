@@ -36,6 +36,7 @@ class Note
       errors.add(:source_id, "must be valid")
     end
   end
+  protected :general_validation
 
   # == Class Methods
 

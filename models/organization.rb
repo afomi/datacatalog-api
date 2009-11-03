@@ -43,6 +43,7 @@ class Organization
       errors.add(:org_type, "must be one of: #{ORG_TYPES.join(', ')}")
     end
   end
+  protected :validate_org_type
 
   # == Callbacks
 

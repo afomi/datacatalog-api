@@ -76,6 +76,7 @@ class Source
       errors.add(:source_type, "must be one of: #{SOURCE_TYPES.join(', ')}")
     end
   end
+  protected :validate_source_type
 
   def validate_period
     return if !period_start && !period_end
@@ -87,12 +88,14 @@ class Source
       errors.add(:period_end, "must be later than period_start")
     end
   end
+  protected :validate_period
 
   def validate_frequency
     if frequency && !Frequency.new(frequency).valid?
       errors.add(:frequency, "is invalid")
     end
   end
+  protected :validate_frequency
 
   # == Callbacks
   

@@ -44,6 +44,7 @@ class Rating
     else errors.add(:kind, "is invalid")
     end
   end
+  protected :general_validation
   
   def comment_validation
     if comment_id.blank?
