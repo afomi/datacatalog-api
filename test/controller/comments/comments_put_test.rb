@@ -21,6 +21,21 @@ class CommentsPutControllerTest < RequestTestCase
     @user.destroy
   end
 
+  context "admin API key : put /:id with invalid param" do
+    before do
+      put "/#{@comment.id}", {
+        :api_key => @admin_user.primary_api_key,
+        :user_id => @admin_user.id
+      }
+    end
+    
+    test "body should say 'created_at' is an invalid param" do
+      assert_include "errors", parsed_response_body
+      assert_include "invalid_params", parsed_response_body["errors"]
+      assert_include "user_id", parsed_response_body["errors"]["invalid_params"]
+    end
+  end
+
   context "admin API key : put /:id with correct param" do
     before do
       put "/#{@comment.id}", {

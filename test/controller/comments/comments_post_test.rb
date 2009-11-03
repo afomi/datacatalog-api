@@ -18,8 +18,7 @@ class CommentsPostControllerTest < RequestTestCase
       post "/", {
         :api_key   => @curator_user.primary_api_key,
         :source_id => @source.id,
-        :text      => "Comment A",
-        :user_id   => @curator_user.id
+        :text      => "Comment A"
       }
     end
     
