@@ -59,18 +59,15 @@ class Source
     :message   => "can only contain alphanumeric characters and dashes",
     :allow_nil => true
 
-  validate :validate_url
   include UrlValidator
-  validate :validate_period
-  validate :validate_frequency
-
-  validate :validate_source_type
+  validate :validate_url
 
   SOURCE_TYPES = %w(
     api
     dataset
   )
 
+  validate :validate_source_type
   def validate_source_type
     unless SOURCE_TYPES.include?(source_type)
       errors.add(:source_type, "must be one of: #{SOURCE_TYPES.join(', ')}")
@@ -78,6 +75,7 @@ class Source
   end
   protected :validate_source_type
 
+  validate :validate_period
   def validate_period
     return if !period_start && !period_end
     if period_start && !period_end
@@ -90,6 +88,7 @@ class Source
   end
   protected :validate_period
 
+  validate :validate_frequency
   def validate_frequency
     if frequency && !Frequency.new(frequency).valid?
       errors.add(:frequency, "is invalid")

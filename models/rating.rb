@@ -32,8 +32,8 @@ class Rating
 
   validates_presence_of :user_id
   validates_presence_of :value
-  validate :general_validation
 
+  validate :general_validation
   def general_validation
     if user.nil?
       errors.add(:user_id, "must be valid")
