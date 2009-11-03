@@ -5,16 +5,21 @@ class CommentsPostControllerTest < RequestTestCase
   def app; DataCatalog::Comments end
 
   before do
+    @source = create_source
     @comment_count = Comment.count
+  end
+  
+  after do
+    @source.destroy
   end
 
   context "curator API key : post / with correct params" do
     before do
       post "/", {
         :api_key   => @curator_user.primary_api_key,
-        :source_id => get_fake_mongo_object_id,
+        :source_id => @source.id,
         :text      => "Comment A",
-        :user_id   => get_fake_mongo_object_id
+        :user_id   => @curator_user.id
       }
     end
     

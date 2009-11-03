@@ -46,15 +46,20 @@ class CommentUnitTest < ModelTestCase
     end
   end
   
-  # - - - - - - - - - -
-  
   context "Comment.new" do
     before do
+      @user = create_user
+      @source = create_source
       @valid_params = {
         :text      => "An explanation",
-        :user_id   => Mongo::ObjectID.new.to_s,
-        :source_id => Mongo::ObjectID.new.to_s
+        :user_id   => @user.id,
+        :source_id => @source.id
       }
+    end
+    
+    after do
+      @source.destroy
+      @user.destroy
     end
     
     context "correct params" do

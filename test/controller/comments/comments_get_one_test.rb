@@ -5,11 +5,19 @@ class CommentsGetOneControllerTest < RequestTestCase
   def app; DataCatalog::Comments end
 
   before do
+    @user = create_user
+    @source = create_source
     @comment = create_comment(
       :text      => "Comment A",
-      :user_id   => get_fake_mongo_object_id,
-      :source_id => get_fake_mongo_object_id
+      :user_id   => @user.id,
+      :source_id => @source.id
     )
+  end
+  
+  after do
+    @comment.destroy
+    @source.destroy
+    @user.destroy
   end
 
   context "normal API key : get /:id" do

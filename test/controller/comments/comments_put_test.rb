@@ -4,13 +4,21 @@ class CommentsPutControllerTest < RequestTestCase
 
   def app; DataCatalog::Comments end
 
-  before :all do
+  before do
+    @user = create_user
+    @source = create_source
     @comment = create_comment(
       :text      => "Original Comment",
-      :user_id   => get_fake_mongo_object_id,
-      :source_id => get_fake_mongo_object_id
+      :user_id   => @user.id,
+      :source_id => @source.id
     )
     @comment_count = Comment.count
+  end
+  
+  after do
+    @comment.destroy
+    @source.destroy
+    @user.destroy
   end
 
   context "admin API key : put /:id with correct param" do

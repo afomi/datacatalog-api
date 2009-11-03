@@ -6,27 +6,31 @@ class CommentsGetSearchControllerTest < RequestTestCase
   
   context "6 comments" do
     before do
-      @user_id     = "4aa677bb25b7e70733000001"
-      @source_base = "200077d325b7e7073300000"
-      @comments = 6.times.map do |n|
-        k = (n % 3) + 1
+      @user = create_user
+      @sources = 3.times.map do |i|
+        create_source
+      end
+      @comments = 6.times.map do |i|
+        k = i % 3
         create_comment(
           :text      => "comment #{k}",
-          :user_id   => @user_id,
-          :source_id => "#{@source_base}#{k}"
+          :user_id   => @user.id,
+          :source_id => @sources[k].id
         )
       end
     end
     
     after do
       @comments.each { |x| x.destroy }
+      @sources.each { |x| x.destroy }
+      @user.destroy
     end
 
-    context "normal API key : get / where text is 'comment 2'" do
+    context "normal API key : get / where text is 'comment 1'" do
       before do
         get "/",
           :api_key => @normal_user.primary_api_key,
-          :filter  => %(text="comment 2")
+          :filter  => %(text="comment 1")
       end
     
       test "body should have 2 top level elements" do
@@ -35,9 +39,9 @@ class CommentsGetSearchControllerTest < RequestTestCase
 
       test "each element should be correct" do
         parsed_response_body.each do |element|
-          assert_equal "comment 2", element["text"]
-          assert_equal @user_id, element["user_id"]
-          assert_equal "#{@source_base}2", element["source_id"]
+          assert_equal "comment 1", element["text"]
+          assert_equal @user.id, element["user_id"]
+          assert_equal @sources[1].id, element["source_id"]
         end
       end
     end

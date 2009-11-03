@@ -17,13 +17,21 @@ class CommentsGetAllControllerTest < RequestTestCase
 
   context "3 comments" do
     before do
+      @user = create_user
+      @source = create_source
       @comments = 3.times.map do |n|
         create_comment(
           :text      => "Comment #{n}",
-          :user_id   => get_fake_mongo_object_id,
-          :source_id => get_fake_mongo_object_id
+          :user_id   => @user.id,
+          :source_id => @source.id
         )
       end
+    end
+    
+    after do
+      @comments.each { |x| x.destroy }
+      @source.destroy
+      @user.destroy
     end
 
     context "normal API key : get /" do
