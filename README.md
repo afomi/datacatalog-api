@@ -8,24 +8,9 @@
     # If you have not used gemcutter before:
     gem install gemcutter
     gem tumble
-
-## Production
-
-    gem install sinatra
-    gem install mongo
-    gem install djsun-mongomapper
-    gem install sinatra_resource
-    gem install frequency
-
-## Testing
-
-    gem install crack
-    gem install djsun-context
-    gem install jeremymcanally-pending
-    gem install rack-test
-    gem install rcov
-    gem install rr
-    gem install timecop
+    
+    # Install dependencies with a rake task:
+    rake dependencies:install
 
 # Setting up Config Files
 
