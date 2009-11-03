@@ -32,12 +32,8 @@ class Document
   validate :general_validation
 
   def general_validation
-    if user.nil?
-      errors.add(:user_id, "must be valid")
-    end
-    if source.nil?
-      errors.add(:source_id, "must be valid")
-    end
+    errors.add(:user_id, "must be valid") if user.nil?
+    errors.add(:source_id, "must be valid") if source.nil?
   end
   protected :general_validation
 

@@ -47,28 +47,16 @@ class Rating
   protected :general_validation
   
   def comment_validation
-    if comment_id.blank?
-      errors.add(:comment_id, "can't be empty")
-    end
-    if comment.nil?
-      errors.add(:comment_id, "must be valid")
-    end
-    unless value >= 0 && value <= 1
-      errors.add(:value, "must be 0 or 1")
-    end
-    unless text.blank?
-      errors.add(:text, "must be empty")
-    end
+    errors.add(:comment_id, "can't be empty") if comment_id.blank?
+    errors.add(:comment_id, "must be valid") if comment.nil?
+    errors.add(:value, "must be 0 or 1") unless value == 0 || value == 1
+    errors.add(:text, "must be empty") unless text.blank?
   end
   protected :comment_validation
   
   def source_validation
-    if source_id.blank?
-      errors.add(:source_id, "can't be empty")
-    end
-    if source.nil?
-      errors.add(:source_id, "must be valid")
-    end
+    errors.add(:source_id, "can't be empty") if source_id.blank?
+    errors.add(:source_id, "must be valid") if source.nil?
     unless value >= 1 && value <= 5
       errors.add(:value, "must be between 1 and 5")
     end
