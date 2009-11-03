@@ -5,7 +5,7 @@ class SourcesDeleteControllerTest < RequestTestCase
   def app; DataCatalog::Sources end
 
   before do
-    @source = Source.create(
+    @source = create_source(
       :title => "The Original Data Source",
       :url   => "http://data.gov/original"
     )

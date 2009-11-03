@@ -11,7 +11,7 @@ class Source
   key :title,               String
   key :slug,                String
   key :description,         String
-  key :source_type,         String, :default => 'Dataset' # other is 'API'
+  key :source_type,         String
   key :license,             String
   key :catalog_name,        String
   key :url,                 String
@@ -59,12 +59,23 @@ class Source
     :message   => "can only contain alphanumeric characters and dashes",
     :allow_nil => true
 
-  validates_format_of :source_type, :with => /\A(API|Dataset)\z/, :message => "must be 'API' or 'Dataset'"
-
   validate :validate_url
   include UrlValidator
   validate :validate_period
   validate :validate_frequency
+
+  validate :validate_source_type
+
+  SOURCE_TYPES = %w(
+    api
+    dataset
+  )
+
+  def validate_source_type
+    unless SOURCE_TYPES.include?(source_type)
+      errors.add(:source_type, "must be one of: #{SOURCE_TYPES.join(', ')}")
+    end
+  end
 
   def validate_period
     return if !period_start && !period_end

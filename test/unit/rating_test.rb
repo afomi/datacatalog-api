@@ -62,12 +62,10 @@ class RatingUnitTest < ModelTestCase
     end
   end
   
-  # - - - - - - - - - -
-  
   context "Rating.new : source" do
     before do
       @user = create_normal_user
-      @source = Source.create(
+      @source = create_source(
         :title => "Worldwide M5+ Earthquakes, Past 7 Days",
         :url   => "http://www.data.gov/details/31"
       )
@@ -119,7 +117,7 @@ class RatingUnitTest < ModelTestCase
   context "Rating.new : comment" do
     before do
       @user = create_normal_user
-      @source = Source.create(
+      @source = create_source(
         :title => "Worldwide M5+ Earthquakes, Past 7 Days",
         :url   => "http://www.data.gov/details/31"
       )

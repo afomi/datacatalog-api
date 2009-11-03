@@ -15,6 +15,15 @@ class SourceUnitTest < ModelTestCase
     end
   end
 
+  shared "source.source_type must be api or dataset" do
+    test "should be invalid when not 'api' or 'dataset'" do
+      @source.valid?
+      assert_include :source_type, @source.errors.errors
+      assert_equal ["must be one of: api, dataset"],
+        @source.errors.errors[:source_type]
+    end
+  end
+
   shared "source.url can't be empty" do
     test "should have error on url - can't be empty" do
       @source.valid?
@@ -63,13 +72,12 @@ class SourceUnitTest < ModelTestCase
     end
   end
 
-  # - - - - - - - - - -
-
   context "Source.new" do
     before do
       @valid_params = {
-        :title => "Migratory Bird Flyways - Continental United States",
-        :url   => "http://www.data.gov/details/12"
+        :title       => "Migratory Bird Flyways - Continental United States",
+        :url         => "http://www.data.gov/details/12",
+        :source_type => "dataset",
       }
     end
 
@@ -82,22 +90,22 @@ class SourceUnitTest < ModelTestCase
     end
     
     context "source_type" do
-      before do
-        @source = Source.new(@valid_params)
-      end
-    
-      use "valid source"
-      
-      test "should be invalid when not 'API' or 'Dataset'" do
-        @source.source_type = "Foobar"
-        @source.save
-        assert_include :source_type, @source.errors.errors
-        assert_include "must be 'API' or 'Dataset'", @source.errors.errors[:source_type]
+      context "missing" do
+        before do
+          @source = Source.new(@valid_params.merge(:source_type => ""))
+        end
+  
+        use "invalid source"
+        use "source.source_type must be api or dataset"
       end
       
-      test "should be populated with 'Dataset' when not explicitly set" do
-        @source.save
-        assert_equal "Dataset", @source.source_type
+      context "invalid" do
+        before do
+          @source = Source.new(@valid_params.merge(:source_type => "foobar"))
+        end
+
+        use "invalid source"
+        use "source.source_type must be api or dataset"
       end
     end
     
@@ -337,7 +345,7 @@ class SourceUnitTest < ModelTestCase
   context "updating a Source" do
     before do
       Source.destroy_all
-      doc = Source.create(
+      doc = create_source(
         :title => "Just Some Data",
         :url   => "http://original.gov"
       )

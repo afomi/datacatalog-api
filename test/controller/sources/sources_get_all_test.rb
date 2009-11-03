@@ -67,7 +67,7 @@ class SourcesGetAllControllerTest < RequestTestCase
           :title => "Source #{n}", 
           :url   => "http://data.gov/sources/#{n}",
           :slug  => "source-#{n}",
-          :source_type  => "Dataset"
+          :source_type  => "dataset"
         )
       end
     end

@@ -5,7 +5,7 @@ class SourcesPutControllerTest < RequestTestCase
   def app; DataCatalog::Sources end
 
   before :all do
-    @source = Source.create({
+    @source = create_source({
       :title => "Just a data source",
       :url   => "http://data.gov/original"
     })

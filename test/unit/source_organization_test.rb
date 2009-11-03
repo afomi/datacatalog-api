@@ -21,7 +21,7 @@ class SourceOrganizationUnitTest < ModelTestCase
         :name     => "Department of Commerce",
         :org_type => "governmental"
       )
-      @source = Source.create(
+      @source = create_source(
         :title        => "2005-2007 American Community Survey Three-Year PUMS Housing File",
         :url          => "http://www.data.gov/details/90",
         :organization => @organization
