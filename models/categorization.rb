@@ -1,7 +1,6 @@
 class Categorization
 
   include MongoMapper::Document
-  include Renderable
 
   # == Attributes
 
@@ -16,15 +15,9 @@ class Categorization
   belongs_to :source
   belongs_to :category
 
-  # == Derived Fields
-
   # == Validations
 
   # == Class Methods
-
-  # == Derived Fields
-
-  # == JSON Output
 
   # == Various Instance Methods
 
