@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_resource_helper')
 
-class DocumentsPutControllerTest < RequestTestCase
+class DocumentsPutTest < RequestTestCase
 
   def app; DataCatalog::Documents end
 

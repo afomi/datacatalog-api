@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_resource_helper')
 
-class DocumentsDeleteControllerTest < RequestTestCase
+class DocumentsDeleteTest < RequestTestCase
 
   def app; DataCatalog::Documents end
 

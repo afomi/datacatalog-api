@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_resource_helper')
 
-class NotesGetSearchControllerTest < RequestTestCase
+class NotesGetFilterTest < RequestTestCase
 
   def app; DataCatalog::Notes end
   

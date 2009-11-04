@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_resource_helper')
 
-class UsersKeysGetAllControllerTest < RequestTestCase
+class UsersKeysGetAllTest < RequestTestCase
 
   def app; DataCatalog::Users end
   
