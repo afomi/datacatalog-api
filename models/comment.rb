@@ -10,6 +10,7 @@ class Comment
   key :reports_problem, Boolean
   key :source_id,       String
   key :user_id,         String
+  key :parent_id,       String
   timestamps!
 
   # == Indices
@@ -18,6 +19,7 @@ class Comment
 
   belongs_to :source
   belongs_to :user
+  belongs_to :parent, :foreign_key => :parent_id, :class_name => 'Comment'
   many :ratings
 
   # == Validations
@@ -30,6 +32,7 @@ class Comment
   def general_validation
     errors.add(:user_id, "must be valid") if user.nil?
     errors.add(:source_id, "must be valid") if source.nil?
+    errors.add(:parent_id, "must be valid") if parent_id && parent.nil?
   end
   protected :general_validation
 
