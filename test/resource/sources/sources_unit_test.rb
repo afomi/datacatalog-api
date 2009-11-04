@@ -40,4 +40,30 @@ class SourcesUnitTest < RequestTestCase
     end
   end
 
+  context "#nested_organization" do
+    before do
+      @user = create_user
+      @organization = create_organization(
+        :name => "YMCA"
+      )
+      @source = create_source(
+        :organization_id => @organization.id
+      )
+    end
+  
+    after do
+      @source.destroy
+      @organization.destroy
+      @user.destroy
+    end
+  
+    test "nested organization should be correct" do
+      actual = DataCatalog::Sources.nested_organization(@source)
+      assert_properties %w(href name slug), actual
+      assert_equal "/organizations/#{@organization.id}", actual["href"]
+      assert_equal "YMCA", actual["name"]
+      assert_equal "ymca", actual["slug"]
+    end
+  end
+
 end

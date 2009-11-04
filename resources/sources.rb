@@ -80,6 +80,10 @@ module DataCatalog
       end
     end
     
+    property :organization do |source|
+      nested_organization(source)
+    end
+    
     property :ratings do |source|
       source.ratings.map do |rating|
         {
@@ -178,6 +182,18 @@ module DataCatalog
         "rating_stats" => comment.rating_stats,
         "parent" => parent
       }
+    end
+
+    def self.nested_organization(source)
+      if source.organization_id
+        {
+          "href" => "/organizations/#{source.organization_id}",
+          "name" => source.organization.name,
+          "slug" => source.organization.slug,
+        }
+      else
+        nil
+      end
     end
 
   end

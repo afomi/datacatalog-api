@@ -37,6 +37,7 @@ class SourcesGetOneControllerTest < RequestTestCase
       license
       license_url
       notes
+      organization
       organization_id
       period_end
       period_start
@@ -57,6 +58,10 @@ class SourcesGetOneControllerTest < RequestTestCase
       assert_include "count",        rating_stats
       assert_include "average",      rating_stats
       assert_include "total",        rating_stats
+    end
+
+    test "body should have organization field" do
+      assert_equal nil, parsed_response_body["organization"]
     end
   end
 

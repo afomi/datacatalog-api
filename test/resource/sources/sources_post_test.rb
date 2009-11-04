@@ -47,6 +47,7 @@ class SourcesPostControllerTest < RequestTestCase
       license
       license_url
       notes
+      organization
       organization_id
       period_end
       period_start
