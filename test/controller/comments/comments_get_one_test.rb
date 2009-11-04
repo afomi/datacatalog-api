@@ -35,6 +35,7 @@ class CommentsGetOneControllerTest < RequestTestCase
     doc_properties %w(
       created_at
       id
+      parent_id
       rating_stats
       reports_problem
       source_id

@@ -50,15 +50,7 @@ module DataCatalog
 
     property :comments do |source|
       source.comments.map do |comment|
-        {
-          "href" => "/comments/#{comment.id}",
-          "text" => comment.text,
-          "user" => {
-            "name" => comment.user.name,
-            "href" => "/users/#{comment.user.id}",
-          },
-          "rating_stats" => comment.rating_stats,
-        }
+        nested_comment(comment)
       end
     end
     
@@ -165,6 +157,27 @@ module DataCatalog
     
     def self.invalid_custom_attrs(hash)
       hash.keys - CUSTOM_ATTRIBUTES
+    end
+    
+    def self.nested_comment(comment)
+      base = {
+        "href" => "/comments/#{comment.id}",
+        "text" => comment.text,
+        "user" => {
+          "name" => comment.user.name,
+          "href" => "/users/#{comment.user.id}",
+        },
+        "rating_stats" => comment.rating_stats,
+      }
+      if comment.parent_id
+        base.merge!({
+          "parent" => {
+            "href" => "/comments/#{comment.parent_id}",
+            "id"   => comment.parent_id,
+          }
+        })
+      end
+      base
     end
 
   end

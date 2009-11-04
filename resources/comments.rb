@@ -19,6 +19,7 @@ module DataCatalog
     property :text
     property :reports_problem
     property :source_id
+    property :parent_id
     property :user_id,      :w => :nobody
     property :rating_stats, :w => :nobody
     
