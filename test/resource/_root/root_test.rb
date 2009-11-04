@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_resource_helper')
 
 # The root action(s) provide basic information about the API.
-class RootControllerTest < RequestTestCase
+class RootResourceTest < RequestTestCase
 
   def app; DataCatalog::Root end
 
