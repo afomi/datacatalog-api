@@ -129,8 +129,9 @@ class SourcesGetOneControllerTest < RequestTestCase
         actual = parsed_response_body["comments"]
         @comments.each do |comment|
           expected = {
-            "href" => "/comments/#{comment.id}",
-            "text" => comment.text,
+            "href"   => "/comments/#{comment.id}",
+            "text"   => comment.text,
+            "parent" => nil,
             "rating_stats" => {
               "count"   => 2,
               "total"   => 1,

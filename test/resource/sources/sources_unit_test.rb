@@ -26,7 +26,8 @@ class SourcesUnitTest < RequestTestCase
   
     test "parent comment should be correct" do
       actual = DataCatalog::Sources.nested_comment(@parent_comment)
-      assert_properties %w(rating_stats href text user), actual
+      assert_properties %w(rating_stats href text user parent), actual
+      assert_equal(nil, actual["parent"])
     end
 
     test "child comment should be correct" do

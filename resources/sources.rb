@@ -160,7 +160,15 @@ module DataCatalog
     end
     
     def self.nested_comment(comment)
-      base = {
+      parent = if comment.parent_id
+        {
+          "href" => "/comments/#{comment.parent_id}",
+          "id"   => comment.parent_id,
+        }
+      else
+        nil
+      end
+      {
         "href" => "/comments/#{comment.id}",
         "text" => comment.text,
         "user" => {
@@ -168,16 +176,8 @@ module DataCatalog
           "href" => "/users/#{comment.user.id}",
         },
         "rating_stats" => comment.rating_stats,
+        "parent" => parent
       }
-      if comment.parent_id
-        base.merge!({
-          "parent" => {
-            "href" => "/comments/#{comment.parent_id}",
-            "id"   => comment.parent_id,
-          }
-        })
-      end
-      base
     end
 
   end
