@@ -20,7 +20,7 @@ class SourceRatingsUnitTest < ModelTestCase
   end
   
   context "source with 5 ratings" do
-    before do
+    before :all do
       @user = create_user
       @source = create_source(
         :title => "2005-2007 American Community Survey Three-Year PUMS Housing File",
@@ -39,7 +39,7 @@ class SourceRatingsUnitTest < ModelTestCase
       @source.save!
     end
     
-    after do
+    after :all do
       @source.destroy
       @ratings.each { |x| x.destroy }
       @user.destroy
@@ -58,10 +58,14 @@ class SourceRatingsUnitTest < ModelTestCase
         assert_equal @ratings[n], @source.ratings.find(@ratings[n].id)
       end
     end
+
+    test "find with fake_id should not raise exception" do
+      assert_equal nil, @source.ratings.find(get_fake_mongo_object_id)
+    end
     
-    test "finding fake_id should raise exception" do
+    test "find! with fake_id should raise exception" do
       assert_raise MongoMapper::DocumentNotFound do
-        @source.ratings.find(get_fake_mongo_object_id)
+        @source.ratings.find!(get_fake_mongo_object_id)
       end
     end
   end

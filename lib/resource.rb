@@ -67,9 +67,13 @@ module DataCatalog
         #
         # @return [Boolean]
         def owner?(user, document)
-          return true if user == document
-          return false unless document.respond_to?(:user)
-          document.user == user
+          if user == document
+            true
+          elsif !document.respond_to?(:user)
+            false
+          else
+            document.user == user
+          end
         end
 
         def user_for(api_key)

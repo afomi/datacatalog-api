@@ -16,12 +16,11 @@ class UsersKeysGetOneControllerTest < RequestTestCase
       :purpose  => "Primary API key"
     })
     @user.save!
-    @api_key_id = @user.api_keys[0].id
   end
 
   context "owner API key : get /:id/keys/:id : found" do
     before do
-      get "/#{@user.id}/keys/#{@api_key_id}",
+      get "/#{@user.id}/keys/#{@user.api_keys[0].id}",
         :api_key => @user.api_keys[0].api_key
     end
     

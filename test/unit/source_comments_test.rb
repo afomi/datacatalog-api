@@ -3,7 +3,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_unit_helper')
 class SourceCommentsUnitTest < ModelTestCase
   
   context "source with no comments" do
-  
     before do
       @source = create_source
     end
@@ -15,12 +14,10 @@ class SourceCommentsUnitTest < ModelTestCase
     test "#comments should return []" do
       assert_equal [], @source.comments
     end
-  
   end
   
   context "source with 3 comments" do
-  
-    before do
+    before :all do
       @user = create_normal_user
       @source = create_source
       @comments = []
@@ -33,7 +30,7 @@ class SourceCommentsUnitTest < ModelTestCase
       end
     end
     
-    after do
+    after :all do
       @comments.each { |x| x.destroy }
       @source.destroy
       @user.destroy
@@ -53,17 +50,15 @@ class SourceCommentsUnitTest < ModelTestCase
       end
     end
     
-    # This behavior probably will be changing soon in MongoMapper
-    #
-    # * find will return nil and find! will raise exception
-    # * wherever find is called it should behave the same whether
-    #   associations or plain old documents
-    test "finding fake_id should raise exception" do
-      assert_raise MongoMapper::DocumentNotFound do
-        @source.comments.find(get_fake_mongo_object_id)
-      end
+    test "find with fake_id should not raise exception" do
+      assert_equal nil, @source.comments.find(get_fake_mongo_object_id)
     end
 
+    test "find! with fake_id should raise exception" do
+      assert_raise MongoMapper::DocumentNotFound do
+        @source.comments.find!(get_fake_mongo_object_id)
+      end
+    end
   end
 
 end

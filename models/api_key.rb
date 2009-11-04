@@ -28,6 +28,10 @@ class ApiKey
       write_attribute('created_at', Time.now.utc)
     end
   end
+  
+  def user
+    _root_document
+  end
 
 end
 

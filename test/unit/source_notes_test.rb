@@ -3,7 +3,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_unit_helper')
 class SourceNotesUnitTest < ModelTestCase
   
   context "source with no notes" do
-  
     before do
       @source = create_source
     end
@@ -11,11 +10,9 @@ class SourceNotesUnitTest < ModelTestCase
     test "#notes should return []" do
       assert_equal [], @source.notes
     end
-  
   end
   
   context "source with 3 notes" do
-  
     before do
       @user = create_normal_user
       @source = create_source
@@ -49,17 +46,15 @@ class SourceNotesUnitTest < ModelTestCase
       end
     end
     
-    # This behavior probably will be changing soon in MongoMapper
-    #
-    # * find will return nil and find! will raise exception
-    # * wherever find is called it should behave the same whether
-    #   associations or plain old notes
-    test "finding fake_id should raise exception" do
-      assert_raise MongoMapper::DocumentNotFound do
-        @source.notes.find(get_fake_mongo_object_id)
-      end
+    test "find with fake_id should not raise exception" do
+      assert_equal nil, @source.notes.find(get_fake_mongo_object_id)
     end
 
+    test "find! with fake_id should raise exception" do
+      assert_raise MongoMapper::DocumentNotFound do
+        @source.notes.find!(get_fake_mongo_object_id)
+      end
+    end
   end
 
 end

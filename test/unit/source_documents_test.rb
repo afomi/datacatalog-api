@@ -3,7 +3,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_unit_helper')
 class SourceDocumentsUnitTest < ModelTestCase
   
   context "source with no documents" do
-  
     before do
       @source = create_source
     end
@@ -15,12 +14,11 @@ class SourceDocumentsUnitTest < ModelTestCase
     test "#documents should return []" do
       assert_equal [], @source.documents
     end
-  
   end
   
   context "source with 3 documents" do
   
-    before do
+    before :all do
       @user = create_normal_user
       @source = create_source
       @documents = []
@@ -33,7 +31,7 @@ class SourceDocumentsUnitTest < ModelTestCase
       end
     end
     
-    after do
+    after :all do
       @documents.each { |x| x.destroy }
       @source.destroy
       @user.destroy
@@ -53,17 +51,15 @@ class SourceDocumentsUnitTest < ModelTestCase
       end
     end
     
-    # This behavior probably will be changing soon in MongoMapper
-    #
-    # * find will return nil and find! will raise exception
-    # * wherever find is called it should behave the same whether
-    #   associations or plain old documents
-    test "finding fake_id should raise exception" do
-      assert_raise MongoMapper::DocumentNotFound do
-        @source.documents.find(get_fake_mongo_object_id)
-      end
+    test "find with fake_id should not raise exception" do
+      assert_equal nil, @source.documents.find(get_fake_mongo_object_id)
     end
 
+    test "find! with fake_id should raise exception" do
+      assert_raise MongoMapper::DocumentNotFound do
+        @source.documents.find!(get_fake_mongo_object_id)
+      end
+    end
   end
 
 end
