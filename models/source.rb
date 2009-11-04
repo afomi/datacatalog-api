@@ -25,6 +25,7 @@ class Source
   key :organization_id,     String
   key :custom,              Hash
   key :raw,                 Hash
+  key :_keywords,           Array
   timestamps!
 
   # == Indices
@@ -115,6 +116,11 @@ class Source
       self.slug = "#{default}-#{n}"
       n += 1
     end
+  end
+  
+  before_save :update_keywords
+  def update_keywords
+    self._keywords = DataCatalog::Search.process([title, description])
   end
 
   # == Class Methods

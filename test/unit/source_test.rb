@@ -340,11 +340,8 @@ class SourceUnitTest < ModelTestCase
     end
   end
   
-  # - - - - - - - - - -
-  
-  context "updating a Source" do
+  context "timestamps" do
     before do
-      Source.destroy_all
       doc = create_source(
         :title => "Just Some Data",
         :url   => "http://original.gov"
@@ -373,6 +370,26 @@ class SourceUnitTest < ModelTestCase
     
     test "body should have an unchanged _id" do
       assert_equal @original_id, @updated._id
+    end
+  end
+  
+  context "keywords" do
+    before do
+      @source = create_source(
+        :title       => "Campaign Contributions for 2008",
+        :url         => "http://fec.gov/data",
+        :description => "This data set contains campaign contributions for the year 2008."
+      )
+    end
+    
+    test "correct keywords" do
+      assert_equal %w(
+        2008
+        campaign
+        contains
+        contributions
+        year
+      ), @source._keywords.sort
     end
   end
     
