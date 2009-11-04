@@ -6,9 +6,10 @@ class Comment
 
   # == Attributes
 
-  key :text,          String
-  key :source_id,     String
-  key :user_id,       String
+  key :text,            String
+  key :reports_problem, Boolean
+  key :source_id,       String
+  key :user_id,         String
   timestamps!
 
   # == Indices

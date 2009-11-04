@@ -36,6 +36,7 @@ class CommentsGetOneControllerTest < RequestTestCase
       created_at
       id
       rating_stats
+      reports_problem
       source_id
       text
       updated_at

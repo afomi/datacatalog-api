@@ -17,6 +17,7 @@ module DataCatalog
     # == Properties
 
     property :text
+    property :reports_problem
     property :source_id
     property :user_id,      :w => :nobody
     property :rating_stats, :w => :nobody
