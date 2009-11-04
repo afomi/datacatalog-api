@@ -3,7 +3,7 @@ task :test => %w(
   dependencies:check
   db:reset:test
   test:unit
-  test:controller
+  test:resource
   test:other
   test:integration
 )
@@ -20,9 +20,9 @@ namespace :test do
     t.test_files = FileList["test/other/**/*_test.rb"]
   end
 
-  desc "Run controller tests"
-  Rake::TestTask.new(:controller) do |t|
-    t.test_files = FileList["test/controller/**/*_test.rb"]
+  desc "Run resource tests"
+  Rake::TestTask.new(:resource) do |t|
+    t.test_files = FileList["test/resource/**/*_test.rb"]
   end
 
   desc "Run integration tests"
