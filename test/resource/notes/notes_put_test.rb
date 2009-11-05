@@ -28,8 +28,9 @@ class NotesPutTest < RequestTestCase
       end
       
       use "return 200 Ok"
-      use "return timestamps and id in body"
       use "unchanged note count"
+      
+      doc_properties %w(text user_id source_id id updated_at created_at)
 
       test "text should be updated in database" do
         note = Note.find_by_id!(@note.id)
