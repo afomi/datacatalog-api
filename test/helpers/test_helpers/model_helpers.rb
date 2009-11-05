@@ -93,6 +93,15 @@ module ModelHelpers
     required[:user_id] = @normal_user.id if @normal_user
     create_model!(Document, custom, required)
   end
+
+  def create_favorite(custom={})
+    required = {
+      :user_id   => '',
+      :source_id => '',
+    }
+    required[:user_id] = @normal_user.id if @normal_user
+    create_model!(Favorite, custom, required)
+  end
   
   def create_organization(custom={})
     required = {
@@ -200,6 +209,15 @@ module ModelHelpers
     }
     required[:user_id] = @normal_user.id if @normal_user
     new_model!(Document, custom, required)
+  end
+
+  def new_favorite(custom={})
+    required = {
+      :user_id   => '',
+      :source_id => '',
+    }
+    required[:user_id] = @normal_user.id if @normal_user
+    new_model!(Note, custom, required)
   end
 
   def new_note(custom={})
