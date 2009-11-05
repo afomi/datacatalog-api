@@ -24,6 +24,7 @@ class User
   many :api_keys
   many :ratings
   many :favorites
+  many :notes
 
   # == Validations
 

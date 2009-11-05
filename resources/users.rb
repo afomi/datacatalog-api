@@ -36,14 +36,8 @@ module DataCatalog
     property :favorites, :r => :owner do |user|
       user.favorites.map do |favorite|
         source = favorite.source
-        rating = Rating.first(
-          :user_id   => user.id,
-          :source_id => favorite.source_id
-        )
-        note = Note.first(
-          :user_id   => user.id,
-          :source_id => favorite.source_id
-        )
+        rating = source.ratings.first(:user_id => user.id)
+        note = user.notes.first(:source_id => favorite.source_id)
         {
           'url'          => "/sources/#{favorite.source_id}",
           'title'        => source.title,
