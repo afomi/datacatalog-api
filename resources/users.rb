@@ -33,6 +33,29 @@ module DataCatalog
       user.valet_api_keys
     end
     
+    property :favorites, :r => :owner do |user|
+      user.favorites.map do |favorite|
+        source = favorite.source
+        rating = Rating.first(
+          :user_id   => user.id,
+          :source_id => favorite.source_id
+        )
+        note = Note.first(
+          :user_id   => user.id,
+          :source_id => favorite.source_id
+        )
+        {
+          'url'          => "/sources/#{favorite.source_id}",
+          'title'        => source.title,
+          'slug'         => source.slug,
+          'description'  => source.description,
+          'user_rating'  => rating ? rating.value : nil,
+          'rating_stats' => source.rating_stats,
+          'user_note'    => note ? note.text : nil,
+        }
+      end
+    end
+    
     # == Callbacks
 
     callback :after_create do |action, user|
