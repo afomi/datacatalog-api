@@ -1,13 +1,51 @@
 module DataCatalog
   
-  # TODO: add unit tests
   class Search
     
-    REMOVE_CHARS = %r([!.;])
+    # Returns an array of strings, tokenized with stopwords removed.
+    #
+    # @param [<String>] array
+    #   An array of strings
+    #
+    # @return [<String>]
+    def self.process(array)
+      unstop(tokenize(array))
+    end
     
+    # Tokenize an array of strings.
+    #
+    # @param [<String>] array
+    #   An array of strings
+    #
+    # @return [<String>]
+    def self.tokenize(array)
+      array.reduce([]) do |m, x|
+        m << tokens(x)
+      end.flatten.uniq
+    end
+
+    REMOVE = %r([!,;])
+    
+    # Tokenize a string, removing extra characters too.
+    #
+    # @param [String] string
+    #
+    # @return [<String>]
+    def self.tokens(s)
+      if s
+        "#{s} ".downcase.
+          gsub(REMOVE, ' ').
+          gsub(%r(\. ), ' ').
+          split(' ')
+      else
+        []
+      end
+    end
+
     STOP_WORDS = %w(
       a
       about
+      and
       are
       as
       at
@@ -38,46 +76,6 @@ module DataCatalog
       with
       the
     )
-    
-    # Returns an array of strings, tokenized with stopwords removed.
-    #
-    # @param [<String>] array
-    #   An array of strings
-    #
-    # @return [<String>]
-    def self.process(array)
-      unstop(tokenize(array))
-    end
-    
-    # Tokenize an array of strings.
-    #
-    # @param [<String>] array
-    #   An array of strings
-    #
-    # @return [<String>]
-    def self.tokenize(array)
-      array.reduce([]) do |m, x|
-        m << tokens(x)
-      end.flatten.uniq
-    end
-    
-    # Tokenize a string, removing extra characters too.
-    #
-    # Problems with current implementation:
-    #   * floating point numbers
-    #     * for example, 98.6 will be split into 98 and 6
-    #   # everything converted to lowercase
-    #
-    # @param [String] string
-    #
-    # @return [<String>]
-    def self.tokens(string)
-      if string
-        string.downcase.gsub(REMOVE_CHARS, ' ').split(' ')
-      else
-        []
-      end
-    end
 
     # Remove stopwords from an array of strings.
     #
