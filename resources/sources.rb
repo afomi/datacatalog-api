@@ -180,7 +180,8 @@ module DataCatalog
           "href" => "/users/#{comment.user.id}",
         },
         "rating_stats" => comment.rating_stats,
-        "parent" => parent
+        "parent" => parent,
+        "created_at" => comment.created_at
       }
     end
 

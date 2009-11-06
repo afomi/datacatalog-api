@@ -1,4 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_resource_helper')
+require 'timecop'
 
 class SourcesGetOneTest < RequestTestCase
 
@@ -101,6 +102,10 @@ class SourcesGetOneTest < RequestTestCase
 
     context "#{role} API key : 2 comments : get /:id" do
       before do
+        
+        @created_at = Time.now
+        Timecop.travel(@created_at)
+        
         @comments = [
           create_comment({
             :text      => "Comment 1",
@@ -120,6 +125,8 @@ class SourcesGetOneTest < RequestTestCase
             })
           end
         end
+  
+        Timecop.return
         get "/#{@source.id}", :api_key => primary_api_key_for(role)
       end
       
@@ -137,6 +144,7 @@ class SourcesGetOneTest < RequestTestCase
             "href"   => "/comments/#{comment.id}",
             "text"   => comment.text,
             "parent" => nil,
+            "created_at" => @created_at.gmtime.strftime("%Y/%m/%d %H:%M:%S +0000"),
             "rating_stats" => {
               "count"   => 2,
               "total"   => 1,
