@@ -103,8 +103,7 @@ class SourcesGetOneTest < RequestTestCase
     context "#{role} API key : 2 comments : get /:id" do
       before do
         
-        @created_at = Time.now
-        Timecop.travel(@created_at)
+        Timecop.freeze
         
         @comments = [
           create_comment({
@@ -126,13 +125,13 @@ class SourcesGetOneTest < RequestTestCase
           end
         end
   
-        Timecop.return
         get "/#{@source.id}", :api_key => primary_api_key_for(role)
       end
       
       after do
         @ratings.each { |x| x.destroy }
         @comments.each { |x| x.destroy }
+        Timecop.freeze
       end
       
       use "successful GET source with :id"
@@ -144,7 +143,7 @@ class SourcesGetOneTest < RequestTestCase
             "href"   => "/comments/#{comment.id}",
             "text"   => comment.text,
             "parent" => nil,
-            "created_at" => @created_at.gmtime.strftime("%Y/%m/%d %H:%M:%S +0000"),
+            "created_at" => Time.now.gmtime.strftime("%Y/%m/%d %H:%M:%S +0000"),
             "rating_stats" => {
               "count"   => 2,
               "total"   => 1,
