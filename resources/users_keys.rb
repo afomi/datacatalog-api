@@ -23,6 +23,8 @@ module DataCatalog
     property :key_type
     property :purpose
     
+    # == Callbacks
+    
     callback :before_destroy do |action, api_key, user|
       if api_key.key_type == 'primary'
         action.error(409, action.convert({
