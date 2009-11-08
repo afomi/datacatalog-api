@@ -33,6 +33,7 @@ class SourcesGetOneTest < RequestTestCase
       description
       documentation_url
       documents
+      favorite_count
       frequency
       id
       license

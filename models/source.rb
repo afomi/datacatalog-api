@@ -26,6 +26,7 @@ class Source
   key :custom,              Hash
   key :raw,                 Hash
   key :_keywords,           Array
+  key :favorite_count,      Integer
   timestamps!
 
   # == Indices
@@ -42,6 +43,7 @@ class Source
   many :categorizations
   many :comments
   many :documents
+  many :favorites
   many :notes
   many :ratings
 

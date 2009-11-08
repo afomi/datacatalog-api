@@ -19,33 +19,37 @@ class SourcesGetAllTest < RequestTestCase
       3.times { |n| assert_include "http://data.gov/sources/#{n}", actual }
     end
 
-    test "each element should have correct attributes" do
-      parsed_response_body.each do |element|
-        assert_include "title"              , element
-        assert_include "slug"               , element
-        assert_include "description"        , element
-        assert_include "source_type"        , element
-        assert_include "license"            , element
-        assert_include "catalog_name"       , element
-        assert_include "url"                , element
-        assert_include "documentation_url"  , element
-        assert_include "license_url"        , element
-        assert_include "catalog_url"        , element
-        assert_include "released"           , element
-        assert_include "period_start"       , element
-        assert_include "period_end"         , element
-        assert_include "rating_stats"       , element
-        rating_stats = element["rating_stats"]
-        assert_include "count",        rating_stats
-        assert_include "average",      rating_stats
-        assert_include "total",        rating_stats
-
-        assert_include "created_at"    , element
-        assert_include "updated_at"    , element
-        assert_include "id"            , element
-        assert_not_include "_id", element
-      end
-    end
+    docs_properties %w(
+      catalog_name
+      catalog_url
+      categories
+      comments
+      created_at
+      custom
+      description
+      documentation_url
+      documents
+      favorite_count
+      frequency
+      id
+      license
+      license_url
+      notes
+      organization
+      organization_id
+      period_end
+      period_start
+      ratings
+      rating_stats
+      raw
+      released
+      slug
+      source_type
+      title
+      updated_at
+      updates_per_year
+      url
+    )
   end
 
   context "0 sources" do

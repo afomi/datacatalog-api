@@ -66,6 +66,10 @@ module DataCatalog
         }
       end
     end
+    
+    property :favorite_count do |source|
+      source.favorites.length
+    end
 
     property :notes do |source|
       source.notes.map do |note|

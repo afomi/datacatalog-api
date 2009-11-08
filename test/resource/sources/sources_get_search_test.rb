@@ -78,6 +78,7 @@ class SourcesGetSearchTest < RequestTestCase
           description
           documentation_url
           documents
+          favorite_count
           frequency
           id
           license
