@@ -103,9 +103,7 @@ class SourcesGetOneTest < RequestTestCase
 
     context "#{role} API key : 2 comments : get /:id" do
       before do
-        
         Timecop.freeze
-        
         @comments = [
           create_comment({
             :text      => "Comment 1",
@@ -130,9 +128,9 @@ class SourcesGetOneTest < RequestTestCase
       end
       
       after do
+        Timecop.return
         @ratings.each { |x| x.destroy }
         @comments.each { |x| x.destroy }
-        Timecop.freeze
       end
       
       use "successful GET source with :id"
