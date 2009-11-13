@@ -12,7 +12,7 @@ DEPENDENCIES = {
   'rack-test'              => ['>= 0.5.1' ],
   'rcov'                   => ['>= 0.9.6' ],
   'rr'                     => ['>= 0.10.4'],
-  'timecop'                => ['>= 0.3.2' ],
+  'timecop'                => ['>= 0.3.1' ],
 }
 
 namespace :dependencies do
