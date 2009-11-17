@@ -1,3 +1,5 @@
+require File.dirname(__FILE__) + '/users'
+
 module DataCatalog
 
   class UsersFavorites < Base
