@@ -120,13 +120,21 @@ Data sources are the primary feature of the National Data Catalog. They are repr
     Parameter               Type           Description
     ---------               ----           -----------
     id*                     String         Unique ID, will be auto-generated upon creation
-    title(+)                String         Required, unique name of data source
-    url                     String         Primary URL for this data source
+    title+                  String         Required, unique name of data source
+    slug                    String         URL slug, will be auto-generated if not provided
+    source_type+            String         Required, either "dataset" or "api"
+    url+                    String         Primary URL for this data source    
+    documentation_url       String         Official documentation for data source 
+    license                 String         IP License data falls under (likely Public Domain for govt.)
+    license_url             String         URL describing license
+    catalog_name            String         Name of originating data catalog (e.g. Data.gov)
+    catalog_url             String         URL of originating catalog   
     released                Date           When this source was publicly released
     period_start            Date           Beginning date for source's applicability
     period_end              Date           End date for source's applicability
     frequency               String         How often the data source is released
-    ratings                 Array          Embedded collection of Rating objects
+    organization_id         String         Unique ID for the Organization (agency, non-profit) publishing the data
+    ratings*                Array          Embedded collection of Rating objects
     rating_stats*           Hash           Contains total, count, average, and histogram
     created_at*             Time           Automatic timestamp on creation
     updated_at*             Time           Automatic timestamp on update
