@@ -31,7 +31,7 @@ module DataCatalog
     property :period_end
     property :frequency
     property :organization_id
-    property :custom
+    property :custom,           :w => :curator
     property :raw,              :w => :admin
     property :rating_stats,     :w => :nobody
 
