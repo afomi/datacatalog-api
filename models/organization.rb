@@ -11,6 +11,9 @@ class Organization
   key :slug,           String
   key :url,            String
   key :user_id,        String
+  key :custom,         Hash
+  key :raw,            Hash
+
   timestamps!
 
   # == Indices

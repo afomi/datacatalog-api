@@ -37,6 +37,8 @@ class OrganizationsGetOneTest < RequestTestCase
       slug
       url
       user_id
+      custom
+      raw
       id
       created_at
       updated_at

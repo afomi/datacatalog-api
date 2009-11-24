@@ -23,6 +23,8 @@ module DataCatalog
     property :slug
     property :url
     property :user_id,     :w => :nobody
+    property :custom,      :w => :admin
+    property :raw,         :w => :admin
 
     # == Callbacks
 
