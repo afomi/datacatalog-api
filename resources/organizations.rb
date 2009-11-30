@@ -17,6 +17,7 @@ module DataCatalog
     # == Properties
     
     property :name
+    property :names
     property :acronym
     property :org_type
     property :description

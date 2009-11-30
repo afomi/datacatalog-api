@@ -5,6 +5,7 @@ class Organization
   # == Attributes
 
   key :name,           String
+  key :names,          Array # of strings
   key :acronym,        String
   key :org_type,       String
   key :description,    String

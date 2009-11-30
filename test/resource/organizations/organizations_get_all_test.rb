@@ -45,6 +45,7 @@ class OrganizationsGetAllTest < RequestTestCase
       
       docs_properties %w(
         name
+        names
         acronym
         org_type
         description
