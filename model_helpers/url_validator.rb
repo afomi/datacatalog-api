@@ -1,7 +1,7 @@
 module UrlValidator
   
   def validate_url
-    return unless url
+    return if url.blank?
     uri = URI.parse(url)
     unless uri.absolute?
       errors.add(:url, "URI must be absolute")
