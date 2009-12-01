@@ -18,7 +18,7 @@ class Source
   key :documentation_url,   String
   key :license_url,         String
   key :catalog_url,         String
-  key :released,            Time
+  key :released,            Hash
   key :period_start,        Time
   key :period_end,          Time
   key :frequency,           String
@@ -123,6 +123,18 @@ class Source
   before_save :update_keywords
   def update_keywords
     self._keywords = DataCatalog::Search.process([title, description])
+  end
+  
+  before_save :clean_released
+  def clean_released
+    year  = released['year']
+    month = released['month']
+    day   = released['day']
+    cleaned = {}
+    cleaned['year']  = year.to_i
+    cleaned['month'] = month.to_i if month
+    cleaned['day']   = day.to_i if day
+    self.released = cleaned
   end
 
   # == Class Methods
