@@ -23,7 +23,7 @@ module DataCatalog
     property :description
     property :slug
     property :url
-    property :custom                     
+    property :custom
     property :raw,         :w => :admin
     property :user_id,     :w => :nobody
 
