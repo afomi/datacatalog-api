@@ -6,11 +6,11 @@ class CategoriesGetFilterTest < RequestTestCase
   
   shared "successful GET of categories where text is 'Category 3'" do
     test "body should have 2 top level elements" do
-      assert_equal 2, parsed_response_body.length
+      assert_equal 2, @members.length
     end
 
     test "each element should be correct" do
-      parsed_response_body.each do |element|
+      @members.each do |element|
         assert_equal "Category 3", element["name"]
         assert_equal @user_id, element["user_id"]
       end
@@ -34,6 +34,7 @@ class CategoriesGetFilterTest < RequestTestCase
           :api_key => @normal_user.primary_api_key,
           :filter  => %(name="Category 3")
         }
+        @members = parsed_response_body['members']
       end
     
       use "successful GET of categories where text is 'Category 3'"

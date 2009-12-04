@@ -6,11 +6,11 @@ class TagsGetFilterTest < RequestTestCase
   
   shared "successful GET of tags where text is 'tag 1'" do
     test "body should have 2 top level elements" do
-      assert_equal 2, parsed_response_body.length
+      assert_equal 2, @members.length
     end
 
     test "each element should be correct" do
-      parsed_response_body.each do |element|
+      @members.each do |element|
         assert_equal "tag 1", element["text"]
         assert_equal @user_id, element["user_id"]
         assert_equal "#{@source_base}1", element["source_id"]
@@ -41,6 +41,7 @@ class TagsGetFilterTest < RequestTestCase
         get "/",
           :api_key => @normal_user.primary_api_key,
           :filter  => "text='tag 1'"
+        @members = parsed_response_body['members']
       end
     
       use "successful GET of tags where text is 'tag 1'"

@@ -4,7 +4,7 @@ DEPENDENCIES = {
   'sinatra'                => ['>= 0.9.4'   , '< 1.0'],
   'mongo'                  => ['>= 0.16'    , '< 1.0'],
   'djsun-mongo_mapper'     => ['>= 0.5.8.2' , '< 0.6'],
-  'sinatra_resource'       => ['>= 0.4.4'   , '< 0.5'],
+  'sinatra_resource'       => ['>= 0.4.6'   , '< 0.5'],
   'frequency'              => ['>= 0.1.0'   , '< 0.2'],
   'crack'                  => ['>= 0.1.4' ],
   'djsun-context'          => ['>= 0.5.6' ],

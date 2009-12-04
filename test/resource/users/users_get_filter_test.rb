@@ -6,11 +6,11 @@ class UsersGetFilterTest < RequestTestCase
   
   shared "successful GET of users where name is 'User 2'" do
     test "body should have 1 top level elements" do
-      assert_equal 1, parsed_response_body.length
+      assert_equal 1, @members.length
     end
 
     test "each element should be correct" do
-      parsed_response_body.each do |element|
+      @members.each do |element|
         assert_equal "User 2", element["name"]
       end
     end
@@ -31,12 +31,13 @@ class UsersGetFilterTest < RequestTestCase
         get "/",
           :api_key => @normal_user.primary_api_key,
           :filter  => "name='User 2'"
+        @members = parsed_response_body['members']
       end
       
       use "successful GET of users where name is 'User 2'"
 
       test "each element should not expose sensitive values" do
-        parsed_response_body.each do |element|
+        @members.each do |element|
           assert_not_include "email", parsed_response_body
           assert_not_include "curator", parsed_response_body
           assert_not_include "admin", parsed_response_body
@@ -49,12 +50,13 @@ class UsersGetFilterTest < RequestTestCase
         get "/",
           :api_key => @admin_user.primary_api_key,
           :filter  => "name='User 2'"
+        @members = parsed_response_body['members']
       end
     
       use "successful GET of users where name is 'User 2'"
 
       test "each element should expose all values" do
-        parsed_response_body.each do |element|
+        @members.each do |element|
           assert_equal "user-2@email.com", element["email"]
           assert_include "curator", element
           assert_include "admin", element

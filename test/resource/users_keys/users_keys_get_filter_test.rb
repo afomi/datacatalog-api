@@ -6,11 +6,11 @@ class UsersKeysGetFilterTest < RequestTestCase
   
   shared "successful GET of users_keys where key_type is valet" do
     test "body should have 2 top level elements" do
-      assert_equal 2, parsed_response_body.length
+      assert_equal 2, @members.length
     end
 
     test "each element should be correct" do
-      parsed_response_body.each do |element|
+      @members.each do |element|
         assert_equal "valet", element["key_type"]
       end
     end
@@ -55,7 +55,7 @@ class UsersKeysGetFilterTest < RequestTestCase
       end
     
       use "return 200 Ok"
-      use "return an empty list response body"
+      use "return an empty list of members"
     end
     
     context "owner API key : get / where key_type is valet'" do
@@ -63,6 +63,7 @@ class UsersKeysGetFilterTest < RequestTestCase
         get "/#{@user.id}/keys",
           :api_key  => @user.primary_api_key,
           :filter   => "key_type=valet"
+        @members = parsed_response_body['members']
       end
     
       use "successful GET of users_keys where key_type is valet"
@@ -73,6 +74,7 @@ class UsersKeysGetFilterTest < RequestTestCase
         get "/#{@user.id}/keys",
           :api_key  => @admin_user.primary_api_key,
           :filter   => "key_type=valet"
+        @members = parsed_response_body['members']
       end
     
       use "successful GET of users_keys where key_type is valet"

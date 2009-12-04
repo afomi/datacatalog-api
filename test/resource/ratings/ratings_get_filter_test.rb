@@ -8,14 +8,14 @@ class RatingsGetFilterTest < RequestTestCase
     use "return 200 Ok"
     
     test "body should have 1 top level element" do
-      assert_equal 1, parsed_response_body.length
+      assert_equal 1, @members.length
     end
     
-    docs_properties %w(kind comment_id source_id user_id text
+    members_properties %w(kind comment_id source_id user_id text
       value previous_value id created_at updated_at) 
 
     test "each element should be correct" do
-      parsed_response_body.each do |element|
+      @members.each do |element|
         assert_equal "source rating 2", element['text']
         assert_equal 2, element["value"]
         assert_equal @user.id, element['user_id']
@@ -28,14 +28,14 @@ class RatingsGetFilterTest < RequestTestCase
     use "return 200 Ok"
 
     test "body should have 2 top level elements" do
-      assert_equal 2, parsed_response_body.length
+      assert_equal 2, @members.length
     end
 
-    docs_properties %w(kind comment_id source_id user_id text
+    members_properties %w(kind comment_id source_id user_id text
       value previous_value id created_at updated_at) 
 
     test "each element should be correct" do
-      parsed_response_body.each do |element|
+      @members.each do |element|
         value = element["value"]
         assert_equal true, value >= 4
         assert_equal "source rating #{value}", element['text']
@@ -48,14 +48,14 @@ class RatingsGetFilterTest < RequestTestCase
     use "return 200 Ok"
 
     test "body should have 5 top level elements" do
-      assert_equal 5, parsed_response_body.length
+      assert_equal 5, @members.length
     end
 
-    docs_properties %w(kind comment_id source_id user_id text
+    members_properties %w(kind comment_id source_id user_id text
       value previous_value id created_at updated_at) 
 
     test "each element should be correct" do
-      parsed_response_body.each do |element|
+      @members.each do |element|
         value = element["value"]
         assert_equal true, value < 4
         assert_equal @user.id, element['user_id']
@@ -128,6 +128,7 @@ class RatingsGetFilterTest < RequestTestCase
         get "/",
           :api_key => @user.primary_api_key,
           :filter  => "value = 2"
+        @members = parsed_response_body['members']
       end
     
       use "successful GET of ratings where value is 2"
@@ -138,6 +139,7 @@ class RatingsGetFilterTest < RequestTestCase
         get "/",
           :api_key => @user.primary_api_key,
           :filter  => "value >= 4"
+        @members = parsed_response_body['members']
       end
     
       use "successful GET of ratings with value greater than or equal to 4"
@@ -148,6 +150,7 @@ class RatingsGetFilterTest < RequestTestCase
         get "/",
           :api_key => @user.primary_api_key,
           :filter  => "value > 3"
+        @members = parsed_response_body['members']
       end
     
       use "successful GET of ratings with value greater than or equal to 4"
@@ -158,6 +161,7 @@ class RatingsGetFilterTest < RequestTestCase
         get "/",
           :api_key => @user.primary_api_key,
           :filter  => "value < 4"
+        @members = parsed_response_body['members']
       end
     
       use "successful GET of ratings with value less than 4"
@@ -168,6 +172,7 @@ class RatingsGetFilterTest < RequestTestCase
         get "/",
           :api_key => @user.primary_api_key,
           :filter  => "value <= 3"
+        @members = parsed_response_body['members']
       end
     
       use "successful GET of ratings with value less than 4"

@@ -6,20 +6,20 @@ class SourcesGetAllTest < RequestTestCase
 
   shared "successful GET of 0 sources" do
     use "return 200 Ok"
-    use "return an empty list response body"
+    use "return an empty list of members"
   end
   
   shared "successful GET of 3 sources" do
     test "body should have 3 top level elements" do
-      assert_equal 3, parsed_response_body.length
+      assert_equal 3, @members.length
     end
 
     test "body should have correct text" do
-      actual = (0 ... 3).map { |n| parsed_response_body[n]["url"] }
+      actual = (0 ... 3).map { |n| @members[n]["url"] }
       3.times { |n| assert_include "http://data.gov/sources/#{n}", actual }
     end
 
-    docs_properties %w(
+    members_properties %w(
       catalog_name
       catalog_url
       categories
@@ -57,6 +57,7 @@ class SourcesGetAllTest < RequestTestCase
       context "#{role} API key : get /" do
         before do
           get "/", :api_key => primary_api_key_for(role)
+          @members = parsed_response_body['members']
         end
 
         use "successful GET of 0 sources"
@@ -84,6 +85,7 @@ class SourcesGetAllTest < RequestTestCase
       context "#{role} API key : get /" do
         before do
           get "/", :api_key => primary_api_key_for(role)
+          @members = parsed_response_body['members']
         end
 
         use "successful GET of 3 sources"

@@ -32,7 +32,7 @@ class UsersFavoritesGetAllTest < RequestTestCase
     end
     
     use "return 200 Ok"
-    use "return an empty list response body"
+    use "return an empty list of members"
     # This does not seem intuitive. However, it is consistent with:
     # 1. Users          having `permission :read => :basic`
     # 2. UsersFavorites having `permission :list => :basic`
@@ -42,15 +42,16 @@ class UsersFavoritesGetAllTest < RequestTestCase
     before do
       get "/#{@user.id}/favorites",
         :api_key => @user.primary_api_key
+      @members = parsed_response_body['members']
     end
     
     use "return 200 Ok"
-    docs_properties %w(source source_id id created_at updated_at)
+    members_properties %w(source source_id id created_at updated_at)
     
     test "values should be correct" do
-      assert_equal 3, parsed_response_body.length
+      assert_equal 3, @members.length
       expected = ["Source 0", "Source 1", "Source 2"]
-      actual = parsed_response_body.map { |x| x['source']['title'] }.sort
+      actual = @members.map { |x| x['source']['title'] }.sort
       assert_equal expected, actual
     end
   end

@@ -6,7 +6,7 @@ class UsersGetAllTest < RequestTestCase
 
   shared "show public attributes for each user" do
     test "each element should show public attributes" do
-      parsed_response_body.each do |element|
+      @members.each do |element|
         assert_include "created_at", element
         assert_include "updated_at", element
         assert_include "id", element
@@ -16,7 +16,7 @@ class UsersGetAllTest < RequestTestCase
   
   shared "hide private attributes for other users" do
     test "each element should hide private attributes" do
-      parsed_response_body.each do |element|
+      @members.each do |element|
         if element["id"] != @normal_user.id
           assert_not_include "primary_api_key", element
           assert_not_include "application_api_keys", element
@@ -31,7 +31,7 @@ class UsersGetAllTest < RequestTestCase
 
   shared "show private attributes for each user" do
     test "each element should show private attributes" do
-      parsed_response_body.each do |element|
+      @members.each do |element|
         assert_include "primary_api_key", element
         assert_include "application_api_keys", element
         assert_include "valet_api_keys", element
@@ -46,11 +46,11 @@ class UsersGetAllTest < RequestTestCase
     use "return 200 Ok"
 
     test "body should have 3 top level elements" do
-      assert_equal 3, parsed_response_body.length
+      assert_equal 3, @members.length
     end
 
     test "elements should have correct names" do
-      names = (0 ... 3).map { |n| parsed_response_body[n]["name"] }
+      names = (0 ... 3).map { |n| @members[n]["name"] }
       assert_include "Normal User", names
       assert_include "Curator User", names
       assert_include "Admin User", names
@@ -63,25 +63,25 @@ class UsersGetAllTest < RequestTestCase
     use "return 200 Ok"
 
     test "body should have 6 top level elements" do
-      assert_equal 6, parsed_response_body.length
+      assert_equal 6, @members.length
     end
 
     test "body should have correct names" do
-      actual = parsed_response_body.map { |element| element["name"] }
+      actual = @members.map { |element| element["name"] }
       (3 ... 6).each { |n| assert_include "User #{n}", actual }
     end
   end
   
   shared "have 3 unique API keys" do
     test "elements should have different API keys" do
-      keys = (0 ... 3).map { |n| parsed_response_body[n]["primary_api_key"] }
+      keys = (0 ... 3).map { |n| @members[n]["primary_api_key"] }
       assert_equal 3, keys.uniq.length
     end
   end
 
   shared "have 6 unique API keys" do
     test "elements should have different API keys" do
-      keys = (0 ... 6).map { |n| parsed_response_body[n]["primary_api_key"] }
+      keys = (0 ... 6).map { |n| @members[n]["primary_api_key"] }
       assert_equal 6, keys.uniq.length
     end
   end
@@ -106,6 +106,7 @@ class UsersGetAllTest < RequestTestCase
     context "normal API key : get /" do
       before do
         get "/", :api_key => @normal_user.primary_api_key
+        @members = parsed_response_body['members']
       end
     
       use "show all 3 users"
@@ -115,6 +116,7 @@ class UsersGetAllTest < RequestTestCase
     context "admin API key : get /" do
       before do
         get "/", :api_key => @admin_user.primary_api_key
+        @members = parsed_response_body['members']
       end
 
       use "show all 3 users"
@@ -122,7 +124,7 @@ class UsersGetAllTest < RequestTestCase
       use "show private attributes for each user"
 
       test "elements should have correct emails" do
-        emails = (0 ... 3).map { |n| parsed_response_body[n]["email"] }
+        emails = (0 ... 3).map { |n| @members[n]["email"] }
         assert_include "normal.user@inter.net", emails
         assert_include "curator.user@inter.net", emails
         assert_include "admin.user@inter.net", emails
@@ -143,6 +145,7 @@ class UsersGetAllTest < RequestTestCase
     context "normal API key : get /" do
       before do
         get "/", :api_key => @normal_user.primary_api_key
+        @members = parsed_response_body['members']
       end
       
       use "show all 6 users"
@@ -152,6 +155,7 @@ class UsersGetAllTest < RequestTestCase
     context "admin API key : get /" do
       before do
         get "/", :api_key => @admin_user.primary_api_key
+        @members = parsed_response_body['members']
       end
   
       use "show all 6 users"
@@ -159,7 +163,7 @@ class UsersGetAllTest < RequestTestCase
       use "show private attributes for each user"
 
       test "body should have correct emails" do
-        actual = parsed_response_body.map { |element| element["email"] }
+        actual = @members.map { |element| element["email"] }
         (3 ... 6).each { |n| assert_include "user-#{n}@email.com", actual }
       end
     end

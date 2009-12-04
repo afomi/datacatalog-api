@@ -11,7 +11,7 @@ class RatingsGetAllTest < RequestTestCase
       end
     
       use "return 200 Ok"
-      use "return an empty list response body"
+      use "return an empty list of members"
     end
   end
 
@@ -72,19 +72,20 @@ class RatingsGetAllTest < RequestTestCase
         get "/", :api_key => @normal_user.primary_api_key
       end
       
-      use "return an empty list response body"
+      use "return an empty list of members"
     end
   
     context "owner API key : get /" do
       before do
         get "/", :api_key => @user.primary_api_key
+        @members = parsed_response_body['members']
       end
     
       test "body should have 7 top level elements" do
-        assert_equal 7, parsed_response_body.length
+        assert_equal 7, @members.length
       end
       
-      docs_properties %w(
+      members_properties %w(
         comment_id
         created_at
         id
@@ -100,7 +101,7 @@ class RatingsGetAllTest < RequestTestCase
       test "correct values for each item" do
         source_ratings = []
         comment_ratings = []
-        parsed_response_body.each do |rating|
+        @members.each do |rating|
           case rating["kind"]
           when "source"
             source_ratings << rating

@@ -18,6 +18,12 @@ class RequestTestCase
       assert_equal [], parsed_response_body
     end
   end
+  
+  shared "return an empty list of members" do
+    test "members should return []" do
+      assert_equal [], parsed_response_body['members']
+    end
+  end
 
   shared "return timestamps and id in body" do
     use "return timestamps in body"

@@ -27,16 +27,17 @@ class NotesGetFilterTest < RequestTestCase
         get "/",
           :api_key => @normal_user.primary_api_key,
           :filter  => "text:'Note 2'"
+        @members = parsed_response_body['members']
       end
       
       use "return 200 OK"
     
       test "body should have 2 top level elements" do
-        assert_equal 2, parsed_response_body.length
+        assert_equal 2, @members.length
       end
       
       test "each element should be correct" do
-        parsed_response_body.each do |element|
+        @members.each do |element|
           assert_equal 'Note 2', element["text"]
           assert_equal @normal_user.id, element["user_id"]
           assert_equal @sources[2].id, element["source_id"]

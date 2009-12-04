@@ -13,11 +13,11 @@ class SourcesGetFilterTest < RequestTestCase
   
   shared "successful GET of sources where url is source #3'" do
     test "body should have 1 top level elements" do
-      assert_equal 1, parsed_response_body.length
+      assert_equal 1, @members.length
     end
 
     test "each element should be correct" do
-      parsed_response_body.each do |element|
+      @members.each do |element|
         assert_equal 'http://data.gov/sources/3', element["url"]
         assert_shared_attributes element
       end
@@ -44,6 +44,7 @@ class SourcesGetFilterTest < RequestTestCase
           get "/",
             :filter  => "url=http://data.gov/sources/3",
             :api_key => primary_api_key_for(role)
+          @members = parsed_response_body['members']
         end
 
         use "successful GET of sources where url is source #3'"

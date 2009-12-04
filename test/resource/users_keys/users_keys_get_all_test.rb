@@ -43,7 +43,7 @@ class UsersKeysGetAllTest < RequestTestCase
       end
 
       use "return 200 Ok"
-      use "return an empty list response body"
+      use "return an empty list of members"
       # This does not seem intuitive. However, it is consistent with:
       # 1. Users     having `permission :read => :basic`
       # 2. UsersKeys having `permission :list => :basic`
@@ -54,16 +54,17 @@ class UsersKeysGetAllTest < RequestTestCase
     before do
       get "/#{@user.id}/keys",
         :api_key => @admin_user.primary_api_key
+      @members = parsed_response_body['members']
     end
     
     use "return 200 Ok"
     
     test "body should have 3 top level elements" do
-      assert_equal 3, parsed_response_body.length
+      assert_equal 3, @members.length
     end
 
     test "each element should have correct attributes" do
-      parsed_response_body.each do |element|
+      @members.each do |element|
         assert_include "purpose", element
         assert_include "api_key", element
         assert_include "key_type", element

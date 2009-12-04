@@ -49,20 +49,21 @@ class OrganizationsGetSearchTest < RequestTestCase
       context "#{role} : get /" do
         before do
           get "/", @search_params.merge(:api_key => primary_api_key_for(role))
+          @members = parsed_response_body['members']
         end
 
         use "return 200 Ok"
 
         test "body should have 1 organization" do
-          assert_equal 1, parsed_response_body.length
+          assert_equal 1, @members.length
         end
       
         test "body should have correct organization" do
           assert_equal %{Department of Justice},
-            parsed_response_body[0]['name']
+            @members[0]['name']
         end
       
-        docs_properties %w(
+        members_properties %w(
           name
           names
           acronym
@@ -90,12 +91,13 @@ class OrganizationsGetSearchTest < RequestTestCase
       context "#{role} : get /" do
         before do
           get "/", @search_params.merge(:api_key => primary_api_key_for(role))
+          @members = parsed_response_body['members']
         end
 
         use "return 200 Ok"
       
         test "body should have correct organizations" do
-          names = parsed_response_body.map { |x| x['name'] }
+          names = @members.map { |x| x['name'] }
           assert_equal 2, names.length
           assert_include %{Environmental Protection Agency}, names
           assert_include %{Department of Health and Human Services}, names

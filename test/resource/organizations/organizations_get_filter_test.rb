@@ -25,13 +25,14 @@ class OrganizationsGetFilterTest < RequestTestCase
         get "/",
           :api_key => @normal_user.primary_api_key,
           :filter  => 'name="organization 3"'
+        @members = parsed_response_body['members']
       end
       
       use "return 200 Ok"
     
       test "body should have correct elements" do
-        assert_equal 2, parsed_response_body.length
-        parsed_response_body.each do |resource|
+        assert_equal 2, @members.length
+        @members.each do |resource|
           assert_equal "organization 3", resource["name"]
           assert_equal @user.id, resource["user_id"]
         end

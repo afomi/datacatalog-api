@@ -11,7 +11,7 @@ class FavoritesGetAllTest < RequestTestCase
       end
       
       use "return 200 Ok"
-      use "return an empty list response body"
+      use "return an empty list of members"
     end
   end
 
@@ -41,20 +41,22 @@ class FavoritesGetAllTest < RequestTestCase
     context "normal API key : get /" do
       before do
         get "/", :api_key => @normal_user.primary_api_key
+        @members = parsed_response_body['members']
       end
   
       test "body should have 0 top level elements" do
-        assert_equal 0, parsed_response_body.length
+        assert_equal 0, @members.length
       end
     end
 
     context "owner API key : get /" do
       before do
         get "/", :api_key => @user.primary_api_key
+        @members = parsed_response_body['members']
       end
       
       test "body should have 3 top level elements" do
-        assert_equal 3, parsed_response_body.length
+        assert_equal 3, @members.length
       end
     end
   end
