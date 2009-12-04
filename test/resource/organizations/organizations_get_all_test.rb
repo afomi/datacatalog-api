@@ -52,12 +52,13 @@ class OrganizationsGetAllTest < RequestTestCase
         description
         slug
         url
-        user_id
+        level
         custom
         raw
         id
         created_at
         updated_at
+        user_id
       )
     end
   end

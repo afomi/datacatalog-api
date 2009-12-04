@@ -1,4 +1,4 @@
-class Organization
+ class Organization
 
   include MongoMapper::Document
   
@@ -12,6 +12,7 @@ class Organization
   key :slug,           String
   key :url,            String
   key :user_id,        String
+  key :level,          Integer
   key :custom,         Hash
   key :raw,            Hash
   key :_keywords,      Array

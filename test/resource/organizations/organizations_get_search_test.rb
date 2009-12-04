@@ -71,6 +71,7 @@ class OrganizationsGetSearchTest < RequestTestCase
           description
           slug
           url
+          level
           user_id
           custom
           raw
