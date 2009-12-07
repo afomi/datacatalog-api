@@ -26,7 +26,6 @@ class Source
   key :custom,              Hash
   key :raw,                 Hash
   key :_keywords,           Array
-  key :favorite_count,      Integer
   timestamps!
 
   # == Indices
