@@ -12,6 +12,7 @@
   key :slug,           String
   key :url,            String
   key :user_id,        String
+  key :interest,       Integer
   key :level,          Integer
   key :custom,         Hash
   key :raw,            Hash

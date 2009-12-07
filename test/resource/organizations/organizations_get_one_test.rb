@@ -37,6 +37,7 @@ class OrganizationsGetOneTest < RequestTestCase
       description
       slug
       url
+      interest
       level
       custom
       raw

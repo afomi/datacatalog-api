@@ -71,6 +71,7 @@ class OrganizationsGetSearchTest < RequestTestCase
           description
           slug
           url
+          interest
           level
           user_id
           custom
