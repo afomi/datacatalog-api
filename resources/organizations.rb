@@ -25,6 +25,7 @@ module DataCatalog
     property :url
     property :interest
     property :level
+    property :source_count
     property :custom
     property :raw,         :w => :admin
     property :user_id,     :w => :nobody

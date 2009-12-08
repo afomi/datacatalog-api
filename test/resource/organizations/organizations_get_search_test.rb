@@ -73,6 +73,7 @@ class OrganizationsGetSearchTest < RequestTestCase
           url
           interest
           level
+          source_count
           user_id
           custom
           raw

@@ -54,6 +54,7 @@ class OrganizationsGetAllTest < RequestTestCase
         url
         interest
         level
+        source_count
         custom
         raw
         id
