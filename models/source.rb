@@ -1,4 +1,4 @@
-gem 'frequency', '>= 0.1.0', '< 0.2.0'
+gem 'frequency', '>= 0.1.2', '< 0.2.0'
 require 'frequency'
 
 class Source
