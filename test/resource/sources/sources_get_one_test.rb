@@ -33,6 +33,7 @@ class SourcesGetOneTest < RequestTestCase
       description
       documentation_url
       documents
+      downloads
       favorite_count
       frequency
       id
@@ -298,7 +299,46 @@ class SourcesGetOneTest < RequestTestCase
           assert_include expected, actual
         end
       end
+
+      context "#{role} API key : 2 downloads : get /:id" do
+        before do
+          @downloads = [
+            create_download({
+              :format    => "csv",
+              :url       => "http://dl.gov/data/6.csv",
+              :source_id => @source.id,
+            }),
+            create_download({
+              :format    => "xml",
+              :url       => "http://dl.gov/data/6.xml",
+              :source_id => @source.id,
+            })
+          ]
+          get "/#{@source.id}", :api_key => primary_api_key_for(role)
+        end
+
+        after do
+          @downloads.each { |x| x.destroy }
+        end
+
+        use "successful GET source with :id"
+
+        test "body should have correct downloads" do
+          actual = parsed_response_body["downloads"]
+          @downloads.each do |download|
+            expected = {
+              "href"    => "/downloads/#{download.id}",
+              "url"     => download.url,
+              "format"  => download.format,
+              "preview" => download.preview,
+            }
+            assert_include expected, actual
+          end
+        end
+      end
+
     end
+
   end
 
 end

@@ -102,6 +102,17 @@ module DataCatalog
       end
     end
 
+    property :downloads do |source|
+      source.downloads.map do |download|
+        {
+          "href"    => "/downloads/#{download.id}",
+          "url"     => download.url,
+          "format"  => download.format,
+          "preview" => download.preview,
+        }
+      end
+    end
+
     # == Callbacks
 
     callback :before_create do |action|

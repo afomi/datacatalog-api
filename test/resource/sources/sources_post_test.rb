@@ -42,6 +42,7 @@ class SourcesPostTest < RequestTestCase
       description
       documentation_url
       documents
+      downloads
       favorite_count
       frequency
       id
