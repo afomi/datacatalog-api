@@ -45,6 +45,7 @@ class Source
   many :favorites
   many :notes
   many :ratings
+  many :downloads
 
   def categories
     categorizations.map(&:category)
