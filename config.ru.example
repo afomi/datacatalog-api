@@ -1,18 +1,16 @@
 ENV['RACK_ENV'] = "development"
-# ENV['RACK_ENV'] = "staging"
-# ENV['RACK_ENV'] = "production"
 require 'app'
-
 map("/")              { run DataCatalog::Root }
 map("/categories")    { run DataCatalog::Categories }
 map("/checkup")       { run DataCatalog::Checkup }
 map("/comments")      { run DataCatalog::Comments }
 map("/documents")     { run DataCatalog::Documents }
+map("/downloads")     { run DataCatalog::Downloads }
 map("/favorites")     { run DataCatalog::Favorites }
 map("/notes")         { run DataCatalog::Notes }
 map("/organizations") { run DataCatalog::Organizations }
 map("/ratings")       { run DataCatalog::Ratings }
 map("/resources")     { run DataCatalog::Resources }
-map("/sources")       { run DataCatalog::Sources}
-map("/tags")          { run DataCatalog::Tags}
-map("/users")         { run DataCatalog::Users}
+map("/sources")       { run DataCatalog::Sources }
+map("/tags")          { run DataCatalog::Tags }
+map("/users")         { run DataCatalog::Users }

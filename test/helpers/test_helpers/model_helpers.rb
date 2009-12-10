@@ -93,6 +93,14 @@ module ModelHelpers
     required[:user_id] = @normal_user.id if @normal_user
     create_model!(Document, custom, required)
   end
+  
+  def create_download(custom={})
+    required = {
+      :url    => "http://data.gov/download/326/csv",
+      :format => "csv",
+    }
+    create_model!(Download, custom, required)
+  end
 
   def create_favorite(custom={})
     required = {
