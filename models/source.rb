@@ -128,18 +128,52 @@ class Source
   end
   protected :update_keywords
   
-  before_save :clean_released
-  def clean_released
+  RELEASED_KEYS = %w(day month year)
+  MIN_YEAR = 1900
+  MAX_YEAR = Time.now.year
+  
+  validate :validate_released
+  def validate_released
+    if (released.keys - RELEASED_KEYS).length > 0
+      errors.add(:released, "only these keys are allowed : #{RELEASED_KEYS}")
+    end
+
     year  = released['year']
     month = released['month']
     day   = released['day']
-    cleaned = {}
-    cleaned['year']  = year.to_i
-    cleaned['month'] = month.to_i if month
-    cleaned['day']   = day.to_i if day
-    self.released = cleaned
+
+    validate_integer(year,  :released, :year)
+    validate_integer(month, :released, :month)
+    validate_integer(day,   :released, :day)
+    
+    if !year.blank? && !((MIN_YEAR .. MAX_YEAR) === year)
+      errors.add(:released, "year must be between #{MIN_YEAR} and #{MAX_YEAR}")
+    end
+    if !month.blank? && !((1 .. 12) === month)
+      errors.add(:released, "month must be between 1 and 12")
+    end
+    if !day.blank? && !((1 .. 31) === day)
+      errors.add(:released, "day must be between 1 and 31")
+    end
+    
+    if !day.blank? && month.blank?
+      errors.add(:released, "month required if day is present")
+    end
+    if !day.blank? && year.blank?
+      errors.add(:released, "year required if day is present")
+    end
+    if !month.blank? && year.blank?
+      errors.add(:released, "year required if month is present")
+    end
   end
-  protected :clean_released
+  protected :validate_released
+  
+  def validate_integer(x, field, subfield)
+    return if x.blank?
+    unless x.is_a?(Integer)
+      errors.add(field, "#{subfield} must be an integer if present")
+    end
+  end
 
   # == Class Methods
 

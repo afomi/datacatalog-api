@@ -338,6 +338,109 @@ class SourceUnitTest < ModelTestCase
         use "source.url must be absolute"
       end
     end
+
+    context "released" do
+      context "missing" do
+        before do
+          @source = Source.new(@valid_params.merge(:released => ""))
+        end
+  
+        use "valid source"
+        
+        test "should have empty hash for released" do
+          @source.valid?
+          assert_equal({}, @source.released)
+        end
+      end
+
+      context "noninteger year" do
+        before do
+          @source = Source.new(@valid_params.merge(
+            :released => { :year => "2004" }
+          ))
+        end
+        
+        test "should have error on released" do
+          @source.valid?
+          assert_include :released, @source.errors.errors
+          actual = @source.errors.errors[:released]
+          assert_include "year must be an integer if present", actual
+          assert_include "year must be between 1900 and 2009", actual
+        end
+      end
+
+      context "noninteger month" do
+        before do
+          @source = Source.new(@valid_params.merge(
+            :released => { :month => "February" }
+          ))
+        end
+        
+        test "should have errors on released" do
+          @source.valid?
+          assert_include :released, @source.errors.errors
+          actual = @source.errors.errors[:released]
+          assert_include "month must be an integer if present", actual
+          assert_include "month must be between 1 and 12", actual
+        end
+      end
+
+      context "noninteger day" do
+        before do
+          @source = Source.new(@valid_params.merge(
+            :released => { :day => "20" }
+          ))
+        end
+        
+        test "should have errors on released" do
+          @source.valid?
+          assert_include :released, @source.errors.errors
+          actual = @source.errors.errors[:released]
+          assert_include "day must be an integer if present", actual
+          assert_include "day must be between 1 and 31", actual
+        end
+      end
+      
+      test "year only" do
+        @source = Source.new(@valid_params.merge(
+          :released => { :year => 2008 }
+        ))
+        assert_equal true, @source.valid?
+      end
+
+      test "year, month only" do
+        @source = Source.new(@valid_params.merge(
+          :released => { :year => 2008, :month => 4 }
+        ))
+        assert_equal true, @source.valid?
+      end
+
+      test "year, month, day only" do
+        @source = Source.new(@valid_params.merge(
+          :released => { :year => 2008, :month => 4, :day => 5 }
+        ))
+        assert_equal true, @source.valid?
+      end
+
+      test "month only" do
+        @source = Source.new(@valid_params.merge(
+          :released => { :month => 5 }
+        ))
+        assert_equal false, @source.valid?
+        actual = @source.errors.errors[:released]
+        assert_include "year required if month is present", actual
+      end
+
+      test "day only" do
+        @source = Source.new(@valid_params.merge(
+          :released => { :day => 12 }
+        ))
+        assert_equal false, @source.valid?
+        actual = @source.errors.errors[:released]
+        assert_include "year required if day is present", actual
+        assert_include "month required if day is present", actual
+      end
+    end
   end
   
   context "timestamps" do
