@@ -132,6 +132,18 @@ class Source
   MIN_YEAR = 1900
   MAX_YEAR = Time.now.year
   
+  before_validation :clean_released
+  def clean_released
+    released.each do |key, value|
+      self.released[key] = begin
+        Integer(value)
+      rescue ArgumentError
+        value
+      end
+    end
+  end
+  protected :clean_released
+  
   validate :validate_released
   def validate_released
     if (released.keys - RELEASED_KEYS).length > 0

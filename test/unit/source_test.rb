@@ -353,10 +353,10 @@ class SourceUnitTest < ModelTestCase
         end
       end
 
-      context "noninteger year" do
+      context "too large of a year" do
         before do
           @source = Source.new(@valid_params.merge(
-            :released => { :year => "2004" }
+            :released => { :year => "2050" }
           ))
         end
         
@@ -364,7 +364,6 @@ class SourceUnitTest < ModelTestCase
           @source.valid?
           assert_include :released, @source.errors.errors
           actual = @source.errors.errors[:released]
-          assert_include "year must be an integer if present", actual
           assert_include "year must be between 1900 and 2009", actual
         end
       end
@@ -385,10 +384,10 @@ class SourceUnitTest < ModelTestCase
         end
       end
 
-      context "noninteger day" do
+      context "too large of a day" do
         before do
           @source = Source.new(@valid_params.merge(
-            :released => { :day => "20" }
+            :released => { :day => 32 }
           ))
         end
         
@@ -396,7 +395,6 @@ class SourceUnitTest < ModelTestCase
           @source.valid?
           assert_include :released, @source.errors.errors
           actual = @source.errors.errors[:released]
-          assert_include "day must be an integer if present", actual
           assert_include "day must be between 1 and 31", actual
         end
       end
