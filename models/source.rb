@@ -174,6 +174,7 @@ class Source
       errors.add(field, "#{subfield} must be an integer if present")
     end
   end
+  protected :validate_integer
 
   # == Class Methods
 
