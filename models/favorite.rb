@@ -21,7 +21,6 @@ class Favorite
   validates_presence_of :user_id
 
   validate :general_validation
-
   def general_validation
     errors.add(:user_id, "must be valid") if user.nil?
     errors.add(:source_id, "must be valid") if source.nil?

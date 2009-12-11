@@ -56,12 +56,12 @@
   # == Callbacks
 
   before_validation :handle_blank_slug
-  before_create :generate_slug
-  
   def handle_blank_slug
     self.slug = nil if self.slug.blank?
   end
+  protected :handle_blank_slug
   
+  before_create :generate_slug
   def generate_slug
     return if name.blank?
     acronym.blank? ? to_slug = name : to_slug = acronym
@@ -75,12 +75,14 @@
       n += 1
     end
   end
+  protected :generate_slug
 
   before_save :update_keywords
   def update_keywords
     self._keywords = DataCatalog::Search.process(
       names + [name, acronym, description])
   end
+  protected :update_keywords
 
   # == Class Methods
 

@@ -105,6 +105,7 @@ class Source
   def handle_blank_slug
     self.slug = nil if self.slug.blank?
   end
+  protected :handle_blank_slug
   
   before_create :generate_slug
   def generate_slug
@@ -119,11 +120,13 @@ class Source
       n += 1
     end
   end
+  protected :generate_slug
   
   before_save :update_keywords
   def update_keywords
     self._keywords = DataCatalog::Search.process([title, description])
   end
+  protected :update_keywords
   
   before_save :clean_released
   def clean_released
@@ -136,6 +139,7 @@ class Source
     cleaned['day']   = day.to_i if day
     self.released = cleaned
   end
+  protected :clean_released
 
   # == Class Methods
 
