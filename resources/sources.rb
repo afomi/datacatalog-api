@@ -104,11 +104,13 @@ module DataCatalog
 
     property :downloads do |source|
       source.downloads.map do |download|
+        size = "#{download.size['number']} #{download.size['unit']}".strip
         {
           "href"    => "/downloads/#{download.id}",
           "url"     => download.url,
           "format"  => download.format,
           "preview" => download.preview,
+          "size"    => size.blank? ? nil : size,
         }
       end
     end
