@@ -3,12 +3,14 @@
 class Download
 
   include MongoMapper::Document
+  include Validators
 
   # == Attributes
 
   key :url,       String
   key :format,    String
   key :preview,   String
+  key :size,      Hash
   key :source_id, String
   timestamps!
   
@@ -40,6 +42,38 @@ class Download
     end
   end
   protected :validate_source_type
+
+  before_validation :clean_size
+  def clean_size
+    h = size
+    h['bytes']  = Try.to_i_or_f(size['bytes'])  if size['bytes']
+    h['number'] = Try.to_i_or_f(size['number']) if size['number']
+    self.size = h
+  end
+  protected :clean_size
+  
+  SIZE_KEYS = %w(bytes number unit)
+  UNIT_VALUES = %w(B KB MB TB PB EB)
+  
+  validate :validate_size
+  def validate_size
+    return if size.empty?
+    if (size.keys - SIZE_KEYS).length > 0
+      errors.add(:size, "only these keys are allowed : #{SIZE_KEYS}")
+    end
+
+    bytes  = size['bytes']
+    number = size['number']
+    unit   = size['unit']
+
+    expect_integer_or_float(number, :size, :number)
+    expect_integer_or_float(bytes, :size, :bytes)
+    
+    unless UNIT_VALUES.include?(unit)
+      errors.add(:size, "unit must be one of: #{UNIT_VALUES.join(' ')}")
+    end
+  end
+  protected :validate_size
 
   # == Class Methods
 

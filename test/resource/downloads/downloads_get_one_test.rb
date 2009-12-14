@@ -36,6 +36,7 @@ class DownloadsGetOneTest < RequestTestCase
         url
         format
         preview
+        size
         source_id
         created_at
         updated_at

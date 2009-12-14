@@ -19,6 +19,7 @@ module DataCatalog
     property :url
     property :format
     property :preview
+    property :size
     property :source_id
 
     # == Callbacks

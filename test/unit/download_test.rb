@@ -46,7 +46,6 @@ class DownloadUnitTest < ModelTestCase
     end
   end
 
-
   # - - - - - - - - - -
   
   context "Download.new : source" do
@@ -90,6 +89,92 @@ class DownloadUnitTest < ModelTestCase
       use "invalid download"
       use "download.source_id can't be empty"
     end
+    
+    context "correct size" do
+      before do
+        @download = Download.new(
+          @valid_params.merge({
+            :size => {
+              'number' => 120,
+              'unit'   => 'KB',
+              'bytes'  => 120 * 1024,
+            }
+          })
+        )
+      end
+      
+      use "valid download"
+    end
+
+    context "incorrect unit" do
+      before do
+        @download = Download.new(
+          @valid_params.merge({
+            :size => {
+              'number' => 120,
+              'unit'   => 'x',
+              'bytes'  => 120 * 1024,
+            }
+          })
+        )
+      end
+      
+      use "invalid download"
+
+      test "should have error on size" do
+        @download.valid?
+        assert_include :size, @download.errors.errors
+        assert_include "unit must be one of: B KB MB TB PB EB",
+          @download.errors.errors[:size]
+      end
+    end
+
+    context "incorrect number" do
+      before do
+        @download = Download.new(
+          @valid_params.merge({
+            :size => {
+              'number' => 'one hundred',
+              'unit'   => 'KB',
+              'bytes'  => 100 * 1024,
+            }
+          })
+        )
+      end
+      
+      use "invalid download"
+
+      test "should have error on size" do
+        @download.valid?
+        assert_include :size, @download.errors.errors
+        assert_include "number must be an integer or float if present",
+          @download.errors.errors[:size]
+      end
+    end
+
+    context "incorrect bytes" do
+      before do
+        @download = Download.new(
+          @valid_params.merge({
+            :size => {
+              'number' => 100,
+              'unit'   => 'KB',
+              'bytes'  => "a bunch",
+            }
+          })
+        )
+      end
+      
+      use "invalid download"
+
+      test "should have error on size" do
+        @download.valid?
+        assert_include :size, @download.errors.errors
+        assert_include "bytes must be an integer or float if present",
+          @download.errors.errors[:size]
+      end
+    end
+    
   end
   
 end

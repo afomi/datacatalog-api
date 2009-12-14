@@ -5,6 +5,7 @@ class Source
 
   include MongoMapper::Document
   include Ratable
+  include Validators
 
   # == Attributes
 
@@ -154,9 +155,9 @@ class Source
     month = released['month']
     day   = released['day']
 
-    validate_integer(year,  :released, :year)
-    validate_integer(month, :released, :month)
-    validate_integer(day,   :released, :day)
+    expect_integer(year,  :released, :year)
+    expect_integer(month, :released, :month)
+    expect_integer(day,   :released, :day)
     
     if !year.blank? && !((MIN_YEAR .. MAX_YEAR) === year)
       errors.add(:released, "year must be between #{MIN_YEAR} and #{MAX_YEAR}")
@@ -179,14 +180,6 @@ class Source
     end
   end
   protected :validate_released
-  
-  def validate_integer(x, field, subfield)
-    return if x.blank?
-    unless x.is_a?(Integer)
-      errors.add(field, "#{subfield} must be an integer if present")
-    end
-  end
-  protected :validate_integer
 
   # == Class Methods
 
