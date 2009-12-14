@@ -330,6 +330,7 @@ class SourcesGetOneTest < RequestTestCase
               "href"    => "/downloads/#{download.id}",
               "url"     => download.url,
               "format"  => download.format,
+              "size"    => download.size['number'],
               "preview" => download.preview,
             }
             assert_include expected, actual
