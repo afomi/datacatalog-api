@@ -364,7 +364,7 @@ class SourceUnitTest < ModelTestCase
           @source.valid?
           assert_include :released, @source.errors.errors
           actual = @source.errors.errors[:released]
-          assert_include "year must be between 1900 and 2009", actual
+          assert_include "year must be between 1900 and 2010", actual
         end
       end
 
