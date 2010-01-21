@@ -13,9 +13,9 @@ class Source
   key :slug,                String
   key :description,         String
   key :source_type,         String
-  key :license,             String
   key :url,                 String
   key :documentation_url,   String
+  key :license,             String
   key :license_url,         String
   key :catalog_name,        String
   key :catalog_url,         String
