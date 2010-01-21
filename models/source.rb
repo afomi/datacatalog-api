@@ -14,10 +14,10 @@ class Source
   key :description,         String
   key :source_type,         String
   key :license,             String
-  key :catalog_name,        String
   key :url,                 String
   key :documentation_url,   String
   key :license_url,         String
+  key :catalog_name,        String
   key :catalog_url,         String
   key :released,            Hash
   key :period_start,        Time
