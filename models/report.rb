@@ -1,11 +1,6 @@
-# A report is:
-# * intended for a curator
-# * created by an importer
-#
-# Attributes:
-# - message
-#
-#
+# A report created by an importer to notify the curators about something.
+# We expect to use it to inform the curators when an importer fails for
+# some reason.
 class Report
 
   include MongoMapper::Document
