@@ -54,12 +54,16 @@ module DataCatalog
         def lookup_api_key
           @api_key ||= params.delete("api_key")
         end
-
+        
         # Is +user+ the owner of +document+?
         #
         # First, checks to see if +user+ and +document+ are the same. After
         # that, try to follow the +document.user+ relationship, if present, to
         # see if that points to +user+.
+        #
+        # Note that certain document classes are ignored (e.g. Report) because
+        # "ownership" is not a useful idea -- or worse, because returning
+        # :owner as the role would trump :curator or :admin.
         #
         # @param [DataCatalog::User] user
         #
@@ -67,7 +71,9 @@ module DataCatalog
         #
         # @return [Boolean]
         def owner?(user, document)
-          if user == document
+          if [Report].include?(document.class)
+            false
+          elsif user == document
             true
           elsif !document.respond_to?(:user)
             false
