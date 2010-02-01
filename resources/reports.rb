@@ -12,7 +12,7 @@ module DataCatalog
     permission :read   => :curator
     permission :create => :curator
     permission :update => :curator
-    permission :delete => :admin
+    permission :delete => :curator
 
     # == Properties
 
