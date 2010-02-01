@@ -10,6 +10,7 @@ map("/favorites")     { run DataCatalog::Favorites }
 map("/notes")         { run DataCatalog::Notes }
 map("/organizations") { run DataCatalog::Organizations }
 map("/ratings")       { run DataCatalog::Ratings }
+map("/reports")       { run DataCatalog::Reports }
 map("/resources")     { run DataCatalog::Resources }
 map("/sources")       { run DataCatalog::Sources }
 map("/tags")          { run DataCatalog::Tags }
