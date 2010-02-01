@@ -130,6 +130,14 @@ module ModelHelpers
     create_model!(Note, custom, required)
   end
   
+  def create_report(custom={})
+    required = {
+      :text      => "Sample Report",
+    }
+    required[:user_id] = @normal_user.id if @normal_user
+    create_model!(Report, custom, required)
+  end
+  
   def create_source(custom={})
     create_model!(Source, custom, {
       :title       => "2005-2007 American Community Survey PUMS Housing File",
@@ -235,6 +243,14 @@ module ModelHelpers
     }
     required[:user_id] = @normal_user.id if @normal_user
     new_model!(Note, custom, required)
+  end
+  
+  def new_report(custom={})
+    required = {
+      :text      => "Sample Report",
+    }
+    required[:user_id] = @normal_user.id if @normal_user
+    new_model!(Report, custom, required)
   end
 
   def new_source(custom={})
