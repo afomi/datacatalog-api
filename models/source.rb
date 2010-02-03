@@ -24,6 +24,7 @@ class Source
   key :period_end,          Time
   key :frequency,           String
   key :organization_id,     ObjectId
+  key :source_group_id,     ObjectId
   key :custom,              Hash
   key :raw,                 Hash
   key :_keywords,           Array
@@ -40,6 +41,7 @@ class Source
   # == Associations
   
   belongs_to :organization
+  belongs_to :source_group
   many :categorizations
   many :comments
   many :documents
