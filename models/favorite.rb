@@ -4,8 +4,8 @@ class Favorite
 
   # == Attributes
 
-  key :source_id, String
-  key :user_id,   String
+  key :source_id, Mongo::ObjectID
+  key :user_id,   Mongo::ObjectID
   timestamps!
   
   # == Indices
@@ -15,6 +15,8 @@ class Favorite
   belongs_to :source
   belongs_to :user
 
+  protected
+  
   # == Validations
 
   validates_presence_of :source_id
@@ -25,7 +27,6 @@ class Favorite
     errors.add(:user_id, "must be valid") if user.nil?
     errors.add(:source_id, "must be valid") if source.nil?
   end
-  protected :general_validation
 
   # == Class Methods
 

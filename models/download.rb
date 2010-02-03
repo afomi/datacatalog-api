@@ -11,7 +11,7 @@ class Download
   key :format,    String
   key :preview,   String
   key :size,      Hash
-  key :source_id, String
+  key :source_id, Mongo::ObjectID
   timestamps!
   
   # == Indices
@@ -19,6 +19,8 @@ class Download
   # == Associations
 
   belongs_to :source
+
+  protected
 
   # == Validations
 
@@ -33,7 +35,6 @@ class Download
   def general_validation
     errors.add(:source_id, "must be valid") if source.nil?
   end
-  protected :general_validation
 
   validate :validate_source_type
   def validate_source_type
@@ -41,7 +42,6 @@ class Download
       errors.add(:source, "must have dataset source_type")
     end
   end
-  protected :validate_source_type
 
   before_validation :clean_size
   def clean_size
@@ -50,7 +50,6 @@ class Download
     h['number'] = Try.to_i_or_f(size['number']) if size['number']
     self.size = h
   end
-  protected :clean_size
   
   SIZE_KEYS = %w(bytes number unit)
   UNIT_VALUES = %w(B KB MB TB PB EB)
@@ -73,7 +72,6 @@ class Download
       errors.add(:size, "unit must be one of: #{UNIT_VALUES.join(' ')}")
     end
   end
-  protected :validate_size
 
   # == Class Methods
 

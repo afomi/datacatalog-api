@@ -10,10 +10,10 @@ class Document
   # == Attributes
 
   key :text,        String
-  key :source_id,   String
-  key :user_id,     String
-  key :previous_id, String
-  key :next_id,     String
+  key :source_id,   Mongo::ObjectID
+  key :user_id,     Mongo::ObjectID
+  key :previous_id, Mongo::ObjectID
+  key :next_id,     Mongo::ObjectID
   timestamps!
 
   # == Indices
@@ -22,6 +22,8 @@ class Document
   
   belongs_to :source
   belongs_to :user
+  
+  protected
 
   # == Validations
   
@@ -34,11 +36,12 @@ class Document
     errors.add(:user_id, "must be valid") if user.nil?
     errors.add(:source_id, "must be valid") if source.nil?
   end
-  protected :general_validation
 
   # == Class Methods
 
   # == Various Instance Methods
+  
+  public
 
   # Creates a new Document version based on +self+.
   #

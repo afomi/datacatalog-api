@@ -85,7 +85,7 @@ class FavoriteUnitTest < ModelTestCase
     context "missing user_id" do
       before do
         @favorite = Favorite.new(@valid_params.merge(
-          :user_id => ""
+          :user_id => nil
         ))
       end
       
@@ -106,7 +106,7 @@ class FavoriteUnitTest < ModelTestCase
 
     context "missing source_id" do
       before do
-        @favorite = Favorite.new(@valid_params.merge(:source_id => ""))
+        @favorite = Favorite.new(@valid_params.merge(:source_id => nil))
       end
       
       use "invalid favorite"

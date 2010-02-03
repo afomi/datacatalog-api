@@ -97,7 +97,7 @@ class RatingUnitTest < ModelTestCase
 
     context "missing user_id" do
       before do
-        @rating = Rating.new(@valid_params.merge(:user_id => ""))
+        @rating = Rating.new(@valid_params.merge(:user_id => nil))
       end
       
       use "invalid rating"
@@ -106,7 +106,7 @@ class RatingUnitTest < ModelTestCase
 
     context "missing source_id" do
       before do
-        @rating = Rating.new(@valid_params.merge(:source_id => ""))
+        @rating = Rating.new(@valid_params.merge(:source_id => nil))
       end
       
       use "invalid rating"
@@ -153,7 +153,7 @@ class RatingUnitTest < ModelTestCase
   
     context "missing user_id" do
       before do
-        @rating = Rating.new(@valid_params.merge(:user_id => ""))
+        @rating = Rating.new(@valid_params.merge(:user_id => nil))
       end
   
       use "invalid rating"
@@ -162,7 +162,7 @@ class RatingUnitTest < ModelTestCase
   
     context "missing comment_id" do
       before do
-        @rating = Rating.new(@valid_params.merge(:comment_id => ""))
+        @rating = Rating.new(@valid_params.merge(:comment_id => nil))
       end
       
       use "invalid rating"

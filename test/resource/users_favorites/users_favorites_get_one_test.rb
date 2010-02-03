@@ -45,7 +45,7 @@ class UsersFavoritesGetOneTest < RequestTestCase
         "title" => "Example Source",
       }
       assert_equal expected, parsed_response_body['source']
-      assert_equal @source.id, parsed_response_body['source_id']
+      assert_equal @source.id.to_s, parsed_response_body['source_id']
     end
   end
   

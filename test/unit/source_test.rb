@@ -80,12 +80,12 @@ class SourceUnitTest < ModelTestCase
         :source_type => "dataset",
       }
     end
-
+  
     context "correct params" do
       before do
         @source = Source.new(@valid_params)
       end
-
+  
       use "valid source"
     end
     
@@ -103,7 +103,7 @@ class SourceUnitTest < ModelTestCase
         before do
           @source = Source.new(@valid_params.merge(:source_type => "foobar"))
         end
-
+  
         use "invalid source"
         use "source.source_type must be api or dataset"
       end
@@ -137,20 +137,20 @@ class SourceUnitTest < ModelTestCase
           @source.save
           assert_equal "my-awesome-slug", @source.slug
         end
-
+  
         test "should generate something when title has no valid characters" do
           @source.title = "%+*"
           @source.save
           assert_not_equal "", @source.slug
         end
-
+  
         test "should be invalid on bad characters" do
           @source.slug = "%+*"
           @source.save
           assert_include :slug, @source.errors.errors
           assert_include "can only contain alphanumeric characters and dashes", @source.errors.errors[:slug]
         end
-
+  
         test "should save only alphanumeric characters from title" do
           @source.title = "My Custom Title!%&+!"
           @source.save
@@ -164,7 +164,7 @@ class SourceUnitTest < ModelTestCase
           @source.save
           assert_equal "stay-the-same", @source.slug
         end
-
+  
         test "should not allow duplicate slug" do
           @source.slug = "in-use"
           @source.save
@@ -174,17 +174,17 @@ class SourceUnitTest < ModelTestCase
           expected = { :slug => ["has already been taken"] }
           assert_equal expected, @new_source.errors.errors
         end
-
+  
         test "should prevent duplicate slugs" do
           @source.title = "Common Title"
           @source.save
-
+  
           s = Source.new(@valid_params)
           s.title = "Common Title"
           assert_equal true, s.save
           assert_equal "common-title-2", s.slug
           assert_equal true, s.valid?
-
+  
           s = Source.new(@valid_params)
           s.title = "Common Title"
           assert_equal true, s.save
@@ -338,7 +338,7 @@ class SourceUnitTest < ModelTestCase
         use "source.url must be absolute"
       end
     end
-
+  
     context "released" do
       context "missing" do
         before do
@@ -352,7 +352,7 @@ class SourceUnitTest < ModelTestCase
           assert_equal({}, @source.released)
         end
       end
-
+  
       context "too large of a year" do
         before do
           @source = Source.new(@valid_params.merge(
@@ -367,7 +367,7 @@ class SourceUnitTest < ModelTestCase
           assert_include "year must be between 1900 and 2010", actual
         end
       end
-
+  
       context "noninteger month" do
         before do
           @source = Source.new(@valid_params.merge(
@@ -383,7 +383,7 @@ class SourceUnitTest < ModelTestCase
           assert_include "month must be between 1 and 12", actual
         end
       end
-
+  
       context "too large of a day" do
         before do
           @source = Source.new(@valid_params.merge(
@@ -405,21 +405,21 @@ class SourceUnitTest < ModelTestCase
         ))
         assert_equal true, @source.valid?
       end
-
+  
       test "year, month only" do
         @source = Source.new(@valid_params.merge(
           :released => { :year => 2008, :month => 4 }
         ))
         assert_equal true, @source.valid?
       end
-
+  
       test "year, month, day only" do
         @source = Source.new(@valid_params.merge(
           :released => { :year => 2008, :month => 4, :day => 5 }
         ))
         assert_equal true, @source.valid?
       end
-
+  
       test "month only" do
         @source = Source.new(@valid_params.merge(
           :released => { :month => 5 }
@@ -428,7 +428,7 @@ class SourceUnitTest < ModelTestCase
         actual = @source.errors.errors[:released]
         assert_include "year required if month is present", actual
       end
-
+  
       test "day only" do
         @source = Source.new(@valid_params.merge(
           :released => { :day => 12 }
@@ -452,7 +452,7 @@ class SourceUnitTest < ModelTestCase
       @original_updated_at = doc.updated_at
       Timecop.travel(1)
       doc.url = "http://updated.gov"
-      doc.save
+      doc.save!
       @updated = doc
       Timecop.return
     end

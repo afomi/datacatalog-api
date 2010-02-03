@@ -19,6 +19,8 @@ class Report
   # == Associations
 
   belongs_to :user
+  
+  protected
 
   # == Validations
 
@@ -29,7 +31,6 @@ class Report
   def validate_user
     errors.add(:user_id, "must be valid") if user.nil?
   end
-  protected :validate_user
 
   STATUS_TYPES = %w(new open closed)
 
@@ -39,7 +40,6 @@ class Report
       errors.add(:status, "must be one of: #{STATUS_TYPES.join(', ')}")
     end
   end
-  protected :validate_status
 
   # == Class Methods
 

@@ -12,9 +12,9 @@ class Rating
   # == Attributes
 
   key :kind,           String
-  key :user_id,        String
-  key :source_id,      String
-  key :comment_id,     String
+  key :user_id,        Mongo::ObjectID
+  key :source_id,      Mongo::ObjectID
+  key :comment_id,     Mongo::ObjectID
   key :value,          Integer
   key :previous_value, Integer, :default => 0
   key :text,           String
@@ -27,6 +27,8 @@ class Rating
   belongs_to :user
   belongs_to :source
   belongs_to :comment
+
+  protected
 
   # == Validations
 
@@ -44,7 +46,6 @@ class Rating
     else errors.add(:kind, "is invalid")
     end
   end
-  protected :general_validation
   
   def comment_validation
     errors.add(:comment_id, "can't be empty") if comment_id.blank?
@@ -52,7 +53,6 @@ class Rating
     errors.add(:value, "must be 0 or 1") unless value == 0 || value == 1
     errors.add(:text, "must be empty") unless text.blank?
   end
-  protected :comment_validation
   
   def source_validation
     errors.add(:source_id, "can't be empty") if source_id.blank?
@@ -61,7 +61,44 @@ class Rating
       errors.add(:value, "must be between 1 and 5")
     end
   end
-  protected :source_validation
+
+  # == Callbacks
+
+  after_create :stats_after_create
+  def stats_after_create
+    doc = self.find_rated_document!
+    stale = doc.rating_stats
+    count = (doc.rating_stats[:count] += 1)
+    total = (doc.rating_stats[:total] += self.value)
+    doc.rating_stats[:average] = total.to_f / count
+    doc.save!
+  end
+  
+  before_update :stats_before_update
+  def stats_before_update
+    rating_from_db = Rating.find_by_id(self.id)
+    self.previous_value = rating_from_db.value if rating_from_db
+  end
+  
+  after_update :stats_after_update
+  def stats_after_update
+    doc = self.find_rated_document!
+    value_delta = self.value - self.previous_value
+    total = (doc.rating_stats[:total] += value_delta)
+    count = doc.rating_stats[:count]
+    doc.rating_stats[:average] = total.to_f / count
+    doc.save
+  end
+  
+  after_destroy :stats_after_destroy
+  def stats_after_destroy
+    doc = self.find_rated_document
+    return if doc.nil?
+    count = (doc.rating_stats[:count] -= 1)
+    doc.rating_stats[:total] -= self.value
+    doc.rating_stats[:average] = nil if count == 0
+    doc.save
+  end
 
   # == Class Methods
 

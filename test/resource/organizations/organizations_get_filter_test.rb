@@ -34,7 +34,7 @@ class OrganizationsGetFilterTest < RequestTestCase
         assert_equal 2, @members.length
         @members.each do |resource|
           assert_equal "organization 3", resource["name"]
-          assert_equal @user.id, resource["user_id"]
+          assert_equal @user.id.to_s, resource["user_id"]
         end
       end
     end

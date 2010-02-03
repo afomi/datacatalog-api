@@ -1,18 +1,19 @@
 require 'rubygems'
 
 DEPENDENCIES = {
-  'sinatra'                => ['>= 0.9.4'   , '< 1.0'],
-  'mongo'                  => ['>= 0.16'    , '< 1.0'],
-  'djsun-mongo_mapper'     => ['>= 0.5.8.2' , '< 0.6'],
-  'sinatra_resource'       => ['>= 0.4.6'   , '< 0.5'],
-  'frequency'              => ['>= 0.1.2'   , '< 0.2'],
-  'crack'                  => ['>= 0.1.4' ],
+  'sinatra'                => ['>= 0.9.4', '< 1.0'],
+  'mongo'                  => ['= 0.18.2'],
+  'mongo_ext'              => ['= 0.18.2'],
+  'mongo_mapper'           => ['>= 0.6.10', '< 0.7'],
+  'sinatra_resource'       => ['>= 0.4.8', '< 0.5'],
+  'frequency'              => ['>= 0.1.2', '< 0.2'],
+  'crack'                  => ['>= 0.1.6' ],
   'djsun-context'          => ['>= 0.5.6' ],
   'jeremymcanally-pending' => ['>= 0.1'   ],
-  'rack-test'              => ['>= 0.5.1' ],
-  'rcov'                   => ['>= 0.9.6' ],
-  'rr'                     => ['>= 0.10.4'],
-  'timecop'                => ['>= 0.3.1' ],
+  'rack-test'              => ['>= 0.5.3' ],
+  'rcov'                   => ['>= 0.9.7' ],
+  'rr'                     => ['>= 0.10.5'],
+  'timecop'                => ['>= 0.3.4' ],
 }
 
 namespace :dependencies do

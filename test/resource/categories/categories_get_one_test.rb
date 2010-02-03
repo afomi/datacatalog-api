@@ -64,7 +64,7 @@ class CategoriesGetOneTest < RequestTestCase
       
       test "body should have correct source_ids" do
         actual = parsed_response_body["source_ids"]
-        expected = @sources.map(&:id)
+        expected = @sources.map { |source| source.id.to_s }
         assert_equal expected, actual
       end
     end

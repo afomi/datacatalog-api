@@ -84,7 +84,7 @@ class DocumentUnitTest < ModelTestCase
     context "missing user_id" do
       before do
         @document = Document.new(@valid_params.merge(
-          :user_id => ""
+          :user_id => nil
         ))
       end
       
@@ -105,7 +105,7 @@ class DocumentUnitTest < ModelTestCase
 
     context "missing source_id" do
       before do
-        @document = Document.new(@valid_params.merge(:source_id => ""))
+        @document = Document.new(@valid_params.merge(:source_id => nil))
       end
       
       use "invalid document"

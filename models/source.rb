@@ -23,22 +23,22 @@ class Source
   key :period_start,        Time
   key :period_end,          Time
   key :frequency,           String
-  key :organization_id,     String
+  key :organization_id,     Mongo::ObjectID
   key :custom,              Hash
   key :raw,                 Hash
   key :_keywords,           Array
   timestamps!
 
   # == Indices
-
+  
   ensure_index :title
   ensure_index :slug
   ensure_index :source_type
   ensure_index :license
   ensure_index :url
-
+  
   # == Associations
-
+  
   belongs_to :organization
   many :categorizations
   many :comments
@@ -47,38 +47,39 @@ class Source
   many :notes
   many :ratings
   many :downloads
-
+  
   def categories
     categorizations.map(&:category)
   end
-
+  
+  protected
+  
   # == Validations
-
+  
   validates_presence_of :title
   validates_presence_of :url
   validates_uniqueness_of :slug
-
+  
   validates_format_of :slug,
     :with      => /\A[a-zA-z0-9\-]+\z/,
     :message   => "can only contain alphanumeric characters and dashes",
     :allow_nil => true
-
+  
   include UrlValidator
   validate :validate_url
-
+  
   SOURCE_TYPES = %w(
     api
     dataset
   )
-
+  
   validate :validate_source_type
   def validate_source_type
     unless SOURCE_TYPES.include?(source_type)
       errors.add(:source_type, "must be one of: #{SOURCE_TYPES.join(', ')}")
     end
   end
-  protected :validate_source_type
-
+  
   validate :validate_period
   def validate_period
     return if !period_start && !period_end
@@ -90,71 +91,28 @@ class Source
       errors.add(:period_end, "must be later than period_start")
     end
   end
-  protected :validate_period
-
+  
   validate :validate_frequency
   def validate_frequency
     if frequency && !Frequency.new(frequency).valid?
       errors.add(:frequency, "is invalid")
     end
   end
-  protected :validate_frequency
-
-  # == Callbacks
-  
-  before_validation :handle_blank_slug
-  def handle_blank_slug
-    self.slug = nil if self.slug.blank?
-  end
-  protected :handle_blank_slug
-  
-  before_create :generate_slug
-  def generate_slug
-    return if title.blank?
-    default = Slug.make(title, self)
-    self.slug = default if slug.blank?
-    n = 2
-    loop do
-      existing = self.class.first(:slug => slug)
-      break unless existing
-      self.slug = "#{default}-#{n}"
-      n += 1
-    end
-  end
-  protected :generate_slug
-  
-  before_save :update_keywords
-  def update_keywords
-    self._keywords = DataCatalog::Search.process([title, description])
-  end
-  protected :update_keywords
   
   RELEASED_KEYS = %w(day month year)
   MIN_YEAR = 1900
   MAX_YEAR = Time.now.year
-  
-  before_validation :clean_released
-  def clean_released
-    released.each do |key, value|
-      self.released[key] = begin
-        Integer(value)
-      rescue ArgumentError
-        value
-      end
-    end
-  end
-  protected :clean_released
   
   validate :validate_released
   def validate_released
     if (released.keys - RELEASED_KEYS).length > 0
       errors.add(:released, "only these keys are allowed : #{RELEASED_KEYS}")
     end
-
+  
     year  = released['year']
     month = released['month']
     day   = released['day']
-
+  
     expect_integer(year,  :released, :year)
     expect_integer(month, :released, :month)
     expect_integer(day,   :released, :day)
@@ -179,10 +137,81 @@ class Source
       errors.add(:released, "year required if month is present")
     end
   end
-  protected :validate_released
+  
+  before_validation :handle_blank_slug
+  def handle_blank_slug
+    self.slug = nil if self.slug.blank?
+  end
+  
+  # == Callbacks
+  
+  before_create :generate_slug
+  def generate_slug
+    return if title.blank?
+    default = Slug.make(title, self)
+    self.slug = default if slug.blank?
+    n = 2
+    loop do
+      existing = self.class.first(:slug => slug)
+      break unless existing
+      self.slug = "#{default}-#{n}"
+      n += 1
+    end
+  end
+  
+  before_save :update_keywords
+  def update_keywords
+    self._keywords = DataCatalog::Search.process([title, description])
+  end
 
+  before_validation :clean_released
+  def clean_released
+    released.each do |key, value|
+      self.released[key] = begin
+        Integer(value)
+      rescue ArgumentError
+        value
+      end
+    end
+  end
+
+  # == Callbacks : source_count
+
+  after_create :increment_source_count
+  def increment_source_count
+    adjust_source_count(self, 1)
+  end
+
+  after_destroy :decrement_source_count
+  def decrement_source_count
+    adjust_source_count(self, -1)
+  end
+  
+  before_update :save_previous
+  def save_previous
+    @previous_source = Source.find(self.id)
+  end
+  
+  after_update :restore_previous
+  def restore_previous
+    adjust_source_count(@previous_source, -1) if @previous_source
+    adjust_source_count(self, 1)
+  end
+  
   # == Class Methods
-
+  
   # == Various Instance Methods
   
+  def adjust_source_count(source, delta)
+    org = source.organization
+    if org
+      if org.source_count
+        org.source_count += delta
+      else
+        org.source_count = delta
+      end
+      org.save!
+    end
+  end
+
 end

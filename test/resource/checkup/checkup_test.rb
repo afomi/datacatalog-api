@@ -77,7 +77,7 @@ class CheckupTest < RequestTestCase
     test "should have correct user href" do
       expected = {
         "href" => "/users/#{@normal_user.id}",
-        "id"   => @normal_user.id
+        "id"   => @normal_user.id.to_s
       }
       assert_equal expected, parsed_response_body["user"]
     end
@@ -100,7 +100,7 @@ class CheckupTest < RequestTestCase
     test "should have correct user href" do
       expected = {
         "href" => "/users/#{@curator_user.id}",
-        "id"   => @curator_user.id
+        "id"   => @curator_user.id.to_s
       }
       assert_equal expected, parsed_response_body["user"]
     end
@@ -123,7 +123,7 @@ class CheckupTest < RequestTestCase
     test "should have correct user href" do
       expected = {
         "href" => "/users/#{@admin_user.id}",
-        "id"   => @admin_user.id
+        "id"   => @admin_user.id.to_s
       }
       assert_equal expected, parsed_response_body["user"]
     end

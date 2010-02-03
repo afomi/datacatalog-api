@@ -83,7 +83,7 @@ class DownloadUnitTest < ModelTestCase
 
     context "missing source_id" do
       before do
-        @download = Download.new(@valid_params.merge(:source_id => ""))
+        @download = Download.new(@valid_params.merge(:source_id => nil))
       end
       
       use "invalid download"

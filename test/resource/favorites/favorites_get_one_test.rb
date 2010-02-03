@@ -38,8 +38,8 @@ class FavoritesGetOneTest < RequestTestCase
       id created_at updated_at)
     
     test "should have correct values" do
-      assert_equal @source.id, parsed_response_body['source_id']
-      assert_equal @user.id, parsed_response_body['user_id']
+      assert_equal @source.id.to_s, parsed_response_body['source_id']
+      assert_equal @user.id.to_s, parsed_response_body['user_id']
       assert_equal({
         'href'  => "/sources/#{@source.id}",
         'title' => @source.title,

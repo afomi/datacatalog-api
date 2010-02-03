@@ -39,8 +39,8 @@ class NotesGetFilterTest < RequestTestCase
       test "each element should be correct" do
         @members.each do |element|
           assert_equal 'Note 2', element["text"]
-          assert_equal @normal_user.id, element["user_id"]
-          assert_equal @sources[2].id, element["source_id"]
+          assert_equal @normal_user.id.to_s, element["user_id"]
+          assert_equal @sources[2].id.to_s, element["source_id"]
         end
       end
     end

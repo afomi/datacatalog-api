@@ -41,8 +41,8 @@ class FavoritesPostTest < RequestTestCase
     end
 
     test "body should have correct values" do
-      assert_equal @source.id, parsed_response_body['source_id']
-      assert_equal @normal_user.id, parsed_response_body['user_id']
+      assert_equal @source.id.to_s, parsed_response_body['source_id']
+      assert_equal @normal_user.id.to_s, parsed_response_body['user_id']
     end
   end
 

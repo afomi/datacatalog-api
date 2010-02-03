@@ -34,7 +34,7 @@ class FavoritesPutTest < RequestTestCase
 
     test "source_id should be updated in database" do
       favorite = Favorite.find_by_id!(@favorite.id)
-      assert_equal @new_source.id, favorite.source_id
+      assert_equal @new_source.id.to_s, favorite.source_id
     end
   end
 

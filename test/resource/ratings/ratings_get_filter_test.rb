@@ -18,7 +18,7 @@ class RatingsGetFilterTest < RequestTestCase
       @members.each do |element|
         assert_equal "source rating 2", element['text']
         assert_equal 2, element["value"]
-        assert_equal @user.id, element['user_id']
+        assert_equal @user.id.to_s, element['user_id']
         assert_include "source_id", element
       end
     end
@@ -39,7 +39,7 @@ class RatingsGetFilterTest < RequestTestCase
         value = element["value"]
         assert_equal true, value >= 4
         assert_equal "source rating #{value}", element['text']
-        assert_equal @user.id, element['user_id']
+        assert_equal @user.id.to_s, element['user_id']
       end
     end
   end
@@ -58,7 +58,7 @@ class RatingsGetFilterTest < RequestTestCase
       @members.each do |element|
         value = element["value"]
         assert_equal true, value < 4
-        assert_equal @user.id, element['user_id']
+        assert_equal @user.id.to_s, element['user_id']
         case element["kind"]
         when "source"
           assert_equal "source rating #{value}", element['text']

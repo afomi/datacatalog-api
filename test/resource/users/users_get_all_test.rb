@@ -17,7 +17,7 @@ class UsersGetAllTest < RequestTestCase
   shared "hide private attributes for other users" do
     test "each element should hide private attributes" do
       @members.each do |element|
-        if element["id"] != @normal_user.id
+        if element["id"] != @normal_user.id.to_s
           assert_not_include "primary_api_key", element
           assert_not_include "application_api_keys", element
           assert_not_include "valet_api_keys", element

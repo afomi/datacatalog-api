@@ -94,7 +94,7 @@ class NoteUnitTest < ModelTestCase
     context "missing user_id" do
       before do
         @note = Note.new(@valid_params.merge(
-          :user_id => ""
+          :user_id => nil
         ))
       end
       
@@ -115,7 +115,7 @@ class NoteUnitTest < ModelTestCase
 
     context "missing source_id" do
       before do
-        @note = Note.new(@valid_params.merge(:source_id => ""))
+        @note = Note.new(@valid_params.merge(:source_id => nil))
       end
       
       use "invalid note"

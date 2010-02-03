@@ -34,14 +34,14 @@ class DownloadsPostTest < RequestTestCase
         r = parsed_response_body
         assert_equal "http://example.gov/data/7", r["url"]
         assert_equal "xml", r["format"]
-        assert_equal @source.id, r["source_id"]
+        assert_equal @source.id.to_s, r["source_id"]
       end
 
       test "text should be correct in database" do
         download = Download.find_by_id!(parsed_response_body["id"])
         assert_equal "http://example.gov/data/7", download.url
         assert_equal "xml", download.format
-        assert_equal @source.id, download.source_id
+        assert_equal @source.id.to_s, download.source_id
       end
     end
   end

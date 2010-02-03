@@ -5,8 +5,8 @@ class Tag
   # == Attributes
 
   key :text,            String
-  key :source_id,       String
-  key :user_id,         String
+  key :source_id,       Mongo::ObjectID
+  key :user_id,         Mongo::ObjectID
   timestamps!
 
   # == Indices

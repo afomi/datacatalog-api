@@ -64,7 +64,7 @@ class ReportUnitTest < ModelTestCase
     
     context "missing user_id" do
       before do
-        @report = Report.new(@valid_params.merge(:user_id => ""))
+        @report = Report.new(@valid_params.merge(:user_id => nil))
       end
       
       use "invalid report"

@@ -26,7 +26,7 @@ class OrganizationsGetOneTest < RequestTestCase
   
     test "body should have correct values" do
       assert_equal "Organization A", parsed_response_body["name"]
-      assert_equal @user.id, parsed_response_body["user_id"]
+      assert_equal @user.id.to_s, parsed_response_body["user_id"]
     end
     
     doc_properties %w(

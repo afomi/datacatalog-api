@@ -11,7 +11,7 @@
   key :description,    String
   key :slug,           String
   key :url,            String
-  key :user_id,        String
+  key :user_id,        Mongo::ObjectID
   key :interest,       Integer
   key :level,          Integer
   key :custom,         Hash
@@ -27,6 +27,8 @@
 
   many :sources
 
+  protected
+  
   # == Validations
 
   include UrlValidator
@@ -51,7 +53,6 @@
       errors.add(:org_type, "must be one of: #{ORG_TYPES.join(', ')}")
     end
   end
-  protected :validate_org_type
 
   # == Callbacks
 
@@ -59,7 +60,6 @@
   def handle_blank_slug
     self.slug = nil if self.slug.blank?
   end
-  protected :handle_blank_slug
   
   before_create :generate_slug
   def generate_slug
@@ -75,14 +75,12 @@
       n += 1
     end
   end
-  protected :generate_slug
 
   before_save :update_keywords
   def update_keywords
     self._keywords = DataCatalog::Search.process(
       names + [name, acronym, description])
   end
-  protected :update_keywords
 
   # == Class Methods
 

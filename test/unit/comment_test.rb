@@ -81,16 +81,16 @@ class CommentUnitTest < ModelTestCase
 
     context "missing user_id" do
       before do
-        @comment = Comment.new(@valid_params.merge(:user_id => ""))
+        @comment = Comment.new(@valid_params.merge(:user_id => nil))
       end
       
       use "invalid comment"
       use "comment.user_id can't be empty"
     end
-
+    
     context "missing source_id" do
       before do
-        @comment = Comment.new(@valid_params.merge(:source_id => ""))
+        @comment = Comment.new(@valid_params.merge(:source_id => nil))
       end
       
       use "invalid comment"
@@ -103,11 +103,11 @@ class CommentUnitTest < ModelTestCase
           :parent_id => get_fake_mongo_object_id
         ))
       end
-
+    
       use "invalid comment"
       use "comment.parent_id must be valid"
     end
-
+    
     context "correct params" do
       before do
         @comment = Comment.new(@valid_params)
