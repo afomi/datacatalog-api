@@ -79,6 +79,12 @@ class UserUnitTest < ModelTestCase
     test "should have 3 valet API keys" do
       assert_equal 3, @user.valet_api_keys.length
     end
+    
+    test "find_by_api_key should work on all keys" do
+      @user.api_keys.map { |x| x.api_key }.each do |key|
+        assert_equal @user, User.find_by_api_key(key)
+      end
+    end
   end
   
   context "creating 2 users with API keys" do
