@@ -33,8 +33,6 @@ module DataCatalog
     # == Callbacks
 
     callback :before_create do |action, user|
-      # puts "user.id : #{user.id}"
-      # puts "action.current_user.id : #{action.current_user.id}"
       unless user.id == action.current_user.id
         action.error(401, action.convert({
           'errors' => ['unauthorized_api_key']
