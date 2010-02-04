@@ -11,7 +11,7 @@
   key :description,    String
   key :slug,           String
   key :url,            String
-  key :user_id,        Mongo::ObjectID
+  key :user_id,        ObjectId
   key :interest,       Integer
   key :level,          Integer
   key :custom,         Hash

@@ -4,8 +4,8 @@ class Categorization
 
   # == Attributes
 
-  key :source_id,   Mongo::ObjectID
-  key :category_id, Mongo::ObjectID
+  key :source_id,   ObjectId
+  key :category_id, ObjectId
   timestamps!
 
   # == Indices

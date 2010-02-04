@@ -10,10 +10,10 @@ class Document
   # == Attributes
 
   key :text,        String
-  key :source_id,   Mongo::ObjectID
-  key :user_id,     Mongo::ObjectID
-  key :previous_id, Mongo::ObjectID
-  key :next_id,     Mongo::ObjectID
+  key :source_id,   ObjectId
+  key :user_id,     ObjectId
+  key :previous_id, ObjectId
+  key :next_id,     ObjectId
   timestamps!
 
   # == Indices

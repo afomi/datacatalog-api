@@ -11,7 +11,7 @@ class Download
   key :format,    String
   key :preview,   String
   key :size,      Hash
-  key :source_id, Mongo::ObjectID
+  key :source_id, ObjectId
   timestamps!
   
   # == Indices

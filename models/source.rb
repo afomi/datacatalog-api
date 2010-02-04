@@ -23,7 +23,7 @@ class Source
   key :period_start,        Time
   key :period_end,          Time
   key :frequency,           String
-  key :organization_id,     Mongo::ObjectID
+  key :organization_id,     ObjectId
   key :custom,              Hash
   key :raw,                 Hash
   key :_keywords,           Array

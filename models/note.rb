@@ -9,8 +9,8 @@ class Note
   # == Attributes
 
   key :text,      String
-  key :source_id, Mongo::ObjectID
-  key :user_id,   Mongo::ObjectID
+  key :source_id, ObjectId
+  key :user_id,   ObjectId
   timestamps!
   
   # == Indices

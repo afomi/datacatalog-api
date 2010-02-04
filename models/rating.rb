@@ -12,9 +12,9 @@ class Rating
   # == Attributes
 
   key :kind,           String
-  key :user_id,        Mongo::ObjectID
-  key :source_id,      Mongo::ObjectID
-  key :comment_id,     Mongo::ObjectID
+  key :user_id,        ObjectId
+  key :source_id,      ObjectId
+  key :comment_id,     ObjectId
   key :value,          Integer
   key :previous_value, Integer, :default => 0
   key :text,           String

@@ -8,9 +8,9 @@ class Comment
 
   key :text,            String
   key :reports_problem, Boolean
-  key :source_id,       Mongo::ObjectID
-  key :user_id,         Mongo::ObjectID
-  key :parent_id,       Mongo::ObjectID
+  key :source_id,       ObjectId
+  key :user_id,         ObjectId
+  key :parent_id,       ObjectId
   timestamps!
 
   # == Indices
