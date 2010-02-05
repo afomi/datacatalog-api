@@ -4,7 +4,7 @@ DEPENDENCIES = {
   'sinatra'                => ['>= 0.9.4', '< 1.0'],
   'mongo'                  => ['= 0.18.2'],
   'mongo_ext'              => ['= 0.18.2'],
-  'mongo_mapper'           => ['>= 0.6.10', '< 0.7'],
+  'mongo_mapper'           => ['= 0.6.10'],
   'sinatra_resource'       => ['>= 0.4.11', '< 0.5'],
   'frequency'              => ['>= 0.1.2', '< 0.2'],
   'crack'                  => ['>= 0.1.6' ],

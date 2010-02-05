@@ -8,7 +8,7 @@ module Config
   end
   
   def self.setup_mongomapper
-    gem 'mongo_mapper', '>= 0.6.10', '< 0.7'
+    gem 'mongo_mapper', '= 0.6.10'
     require 'mongo_mapper'
     MongoMapper.connection = new_mongo_connection
     MongoMapper.database = environment_config['mongo_database']
