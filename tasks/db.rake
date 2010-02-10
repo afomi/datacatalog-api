@@ -21,9 +21,11 @@ namespace :db do
   
   def verbosely_display_users(users)
     users.each do |user|
-      puts "  * #{user.name} | id: #{user.id} | email: #{user.email}"
+      puts "  * name  : #{user.name}"
+      puts "    id    : #{user.id}"
+      puts "    email : #{user.email}"
       user.api_keys.each do |api_key|
-        puts "    - API key : #{api_key.api_key} | #{api_key.key_type}"
+        puts "    - API key : #{api_key.api_key} #{api_key.key_type}"
       end
     end
   end
