@@ -1,10 +1,10 @@
 require 'rubygems'
 gem 'activesupport', '= 2.3.5' 
+gem 'mongo', ">= 0.18.3", '< 1.0'
+gem 'mongo_ext', ">= 0.18.3", '< 1.0'
+gem 'mongo_mapper', '>= 0.7', '< 0.8'
 require 'active_support' 
-gem 'mongo', "= 0.18.2", '< 1.0.0'
-gem 'mongo_ext', "= 0.18.2", '< 1.0.0'
 require 'mongo'
-gem 'mongo_mapper', '= 0.6.10'
 require 'mongo_mapper'
 
 module Config
