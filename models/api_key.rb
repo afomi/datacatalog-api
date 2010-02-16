@@ -22,7 +22,7 @@ class ApiKey
 
   # == Various Instance Methods
 
-  def initialize(attrs={})
+  def initialize(attrs={}, from_database=false)
     super
     unless read_attribute('created_at')
       write_attribute('created_at', Time.now.utc)
