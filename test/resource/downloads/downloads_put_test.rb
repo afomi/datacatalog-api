@@ -34,7 +34,7 @@ class DownloadsPutTest < RequestTestCase
 
       test "source_id should be updated in database" do
         download = Download.find_by_id!(@download.id)
-        assert_equal @new_source.id.to_s, download.source_id
+        assert_equal @new_source.id, download.source_id
       end
     end
   end

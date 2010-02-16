@@ -41,7 +41,7 @@ class DownloadsPostTest < RequestTestCase
         download = Download.find_by_id!(parsed_response_body["id"])
         assert_equal "http://example.gov/data/7", download.url
         assert_equal "xml", download.format
-        assert_equal @source.id.to_s, download.source_id
+        assert_equal @source.id, download.source_id
       end
     end
   end
