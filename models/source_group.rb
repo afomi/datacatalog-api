@@ -41,6 +41,8 @@ class SourceGroup
       source.source_group = self
     end
   end
+  
+  protected
 
   # == Validations
 
@@ -58,7 +60,6 @@ class SourceGroup
   def handle_blank_slug
     self.slug = nil if self.slug.blank?
   end
-  protected :handle_blank_slug
   
   before_create :generate_slug
   def generate_slug
@@ -73,13 +74,11 @@ class SourceGroup
       n += 1
     end
   end
-  protected :generate_slug
   
   before_save :update_keywords
   def update_keywords
     self._keywords = DataCatalog::Search.process([title, description])
   end
-  protected :update_keywords
   
   # == Class Methods
 
