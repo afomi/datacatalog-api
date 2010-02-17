@@ -62,7 +62,7 @@ class RatingUnitTest < ModelTestCase
     end
   end
   
-  context "Rating.new : source" do
+  context "Rating : source" do
     before do
       @user = create_normal_user
       @source = create_source(
@@ -114,7 +114,7 @@ class RatingUnitTest < ModelTestCase
     end
   end
   
-  context "Rating.new : comment" do
+  context "Rating : comment" do
     before do
       @user = create_normal_user
       @source = create_source(

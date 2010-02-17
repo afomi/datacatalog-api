@@ -72,7 +72,7 @@ class SourceUnitTest < ModelTestCase
     end
   end
 
-  context "Source.new" do
+  context "Source" do
     before do
       @valid_params = {
         :title       => "Migratory Bird Flyways - Continental United States",

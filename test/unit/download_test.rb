@@ -48,7 +48,7 @@ class DownloadUnitTest < ModelTestCase
 
   # - - - - - - - - - -
   
-  context "Download.new : source" do
+  context "Download : source" do
     before do
       @source = create_source
       @valid_params = {

@@ -48,7 +48,7 @@ class FavoriteUnitTest < ModelTestCase
 
   # - - - - - - - - - -
   
-  context "Favorite.new : source" do
+  context "Favorite : source" do
     before do
       @user = create_normal_user
       @source = create_source

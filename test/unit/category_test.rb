@@ -24,7 +24,7 @@ class CategoryUnitTest < ModelTestCase
 
   # - - - - - - - - - -
   
-  context "Category.new" do
+  context "Category" do
     before do
       @valid_params = {
         :name => "Science & Technology"

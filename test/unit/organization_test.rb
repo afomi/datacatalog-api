@@ -38,7 +38,7 @@ class OrganizationUnitTest < ModelTestCase
     end
   end
   
-  context "Organization.new" do
+  context "Organization" do
     before do
       @valid_params = {
         :name     => "Department of Commerce",

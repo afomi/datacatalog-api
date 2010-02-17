@@ -69,7 +69,7 @@ class DocumentUnitTest < ModelTestCase
     @user.destroy
   end
   
-  context "Document.new : source" do
+  context "Document : source" do
     context "invalid user_id" do
       before do
         @document = Document.new(@valid_params.merge(

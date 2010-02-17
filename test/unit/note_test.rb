@@ -56,7 +56,7 @@ class NoteUnitTest < ModelTestCase
 
   # - - - - - - - - - -
   
-  context "Note.new : source" do
+  context "Note : source" do
     before do
       @user = create_normal_user
       @source = create_source

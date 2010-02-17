@@ -24,7 +24,7 @@ class SourceGroupUnitTest < ModelTestCase
 
   # - - - - - - - - - -
   
-  context "SourceGroup.new" do
+  context "SourceGroup" do
     before do
       @valid_params = {
         :title => "2005 Toxics Release Inventory"

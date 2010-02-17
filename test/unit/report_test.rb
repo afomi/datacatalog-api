@@ -39,7 +39,7 @@ class ReportUnitTest < ModelTestCase
     end
   end
   
-  context "Report.new" do
+  context "Report" do
     before do
       @user = create_user
       @valid_params = {

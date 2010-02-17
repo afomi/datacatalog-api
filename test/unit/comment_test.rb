@@ -54,7 +54,7 @@ class CommentUnitTest < ModelTestCase
     end
   end
   
-  context "Comment.new" do
+  context "Comment" do
     before do
       @user = create_user
       @source = create_source
