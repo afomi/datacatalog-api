@@ -64,7 +64,7 @@
   before_create :generate_slug
   def generate_slug
     return if name.blank?
-    acronym.blank? ? to_slug = name : to_slug = acronym
+    to_slug = acronym.blank? ? name : acronym
     default = Slug.make(to_slug, self)
     self.slug = default if slug.blank?
     n = 2
