@@ -63,16 +63,9 @@ class SourceGroup
   
   before_create :generate_slug
   def generate_slug
+    return unless slug.blank?
     return if title.blank?
-    default = Slug.make(title, self)
-    self.slug = default if slug.blank?
-    n = 2
-    loop do
-      existing = self.class.first(:slug => slug)
-      break unless existing
-      self.slug = "#{default}-#{n}"
-      n += 1
-    end
+    self.slug = Slug.make(title, self)
   end
   
   before_save :update_keywords

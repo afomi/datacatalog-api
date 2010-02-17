@@ -63,17 +63,10 @@
   
   before_create :generate_slug
   def generate_slug
+    return unless slug.blank?
     return if name.blank?
     to_slug = acronym.blank? ? name : acronym
-    default = Slug.make(to_slug, self)
-    self.slug = default if slug.blank?
-    n = 2
-    loop do
-      existing = self.class.first(:slug => slug)
-      break unless existing
-      self.slug = "#{default}-#{n}"
-      n += 1
-    end
+    self.slug = Slug.make(to_slug, self)
   end
 
   before_save :update_keywords

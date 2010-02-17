@@ -110,62 +110,57 @@ class SourceUnitTest < ModelTestCase
     end
     
     context "slug" do
-      context "Source without title" do
-        before do
-          @source = Source.new(@valid_params.delete_if { |k, v| k == :title })
-        end
-        
-        test "do not set slug if title blank" do
-          assert_equal false, @source.valid?
-          assert_equal nil, @source.slug
-        end
-        
-        test "set slug after title is set and source saved" do
-          @source.title = "Wetlands Protection"
-          assert_equal true, @source.save
-          assert_equal "wetlands-protection", @source.slug
-        end
-      end
-      
-      context "Source with valid params" do
+      context "new" do
         before do
           @source = Source.new(@valid_params)
         end
+        
+        after do
+          @source.destroy
+        end
+
+        test "on validation, not set" do
+          assert_equal true, @source.valid?
+          assert_equal nil, @source.slug
+        end
       
-        test "should save when explicitly set" do
-          @source.slug = "my-awesome-slug"
-          @source.save
-          assert_equal "my-awesome-slug", @source.slug
+        test "on save, set based on title" do
+          assert_equal true, @source.save
+          assert_equal "migratory-bird-flyways-continental-united-states", @source.slug
         end
-  
-        test "should generate something when title has no valid characters" do
-          @source.title = "%+*"
-          @source.save
-          assert_not_equal "", @source.slug
+      end
+      
+      context "create" do
+        before do
+          @source = Source.create(@valid_params)
         end
-  
-        test "should be invalid on bad characters" do
-          @source.slug = "%+*"
-          @source.save
-          assert_include :slug, @source.errors.errors
-          assert_include "can only contain alphanumeric characters and dashes", @source.errors.errors[:slug]
+        
+        after do
+          @source.destroy
         end
-  
-        test "should save only alphanumeric characters from title" do
-          @source.title = "My Custom Title!%&+!"
-          @source.save
-          assert_equal "my-custom-title", @source.slug
+        
+        test "set based on title" do
+          assert_equal "migratory-bird-flyways-continental-united-states", @source.slug
         end
-              
-        test "should stay the same after multiple saves" do
-          @source.title = "Stay the Same!"
-          @source.save
-          assert_equal "stay-the-same", @source.slug
-          @source.save
-          assert_equal "stay-the-same", @source.slug
+      end
+      
+      context "update" do
+        before do
+          @source = Source.new(@valid_params)
         end
-  
-        test "should not allow duplicate slug" do
+        
+        after do
+          @source.destroy
+        end
+        
+        test "unchanged after multiple saves" do
+          @source.save
+          assert_equal "migratory-bird-flyways-continental-united-states", @source.slug
+          @source.save
+          assert_equal "migratory-bird-flyways-continental-united-states", @source.slug
+        end
+
+        test "disallow duplicate slugs" do
           @source.slug = "in-use"
           @source.save
           @new_source = Source.new(@valid_params)
@@ -174,22 +169,19 @@ class SourceUnitTest < ModelTestCase
           expected = { :slug => ["has already been taken"] }
           assert_equal expected, @new_source.errors.errors
         end
-  
-        test "should prevent duplicate slugs" do
-          @source.title = "Common Title"
-          @source.save
-  
-          s = Source.new(@valid_params)
-          s.title = "Common Title"
-          assert_equal true, s.save
-          assert_equal "common-title-2", s.slug
-          assert_equal true, s.valid?
-  
-          s = Source.new(@valid_params)
-          s.title = "Common Title"
-          assert_equal true, s.save
-          assert_equal "common-title-3", s.slug
-          assert_equal true, s.valid?
+        
+        test "prevent duplicate slugs" do
+          params = @valid_params.merge(:title => "Common")
+          @source = Source.create(params)
+        
+          source_2 = Source.create!(params)
+          assert_equal "common-2", source_2.slug
+        
+          source_3 = Source.create!(params)
+          assert_equal "common-3", source_3.slug
+          
+          source_2.destroy
+          source_3.destroy
         end
       end
     end
@@ -443,34 +435,45 @@ class SourceUnitTest < ModelTestCase
   
   context "timestamps" do
     before do
-      doc = create_source(
+      @doc = create_source(
         :title => "Just Some Data",
         :url   => "http://original.gov"
       )
-      @original_id = doc._id
-      @original_created_at = doc.created_at
-      @original_updated_at = doc.updated_at
+      @original = fields(@doc)
       Timecop.travel(1)
-      doc.url = "http://updated.gov"
-      doc.save!
-      @updated = doc
+      @doc.url = "http://updated.gov"
+      @doc.save!
+      @updated = fields(@doc)
       Timecop.return
+    end
+    
+    after do
+      @doc.destroy
     end
   
     test "should have updated url" do
-      assert_equal "http://updated.gov", @updated.url
+      assert_equal "http://updated.gov", @updated[:url]
     end
   
     test "should have an unchanged created_at" do
-      assert_equal_mongo_times @original_created_at, @updated.created_at
+      assert_equal_mongo_times @original[:created_at], @updated[:created_at]
     end
   
     test "body should have an updated updated_at" do
-      assert_different_mongo_times @original_updated_at, @updated.updated_at
+      assert_different_mongo_times @original[:updated_at], @updated[:updated_at]
     end
     
     test "body should have an unchanged _id" do
-      assert_equal @original_id, @updated._id
+      assert_equal @original[:id], @updated[:id]
+    end
+
+    def fields(doc)
+      {
+        :id         => doc._id,
+        :url        => doc.url,
+        :created_at => doc.created_at,
+        :updated_at => doc.updated_at,
+      }
     end
   end
   

@@ -21,8 +21,6 @@ class SourceGroupUnitTest < ModelTestCase
       assert_include "can't be empty", @source_group.errors.errors[:title]
     end
   end
-
-  # - - - - - - - - - -
   
   context "SourceGroup" do
     before do
@@ -47,10 +45,86 @@ class SourceGroupUnitTest < ModelTestCase
       use "invalid source_group"
       use "source_group.title can't be empty"
     end
+
+    context "slug" do
+      context "new" do 
+        before do
+          @source_group = SourceGroup.new(@valid_params)
+        end
+
+        after do
+          @source_group.destroy
+        end
+
+        test "on validation, not set" do
+          assert_equal true, @source_group.valid?
+          assert_equal nil, @source_group.slug
+        end
+
+        test "on save, set based on title" do
+          assert_equal true, @source_group.save
+          assert_equal "2005-toxics-release-inventory", @source_group.slug
+        end
+      end
+
+      context "create" do
+        before do
+          @source_group = SourceGroup.create(@valid_params)
+        end
+
+        after do
+          @source_group.destroy
+        end
+
+        test "set based on title" do
+          assert_equal "2005-toxics-release-inventory", @source_group.slug
+        end
+      end
+
+      context "update" do
+        before do
+          @source_group = SourceGroup.new(@valid_params)
+        end
+
+        after do
+          @source_group.destroy
+        end
+
+        test "unchanged after multiple saves" do
+          @source_group.save
+          assert_equal "2005-toxics-release-inventory", @source_group.slug
+          @source_group.save
+          assert_equal "2005-toxics-release-inventory", @source_group.slug
+        end
+
+        test "disallow duplicate slugs" do
+          @source_group.slug = "in-use"
+          @source_group.save
+          @new_source_group = SourceGroup.new(@valid_params)
+          @new_source_group.slug = "in-use"
+          assert_equal false, @new_source_group.valid?
+          expected = { :slug => ["has already been taken"] }
+          assert_equal expected, @new_source_group.errors.errors
+        end
+
+        test "prevent duplicate slugs" do
+          params = @valid_params.merge(:title => "Common")
+          @source_group = SourceGroup.create(params)
+        
+          source_group_2 = SourceGroup.create!(params)
+          assert_equal "common-2", source_group_2.slug
+        
+          source_group_3 = SourceGroup.create!(params)
+          assert_equal "common-3", source_group_3.slug
+          
+          source_group_2.destroy
+          source_group_3.destroy
+        end
+      end
+    end
+
   end
 
-  # - - - - - - - - - -
-  
   def create_example_sources
     sources = []
     sources << create_source(
@@ -82,12 +156,12 @@ class SourceGroupUnitTest < ModelTestCase
       end
       @source_group.save!
     end
-    
+
     after do
       @source_group.destroy
       @sources.each { |x| x.destroy }
     end
-    
+
     test "correct titles" do
       states = %w(Texas Utah Virginia)
       expected_titles = states.map do |state|
@@ -98,7 +172,7 @@ class SourceGroupUnitTest < ModelTestCase
         assert_include expected_title, titles
       end
     end
-    
+
     test "sources do not point to source_group" do
       @sources.each do |source|
         assert_nil source.source_group_id

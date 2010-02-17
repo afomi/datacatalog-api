@@ -78,92 +78,90 @@ class OrganizationUnitTest < ModelTestCase
       
       use "valid organization"
     end
-    
+
     context "slug" do
-      
-      context "creation" do 
+      context "new" do 
         before do
-          @organization = Organization.new(
-            :name     => "Department of State",
-            :org_type => "governmental"
-          )
+          @organization = Organization.new(@valid_params)
         end
-      
-        test "do not set slug if name blank" do
-          @organization.name = ""
-          assert_equal false, @organization.valid?
+
+        after do
+          @organization.destroy
+        end
+
+        test "on validation, not set" do
+          assert_equal true, @organization.valid?
           assert_equal nil, @organization.slug
         end
-        
-        test "set slug to title when using create" do
-          @organization = Organization.create(
-            :name     => "Department of Justice",
-            :org_type => "governmental",
-            :slug     => ""
-          )
-          assert_equal "department-of-justice", @organization.slug
+
+        test "on save, set based on name" do
+          assert_equal true, @organization.save
+          assert_equal "department-of-commerce", @organization.slug
         end
-          
-        test "set slug to acronym if acronym is set" do
-          @organization.acronym = "DOS"
+
+        test "on save, set based on acronym if present" do
+          @organization.acronym = "DOC"
           assert_equal true, @organization.save
-          assert_equal "dos", @organization.slug
-        end  
-          
-        test "set slug to name if name is set but not acronym" do
-          @organization.acronym = ""
-          assert_equal true, @organization.save
-          assert_equal "department-of-state", @organization.slug
+          assert_equal "doc", @organization.slug
         end
       end
-      
+
+      context "create" do
+        before do
+          @organization = Organization.create(@valid_params)
+        end
+
+        after do
+          @organization.destroy
+        end
+
+        test "set based on name" do
+          assert_equal "department-of-commerce", @organization.slug
+        end
+      end
+
       context "update" do
         before do
-          @organization = Organization.new(
-            :name     => "Department of Agriculture",
-            :org_type => "governmental",
-            :acronym  => "USDA"
-          )
-          end
-        
-          test "should stay the same after multiple saves" do
-            @organization.save
-            assert_equal "usda", @organization.slug
-            @organization.save
-            assert_equal "usda", @organization.slug
-          end
-          
-          test "should not allow duplicate slug" do
-            @organization.slug = "in-use"
-            @organization.save
-            @new_organization = Organization.new(@valid_params)
-            @new_organization.slug = "in-use"
-            assert_equal false, @new_organization.valid?
-            expected = { :slug => ["has already been taken"] }
-            assert_equal expected, @new_organization.errors.errors
-          end
-          
-        test "should prevent duplicate slugs" do
-          @organization.name = "Common Name"
-          @organization.acronym = ""
+          @organization = Organization.new(@valid_params)
+        end
+
+        after do
+          @organization.destroy
+        end
+
+        test "unchanged after multiple saves" do
           @organization.save
+          assert_equal "department-of-commerce", @organization.slug
+          @organization.save
+          assert_equal "department-of-commerce", @organization.slug
+        end
+
+        test "disallow duplicate slugs" do
+          @organization.slug = "in-use"
+          @organization.save
+          @new_organization = Organization.new(@valid_params)
+          @new_organization.slug = "in-use"
+          assert_equal false, @new_organization.valid?
+          expected = { :slug => ["has already been taken"] }
+          assert_equal expected, @new_organization.errors.errors
+        end
+
+        test "prevent duplicate slugs" do
+          params = @valid_params.merge(:name => "Common")
+          @organization = Organization.create(params)
         
-          o2 = Organization.new(@valid_params)
-          o2.name = "Common Name"
-          assert_equal true, o2.save
-          assert_equal "common-name-2", o2.slug
-          assert_equal true, o2.valid?
+          organization_2 = Organization.create!(params)
+          assert_equal "common-2", organization_2.slug
         
-          o3 = Organization.new(@valid_params)
-          o3.name = "Common Name"
-          assert_equal true, o3.save
-          assert_equal "common-name-3", o3.slug
-          assert_equal true, o3.valid?
+          organization_3 = Organization.create!(params)
+          assert_equal "common-3", organization_3.slug
+        
+          organization_2.destroy
+          organization_3.destroy
         end
       end
-      
     end
-    
+
     context "url" do
       context "http with port" do
         before do
@@ -204,5 +202,5 @@ class OrganizationUnitTest < ModelTestCase
       end
     end
   end
-  
+
 end
