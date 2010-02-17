@@ -4,6 +4,7 @@ class SluggableUnitTest < Test::Unit::TestCase
 
   before do
     @doc = Object.new
+    stub(@doc).id { 42 }
   end
   
   context "Slug.make" do
@@ -22,18 +23,20 @@ class SluggableUnitTest < Test::Unit::TestCase
     end
     
     test "empty string with doc id fallback" do
-      stub(@doc).id { 42 }
       assert_equal "42", Slug.make("", @doc)
     end
     
     test "empty string with nil fallback" do
-      stub(@doc).id { nil }
       assert_not_equal "", Slug.make("", @doc)
     end
 
     test "string with weird characters" do
-      stub(@doc).id { 42 }
       assert_equal "42", Slug.make('!!!@!!!', @doc)
+    end
+    
+    test "should generate something when title has no valid characters" do
+      actual = Slug.make("%+*", @object)
+      assert_not_equal "", actual
     end
   end
 
