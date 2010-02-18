@@ -29,6 +29,9 @@ class DocumentsPutTest < RequestTestCase
     end
     
     use "return 200 Ok"
+    
+    # Updating a document creates a new version.
+    # (Yes, this differs from the usual pattern for *_put_test.rb files.)
     use "incremented document count"
 
     test "document in database should be correct" do
