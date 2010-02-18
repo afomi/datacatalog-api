@@ -146,6 +146,13 @@ module ModelHelpers
     })
   end
   
+  def create_source_group(custom={})
+    create_model!(SourceGroup, custom, {
+      :title       => "2005 Toxics Release Inventory",
+      :description => "Collection of 2005 TRI Data",
+    })
+  end
+  
   def create_source_rating(custom={})
     required = {
       :kind      => "source",

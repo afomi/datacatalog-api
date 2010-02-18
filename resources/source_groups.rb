@@ -19,7 +19,7 @@ module DataCatalog
     property :title
     property :slug
     property :description
-    property :sources
+    # property :sources
 
     # == Callbacks
 

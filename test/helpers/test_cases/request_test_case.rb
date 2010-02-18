@@ -20,6 +20,7 @@ class RequestTestCase < Test::Unit::TestCase
       Rating,
       Report,
       Source,
+      SourceGroup,
       Tag,
       User,
     ].each { |m| m.destroy_all }
