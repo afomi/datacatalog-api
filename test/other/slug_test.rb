@@ -3,38 +3,42 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_resource_helper')
 class SluggableUnitTest < Test::Unit::TestCase
 
   context "Slug.make" do
+    class Document; end
+    
     before do
-      @doc = Object.new
+      @doc = Document.new
       stub(@doc).id { 42 }
     end
 
     test "example 1" do
       stub(@doc).slug { "" }
-      stub(Object).first(:slug => "the-great-data") { nil }
+      stub(Document).first(:slug => "the-great-data") { nil }
       assert_equal "the-great-data", Slug.make("The Great Data", @doc)
     end
     
     test "example 2" do
       stub(@doc).slug { "the-great-data" }
-      stub(Object).first(:slug => "the-great-data") { @doc }
-      stub(Object).first(:slug => "the-great-data-2") { nil }
+      stub(Document).first(:slug => "the-great-data") { @doc }
+      stub(Document).first(:slug => "the-great-data-2") { nil }
       assert_equal "the-great-data-2", Slug.make("The Great Data", @doc)
     end
 
     test "example 3" do
       stub(@doc).slug { "the-great-data" }
-      @doc_2 = Object.new
+      @doc_2 = Document.new
       stub(@doc_2).id { 43 }
-      stub(Object).first(:slug => "the-great-data") { @doc }
-      stub(Object).first(:slug => "the-great-data-2") { @doc_2 }
-      stub(Object).first(:slug => "the-great-data-3") { nil }
+      stub(Document).first(:slug => "the-great-data") { @doc }
+      stub(Document).first(:slug => "the-great-data-2") { @doc_2 }
+      stub(Document).first(:slug => "the-great-data-3") { nil }
       assert_equal "the-great-data-3", Slug.make("The Great Data", @doc)
     end
   end
 
   context "Slug.make_prefix" do
+    class Document; end
+
     before do
-      @doc = Object.new
+      @doc = Document.new
       stub(@doc).id { 42 }
     end
   
