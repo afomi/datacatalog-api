@@ -19,6 +19,12 @@ class RatingsPutTest < RequestTestCase
     @rating_copy = @rating.dup
     @rating_count = Rating.count
   end
+  
+  after :all do
+    @rating.destroy
+    @source.destroy
+    @user.destroy
+  end
 
   context "basic API key : put /:id" do
     before do

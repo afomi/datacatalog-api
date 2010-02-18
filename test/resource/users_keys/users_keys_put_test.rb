@@ -33,6 +33,10 @@ class UsersKeysPutTest < RequestTestCase
 
     @api_key_count = @user.api_keys.length
   end
+  
+  after :all do
+    @user.destroy
+  end
  
   def lookup_user_and_api_key
     raise "@n must be defined" unless @n

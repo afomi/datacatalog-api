@@ -13,6 +13,11 @@ class DocumentsPutTest < RequestTestCase
     @document_count = Document.count
   end
   
+  after :all do
+    @document.destroy
+    @source.destroy
+  end
+  
   context "basic API key : put /:id with correct param" do
     before :all do
       put "/#{@document.id}", {

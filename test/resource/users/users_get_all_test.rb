@@ -134,12 +134,17 @@ class UsersGetAllTest < RequestTestCase
   
   context "3 added users" do
     before :all do
+      @users = []
       3.times do |n|
-        create_user_with_primary_key(
+        @users << create_user_with_primary_key(
           :name  => "User #{n + 3}",
           :email => "user-#{n + 3}@email.com"
         )
       end
+    end
+    
+    after :all do
+      @users.each { |user| user.destroy }
     end
   
     context "normal API key : get /" do
