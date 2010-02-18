@@ -1,5 +1,4 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_resource_helper')
-Object.send :undef_method, :id
 
 class SluggableUnitTest < Test::Unit::TestCase
 
