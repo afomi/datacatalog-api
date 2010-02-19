@@ -32,7 +32,7 @@ namespace :db do
   
   desc "Create the primary admin user if not present"
   task :ensure_admin => ["environment:models"] do
-    users = User.find(:all, :conditions => {
+    users = User.all(:conditions => {
       :name  => ADMIN_NAME,
       :admin => true
     })
@@ -54,7 +54,7 @@ namespace :db do
     default_users = Config.environment_config["default_users"]
     if default_users && default_users.length > 0
       default_users.each do |default_user|
-        existing_user = User.find(:first, :conditions => {
+        existing_user = User.first(:conditions => {
           :name => default_user["name"]
         })
         if existing_user
