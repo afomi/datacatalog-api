@@ -184,7 +184,7 @@ class Source
   
   before_update :save_previous
   def save_previous
-    @previous_source = Source.find(self.id)
+    @previous_source = Source.first(:_id => self.id)
   end
   
   after_update :restore_previous

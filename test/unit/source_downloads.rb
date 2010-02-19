@@ -42,12 +42,12 @@ class SourceDownloadsUnitTest < ModelTestCase
       end
       
       test "finding id for #{n} should succeed" do
-        assert_equal @downloads[n], @source.downloads.find(@downloads[n].id)
+        assert_equal @downloads[n], @source.downloads.first(:_id => @downloads[n].id)
       end
     end
     
     test "find with fake_id should not raise exception" do
-      assert_equal nil, @source.downloads.find(get_fake_mongo_object_id)
+      assert_equal nil, @source.downloads.first(:_id => get_fake_mongo_object_id)
     end
 
     test "find! with fake_id should raise exception" do

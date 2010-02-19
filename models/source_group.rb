@@ -27,7 +27,7 @@ class SourceGroup
   # An expensive calculation, avoid using if possible.
   def sources
     source_snippets.map do |source_snippet|
-      Source.find(source_snippet.source_id)
+      Source.first(:_id => source_snippet.source_id)
     end
   end
   

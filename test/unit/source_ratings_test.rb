@@ -55,12 +55,12 @@ class SourceRatingsUnitTest < ModelTestCase
       end
       
       test "finding id for #{n} should succeed" do
-        assert_equal @ratings[n], @source.ratings.find(@ratings[n].id)
+        assert_equal @ratings[n], @source.ratings.first(:_id => @ratings[n].id)
       end
     end
 
     test "find with fake_id should not raise exception" do
-      assert_equal nil, @source.ratings.find(get_fake_mongo_object_id)
+      assert_equal nil, @source.ratings.first(:_id => get_fake_mongo_object_id)
     end
     
     test "find! with fake_id should raise exception" do

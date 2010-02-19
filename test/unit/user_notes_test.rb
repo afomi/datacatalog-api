@@ -39,12 +39,12 @@ class UserNotesUnitTest < ModelTestCase
     
     test "finding id should succeed" do
       3.times do |n|
-        assert_equal @notes[n], @user.notes.find(@notes[n].id)
+        assert_equal @notes[n], @user.notes.first(:_id => @notes[n].id)
       end
     end
     
     test "find with fake_id should not raise exception" do
-      assert_equal nil, @user.notes.find(get_fake_mongo_object_id)
+      assert_equal nil, @user.notes.first(:_id => get_fake_mongo_object_id)
     end
 
     test "find! with fake_id should raise exception" do

@@ -46,12 +46,12 @@ class SourceCommentsUnitTest < ModelTestCase
       end
       
       test "finding id for #{n} should succeed" do
-        assert_equal @comments[n], @source.comments.find(@comments[n].id)
+        assert_equal @comments[n], @source.comments.first(:_id => @comments[n].id)
       end
     end
     
     test "find with fake_id should not raise exception" do
-      assert_equal nil, @source.comments.find(get_fake_mongo_object_id)
+      assert_equal nil, @source.comments.first(:_id => get_fake_mongo_object_id)
     end
 
     test "find! with fake_id should raise exception" do

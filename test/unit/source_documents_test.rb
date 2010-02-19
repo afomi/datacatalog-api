@@ -47,12 +47,12 @@ class SourceDocumentsUnitTest < ModelTestCase
       end
       
       test "finding id for #{n} should succeed" do
-        assert_equal @documents[n], @source.documents.find(@documents[n].id)
+        assert_equal @documents[n], @source.documents.first(:_id => @documents[n].id)
       end
     end
     
     test "find with fake_id should not raise exception" do
-      assert_equal nil, @source.documents.find(get_fake_mongo_object_id)
+      assert_equal nil, @source.documents.first(:_id => get_fake_mongo_object_id)
     end
 
     test "find! with fake_id should raise exception" do

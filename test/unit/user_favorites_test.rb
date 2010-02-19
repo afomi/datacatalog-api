@@ -38,12 +38,12 @@ class UserFavoritesUnitTest < ModelTestCase
     
     test "finding id should succeed" do
       3.times do |n|
-        assert_equal @favorites[n], @user.favorites.find(@favorites[n].id)
+        assert_equal @favorites[n], @user.favorites.first(:_id => @favorites[n].id)
       end
     end
     
     test "find with fake_id should not raise exception" do
-      assert_equal nil, @user.favorites.find(get_fake_mongo_object_id)
+      assert_equal nil, @user.favorites.first(:_id => get_fake_mongo_object_id)
     end
 
     test "find! with fake_id should raise exception" do
