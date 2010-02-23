@@ -20,11 +20,11 @@ module DataCatalog
     property :slug
     property :description
     property :source_type
-    property :license
-    property :catalog_name
     property :url
     property :documentation_url
+    property :license
     property :license_url
+    property :catalog_name
     property :catalog_url
     property :released
     property :period_start
