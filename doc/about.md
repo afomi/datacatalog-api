@@ -1,10 +1,8 @@
 # About the National Data Catalog API
 
-## Pre-Release Note
+## Alpha
 
-The National Data Catalog has not yet been launched. We plan on an early October 2009 release for both the Web App and the API.
-
-Please consider this to be early-stage documentation. We are releasing it now (in rough form) to help internal development and to solicit feedback from our community.
+National Data Catalog is in alpha. Please consider this to be early-stage documentation. We are releasing it now (in rough form) to help internal development and to solicit feedback from our community.
 
 ## Overview
 
