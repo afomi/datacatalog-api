@@ -27,8 +27,21 @@ module DataCatalog
     property :level
     property :source_count
     property :custom
-    property :raw,         :w => :admin
-    property :user_id,     :w => :nobody
+    property :raw,              :w => :admin
+    property :user_id,          :w => :nobody
+    property :jurisdiction_id
+    
+    property :jurisdiction do |org|
+      if org.jurisdiction_id
+        {
+          "href" => "/jurisdictions/#{org.jurisdiction_id}",
+          "name" => org.jurisdiction.name,
+          "slug" => org.jurisdiction.slug,          
+        }
+      else
+        nil
+      end
+    end
 
     # == Callbacks
 

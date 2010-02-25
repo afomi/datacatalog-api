@@ -4,27 +4,29 @@
   
   # == Attributes
 
-  key :name,           String
-  key :names,          Array
-  key :acronym,        String
-  key :org_type,       String
-  key :description,    String
-  key :slug,           String
-  key :url,            String
-  key :user_id,        ObjectId
-  key :interest,       Integer
-  key :level,          Integer
-  key :custom,         Hash
-  key :raw,            Hash
-  key :_keywords,      Array
-  key :source_count,   Integer, :default => 0
+  key :name,              String
+  key :names,             Array
+  key :acronym,           String
+  key :org_type,          String
+  key :description,       String
+  key :slug,              String
+  key :url,               String
+  key :user_id,           ObjectId
+  key :jurisdiction_id,   ObjectId
+  key :interest,          Integer
+  key :level,             Integer
+  key :custom,            Hash
+  key :raw,               Hash
+  key :_keywords,         Array
+  key :source_count,      Integer, :default => 0
 
   timestamps!
 
   # == Indices
 
   # == Associations
-
+  belongs_to :jurisdiction
+  
   many :sources
 
   protected

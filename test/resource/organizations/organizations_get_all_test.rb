@@ -60,6 +60,8 @@ class OrganizationsGetAllTest < RequestTestCase
         id
         created_at
         updated_at
+        jurisdiction
+        jurisdiction_id
         user_id
       )
     end

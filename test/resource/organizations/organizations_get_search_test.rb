@@ -78,6 +78,8 @@ class OrganizationsGetSearchTest < RequestTestCase
           custom
           raw
           id
+          jurisdiction
+          jurisdiction_id
           created_at
           updated_at
         )
