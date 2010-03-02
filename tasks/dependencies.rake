@@ -2,8 +2,8 @@ require 'rubygems'
 
 DEPENDENCIES = {
   'sinatra'                => ['>= 0.9.4', '< 1.0'],
-  'mongo'                  => ['>= 0.18.3', '< 1.0'],
-  'mongo_ext'              => ['>= 0.18.3', '< 1.0'],
+  'mongo'                  => ['= 0.18.3', '< 1.0'],
+  'mongo_ext'              => ['= 0.18.3', '< 1.0'],
   'mongo_mapper'           => ['>= 0.7', '< 0.8'],
   'sinatra_resource'       => ['>= 0.4.11', '< 0.5'],
   'frequency'              => ['>= 0.1.2', '< 0.2'],
