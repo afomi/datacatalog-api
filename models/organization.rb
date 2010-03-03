@@ -1,4 +1,4 @@
- class Organization
+class Organization
 
   include MongoMapper::Document
   
@@ -12,6 +12,7 @@
   key :slug,              String
   key :url,               String
   key :user_id,           ObjectId
+  key :parent_id,         ObjectId
   key :jurisdiction_id,   ObjectId
   key :interest,          Integer
   key :level,             Integer
@@ -26,8 +27,10 @@
 
   # == Associations
   belongs_to :jurisdiction
+  belongs_to :parent, :class_name => 'Organization'
   
   many :sources
+  many :children, :class_name => 'Organization', :foreign_key => :parent_id
 
   protected
   
