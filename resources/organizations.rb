@@ -33,13 +33,12 @@ module DataCatalog
     
     property :jurisdiction do |org|
       if org.jurisdiction_id
+        jurisdiction = org.jurisdiction
         {
-          "href" => "/jurisdictions/#{org.jurisdiction_id}",
-          "name" => org.jurisdiction.name,
-          "slug" => org.jurisdiction.slug,          
+          "name" => jurisdiction.name,
+          "href" => "/jurisdictions/#{jurisdiction.id}",
+          "slug" => jurisdiction.slug,          
         }
-      else
-        nil
       end
     end
 
