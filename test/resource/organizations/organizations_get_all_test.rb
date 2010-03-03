@@ -50,6 +50,11 @@ class OrganizationsGetAllTest < RequestTestCase
         acronym
         org_type
         description
+        parent
+        parent_id
+        children
+        jurisdiction
+        jurisdiction_id
         slug
         url
         interest
@@ -60,8 +65,6 @@ class OrganizationsGetAllTest < RequestTestCase
         id
         created_at
         updated_at
-        jurisdiction
-        jurisdiction_id
         user_id
       )
     end

@@ -69,6 +69,11 @@ class OrganizationsGetSearchTest < RequestTestCase
           acronym
           org_type
           description
+          parent
+          parent_id
+          children
+          jurisdiction
+          jurisdiction_id
           slug
           url
           interest
@@ -78,8 +83,6 @@ class OrganizationsGetSearchTest < RequestTestCase
           custom
           raw
           id
-          jurisdiction
-          jurisdiction_id
           created_at
           updated_at
         )

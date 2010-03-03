@@ -41,19 +41,22 @@ class OrganizationsGetOneTest < RequestTestCase
       acronym
       org_type
       description
+      parent
+      parent_id
+      children
+      jurisdiction
+      jurisdiction_id
       slug
       url
       interest
       level
       source_count
+      user_id
       custom
       raw
       id
-      jurisdiction
-      jurisdiction_id
       created_at
       updated_at
-      user_id
     )
 
   end
