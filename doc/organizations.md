@@ -7,9 +7,10 @@
     acronym       String   curator       acronym
     org_type      String   curator       "commercial", "governmental", or "not-for-profit"
     description   String   curator       description
+    parent_id     ObjectId curator       the parent organization
     slug          String   curator       URL slug, will be auto-generated if not specified
     url           String   curator       URL
-    interest      Integer  curator       subjective measure of interest (see note)
+    interest      Integer  curator       subjective measure of interest
     top_level     Boolean  curator       display this organization as a top level "jurisdiction"?
     custom        Hash     admin         custom parameters
     raw           Hash     admin         raw data (usually from the original import)
