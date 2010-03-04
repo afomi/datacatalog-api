@@ -8,14 +8,14 @@ namespace :db do
     puts "Dropped database: #{db_name}."
   end
   
-  def verbosely_create_user(params)
+  def verbosely_create_user(params, phrase="user")
     api_key = params.delete("primary_api_key")
     user = User.create(params)
     user.add_api_key!({
       :api_key  => api_key,
       :key_type => "primary"
     })
-    puts "Created user:"
+    puts "Created #{phrase}:"
     verbosely_display_users([user])
   end
 
