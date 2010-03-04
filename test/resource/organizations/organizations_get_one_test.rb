@@ -49,6 +49,7 @@ class OrganizationsGetOneTest < RequestTestCase
       slug
       url
       interest
+      top_level
       source_count
       user_id
       custom

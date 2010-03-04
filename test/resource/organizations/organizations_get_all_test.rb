@@ -58,6 +58,7 @@ class OrganizationsGetAllTest < RequestTestCase
         slug
         url
         interest
+        top_level
         source_count
         custom
         raw

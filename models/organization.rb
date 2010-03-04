@@ -15,6 +15,7 @@ class Organization
   key :parent_id,         ObjectId
   key :jurisdiction_id,   ObjectId
   key :interest,          Integer
+  key :top_level,         Boolean, :default => false
   key :custom,            Hash
   key :raw,               Hash
   key :_keywords,         Array
