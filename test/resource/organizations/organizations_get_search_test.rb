@@ -77,7 +77,6 @@ class OrganizationsGetSearchTest < RequestTestCase
           slug
           url
           interest
-          level
           source_count
           user_id
           custom
