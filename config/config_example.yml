@@ -13,26 +13,30 @@ development:
     - name: Curator 1
       email: curator_1@your_organization.com
       curator: true
-    default_organizations: &organizations
-      - name: US Federal Government
-        acronym:
-        org_type: governmental
-        interest: 1
-      - name: Executive Branch
-        acronym:
-        parent_name: US Federal Government
-        org_type: governmental
-        interest: 1
-      - name: Judicial Branch
-        acronym:
-        parent_name: US Federal Government
-        org_type: governmental
-        interest: 1
-      - name: Legislative Branch
-        acronym:
-        parent_name: US Federal Government
-        org_type: governmental
-        interest: 1
+  default_organizations: &organizations
+    - name: USA Federal Government
+      acronym:
+      org_type: governmental
+      top_level: true
+      interest: 1
+    - name: Executive Branch
+      acronym:
+      parent_name: USA Federal Government
+      org_type: governmental
+      top_level: false
+      interest: 1
+    - name: Judicial Branch
+      acronym:
+      parent_name: USA Federal Government
+      org_type: governmental
+      top_level: false
+      interest: 1
+    - name: Legislative Branch
+      acronym:
+      parent_name: USA Federal Government
+      org_type: governmental
+      top_level: false
+      interest: 1
 
 test:
   base_uri: http://localhost:4567/
