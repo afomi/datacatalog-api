@@ -13,6 +13,26 @@ development:
     - name: Curator 1
       email: curator_1@your_organization.com
       curator: true
+    default_organizations: &organizations
+      - name: US Federal Government
+        acronym:
+        org_type: governmental
+        interest: 1
+      - name: Executive Branch
+        acronym:
+        parent_name: US Federal Government
+        org_type: governmental
+        interest: 1
+      - name: Judicial Branch
+        acronym:
+        parent_name: US Federal Government
+        org_type: governmental
+        interest: 1
+      - name: Legislative Branch
+        acronym:
+        parent_name: US Federal Government
+        org_type: governmental
+        interest: 1
 
 test:
   base_uri: http://localhost:4567/
@@ -20,6 +40,7 @@ test:
   mongo_database: natdatcat_test
   api_key_salt: "000000000000000000000000000000000000000000000000000000000"
   default_users: *users
+  default_organizations: *organizations
 
 staging:
   base_uri: http://staging.com/
@@ -27,6 +48,7 @@ staging:
   mongo_database: natdatcat_sta
   api_key_salt: "000000000000000000000000000000000000000000000000000000000"
   default_users: *users
+  default_organizations: *organizations
   
 production:
   base_uri: http://production.com/
@@ -34,3 +56,4 @@ production:
   mongo_database: natdatcat_pro
   api_key_salt: "000000000000000000000000000000000000000000000000000000000"
   default_users: *users
+  default_organizations: *organizations

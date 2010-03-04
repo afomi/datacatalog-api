@@ -8,15 +8,26 @@ namespace :db do
     puts "Dropped database: #{db_name}."
   end
   
-  def verbosely_create_user(params, phrase="user")
+  def verbosely_create_user(params)
     api_key = params.delete("primary_api_key")
     user = User.create(params)
     user.add_api_key!({
       :api_key  => api_key,
       :key_type => "primary"
     })
-    puts "Created #{phrase}:"
+    puts "Created user:"
     verbosely_display_users([user])
+  end
+
+  def verbosely_create_organization(params)
+    parent_name = params.delete("parent_name")
+    if parent_name
+      parent_organization = Organization.first(:name => parent_name)
+      params.merge!({ "parent_id" => parent_organization.id })
+    end
+    organization = Organization.create(params)
+    puts "Created organization:"
+    verbosely_display_organizations([organization])
   end
   
   def verbosely_display_users(users)
@@ -27,6 +38,13 @@ namespace :db do
       user.api_keys.each do |api_key|
         puts "    - API key : #{api_key.api_key} #{api_key.key_type}"
       end
+    end
+  end
+
+  def verbosely_display_organizations(organizations)
+    organizations.each do |organization|
+      puts "  * name  : #{organization.name}"
+      puts "    id    : #{organization.id}"
     end
   end
   
@@ -48,6 +66,9 @@ namespace :db do
       }, "admin user")
     end
   end
+  
+  desc "Create default users and organizations as needed"
+  task :ensure_defaults => [:ensure_default_users, :ensure_default_organizations]
 
   desc "Create default users if not present"
   task :ensure_default_users => ["environment:models"] do
@@ -66,6 +87,26 @@ namespace :db do
       end
     else
       puts "No default users specified in config.yml"
+    end
+  end
+
+  desc "Create default organizations if not present"
+  task :ensure_default_organizations => ["environment:models"] do
+    default_organizations = Config.environment_config["default_organizations"]
+    if default_organizations && default_organizations.length > 0
+      default_organizations.each do |default_organization|
+        existing_organization = Organization.first(:conditions => {
+          :name => default_organization["name"]
+        })
+        if existing_organization
+          puts "Found organization:"
+          verbosely_display_organizations([existing_organization])
+        else
+          verbosely_create_organization(default_organization)
+        end
+      end
+    else
+      puts "No default organizations specified in config.yml"
     end
   end
   
