@@ -24,6 +24,7 @@ class Source
   key :period_end,          Time
   key :frequency,           String
   key :organization_id,     ObjectId
+  key :jurisdiction_id,     ObjectId
   key :source_group_id,     ObjectId
   key :custom,              Hash
   key :raw,                 Hash
@@ -37,10 +38,12 @@ class Source
   ensure_index :source_type
   ensure_index :license
   ensure_index :url
+  ensure_index :jurisdiction_id
   
   # == Associations
   
   belongs_to :organization
+  belongs_to :jurisdiction, :class_name => 'Organization'
   belongs_to :source_group
   many :categorizations
   many :comments
@@ -180,6 +183,17 @@ class Source
   after_destroy :decrement_source_count
   def decrement_source_count
     adjust_source_count(self, -1)
+  end
+  
+  after_save :set_jurisdiction
+  def set_jurisdiction
+    self.jurisdiction = nil
+    if current_org = self.organization
+      until current_org.top_level || current_org.parent.nil?
+        current_org = current_org.parent
+      end 
+      self.jurisdiction = current_org if current_org.top_level
+    end
   end
   
   before_update :save_previous
