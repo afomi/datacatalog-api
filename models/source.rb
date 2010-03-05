@@ -175,13 +175,7 @@ class Source
 
   after_save :set_jurisdiction
   def set_jurisdiction
-    self.jurisdiction = nil
-    if current_org = self.organization
-      until current_org.top_level || current_org.parent.nil?
-        current_org = current_org.parent
-      end 
-      self.jurisdiction = current_org if current_org.top_level
-    end
+    self.jurisdiction = calculate_jurisdiction
   end
 
   # == Callbacks : source_count
@@ -210,6 +204,20 @@ class Source
   # == Class Methods
   
   # == Various Instance Methods
+  
+  public
+  
+  def calculate_jurisdiction
+    current_org = self.organization
+    return nil unless current_org
+    until current_org.top_level || current_org.parent.nil?
+      current_org = current_org.parent
+    end 
+    return nil unless current_org.top_level
+    current_org
+  end
+  
+  protected
   
   def adjust_source_count(source, delta)
     org = source.organization

@@ -8,14 +8,23 @@ class SourceJurisdictionUnitTest < ModelTestCase
         :name     => "Department of Commerce",
         :org_type => "governmental"
       )
-      @source = create_source(
+      @source = new_source(
         :title        => "2005-2007 American Community Survey Three-Year PUMS Housing File",
         :url          => "http://www.data.gov/details/90",
         :organization => @organization
       )
     end
     
-    test "#jurisdiction should be nil" do
+    test "#calculate_jurisdiction should be nil" do
+      assert @source.calculate_jurisdiction.nil?
+    end
+    
+    test "before save, #jurisdiction should be nil" do
+      assert @source.calculate_jurisdiction.nil?
+    end
+    
+    test "after save, #jurisdiction should be nil" do
+      @source.save
       assert @source.jurisdiction.nil?
     end
   end
@@ -32,14 +41,23 @@ class SourceJurisdictionUnitTest < ModelTestCase
         :org_type  => "governmental",
         :parent_id => @jurisdiction.id
       )
-      @source = create_source(
+      @source = new_source(
         :title        => "2005-2007 American Community Survey Three-Year PUMS Housing File",
         :url          => "http://www.data.gov/details/90",
         :organization => @organization
       )
     end
-    
-    test "#jurisdiction should return correct organization" do
+
+    test "#calculate_jurisdiction should return correct organization" do
+      assert_equal @jurisdiction, @source.calculate_jurisdiction
+    end
+
+    test "before save, #jurisdiction should return nil" do
+      assert @source.jurisdiction.nil?
+    end
+
+    test "after save, #jurisdiction should return correct organization" do
+      @source.save
       assert_equal @jurisdiction, @source.jurisdiction
     end
     
