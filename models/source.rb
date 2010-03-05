@@ -173,6 +173,17 @@ class Source
     end
   end
 
+  after_save :set_jurisdiction
+  def set_jurisdiction
+    self.jurisdiction = nil
+    if current_org = self.organization
+      until current_org.top_level || current_org.parent.nil?
+        current_org = current_org.parent
+      end 
+      self.jurisdiction = current_org if current_org.top_level
+    end
+  end
+
   # == Callbacks : source_count
 
   after_create :increment_source_count
@@ -183,17 +194,6 @@ class Source
   after_destroy :decrement_source_count
   def decrement_source_count
     adjust_source_count(self, -1)
-  end
-  
-  after_save :set_jurisdiction
-  def set_jurisdiction
-    self.jurisdiction = nil
-    if current_org = self.organization
-      until current_org.top_level || current_org.parent.nil?
-        current_org = current_org.parent
-      end 
-      self.jurisdiction = current_org if current_org.top_level
-    end
   end
   
   before_update :save_previous
