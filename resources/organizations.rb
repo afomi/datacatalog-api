@@ -22,7 +22,6 @@ module DataCatalog
     property :org_type
     property :description
     property :parent_id
-    property :jurisdiction_id
     property :slug
     property :url
     property :interest
@@ -31,17 +30,6 @@ module DataCatalog
     property :custom
     property :raw,              :w => :admin
     property :user_id,          :w => :nobody
-    
-    property :jurisdiction do |org|
-      if org.jurisdiction_id
-        jurisdiction = org.jurisdiction
-        {
-          "name" => jurisdiction.name,
-          "href" => "/jurisdictions/#{jurisdiction.id}",
-          "slug" => jurisdiction.slug,          
-        }
-      end
-    end
     
     property :parent do |org|
       if org.parent_id

@@ -6,20 +6,14 @@ class OrganizationsGetOneTest < RequestTestCase
 
   before do
     @user = create_user_with_primary_key
-    @jurisdiction = create_jurisdiction(
-      :name     => "Jurisdiction A",
-      :user_id  => @user.id
-    )
     @organization = create_organization(
       :name      => "Organization A",
-      :jurisdiction_id => @jurisdiction.id,
       :user_id   => @user.id
     )
   end
   
   after do
     @organization.destroy
-    @jurisdiction.destroy
     @user.destroy
   end
 
@@ -44,8 +38,6 @@ class OrganizationsGetOneTest < RequestTestCase
       parent
       parent_id
       children
-      jurisdiction
-      jurisdiction_id
       slug
       url
       interest

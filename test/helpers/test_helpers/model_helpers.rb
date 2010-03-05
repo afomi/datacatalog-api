@@ -121,15 +121,6 @@ module ModelHelpers
     create_model!(Organization, custom, required)
   end
 
-  def create_jurisdiction(custom={})
-    required = {
-      :name     => "Sample Jurisdiction",
-      :url      => "http://name.gov"
-    }
-    required[:user_id] = @normal_user.id if @normal_user
-    create_model!(Jurisdiction, custom, required)
-  end
-  
   def create_note(custom={})
     required = {
       :text      => "Sample Note",

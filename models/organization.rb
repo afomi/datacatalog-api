@@ -13,7 +13,6 @@ class Organization
   key :url,               String
   key :user_id,           ObjectId
   key :parent_id,         ObjectId
-  key :jurisdiction_id,   ObjectId
   key :interest,          Integer
   key :top_level,         Boolean, :default => false
   key :custom,            Hash
@@ -26,7 +25,7 @@ class Organization
   # == Indices
 
   # == Associations
-  belongs_to :jurisdiction
+
   belongs_to :parent, :class_name => 'Organization'
   
   many :sources

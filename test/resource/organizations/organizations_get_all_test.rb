@@ -53,8 +53,6 @@ class OrganizationsGetAllTest < RequestTestCase
         parent
         parent_id
         children
-        jurisdiction
-        jurisdiction_id
         slug
         url
         interest
