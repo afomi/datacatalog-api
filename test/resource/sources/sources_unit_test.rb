@@ -58,7 +58,7 @@ class SourcesUnitTest < RequestTestCase
     end
   
     test "nested organization should be correct" do
-      actual = DataCatalog::Sources.nested_organization(@source)
+      actual = DataCatalog::Sources.nested_organization(@source, @source.organization_id)
       assert_properties %w(href name slug), actual
       assert_equal "/organizations/#{@organization.id}", actual["href"]
       assert_equal "YMCA", actual["name"]

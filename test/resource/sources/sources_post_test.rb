@@ -51,6 +51,8 @@ class SourcesPostTest < RequestTestCase
       notes
       organization
       organization_id
+      jurisdiction
+      jurisdiction_id
       period_end
       period_start
       ratings

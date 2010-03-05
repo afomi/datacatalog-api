@@ -31,6 +31,7 @@ module DataCatalog
     property :period_end
     property :frequency
     property :organization_id
+    property :jurisdiction_id,  :w => :nobody
     property :custom,           :w => :curator
     property :raw,              :w => :admin
     property :rating_stats,     :w => :nobody
@@ -85,7 +86,11 @@ module DataCatalog
     end
     
     property :organization do |source|
-      nested_organization(source)
+      nested_organization(source, source.organization_id)
+    end
+    
+    property :jurisdiction do |source|
+      nested_organization(source, source.jurisdiction_id)
     end
     
     property :ratings do |source|
@@ -202,10 +207,10 @@ module DataCatalog
       }
     end
 
-    def self.nested_organization(source)
-      if source.organization_id
+    def self.nested_organization(source, org_id)
+      if org_id
         {
-          "href" => "/organizations/#{source.organization_id}",
+          "href" => "/organizations/#{org_id}",
           "name" => source.organization.name,
           "slug" => source.organization.slug,
         }
