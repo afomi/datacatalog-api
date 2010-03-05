@@ -19,19 +19,19 @@ development:
       org_type: governmental
       top_level: true
       interest: 1
-    - name: Executive Branch
+    - name: USA Executive Branch
       acronym:
       parent_name: USA Federal Government
       org_type: governmental
       top_level: false
       interest: 1
-    - name: Judicial Branch
+    - name: USA Judicial Branch
       acronym:
       parent_name: USA Federal Government
       org_type: governmental
       top_level: false
       interest: 1
-    - name: Legislative Branch
+    - name: USA Legislative Branch
       acronym:
       parent_name: USA Federal Government
       org_type: governmental
