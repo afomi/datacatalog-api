@@ -77,5 +77,37 @@ class SourceJurisdictionUnitTest < ModelTestCase
       assert_equal @new_jurisdiction, @source.jurisdiction
     end
   end
+
+  context "source with a jurisdiction under a jurisdiction" do
+    before do
+      @california = create_organization(
+        :name      => "State of California",
+        :org_type  => "governmental",
+        :top_level => true 
+      )
+      @san_francisco = create_organization(
+        :name      => "City of San Francisco",
+        :org_type  => "governmental",
+        :top_level => true,
+        :parent_id => @california.id
+      )
+      @human_services = create_organization(
+        :name      => "Human Services Agency",
+        :org_type  => "governmental",
+        :href      => "http://www.sfhsa.org",
+        :parent_id => @san_francisco.id
+      )
+      @source = new_source(
+        :title        => "DAAS Intake monthly",
+        :url          => "http://www.datasf.org/story.php?title=daas-intake-monthly",
+        :organization => @human_services
+      )
+    end
+
+    test "#calculate_jurisdiction should return proximate parent" do
+      assert_equal @san_francisco, @source.calculate_jurisdiction
+    end
+  end
+
   
 end
