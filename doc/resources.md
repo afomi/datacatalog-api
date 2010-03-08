@@ -129,9 +129,9 @@ Data sources are the primary feature of the National Data Catalog. They are repr
     license_url             String         URL describing license
     catalog_name            String         Name of originating data catalog (e.g. Data.gov)
     catalog_url             String         URL of originating catalog   
-    released                Date           When this source was publicly released
-    period_start            Date           Beginning date for source's applicability
-    period_end              Date           End date for source's applicability
+    released                Date Hash      When this source was publicly released
+    period_start            Date Hash      Beginning date for source's applicability
+    period_end              Date Hash      End date for source's applicability
     frequency               String         How often the data source is released
     organization_id         String         Unique ID for the Organization (agency, non-profit) publishing the data
     ratings*                Array          Embedded collection of Rating objects
@@ -143,7 +143,10 @@ Data sources are the primary feature of the National Data Catalog. They are repr
 
 A normal user can read sources, while curators and admins can perform full CRUD on sources.
 
-*Note*: All calls assume an added `api_key=MY_API_KEY` as a parameter.
+*Notes*:
+
+* All calls assume an added `api_key=MY_API_KEY` as a parameter.
+* "Date Hash" is a Ruby hash intended for use with the Kronos gem.
 
 Get all sources:
 

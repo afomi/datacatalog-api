@@ -20,8 +20,8 @@ class Source
   key :catalog_name,        String
   key :catalog_url,         String
   key :released,            Hash
-  key :period_start,        Time
-  key :period_end,          Time
+  key :period_start,        Hash
+  key :period_end,          Hash
   key :frequency,           String
   key :organization_id,     ObjectId
   key :jurisdiction_id,     ObjectId
@@ -104,45 +104,21 @@ class Source
     end
   end
   
-  RELEASED_KEYS = %w(day month year)
-  MIN_YEAR = 1900
-  MAX_YEAR = Time.now.year
-  
   validate :validate_released
   def validate_released
-    if (released.keys - RELEASED_KEYS).length > 0
-      errors.add(:released, "only these keys are allowed : #{RELEASED_KEYS}")
-    end
-  
-    year  = released['year']
-    month = released['month']
-    day   = released['day']
-  
-    expect_integer(year,  :released, :year)
-    expect_integer(month, :released, :month)
-    expect_integer(day,   :released, :day)
-    
-    if !year.blank? && !((MIN_YEAR .. MAX_YEAR) === year)
-      errors.add(:released, "year must be between #{MIN_YEAR} and #{MAX_YEAR}")
-    end
-    if !month.blank? && !((1 .. 12) === month)
-      errors.add(:released, "month must be between 1 and 12")
-    end
-    if !day.blank? && !((1 .. 31) === day)
-      errors.add(:released, "day must be between 1 and 31")
-    end
-    
-    if !day.blank? && month.blank?
-      errors.add(:released, "month required if day is present")
-    end
-    if !day.blank? && year.blank?
-      errors.add(:released, "year required if day is present")
-    end
-    if !month.blank? && year.blank?
-      errors.add(:released, "year required if month is present")
-    end
+    expect_kronos_hash(released, :released)
   end
   
+  validate :validate_period_start
+  def validate_period_start
+    expect_kronos_hash(period_start, :period_start)
+  end
+  
+  validate :validate_period_end
+  def validate_period_end
+    expect_kronos_hash(period_end, :period_end)
+  end
+
   before_validation :handle_blank_slug
   def handle_blank_slug
     self.slug = nil if self.slug.blank?
