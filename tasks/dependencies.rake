@@ -9,7 +9,7 @@ DEPENDENCIES = {
   'frequency'              => ['>= 0.1.2', '< 0.2'],
   'crack'                  => ['>= 0.1.6' ],
   'djsun-context'          => ['>= 0.5.6' ],
-  'jeremymcanally-pending' => ['>= 0.1'   ],
+  'pending'                => ['>= 0.1.1' ],
   'rack-test'              => ['>= 0.5.3' ],
   'rcov'                   => ['>= 0.9.7' ],
   'rr'                     => ['>= 0.10.5'],
