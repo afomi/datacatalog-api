@@ -145,15 +145,11 @@ class Source
     self._keywords = DataCatalog::Search.process([title, description])
   end
 
-  before_validation :clean_released
-  def clean_released
-    released.each do |key, value|
-      self.released[key] = begin
-        Integer(value)
-      rescue ArgumentError
-        value
-      end
-    end
+  before_validation :clean_date_fields
+  def clean_date_fields
+    released.each     { |k, v| self.released[k]     = Try.to_i(v) }
+    period_start.each { |k, v| self.period_start[k] = Try.to_i(v) }
+    period_end.each   { |k, v| self.period_end[k]   = Try.to_i(v) }
   end
 
   after_save :set_jurisdiction
