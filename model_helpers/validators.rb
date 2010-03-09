@@ -28,6 +28,7 @@ module Validators
   def expect_kronos_hash(x, field)
     if (x.keys - KRONOS_DATE_KEYS).length > 0
       errors.add(field, "only these keys are allowed : #{RELEASED_KEYS}")
+      return
     end
   
     year, month, day = x['year'], x['month'], x['day']

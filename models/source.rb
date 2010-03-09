@@ -1,6 +1,9 @@
 gem 'frequency', '>= 0.1.2', '< 0.2.0'
 require 'frequency'
 
+gem 'kronos', '>= 0.1.5'
+require 'kronos'
+
 class Source
 
   include MongoMapper::Document
@@ -85,18 +88,6 @@ class Source
     end
   end
   
-  validate :validate_period
-  def validate_period
-    return if !period_start && !period_end
-    if period_start && !period_end
-      errors.add(:period_end, "is required if period_start given")
-    elsif period_end && !period_start
-      errors.add(:period_start, "is required if period_end given")
-    elsif period_start > period_end
-      errors.add(:period_end, "must be later than period_start")
-    end
-  end
-  
   validate :validate_frequency
   def validate_frequency
     if frequency && !Frequency.new(frequency).valid?
@@ -108,15 +99,31 @@ class Source
   def validate_released
     expect_kronos_hash(released, :released)
   end
-  
-  validate :validate_period_start
-  def validate_period_start
-    expect_kronos_hash(period_start, :period_start)
-  end
-  
-  validate :validate_period_end
-  def validate_period_end
-    expect_kronos_hash(period_end, :period_end)
+
+  validate :validate_period
+  def validate_period
+    p1 = period_start.blank? ? nil : period_start
+    p2 = period_end.blank?   ? nil : period_end
+    if !p1 && !p2
+      return
+    elsif p1 && !p2
+      errors.add(:period_end, "is required if period_start given")
+    elsif !p1 && p2
+      errors.add(:period_start, "is required if period_end given")
+    elsif p1 && p2
+      expect_kronos_hash(p1, :period_start)
+      expect_kronos_hash(p2, :period_end)
+      k1 = Kronos.from_hash(p1)
+      k2 = Kronos.from_hash(p2)
+      errors.add(:period_start, "must be valid") unless k1.valid?
+      errors.add(:period_end,   "must be valid") unless k2.valid?
+      return unless k1.valid? && k2.valid?
+      unless k1 < k2
+        errors.add(:period_start, "must be earlier than period_end")
+      end
+    else
+      raise "Unexpected"
+    end
   end
 
   before_validation :handle_blank_slug

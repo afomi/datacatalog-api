@@ -49,7 +49,7 @@ class SourceUnitTest < ModelTestCase
   end
   
   shared "source.frequency is invalid" do
-    test "" do
+    test "should have error on frequency" do
       @source.valid?
       assert_include :frequency, @source.errors.errors
       assert_include "is invalid", @source.errors.errors[:frequency]
@@ -57,7 +57,7 @@ class SourceUnitTest < ModelTestCase
   end
 
   shared "source.period_start is invalid" do
-    test "" do
+    test "should have error period_start" do
       @source.valid?
       assert_include :period_start, @source.errors.errors
       assert_include "is invalid", @source.errors.errors[:period_start]
@@ -65,7 +65,7 @@ class SourceUnitTest < ModelTestCase
   end
 
   shared "source.period_end is invalid" do
-    test "" do
+    test "should have error on period_end" do
       @source.valid?
       assert_include :period_end, @source.errors.errors
       assert_include "is invalid", @source.errors.errors[:period_end]
@@ -230,46 +230,70 @@ class SourceUnitTest < ModelTestCase
       context "period_start without period_end" do
         before do
           @source = Source.new(@valid_params.merge(
-            :period_start => Time.local(2009, 3, 1)
+            :period_start => {
+              "year"  => 2005,
+              "month" => 7,
+              "day"   => 21,
+            }
           ))
         end
-  
+        
         use "invalid source"
       end
   
       context "period_end without period_start" do
         before do
           @source = Source.new(@valid_params.merge(
-            :period_end   => Time.local(2007, 3, 5)
+            :period_end => {
+              "year"  => 2006,
+              "month" => 4,
+              "day"   => 20,
+            }
           ))
         end
-  
+        
         use "invalid source"
       end
   
       context "period_end before period_start" do
         before do
           @source = Source.new(@valid_params.merge(
-            :period_start => Time.local(2009, 3, 1),
-            :period_end   => Time.local(2007, 3, 5)
+            :period_start => {
+              "year"  => 2009,
+              "month" => 3,
+              "day"   => 1
+            },
+            :period_end => {
+              "year"  => 2007,
+              "month" => 3,
+              "day"   => 5
+            }
           ))
         end
-  
+        
         use "invalid source"
       end
   
       context "period_start before period_end" do
         before do
           @source = Source.new(@valid_params.merge(
-            :period_start => Time.local(2007, 3, 5),
-            :period_end   => Time.local(2009, 3, 1)
+            :period_start => {
+              "year"  => 2007,
+              "month" => 3,
+              "day"   => 5,
+            },
+            :period_end => {
+              "year"  => 2009,
+              "month" => 3,
+              "day"   => 1,
+            }
           ))
         end
   
         use "valid source"
       end
-  
-      # PENDING
+    
+      # TODO: See Pivotal Ticket #2732426
       # context "period with strings" do
       #   before do
       #     @source = Source.new(@valid_params.merge(
