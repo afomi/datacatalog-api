@@ -147,9 +147,9 @@ class Source
 
   before_validation :clean_date_fields
   def clean_date_fields
-    released.each     { |k, v| self.released[k]     = Try.to_i(v) }
-    period_start.each { |k, v| self.period_start[k] = Try.to_i(v) }
-    period_end.each   { |k, v| self.period_end[k]   = Try.to_i(v) }
+    self.released     = Clean.kronos_hash(released)
+    self.period_start = Clean.kronos_hash(period_start)
+    self.period_end   = Clean.kronos_hash(period_end)
   end
 
   after_save :set_jurisdiction

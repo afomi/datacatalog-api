@@ -45,7 +45,7 @@ class Download
 
   before_validation :clean_size
   def clean_size
-    h = size
+    h = {}
     h['bytes']  = Try.to_i_or_f(size['bytes'])  if size['bytes']
     h['number'] = Try.to_i_or_f(size['number']) if size['number']
     self.size = h

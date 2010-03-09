@@ -358,7 +358,7 @@ class SourceUnitTest < ModelTestCase
     context "released" do
       context "missing" do
         before do
-          @source = Source.new(@valid_params.merge(:released => ""))
+          @source = Source.new(@valid_params.merge(:released => ''))
         end
   
         use "valid source"
