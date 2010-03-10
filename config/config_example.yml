@@ -37,6 +37,11 @@ development:
       org_type: governmental
       top_level: false
       interest: 1
+    - name: District of Columbia
+      org_type: governmental
+      acronym: DC
+      top_level: true
+      interest: 1
 
 test:
   base_uri: http://localhost:4567/
