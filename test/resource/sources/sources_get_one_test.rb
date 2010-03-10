@@ -65,9 +65,6 @@ class SourcesGetOneTest < RequestTestCase
       assert_include "total",        rating_stats
     end
 
-    test "body should have organization field" do
-      assert_equal nil, parsed_response_body["organization"]
-    end
   end
 
   %w(normal).each do |role|
@@ -102,6 +99,55 @@ class SourcesGetOneTest < RequestTestCase
           assert_include expected, actual
         end
       end
+    end
+    
+    context "#{role} API key : 1 jurisdiction : get /:id" do
+      before do
+        @jurisdiction = create_organization(
+          :name      => "US Federal Government",
+          :org_type  => "governmental",
+          :top_level => true 
+        )
+        @organization = create_organization(
+          :name      => "Department of Commerce",
+          :org_type  => "governmental",
+          :parent_id => @jurisdiction.id
+        )        
+        @source.organization = @organization
+        assert @source.save
+        get "/#{@source.id}", :api_key => primary_api_key_for(role)
+      end
+      
+      after do
+        @organization.destroy
+        @jurisdiction.destroy
+      end
+      
+      use "successful GET source with :id"
+
+      test "body should have correct organization" do
+        actual = parsed_response_body["organization"]
+        expected = {
+          "name" => "Department of Commerce",
+          "href" => "/organizations/#{@organization.id}",
+          "slug" => "department-of-commerce"
+        }
+        assert_equal @organization.id.to_s, parsed_response_body["organization_id"]
+        assert_equal expected, actual
+      end
+
+      test "body should have correct jurisdiction" do
+        actual = parsed_response_body["jurisdiction"]
+        expected = {
+          "slug" => "us-federal-government",
+          "name" => "US Federal Government",
+          "href" => "/organizations/#{@jurisdiction.id}"
+        }
+        assert_equal @jurisdiction.id, @source.jurisdiction_id # passes
+        assert_equal @jurisdiction.id.to_s, parsed_response_body["jurisdiction_id"] # fails
+        assert_equal expected, actual # fails
+      end
+
     end
 
     context "#{role} API key : 2 comments : get /:id" do

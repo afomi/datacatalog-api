@@ -41,6 +41,29 @@ class SourceJurisdictionUnitTest < ModelTestCase
         :org_type  => "governmental",
         :parent_id => @jurisdiction.id
       )
+      @source = create_source(
+        :title        => "2005-2007 American Community Survey Three-Year PUMS Housing File",
+        :url          => "http://www.data.gov/details/90",
+        :organization => @organization
+      )
+    end
+    test "after create, #jurisdiction should return correct organization" do
+      assert_equal @jurisdiction, @source.jurisdiction
+    end
+  end
+  
+  context "source with a jurisdiction" do
+    before do
+      @jurisdiction = create_organization(
+        :name      => "US Federal Government",
+        :org_type  => "governmental",
+        :top_level => true 
+      )
+      @organization = create_organization(
+        :name      => "Department of Commerce",
+        :org_type  => "governmental",
+        :parent_id => @jurisdiction.id
+      )
       @source = new_source(
         :title        => "2005-2007 American Community Survey Three-Year PUMS Housing File",
         :url          => "http://www.data.gov/details/90",
