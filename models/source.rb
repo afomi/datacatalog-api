@@ -152,7 +152,7 @@ class Source
     self.period_end   = Clean.kronos_hash(period_end)
   end
 
-  after_save :set_jurisdiction
+  before_save :set_jurisdiction
   def set_jurisdiction
     self.jurisdiction = calculate_jurisdiction
   end
