@@ -13,14 +13,17 @@ class Try
   end
 
   def self.to_i(x)
-    begin
+    if x.nil?
+      nil
+    elsif to_i?(x)
       Integer(x)
-    rescue ArgumentError
+    else
       x
     end
   end
 
   def self.to_i?(x)
+    return false if x.is_a?(Float)
     begin
       Integer(x)
       true
