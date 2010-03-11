@@ -14,7 +14,7 @@ class Try
 
   def self.to_i(x)
     begin
-      Integer(self)
+      Integer(x)
     rescue ArgumentError
       x
     end
