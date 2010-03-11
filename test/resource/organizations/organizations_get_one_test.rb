@@ -29,6 +29,18 @@ class OrganizationsGetOneTest < RequestTestCase
       assert_equal @user.id.to_s, parsed_response_body["user_id"]
     end
     
+    test "parent_id should be set" do
+      @jurisdiction = create_organization(
+          :name      => "US Federal Government",
+          :org_type  => "governmental",
+          :top_level => true 
+      )
+      @organization.parent_id = @jurisdiction.id
+      @organization.save!
+      get "/#{@organization.id}", :api_key => @normal_user.primary_api_key
+      assert_equal parsed_response_body['parent_id'], @jurisdiction.id.to_s
+    end
+    
     doc_properties %w(
       name
       names
