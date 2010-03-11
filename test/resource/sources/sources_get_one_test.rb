@@ -112,9 +112,10 @@ class SourcesGetOneTest < RequestTestCase
           :name      => "Department of Commerce",
           :org_type  => "governmental",
           :parent_id => @jurisdiction.id
-        )        
+        )
+
         @source.organization = @organization
-        assert @source.save
+        @source.save!
         get "/#{@source.id}", :api_key => primary_api_key_for(role)
       end
       
@@ -132,8 +133,15 @@ class SourcesGetOneTest < RequestTestCase
           "href" => "/organizations/#{@organization.id}",
           "slug" => "department-of-commerce"
         }
-        assert_equal @organization.id.to_s, parsed_response_body["organization_id"]
         assert_equal expected, actual
+      end
+      
+      test "body should have correct organization_id" do
+        assert_equal @organization.id.to_s, parsed_response_body["organization_id"]
+      end
+
+      test "body should have correct jurisdiction_id" do
+        assert_equal @jurisdiction.id.to_s, parsed_response_body["jurisdiction_id"] # fails
       end
 
       test "body should have correct jurisdiction" do
@@ -143,9 +151,7 @@ class SourcesGetOneTest < RequestTestCase
           "name" => "US Federal Government",
           "href" => "/organizations/#{@jurisdiction.id}"
         }
-        assert_equal @jurisdiction.id, @source.jurisdiction_id # passes
-        assert_equal @jurisdiction.id.to_s, parsed_response_body["jurisdiction_id"] # fails
-        assert_equal expected, actual # fails
+        assert_equal expected, actual
       end
 
     end
@@ -172,7 +178,7 @@ class SourcesGetOneTest < RequestTestCase
             })
           end
         end
-  
+      
         get "/#{@source.id}", :api_key => primary_api_key_for(role)
       end
       
@@ -280,7 +286,7 @@ class SourcesGetOneTest < RequestTestCase
         end
       end
     end
-
+    
     context "#{role} API key : 2 ratings : get /:id" do
       before do
         @source_ratings = [
@@ -347,7 +353,7 @@ class SourcesGetOneTest < RequestTestCase
           assert_include expected, actual
         end
       end
-
+    
       context "#{role} API key : 2 downloads : get /:id" do
         before do
           @downloads = [
@@ -364,13 +370,13 @@ class SourcesGetOneTest < RequestTestCase
           ]
           get "/#{@source.id}", :api_key => primary_api_key_for(role)
         end
-
+    
         after do
           @downloads.each { |x| x.destroy }
         end
-
+    
         use "successful GET source with :id"
-
+    
         test "body should have correct downloads" do
           actual = parsed_response_body["downloads"]
           @downloads.each do |download|
@@ -385,7 +391,7 @@ class SourcesGetOneTest < RequestTestCase
           end
         end
       end
-
+    
     end
 
   end
