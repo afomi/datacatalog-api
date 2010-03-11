@@ -28,7 +28,7 @@ module Validators
   def expect_kronos_hash(x, field)
     return if x.blank?
     if (x.keys - KRONOS_DATE_KEYS).length > 0
-      errors.add(field, "only these keys are allowed : #{RELEASED_KEYS}")
+      errors.add(field, "only these keys are allowed : #{KRONOS_DATE_KEYS}")
       return
     end
   
