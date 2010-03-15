@@ -1,4 +1,8 @@
-# /organizations resource
+# Organization
+
+The `Organization` resource represents an organization, such as a government agency, non-profit, or commercial entity.
+
+## Schema
 
     Field         Type     Writable By   Description
     -----         ----     -----------   -----------
@@ -8,13 +12,29 @@
     org_type      String   curator       "commercial", "governmental", or "not-for-profit"
     description   String   curator       description
     parent_id     ObjectId curator       the parent organization
-    slug          String   curator       URL slug, will be auto-generated if not specified
+    slug          String   curator       URL slug (auto-generated if not provided)
     url           String   curator       URL
     interest      Integer  curator       subjective measure of interest
     top_level     Boolean  curator       display this organization as a top level "jurisdiction"?
     custom        Hash     admin         custom parameters
     raw           Hash     admin         raw data (usually from the original import)
     user_id       String   nobody        the user that created this entity in the API
+
+### interest
+
+'interest' is a subjective measure of how interesting and relevant an organization is to the National Data Catalog. Specific values are set by our curators and should not be treated as definitive.
+
+### top_level
+
+Set `top_level` to true to let an organization be used as a highlighted grouping. The National Data Catalog Web App uses this field to make a list of "jurisdictions" for users to filter by; such as:
+
+  * US Federal Government
+  * District of Columbia
+  * San Francisco
+
+Why is top_level needed? Couldn't the API just test for `parent_id == nil`? Not really. Consider this example pertaining to San Francisco. San Francisco (a city) should have California (a state) as an ancestor, since cities get their charters from states and are subject to their laws. However, the user interface still wants to present San Francisco as a top-level grouping, so it needs to be able to figure this out.
+
+## Access Privileges
 
     Permission   Who
     ----------   ---
@@ -24,16 +44,28 @@
     Update       curator
     Delete       curator
 
-## interest
+## API Calls
 
-'interest' is a subjective measure of how interesting and relevant an organization is to the National Data Catalog. Specific values are set by our curators and should not be treated as definitive.
+*Note*: You will need to add `api_key=MY_API_KEY` to the examples below.
 
-## top_level
+A normal user can read sources, while curators and admins can perform full CRUD on sources.
 
-Set 'top_level' to true to let an organization be used as a highlighted grouping. The National Data Catalog Web App uses this field to make a list of "jurisdictions" for users to filter by; such as:
+Get all sources:
 
-  * US Federal
-  * District of Columbia
-  * San Francisco
+    GET http://sandbox.nationaldatacatalog.com/sources?api_key=MY_API_KEY
 
-Why is top_level needed -- couldn't one just test for `parent_id == nil`? Perhaps. However, consider the case of San Francisco and the State of California: the city arguably has the state as an ancestor. (Cities get their charters from states and are subject to their laws.) However, the user interface still wants to present San Francisco as a top-level grouping. This explains the need for the boolean 'top level' flag.
+Get one source:
+
+    GET http://sandbox.nationaldatacatalog.com/sources/SOURCE_ID?api_key=MY_API_KEY
+
+Create a new source:
+
+    POST http://sandbox.nationaldatacatalog.com/sources?api_key=MY_API_KEY
+
+Update an existing source:
+
+    PUT http://sandbox.nationaldatacatalog.com/sources/SOURCE_ID?api_key=MY_API_KEY
+
+Delete an existing source:
+
+    DELETE http://sandbox.nationaldatacatalog.com/sources/SOURCE_ID?api_key=MY_API_KEY

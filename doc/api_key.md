@@ -1,0 +1,63 @@
+# ApiKey
+
+There are three types of API Keys:
+
+1. **Primary** - Created when a new `user` is created. Cannot be deleted.
+2. **Application** - For developers who need their applications to access the API.
+3. **Valet** - For users to give other applications access to their user-specific data. May be replaced in the future by OAuth.
+
+## Schema
+
+    Asterisk (*) denotes read-only fields
+    Plus (+) denotes required fields when creating and updating
+
+    Field       R  W  Type    Description
+    -----       -  -  ----    -----------
+    id          R     String  Unique ID (auto-generated upon creation)
+    api_key           String  Unique key to be used
+    key_type       W  String  Must be "application" or "valet"
+    purpose        W  String  User-supplied description of key's use
+    created_at  R     Time    Automatic timestamp on creation
+    updated_at  R     Time    Automatic timestamp on update
+
+*Notes*:
+
+* R denotes read-only fields
+* W denotes required fields when writing (creating or updating)
+* "Date Hash" is a Ruby hash intended for use with the Kronos gem.
+
+## Permissions
+
+	Permission   Who
+	----------   ---
+	List         (add information here)
+	Create       (add information here)
+	Read         (add information here)
+	Update       (add information here)
+	Delete       (add information here)
+    
+## API Calls
+
+A user can perform CRUD on her own keys, as can an admin user. `Keys` are nested underneath the `User` resource.
+
+*Note*: You will need to add `api_key=MY_API_KEY` to the examples below.
+
+Get a user's API keys:
+
+    GET http://sandbox.nationaldatacatalog.com/users/USER_ID/keys
+
+Get one API key:
+
+    GET http://sandbox.nationaldatacatalog.com/users/USER_ID/keys/KEY_ID
+    
+Create a new key:
+
+    POST http://sandbox.nationaldatacatalog.com/users/USER_ID/keys
+
+Update an existing key:
+
+    PUT http://sandbox.nationaldatacatalog.com/users/USER_ID/keys/KEY_ID
+    
+Delete an existing key:
+
+    DELETE http://sandbox.nationaldatacatalog.com/users/USER_ID/keys/KEY_ID
