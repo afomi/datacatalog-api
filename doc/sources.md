@@ -10,7 +10,7 @@ Data sources are the primary feature of the National Data Catalog. They are repr
     title                 W  String     Unique name of data source
     slug                     String     URL slug (auto-generated if not provided)
     source_type           W  String     Either "dataset" or "api"
-    url                   W  String     Primary URL for this data source    
+    url                   W  String     Primary URL for this data source (should have metadata) 
     documentation_url        String     Official documentation for data source 
     license                  String     License for the data (e.g. public domain)
     license_url              String     URL describing license

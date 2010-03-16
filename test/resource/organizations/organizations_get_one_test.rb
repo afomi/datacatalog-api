@@ -52,6 +52,8 @@ class OrganizationsGetOneTest < RequestTestCase
       children
       slug
       url
+      home_url
+      catalog_url
       interest
       top_level
       source_count

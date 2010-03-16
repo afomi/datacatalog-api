@@ -24,6 +24,8 @@ module DataCatalog
     property :parent_id
     property :slug
     property :url
+    property :home_url
+    property :catalog_url
     property :interest
     property :top_level
     property :source_count

@@ -13,9 +13,11 @@ The `Organization` resource represents an organization, such as a government age
     description   String   curator       description
     parent_id     ObjectId curator       the parent organization
     slug          String   curator       URL slug (auto-generated if not provided)
-    url           String   curator       URL
+    url           String   curator       URL for a metadata page about the organization
+    home_url      String   curator       Organization home page (e.g. http://energy.gov)
+    catalog_url   String   curator       URL of originating catalog (e.g. http://data.dc.gov)
     interest      Integer  curator       subjective measure of interest
-    top_level     Boolean  curator       display this organization as a top level "jurisdiction"?
+    top_level     Boolean  curator       is this organization a top level jurisdiction?
     custom        Hash     admin         custom parameters
     raw           Hash     admin         raw data (usually from the original import)
     user_id       String   nobody        the user that created this entity in the API
