@@ -32,6 +32,16 @@ Data sources are the primary feature of the National Data Catalog. They are repr
 * W denotes required fields when writing (creating or updating)
 * "Date Hash" is a Ruby hash intended for use with the Kronos gem.
 
+### frequency
+
+Valid values for frequency include:
+
+    each (second / minute / hour / day / week / month / quarter / year)
+    hourly / daily / weekly / monthly / quarterly / annually / yearly
+    one-time / other / unknown
+
+A complete, up-to-date list can be found in [frequency.rb in the frequency gem](http://github.com/djsun/frequency/blob/master/lib/frequency.rb).
+
 ## Permissions
 
 	Permission   Who
