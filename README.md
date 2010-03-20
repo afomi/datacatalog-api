@@ -5,10 +5,6 @@
 
 # Gem Dependencies
 
-    # If you have not used gemcutter before:
-    gem install gemcutter
-    gem tumble
-    
     # Install dependencies with a rake task:
     rake dependencies:install
 
