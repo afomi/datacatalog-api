@@ -1,7 +1,7 @@
 require 'rubygems'
 
 DEPENDENCIES = {
-  'sinatra'                => ['>= 0.9.4', '< 1.0'],
+  'sinatra'                => ['>= 1.0'],
   'mongo'                  => ['= 0.18.3'],
   'mongo_ext'              => ['= 0.18.3'],
   'mongo_mapper'           => ['= 0.7.0'],
