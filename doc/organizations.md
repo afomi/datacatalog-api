@@ -15,7 +15,8 @@ The `Organization` resource represents an organization, such as a government age
     slug          String   curator       URL slug (auto-generated if not provided)
     url           String   curator       URL for a metadata page about the organization
     home_url      String   curator       Organization home page (e.g. http://energy.gov)
-    catalog_url   String   curator       URL of originating catalog (e.g. http://data.dc.gov)
+    catalog_name  String   curator       Name of originating catalog (e.g. "NYC Data Mine")
+    catalog_url   String   curator       URL of originating catalog (e.g. "http://www.nyc.gov/html/datamine")
     interest      Integer  curator       subjective measure of interest
     top_level     Boolean  curator       is this organization a top level jurisdiction?
     custom        Hash     admin         custom parameters

@@ -14,8 +14,8 @@ Data sources are the primary feature of the National Data Catalog. They are repr
     documentation_url        String     Official documentation for data source 
     license                  String     License for the data (e.g. public domain)
     license_url              String     URL describing license
-    catalog_name             String     Name of originating catalog (e.g. 'data.gov')
-    catalog_url              String     URL of originating catalog   
+    catalog_name             String     Name of originating catalog (e.g. "NYC Data Mine")
+    catalog_url              String     URL of originating catalog (e.g. "http://www.nyc.gov/html/datamine")
     released                 Date Hash  When this source was publicly released
     period_start             Date Hash  Beginning date for source's applicability
     period_end               Date Hash  End date for source's applicability

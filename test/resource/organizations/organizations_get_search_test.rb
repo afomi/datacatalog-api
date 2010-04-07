@@ -75,6 +75,7 @@ class OrganizationsGetSearchTest < RequestTestCase
           slug
           url
           home_url
+          catalog_name
           catalog_url
           interest
           top_level

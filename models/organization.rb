@@ -12,6 +12,7 @@ class Organization
   key :slug,              String
   key :url,               String
   key :home_url,          String
+  key :catalog_name,      String
   key :catalog_url,       String
   key :user_id,           ObjectId
   key :parent_id,         ObjectId

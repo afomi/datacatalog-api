@@ -25,6 +25,7 @@ module DataCatalog
     property :slug
     property :url
     property :home_url
+    property :catalog_name
     property :catalog_url
     property :interest
     property :top_level
