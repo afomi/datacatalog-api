@@ -42,7 +42,11 @@ development:
       acronym: DC
       top_level: true
       interest: 1
-
+    - name: Utah
+      org_type: governmental
+      acronym: 
+      top_level: true
+      interest: 1
 test:
   base_uri: http://localhost:4567/
   mongo_hostname: localhost
