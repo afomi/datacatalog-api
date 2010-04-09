@@ -6,8 +6,8 @@ module UrlValidator
     unless uri.absolute?
       errors.add(:url, "URI must be absolute")
     end
-    unless %w(http ftp).include?(uri.scheme)
-      errors.add(:url, "URI scheme must be http or ftp")
+    unless %w(http https ftp).include?(uri.scheme)
+      errors.add(:url, "URI scheme must be http, https, or ftp")
     end
   rescue URI::InvalidURIError => e
     errors.add(:url, "Invalid URI: #{e})")

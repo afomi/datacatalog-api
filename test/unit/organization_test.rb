@@ -30,11 +30,11 @@ class OrganizationUnitTest < ModelTestCase
     end
   end
 
-  shared "organization.url must be http or ftp" do
-    test "should have error on url - must be http or ftp" do
+  shared "organization.url must be http, https, or ftp" do
+    test "should have error on url - must be http, https, or ftp" do
       @organization.valid?
       assert_include :url, @organization.errors.errors
-      assert_include "URI scheme must be http or ftp", @organization.errors.errors[:url]
+      assert_include "URI scheme must be http, https, or ftp", @organization.errors.errors[:url]
     end
   end
   
@@ -181,14 +181,14 @@ class OrganizationUnitTest < ModelTestCase
         use "valid organization"
       end
     
-      context "https" do
+      context "wacky" do
         before do
           @organization = Organization.new(@valid_params.merge(
-            :url => "https://commerce.gov"))
+            :url => "wacky://commerce.gov"))
         end
     
         use "invalid organization"
-        use "organization.url must be http or ftp"
+        use "organization.url must be http, https, or ftp"
       end
     
       context "relative" do

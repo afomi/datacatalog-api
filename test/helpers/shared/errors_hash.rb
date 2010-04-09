@@ -84,7 +84,7 @@ class RequestTestCase
     test "body should say url scheme is incorrect" do
       assert_include "errors", parsed_response_body
       assert_include "url", parsed_response_body["errors"]
-      assert_include "URI scheme must be http or ftp", parsed_response_body["errors"]["url"]
+      assert_include "URI scheme must be http, https, or ftp", parsed_response_body["errors"]["url"]
     end
   end
 

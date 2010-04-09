@@ -40,11 +40,11 @@ class SourceUnitTest < ModelTestCase
     end
   end
 
-  shared "source.url must be http or ftp" do
-    test "should have error on url - must be http or ftp" do
+  shared "source.url must be http, https, or ftp" do
+    test "should have error on url - must be http, https, or ftp" do
       @source.valid?
       assert_include :url, @source.errors.errors
-      assert_include "URI scheme must be http or ftp", @source.errors.errors[:url]
+      assert_include "URI scheme must be http, https, or ftp", @source.errors.errors[:url]
     end
   end
   
@@ -340,8 +340,7 @@ class SourceUnitTest < ModelTestCase
             :url => "https://sekret.com/1999"))
         end
   
-        use "invalid source"
-        use "source.url must be http or ftp"
+        use "valid source"
       end
   
       context "relative" do
@@ -352,6 +351,16 @@ class SourceUnitTest < ModelTestCase
   
         use "invalid source"
         use "source.url must be absolute"
+      end
+      
+      context "wacky" do
+        before do
+          @source = Source.new(@valid_params.merge(
+            :url => "wacky://sekret.com/1999"))
+        end
+  
+        use "invalid source"
+        use "source.url must be http, https, or ftp"
       end
     end
   
