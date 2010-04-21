@@ -31,7 +31,7 @@ class FavoriteUnitTest < ModelTestCase
   end
 
   shared "favorite.source_id can't be empty" do
-    test "should have emptuy error on source_id" do
+    test "should have empty error on source_id" do
       @favorite.valid?
       assert_include :source_id, @favorite.errors.errors
       assert_include "can't be empty", @favorite.errors.errors[:source_id]
