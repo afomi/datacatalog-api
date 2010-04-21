@@ -75,6 +75,7 @@ class ImportUnitTest < ModelTestCase
       use "valid Import"
       
       test "calculate correct duration" do
+        @import.valid? # triggers before|after_validation callbacks
         assert_equal 30, @import.duration
       end
       

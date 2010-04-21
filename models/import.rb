@@ -8,12 +8,14 @@ class Import
   key :status,       String # see STATUS_TYPES below
   key :start_time,   Time
   key :finish_time,  Time
+  key :duration,     Float
   timestamps!
 
   # == Indices
   
   ensure_index :importer_id
   ensure_index :finish_time
+  ensure_index :duration
 
   # == Associations
   
@@ -35,15 +37,18 @@ class Import
       errors.add(:status, "must be one of: #{STATUS_TYPES.join(', ')}")
     end
   end
+  
+  # == Callbacks
+  
+  after_validation :update_duration
+  def update_duration
+    if start_time && finish_time
+      self.duration = finish_time - start_time
+    end
+  end
 
   # == Class Methods
 
   # == Various Instance Methods
-  
-  public
-  
-  def duration
-    finish_time - start_time
-  end
 
 end
