@@ -115,8 +115,8 @@ module ModelHelpers
     timestamp = Time.now
     required = {
       :status      => 'success',
-      :start_time  => timestamp - 60,
-      :finish_time => timestamp,
+      :started_at  => timestamp - 60,
+      :finished_at => timestamp,
     }
     create_model!(Import, custom, required)
   end

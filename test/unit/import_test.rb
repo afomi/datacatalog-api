@@ -22,19 +22,19 @@ class ImportUnitTest < ModelTestCase
     end
   end
 
-  shared "import.start_time can't be empty" do
-    test "should have empty error on start_time" do
+  shared "import.started_at can't be empty" do
+    test "should have empty error on started_at" do
       @import.valid?
-      assert_include :start_time, @import.errors.errors
-      assert_include "can't be empty", @import.errors.errors[:start_time]
+      assert_include :started_at, @import.errors.errors
+      assert_include "can't be empty", @import.errors.errors[:started_at]
     end
   end
 
-  shared "import.finish_time can't be empty" do
-    test "should have empty error on finish_time" do
+  shared "import.finished_at can't be empty" do
+    test "should have empty error on finished_at" do
       @import.valid?
-      assert_include :finish_time, @import.errors.errors
-      assert_include "can't be empty", @import.errors.errors[:finish_time]
+      assert_include :finished_at, @import.errors.errors
+      assert_include "can't be empty", @import.errors.errors[:finished_at]
     end
   end
 
@@ -57,8 +57,8 @@ class ImportUnitTest < ModelTestCase
       })
       @valid_params = {
         :importer_id => @importer.id,
-        :start_time  => finish - 30,
-        :finish_time => finish,
+        :started_at  => finish - 30,
+        :finished_at => finish,
         :status      => 'success',
       }
     end
@@ -93,22 +93,22 @@ class ImportUnitTest < ModelTestCase
       use "import.importer_id can't be empty"
     end
 
-    context "missing start_time" do
+    context "missing started_at" do
       before do
-        @import = Import.new(@valid_params.merge(:start_time => nil))
+        @import = Import.new(@valid_params.merge(:started_at => nil))
       end
       
       use "invalid Import"
-      use "import.start_time can't be empty"
+      use "import.started_at can't be empty"
     end
 
-    context "missing finish_time" do
+    context "missing finished_at" do
       before do
-        @import = Import.new(@valid_params.merge(:finish_time => nil))
+        @import = Import.new(@valid_params.merge(:finished_at => nil))
       end
       
       use "invalid Import"
-      use "import.finish_time can't be empty"
+      use "import.finished_at can't be empty"
     end
     
     context "invalid status" do

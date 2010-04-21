@@ -6,15 +6,15 @@ class Import
 
   key :importer_id,  Mongo::ObjectID
   key :status,       String # see STATUS_TYPES below
-  key :start_time,   Time
-  key :finish_time,  Time
+  key :started_at,   Time
+  key :finished_at,  Time
   key :duration,     Float
   timestamps!
 
   # == Indices
   
   ensure_index :importer_id
-  ensure_index :finish_time
+  ensure_index :finished_at
   ensure_index :duration
 
   # == Associations
@@ -26,8 +26,8 @@ class Import
   # == Validations
 
   validates_presence_of :importer_id
-  validates_presence_of :start_time
-  validates_presence_of :finish_time
+  validates_presence_of :started_at
+  validates_presence_of :finished_at
 
   STATUS_TYPES = %w(success failure)
 
@@ -42,8 +42,8 @@ class Import
   
   after_validation :update_duration
   def update_duration
-    if start_time && finish_time
-      self.duration = finish_time - start_time
+    if started_at && finished_at
+      self.duration = finished_at - started_at
     end
   end
 
