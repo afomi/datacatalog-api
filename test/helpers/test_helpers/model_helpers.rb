@@ -111,6 +111,23 @@ module ModelHelpers
     create_model!(Favorite, custom, required)
   end
   
+  def create_import(custom={})
+    timestamp = Time.now
+    required = {
+      :status      => 'success',
+      :start_time  => timestamp - 60,
+      :finish_time => timestamp,
+    }
+    create_model!(Import, custom, required)
+  end
+  
+  def create_importer(custom={})
+    required = {
+      :name => '',
+    }
+    create_model!(Importer, custom, required)
+  end
+  
   def create_organization(custom={})
     required = {
       :name     => "Sample Organization",

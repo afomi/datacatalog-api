@@ -77,6 +77,10 @@ class ImportUnitTest < ModelTestCase
       test "calculate correct duration" do
         assert_equal 30, @import.duration
       end
+      
+      test "point to associated importer" do
+        assert_equal @importer, @import.importer
+      end
     end
 
     context "missing importer_id" do
