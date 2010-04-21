@@ -14,11 +14,11 @@ class ImportUnitTest < ModelTestCase
     end
   end
 
-  shared "import.name can't be empty" do
-    test "should have empty error on name" do
+  shared "import.importer_id can't be empty" do
+    test "should have empty error on importer_id" do
       @import.valid?
-      assert_include :name, @import.errors.errors
-      assert_include "can't be empty", @import.errors.errors[:name]
+      assert_include :importer_id, @import.errors.errors
+      assert_include "can't be empty", @import.errors.errors[:importer_id]
     end
   end
 
@@ -52,8 +52,11 @@ class ImportUnitTest < ModelTestCase
   context "Import : source" do
     before do
       finish = Time.now
+      @importer = create_importer({
+        :name => "Austin, TX"
+      })
       @valid_params = {
-        :name        => "data.gov",
+        :importer_id => @importer.id,
         :start_time  => finish - 30,
         :finish_time => finish,
         :status      => 'success',
@@ -61,6 +64,7 @@ class ImportUnitTest < ModelTestCase
     end
     
     after do
+      @importer.destroy
     end
     
     context "correct params" do
@@ -75,13 +79,13 @@ class ImportUnitTest < ModelTestCase
       end
     end
 
-    context "missing name" do
+    context "missing importer_id" do
       before do
-        @import = Import.new(@valid_params.merge(:name => nil))
+        @import = Import.new(@valid_params.merge(:importer_id => nil))
       end
       
       use "invalid Import"
-      use "Import.name can't be empty"
+      use "import.importer_id can't be empty"
     end
 
     context "missing start_time" do

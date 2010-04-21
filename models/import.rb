@@ -23,7 +23,7 @@ class Import
 
   # == Validations
 
-  validates_presence_of :name
+  validates_presence_of :importer_id
   validates_presence_of :start_time
   validates_presence_of :finish_time
 
