@@ -48,7 +48,7 @@ class ImporterUnitTest < ModelTestCase
       end
       
       use "invalid Importer"
-      use "Importer.name can't be empty"
+      use "importer.name can't be empty"
     end
   end
   

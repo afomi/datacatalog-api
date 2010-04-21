@@ -94,7 +94,7 @@ class ImportUnitTest < ModelTestCase
       end
       
       use "invalid Import"
-      use "Import.start_time can't be empty"
+      use "import.start_time can't be empty"
     end
 
     context "missing finish_time" do
@@ -103,7 +103,7 @@ class ImportUnitTest < ModelTestCase
       end
       
       use "invalid Import"
-      use "Import.finish_time can't be empty"
+      use "import.finish_time can't be empty"
     end
     
     context "invalid status" do
