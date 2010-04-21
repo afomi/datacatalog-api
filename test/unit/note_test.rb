@@ -39,7 +39,7 @@ class NoteUnitTest < ModelTestCase
   end
 
   shared "note.source_id can't be empty" do
-    test "should have emptuy error on source_id" do
+    test "should have empty error on source_id" do
       @note.valid?
       assert_include :source_id, @note.errors.errors
       assert_include "can't be empty", @note.errors.errors[:source_id]

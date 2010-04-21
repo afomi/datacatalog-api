@@ -39,7 +39,7 @@ class DocumentUnitTest < ModelTestCase
   end
 
   shared "document.source_id can't be empty" do
-    test "should have emptuy error on source_id" do
+    test "should have empty error on source_id" do
       @document.valid?
       assert_include :source_id, @document.errors.errors
       assert_include "can't be empty", @document.errors.errors[:source_id]
