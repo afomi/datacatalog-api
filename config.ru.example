@@ -7,6 +7,8 @@ map("/comments")      { run DataCatalog::Comments }
 map("/documents")     { run DataCatalog::Documents }
 map("/downloads")     { run DataCatalog::Downloads }
 map("/favorites")     { run DataCatalog::Favorites }
+map("/importers")     { run DataCatalog::Importers }
+map("/imports")       { run DataCatalog::Imports }
 map("/notes")         { run DataCatalog::Notes }
 map("/organizations") { run DataCatalog::Organizations }
 map("/ratings")       { run DataCatalog::Ratings }
