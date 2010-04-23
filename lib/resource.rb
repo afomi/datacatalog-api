@@ -37,6 +37,18 @@ module DataCatalog
             "errors" => ["invalid_api_key"]
           })
         end
+        
+        # Callback from SinatraResource
+        def log_event(event, params)
+          case event
+          when :get_many
+            search_string = params['search']
+            if search_string
+              words = search_string.downcase.split(" ")
+              SearchEvent.create!(:event => 'search', :words => words)
+            end
+          end
+        end
 
         # Required for SinatraResource
         def lookup_role(document=nil)
