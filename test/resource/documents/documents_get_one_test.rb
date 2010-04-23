@@ -5,10 +5,14 @@ class DocumentsGetOneTest < RequestTestCase
   def app; DataCatalog::Documents end
 
   before do
-    source = create_source
+    @source = create_source
     @document = create_document(
-      :source_id => source.id
+      :source_id => @source.id
     )
+  end
+  
+  after do
+    @source.destroy
   end
   
   context "normal API key : get /:id" do
