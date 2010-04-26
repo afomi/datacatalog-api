@@ -29,6 +29,9 @@ namespace :deploy do
   
   desc "Get shared files into position"
   task :after_update_code, :roles => [:web, :app] do
+    run "webgen -d #{release_path}/documentation"
+    run "ln -nfs #{release_path}/documentation/out #{shared_path}/docs"
+    
     run "ln -nfs #{shared_path}/config/config.yml #{release_path}/config/config.yml"
     run "ln -nfs #{shared_path}/config.ru #{release_path}/config.ru"
     run "rm #{File.join release_path, 'tmp', 'pids'}"
