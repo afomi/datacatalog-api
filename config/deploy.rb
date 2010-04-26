@@ -6,7 +6,7 @@ set :domain, 'api.nationaldatacatalog.com'
 
 set :scm, :git
 set :repository, "git://github.com/sunlightlabs/#{application}.git"
-set :branch, 'master'
+set :branch, 'production'
 
 set :use_sudo, false
 set :deploy_to, "/home/#{user}/www/#{application}"
