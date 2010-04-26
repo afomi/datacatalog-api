@@ -1,10 +1,9 @@
+---
+title: _Overview_
+in_menu: true
+---
+
 # About the National Data Catalog API
-
-## Alpha
-
-National Data Catalog is in alpha. Please consider this to be early-stage documentation. We are releasing it now (in rough form) to help internal development and to solicit feedback from our community.
-
-## Overview
 
 The National Data Catalog, a project of the [Sunlight Labs](http://sunlightlabs.com), stores metadata about data sets and APIs published by all levels and branches of the United States government. The API is designed to help software developers search for, identify, and work with U.S. government data sources.
 
@@ -12,17 +11,22 @@ The National Data Catalog consists of several pieces:
 
 * At the center is the API. (We say the center because the other services rely on it.)
 
-* The API powers the [National Data Catalog Web app](http://nationaldatacatalog.com), intended for use by the public (e.g. reporters, researchers, and so on -- not only software developers).
+* The API powers the [National Data Catalog web app](http://nationaldatacatalog.com), intended for use by the public (e.g. reporters, bloggers, researchers, and so on -- not only software developers).
 
 * The catalog is kept up-to-date with the help of our users, curators, and automatic importers. The importers are Web services that talk directly to the API that populate the National Data Catalog with information from other Web sites and services.
 
 * The API is intended to be open-ended; we encourage the development of third-party applications and tools built around it.
 
+## Alpha
+
+National Data Catalog is in alpha. Please consider this to be early-stage documentation. We are releasing it now (in rough form) to help internal development and to solicit feedback from our community.
+
 ## Getting Access
 
 Generally speaking, all API calls require an API key parameter (called api_key).
 
-When we launch the National Data Catalog Web App, you will be able to get an API key by visiting [nationaldatacatalog.com](http://nationaldatacatalog.com).
+First, sign up for an account using the [web application](http://nationaldatacatalog.com). Then, visit your [profile page](http://nationaldatacatalog.com/profile) to see your key.
+You can get an API key by signing up for an account on the Web app.  [nationaldatacatalog.com].
 
 ## JSON Based
 
@@ -37,19 +41,19 @@ For getting started quickly, we recommend using [Firefox](http://getfirefox.com)
 
 To view general meta data about the API:
 
-    GET http://sandbox.nationaldatacatalog.com/
+    GET http://api.nationaldatacatalog.com/
     
 To view available resources for anonymous access:
 
-    GET http://sandbox.nationaldatacatalog.com/resources
+    GET http://api.nationaldatacatalog.com/resources
 
 To view available resources accessible via a particular API key:
 
-    GET http://sandbox.nationaldatacatalog.com/resources?api_key=MY_API_KEY
+    GET http://api.nationaldatacatalog.com/resources?api_key={api_key}
 
 To view status of an API key, including the associated user ID:
 
-    GET http://sandbox.nationaldatacatalog.com/checkup?api_key=MY_API_KEY
+    GET http://api.nationaldatacatalog.com/checkup?api_key={api_key}
 
 ## API Design Principles
 
@@ -83,5 +87,3 @@ Here are some ways to get involved:
 * the [National Data Catalog project page](http://sunlightlabs.com/projects/datacatalog/)
 * the [Sunlight Labs Mailing List](http://groups.google.com/group/sunlightlabs)
 * the [transparency chat room](irc://chat.freenode.net/transparency)
-
-You might also like to read our [inaugural blog post](http://www.sunlightlabs.com/blog/2009/kickoff-national-data-catalog/) about the project.

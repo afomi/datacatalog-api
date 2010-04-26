@@ -1,6 +1,15 @@
-## Source
+---
+title: Sources
+in_menu: true
+---
+
+# Sources
 
 Data sources are the primary feature of the National Data Catalog. They are representations of data sets and APIs. See sources.md for more information.
+
+## Base URL
+
+http://api.nationaldatacatalog.com/sources
 
 ## Schema
 
@@ -54,26 +63,26 @@ A complete, up-to-date list can be found in [frequency.rb in the frequency gem](
 
 ## API Calls
 
-*Note*: You will need to add `api_key=MY_API_KEY` to the examples below.
-
 A normal user can read sources, while curators and admins can perform full CRUD on sources.
+
+*Note*: You will need to add `api_key={api_key}` to the examples below.
 
 Get all sources:
 
-    GET http://sandbox.nationaldatacatalog.com/sources?api_key=MY_API_KEY
+    GET http://nationaldatacatalog.com/sources
 
 Get one source:
 
-    GET http://sandbox.nationaldatacatalog.com/sources/SOURCE_ID?api_key=MY_API_KEY
+    GET http://nationaldatacatalog.com/sources/{source_id}
     
 Create a new source:
 
-    POST http://sandbox.nationaldatacatalog.com/sources?api_key=MY_API_KEY
+    POST http://nationaldatacatalog.com/sources
 
 Update an existing source:
 
-    PUT http://sandbox.nationaldatacatalog.com/sources/SOURCE_ID?api_key=MY_API_KEY
+    PUT http://nationaldatacatalog.com/sources/{source_id}
     
 Delete an existing source:
 
-    DELETE http://sandbox.nationaldatacatalog.com/sources/SOURCE_ID?api_key=MY_API_KEY
+    DELETE http://nationaldatacatalog.com/sources/{source_id}?api_key={api_key}
