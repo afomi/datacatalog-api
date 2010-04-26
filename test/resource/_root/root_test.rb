@@ -13,7 +13,7 @@ class RootResourceTest < RequestTestCase
     end
     
     test "body has correct version" do
-      assert_equal "0.4.7", parsed_response_body["version"]
+      assert_equal "0.4.8", parsed_response_body["version"]
     end
     
     test "body has list of resources" do
