@@ -6,7 +6,7 @@ set :domain, 'api.nationaldatacatalog.com'
 
 set :scm, :git
 set :repository, "git://github.com/sunlightlabs/#{application}.git"
-set :branch, 'master'
+set :branch, 'production'
 
 set :use_sudo, false
 set :deploy_to, "/home/#{user}/www/#{application}"
@@ -29,10 +29,14 @@ namespace :deploy do
   
   desc "Get shared files into position"
   task :after_update_code, :roles => [:web, :app] do
+    run "webgen -d #{release_path}/documentation"
+    run "ln -nfs #{release_path}/documentation/out #{shared_path}/docs"
+    
     run "ln -nfs #{shared_path}/config.ru #{release_path}/config.ru"
     run "ln -nfs #{shared_path}/config/config.yml #{release_path}/config/config.yml"
     run "ln -nfs #{shared_path}/config/users.yml #{release_path}/config/users.yml"
     run "ln -nfs #{shared_path}/config/organizations.yml #{release_path}/config/organizations.yml"
+
     run "rm #{File.join release_path, 'tmp', 'pids'}"
     run "rm #{File.join release_path, 'public', 'system'}"
     run "rm #{File.join release_path, 'log'}"

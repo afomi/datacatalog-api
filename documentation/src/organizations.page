@@ -1,8 +1,18 @@
-# Organization
+---
+title: Organizations
+in_menu: true
+---
+
+# Organizations
 
 The `Organization` resource represents an organization, such as a government agency, non-profit, or commercial entity.
 
+## Base URL
+
+http://api.nationaldatacatalog.com/organizations
+
 ## Schema
+
 
     Field         Type     Writable By   Description
     -----         ----     -----------   -----------
@@ -49,26 +59,26 @@ Why is top_level needed? Couldn't the API just test for `parent_id == nil`? Not 
 
 ## API Calls
 
-*Note*: You will need to add `api_key=MY_API_KEY` to the examples below.
-
 A normal user can read sources, while curators and admins can perform full CRUD on sources.
+
+*Note*: You will need to add `api_key={api_key}` to the examples below.
 
 Get all sources:
 
-    GET http://sandbox.nationaldatacatalog.com/sources?api_key=MY_API_KEY
+    GET http://api.nationaldatacatalog.com/sources
 
 Get one source:
 
-    GET http://sandbox.nationaldatacatalog.com/sources/SOURCE_ID?api_key=MY_API_KEY
+    GET http://api.nationaldatacatalog.com/sources/{source_id}
 
 Create a new source:
 
-    POST http://sandbox.nationaldatacatalog.com/sources?api_key=MY_API_KEY
+    POST http://api.nationaldatacatalog.com/sources
 
 Update an existing source:
 
-    PUT http://sandbox.nationaldatacatalog.com/sources/SOURCE_ID?api_key=MY_API_KEY
+    PUT http://api.nationaldatacatalog.com/sources/{source_id}
 
 Delete an existing source:
 
-    DELETE http://sandbox.nationaldatacatalog.com/sources/SOURCE_ID?api_key=MY_API_KEY
+    DELETE http://nationaldatacatalog.com/sources/{source_id}

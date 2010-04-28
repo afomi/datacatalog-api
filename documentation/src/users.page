@@ -1,4 +1,9 @@
-# User
+---
+title: Users
+in_menu: true
+---
+
+# Users
 
 The `User` resource represents a user account. A user account starts off with a primary API key. Using this key, you can request more API keys.
 
@@ -7,6 +12,10 @@ There are three types of users:
 1. **basic** - Has read access to data sources and other users. Has full access to own user profile.
 2. **curator** - Has full access to data sources and own user profile. Has read access to other users.
 3. **admin** - Has full access to data sources and all users.
+
+## Base URL
+
+http://api.nationaldatacatalog.com/users
 
 ## Schema
 
@@ -24,8 +33,7 @@ There are three types of users:
     created_at            R     Time     Automatic timestamp on creation
     updated_at            R     Time     Automatic timestamp on update
 
-*Notes*:
-
+*Notes*: 
 * R denotes read-only fields
 * W denotes required fields when writing (creating or updating)
 
@@ -41,29 +49,31 @@ There are three types of users:
 
 ## API Calls
 
-The `User` resource responds to standard CRUD operations, according to the permissions above. You will need to add `api_key=MY_API_KEY` to the examples below.
+The `User` resource responds to standard CRUD operations, according to the permissions above.
+
+*Note*: You will need to add `api_key={api_key}` to the examples below.
 
 Get all users:
 
-    GET http://sandbox.nationaldatacatalog.com/users
+    GET http://nationaldatacatalog.com/users
     
 Get all users named John:
 
-    GET http://sandbox.nationaldatacatalog.com/users?first_name=John
+    GET http://nationaldatacatalog.com/users?first_name=John
 
 Get one user:
 
-    GET http://sandbox.nationaldatacatalog.com/users/USER_ID
+    GET http://nationaldatacatalog.com/users/{user_id}
     
 Create a new user:
 
-    POST http://sandbox.nationaldatacatalog.com/users
+    POST http://nationaldatacatalog.com/users
 
 Update an existing user:
 
-    PUT http://sandbox.nationaldatacatalog.com/users/USER_ID
+    PUT http://nationaldatacatalog.com/users/{user_id}
     
 Delete an existing user:
 
-    DELETE http://sandbox.nationaldatacatalog.com/users/USER_ID
+    DELETE http://nationaldatacatalog.com/users/{user_id}
 

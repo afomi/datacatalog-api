@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{lang:}">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="description" content="description goes here" />
+    <meta name="keywords" content="keywords,goes,here" />
+    <meta name="author" content="Sunlight Labs" />
+    <meta name="generator" content="webgen - http://webgen.rubyforge.org" />
+    <link rel="stylesheet" type="text/css" href="{relocatable: default.css}" />
+    <!--[if IE 6]>
+        <link rel="stylesheet" href="{relocatable: browserfix.css}" type="text/css" />
+        <![endif]-->
+    <title>{title:}</title>
+  </head>
+
+  <body>
+    <div id="sidebar">
+      <h1>National Data Catalog API</h1>
+      <h2>Open Government Data</h2>
+
+      <div id="menu">
+        {menu: {min_levels: 2, used_nodes: files}}
+      </div>
+
+      <h3>Links:</h3>
+      <ul>
+        <li><a href="http://github.com/sunlightlabs/ruby-datacatalog">Ruby wrapper</a></li>
+        <li><a href="http://github.com/sunlightlabs/datacatalog-api">API Source Code</a></li>
+        <li><a href="http://nationaldatacatalog.com">web application</a></li>
+      </ul>
+    </div>
+
+    <div id="content">
+      <webgen:block name="content" />
+
+      <div id="footer">
+        <p>Last updated: <%= Time.now.utc.strftime("%Y-%m-%d %H:%M:%S") %> UTC</p>
+      </div>
+    </div>
+    
+  </body>
+</html>

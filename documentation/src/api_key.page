@@ -1,3 +1,8 @@
+---
+title: API Keys
+in_menu: true
+---
+
 # ApiKey
 
 There are three types of API Keys:
@@ -5,6 +10,10 @@ There are three types of API Keys:
 1. **Primary** - Created when a new `user` is created. Cannot be deleted.
 2. **Application** - For developers who need their applications to access the API.
 3. **Valet** - For users to give other applications access to their user-specific data. May be replaced in the future by OAuth.
+
+## Base URL
+
+http://api.nationaldatacatalog.com/users/{user_id}/keys
 
 ## Schema
 
@@ -40,24 +49,24 @@ There are three types of API Keys:
 
 A user can perform CRUD on her own keys, as can an admin user. `Keys` are nested underneath the `User` resource.
 
-*Note*: You will need to add `api_key=MY_API_KEY` to the examples below.
+*Note*: You will need to add `api_key={api_key}` to the examples below.
 
 Get a user's API keys:
 
-    GET http://sandbox.nationaldatacatalog.com/users/USER_ID/keys
+    GET http://api.nationaldatacatalog.com/users/{user_id}/keys
 
 Get one API key:
 
-    GET http://sandbox.nationaldatacatalog.com/users/USER_ID/keys/KEY_ID
+    GET http://api.nationaldatacatalog.com/users/{user_id}/keys/{key_id}
     
 Create a new key:
 
-    POST http://sandbox.nationaldatacatalog.com/users/USER_ID/keys
+    POST http://api.nationaldatacatalog.com/users/{user_id}/keys
 
 Update an existing key:
 
-    PUT http://sandbox.nationaldatacatalog.com/users/USER_ID/keys/KEY_ID
+    PUT http://api.nationaldatacatalog.com/users/{user_id}/keys/{key_id}
     
 Delete an existing key:
 
-    DELETE http://sandbox.nationaldatacatalog.com/users/USER_ID/keys/KEY_ID
+    DELETE http://api.nationaldatacatalog.com/users/{user_id}/keys/{key_id}

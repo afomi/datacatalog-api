@@ -48,21 +48,22 @@ class OrganizationsGetSearchTest < RequestTestCase
     %w(normal).each do |role|
       context "#{role} : get /" do
         before do
+          @search_event_count = SearchEvent.count
           get "/", @search_params.merge(:api_key => primary_api_key_for(role))
           @members = parsed_response_body['members']
         end
-
+        
         use "return 200 Ok"
-
+        
         test "body should have 1 organization" do
           assert_equal 1, @members.length
         end
-      
+              
         test "body should have correct organization" do
           assert_equal %{Department of Justice},
             @members[0]['name']
         end
-      
+              
         members_properties %w(
           name
           names
@@ -87,6 +88,14 @@ class OrganizationsGetSearchTest < RequestTestCase
           created_at
           updated_at
         )
+        
+        use "incremented search_event count"
+        
+        test "updated search log" do
+          search_event = SearchEvent.all(:order => 'created_at desc').first
+          assert_equal "search", search_event.event
+          assert_equal [@search_params[:search]], search_event.words
+        end
       end
     end
   end

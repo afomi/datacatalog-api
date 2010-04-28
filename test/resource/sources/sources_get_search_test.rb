@@ -54,6 +54,7 @@ class SourcesGetSearchTest < RequestTestCase
     %w(normal).each do |role|
       context "#{role} : get /" do
         before do
+          @search_event_count = SearchEvent.count
           get "/", @search_params.merge(:api_key => primary_api_key_for(role))
           @members = parsed_response_body['members']
         end
@@ -103,6 +104,14 @@ class SourcesGetSearchTest < RequestTestCase
           updates_per_year
           url
         )
+
+        use "incremented search_event count"
+
+        test "updated search log" do
+          search_event = SearchEvent.all(:order => 'created_at desc').first
+          assert_equal "search", search_event.event
+          assert_equal [@search_params[:search]], search_event.words
+        end
       end
     end
   end
