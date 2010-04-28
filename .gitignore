@@ -1,5 +1,7 @@
 rcov/*
 config/config.yml
+config/users.yml
+config/organizations.yml
 config.ru
 restart.txt
 .DS_Store

@@ -1,0 +1,33 @@
+- name: USA Federal Government
+  acronym:
+  org_type: governmental
+  top_level: true
+  interest: 1
+- name: USA Executive Branch
+  acronym:
+  parent_name: USA Federal Government
+  org_type: governmental
+  top_level: false
+  interest: 1
+- name: USA Judicial Branch
+  acronym:
+  parent_name: USA Federal Government
+  org_type: governmental
+  top_level: false
+  interest: 1
+- name: USA Legislative Branch
+  acronym:
+  parent_name: USA Federal Government
+  org_type: governmental
+  top_level: false
+  interest: 1
+- name: District of Columbia
+  org_type: governmental
+  acronym: DC
+  top_level: true
+  interest: 1
+- name: Utah
+  org_type: governmental
+  acronym: 
+  top_level: true
+  interest: 1

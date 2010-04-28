@@ -29,8 +29,10 @@ namespace :deploy do
   
   desc "Get shared files into position"
   task :after_update_code, :roles => [:web, :app] do
-    run "ln -nfs #{shared_path}/config/config.yml #{release_path}/config/config.yml"
     run "ln -nfs #{shared_path}/config.ru #{release_path}/config.ru"
+    run "ln -nfs #{shared_path}/config/config.yml #{release_path}/config/config.yml"
+    run "ln -nfs #{shared_path}/config/users.yml #{release_path}/config/users.yml"
+    run "ln -nfs #{shared_path}/config/organizations.yml #{release_path}/config/organizations.yml"
     run "rm #{File.join release_path, 'tmp', 'pids'}"
     run "rm #{File.join release_path, 'public', 'system'}"
     run "rm #{File.join release_path, 'log'}"

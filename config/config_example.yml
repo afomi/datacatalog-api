@@ -3,70 +3,15 @@ development:
   mongo_hostname: localhost
   mongo_database: natdatcat_dev
   api_key_salt: "000000000000000000000000000000000000000000000000000000000"
-  default_users: &users
-    - name: Admin 1
-      email: admin_1@your_organization.com
-      admin: true
-    - name: Admin 2
-      email: admin_2@your_organization.com
-      admin: true
-    - name: Curator 1
-      email: curator_1@your_organization.com
-      curator: true
-  default_organizations: &organizations
-    - name: USA Federal Government
-      acronym:
-      org_type: governmental
-      top_level: true
-      interest: 1
-    - name: USA Executive Branch
-      acronym:
-      parent_name: USA Federal Government
-      org_type: governmental
-      top_level: false
-      interest: 1
-    - name: USA Judicial Branch
-      acronym:
-      parent_name: USA Federal Government
-      org_type: governmental
-      top_level: false
-      interest: 1
-    - name: USA Legislative Branch
-      acronym:
-      parent_name: USA Federal Government
-      org_type: governmental
-      top_level: false
-      interest: 1
-    - name: District of Columbia
-      org_type: governmental
-      acronym: DC
-      top_level: true
-      interest: 1
-    - name: Utah
-      org_type: governmental
-      acronym: 
-      top_level: true
-      interest: 1
+
 test:
   base_uri: http://localhost:4567/
   mongo_hostname: localhost
   mongo_database: natdatcat_test
   api_key_salt: "000000000000000000000000000000000000000000000000000000000"
-  default_users: *users
-  default_organizations: *organizations
-
-staging:
-  base_uri: http://staging.com/
-  mongo_hostname: localhost
-  mongo_database: natdatcat_sta
-  api_key_salt: "000000000000000000000000000000000000000000000000000000000"
-  default_users: *users
-  default_organizations: *organizations
   
 production:
-  base_uri: http://production.com/
+  base_uri: http://localhost:3000/
   mongo_hostname: localhost
   mongo_database: natdatcat_pro
   api_key_salt: "000000000000000000000000000000000000000000000000000000000"
-  default_users: *users
-  default_organizations: *organizations

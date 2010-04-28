@@ -1,0 +1,36 @@
+- name: National Data Catalog web app
+  email: web-app@your-domain-here.com
+  admin: true
+  primary_api_key: 0000000000000000000000000000000000000000
+- name: importer system
+  email: importer-system@your-domain-here.com
+  admin: true
+  primary_api_key: 0000000000000000000000000000000000000000
+- name: data.gov importer
+  email: data-gov-importer@your-domain-here.com
+  admin: true
+  primary_api_key: 0000000000000000000000000000000000000000
+- name: dc.gov importer
+  email: dc-gov-importer@your-domain-here.com
+  admin: true
+  primary_api_key: 0000000000000000000000000000000000000000
+- name: utah.gov importer
+  email: utah-gov-importer@your-domain-here.com
+  admin: true
+  primary_api_key: 0000000000000000000000000000000000000000
+- name: Admin 1
+  email: admin-1@your-domain-here.com
+  admin: true
+  primary_api_key: 0000000000000000000000000000000000000000
+- name: Admin 1
+  email: admin-2@your-domain-here.com
+  admin: true
+  primary_api_key: 0000000000000000000000000000000000000000
+- name: Curator 1
+  email: curator-1@your-domain-here.com
+  curator: true
+  primary_api_key: 0000000000000000000000000000000000000000
+- name: Curator 1
+  curator: curator-2@your-domain-here.com
+  admin: true
+  primary_api_key: 0000000000000000000000000000000000000000

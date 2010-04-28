@@ -72,7 +72,7 @@ namespace :db do
 
   desc "Create default users if not present"
   task :ensure_default_users => ["environment:models"] do
-    default_users = Config.environment_config["default_users"]
+    default_users = Config.default_users
     if default_users && default_users.length > 0
       default_users.each do |default_user|
         existing_user = User.first(:conditions => {
@@ -86,13 +86,13 @@ namespace :db do
         end
       end
     else
-      puts "No default users specified in config.yml"
+      puts "No default users specified in users.yml"
     end
   end
 
   desc "Create default organizations if not present"
   task :ensure_default_organizations => ["environment:models"] do
-    default_organizations = Config.environment_config["default_organizations"]
+    default_organizations = Config.default_organizations
     if default_organizations && default_organizations.length > 0
       default_organizations.each do |default_organization|
         existing_organization = Organization.first(:conditions => {
@@ -106,7 +106,7 @@ namespace :db do
         end
       end
     else
-      puts "No default organizations specified in config.yml"
+      puts "No default organizations specified in organizations.yml"
     end
   end
   

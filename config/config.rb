@@ -71,5 +71,23 @@ module Config
       @config = YAML.load_file(file)
     end
   end
+  
+  def self.default_users
+    if @default_users
+      @default_users
+    else
+      file = File.join(File.dirname(__FILE__), "users.yml")
+      @default_users = YAML.load_file(file)
+    end
+  end
+  
+  def self.default_organizations
+    if @default_organizations
+      @default_organizations
+    else
+      file = File.join(File.dirname(__FILE__), "organizations.yml")
+      @default_organizations = YAML.load_file(file)
+    end
+  end
 
 end
