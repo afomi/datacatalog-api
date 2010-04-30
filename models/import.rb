@@ -4,7 +4,7 @@ class Import
 
   # == Attributes
 
-  key :importer_id,  Mongo::ObjectID
+  key :importer_id,  ObjectId
   key :status,       String # see STATUS_TYPES below
   key :started_at,   Time
   key :finished_at,  Time

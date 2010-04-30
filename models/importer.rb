@@ -11,7 +11,7 @@ class Importer
 
   # == Associations
   
-  many :imports, :class_name => 'Import', :foreign_key => :importer_id
+  many :imports
   
   protected
 

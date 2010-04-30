@@ -8,8 +8,8 @@ class SourceSnippet
   key :description,     String
   key :source_type,     String
   key :url,             String
-  key :source_id,       Mongo::ObjectID
-  key :organization_id, Mongo::ObjectID
+  key :source_id,       ObjectId
+  key :organization_id, ObjectId
 
   # == Associations
   
