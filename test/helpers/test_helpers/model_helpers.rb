@@ -114,7 +114,7 @@ module ModelHelpers
   def create_import(custom={})
     timestamp = Time.now
     required = {
-      :status      => 'success',
+      :status      => 'succeeded',
       :started_at  => timestamp - 60,
       :finished_at => timestamp,
     }

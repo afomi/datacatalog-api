@@ -42,14 +42,14 @@ class ImportUnitTest < ModelTestCase
     test "should have error on status" do
       @import.valid?
       assert_include :status, @import.errors.errors
-      assert_include "must be one of: success, failure",
+      assert_include "must be one of: started, succeeded, failed",
         @import.errors.errors[:status]
     end
   end
 
   # - - - - - - - - - -
   
-  context "Import : source" do
+  context "Import : succeeded" do
     before do
       finish = Time.now
       @importer = create_importer({
@@ -59,7 +59,7 @@ class ImportUnitTest < ModelTestCase
         :importer_id => @importer.id,
         :started_at  => finish - 30,
         :finished_at => finish,
-        :status      => 'success',
+        :status      => 'succeeded',
       }
     end
     
@@ -119,7 +119,32 @@ class ImportUnitTest < ModelTestCase
       use "invalid Import"
       use "import.status must be valid"
     end
-    
   end
-  
+
+  context "Import : started" do
+    before do
+      started = Time.now
+      @importer = create_importer({
+        :name => "Roosevelt, TX"
+      })
+      @valid_params = {
+        :importer_id => @importer.id,
+        :started_at  => started,
+        :status      => 'started',
+      }
+    end
+
+    after do
+      @importer.destroy
+    end
+      
+    context "correct params" do
+      before do
+        @import = Import.new(@valid_params)
+      end
+      
+      use "valid Import"
+    end
+  end
+
 end

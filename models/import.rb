@@ -27,15 +27,21 @@ class Import
 
   validates_presence_of :importer_id
   validates_presence_of :started_at
-  validates_presence_of :finished_at
+  validates_presence_of :finished_at, :if => :completed_import?
 
-  STATUS_TYPES = %w(success failure)
+  COMPLETED_STATUS_TYPES = %w(succeeded failed)
+  INCOMPLETED_STATUS_TYPES = %w(started)
+  STATUS_TYPES = INCOMPLETED_STATUS_TYPES.concat(COMPLETED_STATUS_TYPES)
 
   validate :validate_status
   def validate_status
     unless STATUS_TYPES.include?(status)
       errors.add(:status, "must be one of: #{STATUS_TYPES.join(', ')}")
     end
+  end
+  
+  def completed_import?
+    COMPLETED_STATUS_TYPES.include?(status)
   end
   
   # == Callbacks

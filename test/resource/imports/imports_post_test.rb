@@ -19,7 +19,7 @@ class ImportsPostTest < RequestTestCase
       post "/", {
         :api_key     => @curator_user.primary_api_key,
         :importer_id => @importer.id,
-        :status      => 'success',
+        :status      => 'succeeded',
         :started_at  => @started_at.to_s,
         :finished_at => @finished_at.to_s,
       }
@@ -40,7 +40,7 @@ class ImportsPostTest < RequestTestCase
     end
     
     test "body should have correct status" do
-      assert_equal "success", parsed_response_body["status"]
+      assert_equal "succeeded", parsed_response_body["status"]
     end
     
     test "timestamps should be correct in database" do
