@@ -1,12 +1,18 @@
-set :environment, (ENV['target'] || 'production')
+set :environment, (ENV['target'] || 'staging')
 
 set :user, 'datcat'
 set :application, 'datacatalog-api'
-set :domain, 'api.nationaldatacatalog.com'
 
 set :scm, :git
 set :repository, "git://github.com/sunlightlabs/#{application}.git"
-set :branch, 'production'
+
+if environment == 'production'
+  set :domain, 'api.nationaldatacatalog.com'
+  set :branch, 'production'
+else
+  set :domain, 'api.staging.nationaldatacatalog.com'
+  set :branch, 'master'
+end
 
 set :use_sudo, false
 set :deploy_to, "/home/#{user}/www/#{application}"
