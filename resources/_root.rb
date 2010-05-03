@@ -20,12 +20,7 @@ module DataCatalog
         "href" => "http://github.com/sunlightlabs/datacatalog-api"
       },
       "documentation" => {
-        "overview" => {
-          "href" => "http://github.com/sunlightlabs/datacatalog-api/blob/master/doc/about.md"
-        },
-        "resource_details" => {
-          "href" => "http://github.com/sunlightlabs/datacatalog-api/blob/master/doc/resources.md"
-        },
+        "href" => "http://api.nationaldatacatalog.com/docs/"
       },
     }
 
