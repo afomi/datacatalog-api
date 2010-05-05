@@ -511,22 +511,55 @@ class SourceUnitTest < ModelTestCase
   end
   
   context "keywords" do
-    before do
-      @source = create_source(
-        :title       => "Campaign Contributions for 2008",
-        :url         => "http://fec.gov/data",
-        :description => "This data set contains campaign contributions for the year 2008."
-      )
+    context "no organization" do
+      before do
+        @source = create_source(
+          :title       => "Campaign Contributions for 2008",
+          :url         => "http://fec.gov/data",
+          :description => "This data set contains campaign contributions for the year 2008."
+        )
+      end
+    
+      test "correct keywords" do
+        assert_equal %w(
+          2008
+          campaign
+          contains
+          contributions
+          year
+        ), @source._keywords.sort
+      end
     end
     
-    test "correct keywords" do
-      assert_equal %w(
-        2008
-        campaign
-        contains
-        contributions
-        year
-      ), @source._keywords.sort
+    context "with organization" do
+      before do
+        @organization = create_organization({
+          :name        => "Environmental Protection Agency",
+          :acronym     => "EPA",
+          :names       => ["Environmental Protection Agency"],
+          :description => "The mission of EPA is to protect human health and to safeguard the natural environment -- air, water and land -- upon which life depends.",
+        })
+        @source = create_source({
+          :title           => "Campaign Contributions for 2008",
+          :url             => "http://fec.gov/data",
+          :description     => "This data set contains campaign contributions for the year 2008.",
+          :organization_id => @organization.id,
+        })
+      end
+    
+      test "correct keywords" do
+        assert_equal %w(
+          2008
+          agency
+          campaign
+          contains
+          contributions
+          environmental
+          epa
+          protection
+          year
+        ), @source._keywords.sort
+      end
     end
   end
     

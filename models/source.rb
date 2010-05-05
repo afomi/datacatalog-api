@@ -142,7 +142,13 @@ class Source
   
   before_save :update_keywords
   def update_keywords
-    self._keywords = DataCatalog::Search.process([title, description])
+    words = [title, description]
+    if organization
+      words << organization.name if organization.name
+      words.concat(organization.names) if organization.names
+      words << organization.acronym if organization.acronym
+    end
+    self._keywords = DataCatalog::Search.process(words)
   end
 
   before_validation :clean_date_fields
