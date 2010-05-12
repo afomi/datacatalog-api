@@ -11,6 +11,7 @@ class Organization
   key :description,       String
   key :slug,              String
   key :slug_suffix,       String
+  key :old_slug,          String # No need to expose in API
   key :url,               String
   key :home_url,          String
   key :catalog_name,      String
