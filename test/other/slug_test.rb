@@ -41,6 +41,11 @@ class SluggableUnitTest < Test::Unit::TestCase
       @doc = Document.new
       stub(@doc).id { 42 }
     end
+    
+    test "string with apostraphe" do
+      assert_equal "governors-office-of-planning-and-budget",
+        Slug.make_prefix("Governor's Office of Planning and Budget", @doc)
+    end
   
     test "alphanumeric string" do
       assert_equal "the-great-data", Slug.make_prefix("The Great Data", @doc)

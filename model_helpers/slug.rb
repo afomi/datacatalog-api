@@ -20,6 +20,7 @@ class Slug
   # http://github.com/rails/rails/blob/ea0e41d8fa5a132a2d2771e9785833b7663203ac/activesupport/lib/active_support/inflector.rb#L259
   def self.make_prefix(text, document, separator = "-")
     slug = text.to_s.downcase
+    slug.gsub!(/[']+/, '')
     slug.gsub!(/[^a-z0-9]+/, separator)
     unless separator.nil? || separator == ''
       regex = Regexp.escape(separator)
