@@ -1,22 +1,30 @@
 - name: USA Federal Government
   acronym:
+  slug: usa-federal-govt
+  slug_suffix: ""
   org_type: governmental
   top_level: true
   interest: 1
 - name: USA Executive Branch
   acronym:
+  slug: usa-executive-branch
+  slug_suffix: ""
   parent_name: USA Federal Government
   org_type: governmental
   top_level: false
   interest: 1
 - name: USA Judicial Branch
   acronym:
+  slug: usa-judicial-branch
+  slug_suffix: ""
   parent_name: USA Federal Government
   org_type: governmental
   top_level: false
   interest: 1
 - name: USA Legislative Branch
   acronym:
+  slug: usa-legislative-branch
+  slug_suffix: ""
   parent_name: USA Federal Government
   org_type: governmental
   top_level: false
@@ -24,14 +32,20 @@
 - name: District of Columbia
   org_type: governmental
   acronym: DC
+  slug: dc
+  slug_suffix: dc
   top_level: true
   interest: 1
 - name: Utah
   org_type: governmental
   acronym: 
+  slug: utah
+  slug_suffix: utah
   top_level: true
   interest: 1
 - name: San Francisco
   acronum:
+  slug: san-francisco
+  slug_suffix: san-francisco
   top_level: true
   interest: 1

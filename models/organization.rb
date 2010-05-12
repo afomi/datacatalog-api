@@ -10,6 +10,7 @@ class Organization
   key :org_type,          String
   key :description,       String
   key :slug,              String
+  key :slug_suffix,       String
   key :url,               String
   key :home_url,          String
   key :catalog_name,      String
@@ -73,6 +74,10 @@ class Organization
     return unless slug.blank?
     return if name.blank?
     to_slug = acronym.blank? ? name : acronym
+    if parent
+      suffix = parent.slug_suffix
+      to_slug << "-#{suffix}" unless suffix.blank?
+    end
     self.slug = Slug.make(to_slug, self)
   end
 

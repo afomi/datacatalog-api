@@ -54,6 +54,7 @@ class OrganizationsGetAllTest < RequestTestCase
         parent_id
         children
         slug
+        slug_suffix
         url
         home_url
         catalog_name

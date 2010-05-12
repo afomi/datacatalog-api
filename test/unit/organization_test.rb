@@ -203,4 +203,66 @@ class OrganizationUnitTest < ModelTestCase
     end
   end
 
+  context "slug with state suffix" do
+    context "new" do 
+      before do
+        @texas = Organization.create!({
+          :name        => "Texas",
+          :org_type    => "governmental",
+          :slug_suffix => "texas",
+        })
+        @ethics = Organization.create!({
+          :name      => "Ethics Commission",
+          :org_type  => "governmental",
+          :parent_id => @texas.id,
+        })
+      end
+
+      after do
+        @ethics.destroy
+        @texas.destroy
+      end
+
+      test "on save, set based on name and parent" do
+        assert_equal "texas", @texas.slug
+        assert_equal "ethics-commission-texas", @ethics.slug
+      end
+    end
+  end
+
+  context "slug with city state suffix" do
+    context "new" do 
+      before do
+        @texas = Organization.create!({
+          :name        => "Texas",
+          :org_type    => "governmental",
+          :slug_suffix => "texas",
+        })
+        @austin = Organization.create!({
+          :name        => "Austin, Texas",
+          :org_type    => "governmental",
+          :slug        => "austin-texas",
+          :slug_suffix => "austin-texas",
+          :parent_id   => @texas.id,
+        })
+        @auditor = Organization.create!({
+          :name      => "City Auditor",
+          :org_type  => "governmental",
+          :parent_id => @austin.id,
+        })
+      end
+  
+      after do
+        @auditor.destroy
+        @austin.destroy
+        @texas.destroy
+      end
+  
+      test "on save, set based on name and parent" do
+        assert_equal "austin-texas", @austin.slug
+        assert_equal "city-auditor-austin-texas", @auditor.slug
+      end
+    end
+  end
+
 end

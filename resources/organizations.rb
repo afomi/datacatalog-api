@@ -23,6 +23,7 @@ module DataCatalog
     property :description
     property :parent_id
     property :slug
+    property :slug_suffix
     property :url
     property :home_url
     property :catalog_name
