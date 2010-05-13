@@ -30,17 +30,17 @@
   top_level: false
   interest: 1
 - name: District of Columbia
-  org_type: governmental
   acronym: DC
   slug: dc
   slug_suffix: dc
+  org_type: governmental
   top_level: true
   interest: 1
 - name: Utah
-  org_type: governmental
   acronym: 
   slug: utah
   slug_suffix: utah
+  org_type: governmental
   top_level: true
   interest: 1
 - name: San Francisco
