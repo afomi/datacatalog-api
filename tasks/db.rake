@@ -10,7 +10,7 @@ namespace :db do
   
   def verbosely_create_user(params, phrase="user")
     api_key = params.delete("primary_api_key")
-    user = User.create(params)
+    user = User.create!(params)
     user.add_api_key!({
       :api_key  => api_key,
       :key_type => "primary"
@@ -25,7 +25,7 @@ namespace :db do
       parent_organization = Organization.first(:name => parent_name)
       params.merge!({ "parent_id" => parent_organization.id })
     end
-    organization = Organization.create(params)
+    organization = Organization.create!(params)
     puts "Created organization:"
     verbosely_display_organizations([organization])
   end
