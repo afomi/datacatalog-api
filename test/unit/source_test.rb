@@ -15,11 +15,11 @@ class SourceUnitTest < ModelTestCase
     end
   end
 
-  shared "source.source_type must be api or dataset" do
-    test "should be invalid when not 'api' or 'dataset'" do
+  shared "source.source_type must be correct" do
+    test "should be invalid when not 'api', 'dataset', or 'interactive'" do
       @source.valid?
       assert_include :source_type, @source.errors.errors
-      assert_equal ["must be one of: api, dataset"],
+      assert_equal ["must be one of: api, dataset, interactive"],
         @source.errors.errors[:source_type]
     end
   end
@@ -96,7 +96,7 @@ class SourceUnitTest < ModelTestCase
         end
   
         use "invalid source"
-        use "source.source_type must be api or dataset"
+        use "source.source_type must be correct"
       end
       
       context "invalid" do
@@ -105,7 +105,7 @@ class SourceUnitTest < ModelTestCase
         end
   
         use "invalid source"
-        use "source.source_type must be api or dataset"
+        use "source.source_type must be correct"
       end
     end
     

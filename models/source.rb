@@ -79,6 +79,7 @@ class Source
   SOURCE_TYPES = %w(
     api
     dataset
+    interactive
   )
   
   validate :validate_source_type
