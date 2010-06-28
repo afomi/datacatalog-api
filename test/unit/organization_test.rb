@@ -119,6 +119,44 @@ class OrganizationUnitTest < ModelTestCase
           assert_equal "department-of-commerce", @organization.slug
         end
       end
+      
+      context "create with parent" do
+        before do
+          @texas = Organization.create({
+            :name        => "Texas",
+            :org_type    => "governmental",
+            :slug_suffix => "texas"
+          })
+          @sac = Organization.create({
+            :name      => "Sunset Advisory Commission",
+            :org_type  => "governmental",
+            :parent_id => @texas.id,
+          })
+          @wdms = Organization.create({
+            :name      => "Wildlife Damage Management Service",
+            :acronym   => "WDMS",
+            :org_type  => "governmental",
+            :parent_id => @texas.id,
+          })
+        end
+
+        after do
+          @sac.destroy
+          @wdms.destroy
+          @texas.destroy
+        end
+
+        test "add suffix based on name correctly" do
+          assert_equal "sunset-advisory-commission-texas", @sac.slug
+          assert_equal "Sunset Advisory Commission", @sac.name
+        end
+
+        test "add suffix based on acronym correctly" do
+          assert_equal "wdms-texas", @wdms.slug
+          assert_equal "Wildlife Damage Management Service", @wdms.name
+          assert_equal "WDMS", @wdms.acronym
+        end
+      end
 
       context "update" do
         before do

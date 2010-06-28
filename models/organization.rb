@@ -74,7 +74,7 @@ class Organization
   def generate_slug
     return unless slug.blank?
     return if name.blank?
-    to_slug = acronym.blank? ? name : acronym
+    to_slug = (acronym.blank? ? name : acronym).clone
     if parent
       suffix = parent.slug_suffix
       to_slug << "-#{suffix}" unless suffix.blank?
