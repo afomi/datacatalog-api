@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-thin -p 4000 -R config-test.ru start
+thin -p 3001 -R config-test.ru start
 # thin --trace -p 3000 -R config.ru start
