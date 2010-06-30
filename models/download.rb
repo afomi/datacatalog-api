@@ -36,13 +36,6 @@ class Download
     errors.add(:source_id, "must be valid") if source.nil?
   end
 
-  validate :validate_source_type
-  def validate_source_type
-    unless source.source_type == "dataset"
-      errors.add(:source, "must have dataset source_type")
-    end
-  end
-
   before_validation :clean_size
   def clean_size
     h = size
