@@ -303,4 +303,39 @@ class OrganizationUnitTest < ModelTestCase
     end
   end
 
+  context "three organization levels" do
+    before do
+      @texas = Organization.create!({
+        :name        => "Texas",
+        :org_type    => "governmental",
+        :top_level   => true,
+      })
+      @austin = Organization.create!({
+        :name        => "Austin, Texas",
+        :slug        => "austin",
+        :org_type    => "governmental",
+        :parent_id   => @texas.id,
+      })
+      @greenville_tx = Organization.create!({
+        :name      => "Greenville, TX",
+        :slug      => "greenville",
+        :org_type  => "governmental",
+        :parent_id => @texas.id,
+      })
+    end
+  
+    after do
+      @greenville_tx.destroy
+      @austin.destroy
+      @texas.destroy
+    end
+    
+    test "correct top_parent_id" do
+      assert_equal @texas.id, @texas.top_parent_id
+      assert_equal @texas.id, @austin.top_parent_id
+      assert_equal @texas.id, @greenville_tx.top_parent_id
+    end
+  end
+
+
 end

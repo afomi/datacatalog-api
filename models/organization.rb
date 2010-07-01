@@ -18,6 +18,7 @@ class Organization
   key :catalog_url,       String
   key :user_id,           ObjectId
   key :parent_id,         ObjectId
+  key :top_parent_id,     ObjectId
   key :interest,          Integer
   key :top_level,         Boolean, :default => false
   key :custom,            Hash
@@ -87,9 +88,33 @@ class Organization
     self._keywords = DataCatalog::Search.process(
       names + [name, acronym, description])
   end
+  
+  before_save :update_top_parent_id
+  def update_top_parent_id
+    self.top_parent_id = get_top_parent_id
+  end
 
   # == Class Methods
 
   # == Various Instance Methods
+  
+  def get_top_parent_id(max_generations = 10)
+    k = 0
+    org = self
+    while
+      k += 1
+      if k > max_generations
+        raise DataCatalog::Error, "Top-level parent of #{self.id} not found"
+      end
+      if org.top_level
+        return org.id
+      elsif org.parent_id
+        org = org.parent
+      else
+        return nil
+      end
+    end
+  end
+  
 
 end
