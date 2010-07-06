@@ -4,37 +4,41 @@ class OrganizationAssociationsUnitTest < ModelTestCase
   
   context "Organization.create" do
     before do
-      @parent_organization = create_organization({
+      @parent = Organization.create!({
         :name        => "Department of Health and Human Services",
         :acronym     => "HHS",
+        :top_level   => true,
         :description => "The mission of HHS is...",
+        :org_type    => "governmental",
+        :top_level   => true,
       })
-      @child_organization = create_organization({
+      @child = Organization.create!({
         :name        => "National Institutes of Health",
         :acronym     => "NIH",
         :description => "The mission of NIH is...",
-        :parent_id   => @parent_organization.id,
+        :org_type    => "governmental",
+        :parent_id   => @parent.id,
       })
     end
     
     after do
-      @child_organization.destroy
-      @parent_organization.destroy
+      @child.destroy
+      @parent.destroy
     end
-
+    
     test "organizations should be valid" do
-      assert @parent_organization.valid?
-      assert @child_organization.valid?
+      assert @parent.valid?
+      assert @child.valid?
     end
     
     test "organization.parent should be correct" do
-      assert_equal @parent_organization, @child_organization.parent
+      assert_equal @parent, @child.parent
     end
-
+    
     test "organization.children should be correct" do
-      children = @parent_organization.children.all
+      children = @parent.children.all
       assert_equal 1, children.length
-      assert_include @child_organization, children
+      assert_include @child, children
     end
   end
   

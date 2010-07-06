@@ -1,10 +1,11 @@
 class Slug
   
   # Convert +text+ into a slug appropriate for +document+.
-  def self.make(text, document)
+  def self.make(text, document, scope = {})
     slug = prefix = make_prefix(text, document)
     Iterate.starting_at(2) do |n|
-      break unless document.class.first(:slug => slug)
+      conditions = { :slug => slug }.merge(scope)
+      break unless document.class.first(conditions)
       slug = "#{prefix}-#{n}"
     end
     slug
