@@ -54,7 +54,7 @@ class Document
       raise DataCatalog::Error, "expected document to have an id"
     end
     copy = self.dup
-    copy.id = Mongo::ObjectID.new.to_s
+    copy.id = BSON::ObjectID.new.to_s
     copy.next_id = self.id
     copy.save!
     self.previous_id = copy.id
