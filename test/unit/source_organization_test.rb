@@ -49,8 +49,12 @@ class SourceOrganizationUnitTest < ModelTestCase
       end
     
       test "#sources and @source_count should be correct" do
-        assert_include @source_2, @organization.sources
         assert_equal 2, @organization.source_count
+        # assert_include @source_2, @organization.sources
+        # temporary fix, since MongoMapper 0.8.2 broke the above behavior
+        assert_equal(1, @organization.sources.select { |o|
+          o == @source_2
+        }.length)
       end
     end
     

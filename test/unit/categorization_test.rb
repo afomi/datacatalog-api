@@ -33,8 +33,8 @@ class CategorizationUnitTest < ModelTestCase
     
       test "Source#categorizations should be correct" do
         categorizations = @source.categorizations
-        @categorizations.each do |categorization|
-          assert_include categorization, categorizations
+        categorizations.each do |categorization|
+          assert_include categorization, @categorizations
         end
       end
     
