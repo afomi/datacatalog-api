@@ -36,7 +36,6 @@ class Source
   timestamps!
 
   # == Indices
-  
   ensure_index :title
   ensure_index :slug
   ensure_index :source_type
@@ -44,9 +43,7 @@ class Source
   ensure_index :url
   ensure_index :jurisdiction_id
   ensure_index :catalog_id
-  
   # == Associations
-  
   belongs_to :organization
   belongs_to :jurisdiction, :class_name => 'Organization'
   belongs_to :source_group
@@ -58,47 +55,37 @@ class Source
   many :notes
   many :ratings
   many :downloads
-  
   def categories
     categorizations.map(&:category)
   end
-  
   protected
-  
   # == Validations
-  
   validates_presence_of :title
   validates_presence_of :url
   validates_uniqueness_of :slug
-  
   validates_format_of :slug,
     :with      => /\A[a-zA-z0-9\-]+\z/,
     :message   => "can only contain alphanumeric characters and dashes",
     :allow_nil => true
-  
   include UrlValidator
   validate :validate_url
-  
   SOURCE_TYPES = %w(
     api
     dataset
     interactive
   )
-  
   validate :validate_source_type
   def validate_source_type
     unless SOURCE_TYPES.include?(source_type)
       errors.add(:source_type, "must be one of: #{SOURCE_TYPES.join(', ')}")
     end
   end
-  
   validate :validate_frequency
   def validate_frequency
     if frequency && !Frequency.new(frequency).valid?
       errors.add(:frequency, "is invalid")
     end
   end
-  
   validate :validate_released
   def validate_released
     expect_kronos_hash(released, :released)
@@ -134,16 +121,13 @@ class Source
   def handle_blank_slug
     self.slug = nil if self.slug.blank?
   end
-  
   # == Callbacks
-  
   before_create :generate_slug
   def generate_slug
     return unless slug.blank?
     return if title.blank?
     self.slug = Slug.make(title, self)
   end
-  
   before_save :update_keywords
   def update_keywords
     words = [title, description]
@@ -178,24 +162,18 @@ class Source
   def decrement_source_count
     adjust_source_count(self, -1)
   end
-  
   before_update :save_previous
   def save_previous
     @previous_source = Source.first(:_id => self.id)
   end
-  
   after_update :restore_previous
   def restore_previous
     adjust_source_count(@previous_source, -1) if @previous_source
     adjust_source_count(self, 1)
   end
-  
   # == Class Methods
-  
   # == Various Instance Methods
-  
   public
-  
   def calculate_jurisdiction
     current_org = self.organization
     return nil unless current_org
@@ -205,9 +183,7 @@ class Source
     return nil unless current_org.top_level
     current_org
   end
-  
   protected
-  
   def adjust_source_count(source, delta)
     org = source.organization
     if org
