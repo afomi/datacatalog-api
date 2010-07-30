@@ -29,6 +29,7 @@ class Source
   key :organization_id,     ObjectId
   key :jurisdiction_id,     ObjectId
   key :source_group_id,     ObjectId
+  key :catalog_id,          ObjectId
   key :custom,              Hash
   key :raw,                 Hash
   key :_keywords,           Array
@@ -42,12 +43,14 @@ class Source
   ensure_index :license
   ensure_index :url
   ensure_index :jurisdiction_id
+  ensure_index :catalog_id
   
   # == Associations
   
   belongs_to :organization
   belongs_to :jurisdiction, :class_name => 'Organization'
   belongs_to :source_group
+  belongs_to :catalog
   many :categorizations
   many :comments
   many :documents

@@ -51,7 +51,14 @@ module ModelHelpers
   end
   
   # == Factories
-  
+
+  def create_catalog(custom={})
+    create_model!(Catalog, custom, {
+      :title => "Big Government Data Catalog",
+      :url   => "http://bigdata.gov",
+    })
+  end
+
   def create_category(custom={})
     create_model!(Category, custom, {
       :source_id   => get_fake_mongo_object_id,
