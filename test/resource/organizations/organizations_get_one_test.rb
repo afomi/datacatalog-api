@@ -23,22 +23,44 @@ class OrganizationsGetOneTest < RequestTestCase
     end
     
     use "return 200 Ok"
-  
+      
     test "body should have correct values" do
-      assert_equal "Organization A", parsed_response_body["name"]
-      assert_equal @user.id.to_s, parsed_response_body["user_id"]
+      actual = parsed_response_body
+      assert_equal "Organization A", actual["name"]
+      assert_equal @user.id.to_s, actual["user_id"]
     end
     
-    test "parent_id should be set" do
-      @jurisdiction = create_organization(
-          :name      => "US Federal Government",
-          :org_type  => "governmental",
-          :top_level => true 
-      )
-      @organization.parent_id = @jurisdiction.id
-      @organization.save!
-      get "/#{@organization.id}", :api_key => @normal_user.primary_api_key
-      assert_equal parsed_response_body['parent_id'], @jurisdiction.id.to_s
+    context "with parentage" do
+      before do
+        @jurisdiction = create_organization(
+            :name      => "US Federal Government",
+            :org_type  => "governmental",
+            :top_level => true 
+        )
+        @organization.parent_id = @jurisdiction.id
+        @organization.save!
+        get "/#{@organization.id}", :api_key => @normal_user.primary_api_key
+      end
+    
+      test "parent_id should be set" do
+        assert_equal parsed_response_body['parent_id'], @jurisdiction.id.to_s
+      end
+
+      test "parent should be correct" do
+        actual = parsed_response_body['parent']
+        assert_properties %w(href name slug), actual
+        assert_equal actual["href"], "/organizations/#{@jurisdiction.id}"
+        assert_equal actual["name"], "US Federal Government"
+        assert_equal actual["slug"], "us-federal-government"
+      end
+
+      test "top_parent should be correct" do
+        actual = parsed_response_body['top_parent']
+        assert_properties %w(href name slug), actual
+        assert_equal actual["href"], "/organizations/#{@jurisdiction.id}"
+        assert_equal actual["name"], "US Federal Government"
+        assert_equal actual["slug"], "us-federal-government"
+      end
     end
     
     doc_properties %w(
@@ -49,6 +71,7 @@ class OrganizationsGetOneTest < RequestTestCase
       description
       parent
       parent_id
+      top_parent
       children
       slug
       url

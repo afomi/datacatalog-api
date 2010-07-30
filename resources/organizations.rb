@@ -34,18 +34,32 @@ module DataCatalog
     property :raw,              :w => :admin
     property :user_id,          :w => :nobody
     
-    property :parent do |org|
-      if org.parent_id
-        parent = org.parent
-        {
-          "name" => parent.name,
-          "href" => "/organizations/#{parent.id}",
-        }
+    property :parent do |organization|
+      if organization.parent_id
+        if parent = organization.parent
+          {
+            "name" => parent.name,
+            "href" => "/organizations/#{parent.id}",
+            "slug" => parent.slug,
+          }
+        end
       end
     end
-    
-    property :children do |org|
-      org.children.map do |child|
+
+    property :top_parent do |organization|
+      if organization.top_parent_id
+        if top_parent = organization.top_parent
+          {
+            "name" => top_parent.name,
+            "href" => "/organizations/#{top_parent.id}",
+            "slug" => top_parent.slug,
+          }
+        end
+      end
+    end
+
+    property :children do |organization|
+      organization.children.map do |child|
         {
           "name" => child.name,
           "href" => "/organizations/#{child.id}",

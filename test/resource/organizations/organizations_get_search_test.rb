@@ -72,6 +72,7 @@ class OrganizationsGetSearchTest < RequestTestCase
           description
           parent
           parent_id
+          top_parent
           children
           slug
           url
