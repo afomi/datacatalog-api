@@ -11,7 +11,7 @@ module ModelHelpers
       :email     => "normal.user@inter.net"
     })
   end
-  
+
   def create_another_normal_user
     key = ApiKey.new(
       :api_key  => "normal-400746a36d098181c15c52cd9e3eff66d",
@@ -49,7 +49,7 @@ module ModelHelpers
       :admin     => true
     })
   end
-  
+
   # == Factories
 
   def create_catalog(custom={})
@@ -65,14 +65,14 @@ module ModelHelpers
       :category_id => get_fake_mongo_object_id,
     })
   end
-  
+
   def create_categorization(custom={})
     create_model!(Categorization, custom, {
       :source_id   => get_fake_mongo_object_id,
       :category_id => get_fake_mongo_object_id,
     })
   end
-  
+
   def create_comment(custom={})
     required = {
       :text      => "Comment Text",
@@ -81,7 +81,7 @@ module ModelHelpers
     required[:user_id] = @normal_user.id if @normal_user
     create_model!(Comment, custom, required)
   end
-  
+
   def create_comment_rating(custom={})
     required = {
       :kind      => "comment",
@@ -91,7 +91,7 @@ module ModelHelpers
     required[:user_id] = @normal_user.id if @normal_user
     create_model!(Rating, custom, required)
   end
-  
+
   def create_document(custom={})
     required = {
       :text      => "Sample Document",
@@ -100,7 +100,7 @@ module ModelHelpers
     required[:user_id] = @normal_user.id if @normal_user
     create_model!(Document, custom, required)
   end
-  
+
   def create_download(custom={})
     required = {
       :url    => "http://data.gov/download/326/csv",
@@ -117,7 +117,7 @@ module ModelHelpers
     required[:user_id] = @normal_user.id if @normal_user
     create_model!(Favorite, custom, required)
   end
-  
+
   def create_import(custom={})
     timestamp = Time.now
     required = {
@@ -127,14 +127,14 @@ module ModelHelpers
     }
     create_model!(Import, custom, required)
   end
-  
+
   def create_importer(custom={})
     required = {
       :name => '',
     }
     create_model!(Importer, custom, required)
   end
-  
+
   def create_organization(custom={})
     required = {
       :name     => "Sample Organization",
@@ -153,7 +153,7 @@ module ModelHelpers
     required[:user_id] = @normal_user.id if @normal_user
     create_model!(Note, custom, required)
   end
-  
+
   def create_report(custom={})
     required = {
       :text      => "Sample Report",
@@ -161,7 +161,7 @@ module ModelHelpers
     required[:user_id] = @normal_user.id if @normal_user
     create_model!(Report, custom, required)
   end
-  
+
   def create_source(custom={})
     create_model!(Source, custom, {
       :title       => "2005-2007 American Community Survey PUMS Housing File",
@@ -169,14 +169,14 @@ module ModelHelpers
       :source_type => "dataset",
     })
   end
-  
+
   def create_source_group(custom={})
     create_model!(SourceGroup, custom, {
       :title       => "2005 Toxics Release Inventory",
       :description => "Collection of 2005 TRI Data",
     })
   end
-  
+
   def create_source_rating(custom={})
     required = {
       :kind      => "source",
@@ -187,7 +187,7 @@ module ModelHelpers
     required[:user_id] = @normal_user.id if @normal_user
     create_model!(Rating, custom, required)
   end
-  
+
   def create_user_with_primary_key(custom={})
     user = create_user(custom)
     user.add_api_key!(:key_type => "primary")
@@ -200,13 +200,13 @@ module ModelHelpers
       :email => "data.mangler@inter.net"
     })
   end
-  
+
   def create_tag(custom={})
     create_model!(Tag, custom, {
       :text => "Sample Tag"
     })
   end
-  
+
   # -----
 
   def new_api_key(custom={})
@@ -222,14 +222,14 @@ module ModelHelpers
       :category_id => get_fake_mongo_object_id,
     })
   end
-  
+
   def new_categorization(custom={})
     new_model!(Categorization, custom, {
       :source_id   => get_fake_mongo_object_id,
       :category_id => get_fake_mongo_object_id,
     })
   end
-  
+
   def new_comment(custom={})
     required = {
       :text      => "Comment Text",
@@ -238,7 +238,7 @@ module ModelHelpers
     required[:user_id] = @normal_user.id if @normal_user
     new_model!(Comment, custom, required)
   end
-  
+
   def new_comment_rating(custom={})
     required = {
       :kind      => "comment",
@@ -248,7 +248,7 @@ module ModelHelpers
     required[:user_id] = @normal_user.id if @normal_user
     new_model!(Rating, custom, required)
   end
-  
+
   def new_document(custom={})
     required = {
       :text      => "Sample Document",
@@ -275,7 +275,7 @@ module ModelHelpers
     required[:user_id] = @normal_user.id if @normal_user
     new_model!(Note, custom, required)
   end
-  
+
   def new_report(custom={})
     required = {
       :text      => "Sample Report",
@@ -297,7 +297,7 @@ module ModelHelpers
       :text => "Sample Tag"
     })
   end
-  
+
   def new_user(custom={})
     new_model!(User, custom, {
       :name  => "Data Mangler",
