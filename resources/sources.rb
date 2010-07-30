@@ -208,18 +208,14 @@ module DataCatalog
     end
 
     def self.nested_organization(source, org_id)
-      if org_id
-        org = Organization.first(:_id => org_id)
-        if org
-          {
-            "href" => "/organizations/#{org_id}",
-            "name" => org.name,
-            "slug" => org.slug,
-          }
-        end
-      else
-        nil
-      end
+      return unless org_id
+      org = Organization.first(:_id => org_id)
+      return unless org
+      {
+        "href" => "/organizations/#{org_id}",
+        "name" => org.name,
+        "slug" => org.slug,
+      }
     end
 
   end
