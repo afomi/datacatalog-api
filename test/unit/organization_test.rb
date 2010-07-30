@@ -349,6 +349,12 @@ class OrganizationUnitTest < ModelTestCase
       assert_equal @texas.id, @austin.top_parent_id
       assert_equal @texas.id, @greenville_tx.top_parent_id
     end
+    
+    test "correct top_parent" do
+      assert_equal @texas, @texas.top_parent
+      assert_equal @texas, @austin.top_parent
+      assert_equal @texas, @greenville_tx.top_parent
+    end
   end
   
 end

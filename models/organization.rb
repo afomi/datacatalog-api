@@ -31,6 +31,7 @@ class Organization
   # == Associations
 
   belongs_to :parent, :class_name => 'Organization'
+  belongs_to :top_parent, :class_name => 'Organization'
   
   many :sources
   many :children, :class_name => 'Organization', :foreign_key => :parent_id
