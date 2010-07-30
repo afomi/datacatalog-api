@@ -191,19 +191,17 @@ module DataCatalog
           "href" => "/comments/#{comment.parent_id}",
           "id"   => comment.parent_id,
         }
-      else
-        nil
       end
       {
-        "href" => "/comments/#{comment.id}",
-        "text" => comment.text,
-        "user" => {
-          "name" => comment.user.name,
-          "href" => "/users/#{comment.user.id}",
-        },
+        "href"         => "/comments/#{comment.id}",
+        "text"         => comment.text,
         "rating_stats" => comment.rating_stats,
-        "parent" => parent,
-        "created_at" => comment.created_at
+        "parent"       => parent,
+        "created_at"   => comment.created_at,
+        "user"         => {
+          "name"       => comment.user.name,
+          "href"       => "/users/#{comment.user.id}",
+        },
       }
     end
 
