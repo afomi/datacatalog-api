@@ -84,8 +84,6 @@ class OrganizationsGetSearchTest < RequestTestCase
           source_count
           user_id
           custom
-          raw
-          versions
           id
           created_at
           updated_at

@@ -63,8 +63,6 @@ class OrganizationsGetAllTest < RequestTestCase
         top_level
         source_count
         custom
-        raw
-        versions
         id
         created_at
         updated_at

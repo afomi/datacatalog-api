@@ -31,8 +31,8 @@ module DataCatalog
     property :top_level
     property :source_count
     property :custom
-    property :raw,              :w => :admin
-    property :versions
+    property :raw,              :w => :admin, :hide_by_default => true
+    property :versions,         :w => :admin, :hide_by_default => true
     property :user_id,          :w => :nobody
 
     property :parent do |organization|

@@ -33,8 +33,8 @@ module DataCatalog
     property :organization_id
     property :jurisdiction_id,  :w => :nobody
     property :custom,           :w => :curator
-    property :raw,              :w => :admin
-    property :versions
+    property :raw,              :w => :admin, :hide_by_default => true
+    property :versions,         :w => :admin, :hide_by_default => true
     property :rating_stats,     :w => :nobody
 
     property :updates_per_year do |source|
