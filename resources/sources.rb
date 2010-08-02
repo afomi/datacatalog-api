@@ -34,6 +34,7 @@ module DataCatalog
     property :jurisdiction_id,  :w => :nobody
     property :custom,           :w => :curator
     property :raw,              :w => :admin
+    property :versions
     property :rating_stats,     :w => :nobody
 
     property :updates_per_year do |source|

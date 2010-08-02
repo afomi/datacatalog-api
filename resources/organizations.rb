@@ -32,6 +32,7 @@ module DataCatalog
     property :source_count
     property :custom
     property :raw,              :w => :admin
+    property :versions
     property :user_id,          :w => :nobody
 
     property :parent do |organization|

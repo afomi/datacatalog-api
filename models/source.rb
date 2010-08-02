@@ -32,6 +32,7 @@ class Source
   key :catalog_id,          ObjectId
   key :custom,              Hash
   key :raw,                 Hash
+  key :versions,            Hash
   key :_keywords,           Array
   timestamps!
 

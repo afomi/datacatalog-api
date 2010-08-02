@@ -84,6 +84,7 @@ class OrganizationsGetOneTest < RequestTestCase
       user_id
       custom
       raw
+      versions
       id
       created_at
       updated_at

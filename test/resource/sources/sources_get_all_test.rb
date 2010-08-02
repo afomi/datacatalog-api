@@ -45,6 +45,7 @@ class SourcesGetAllTest < RequestTestCase
       ratings
       rating_stats
       raw
+      versions
       released
       slug
       source_type

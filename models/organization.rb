@@ -21,6 +21,7 @@ class Organization
   key :top_level,         Boolean, :default => false
   key :custom,            Hash
   key :raw,               Hash
+  key :versions,          Hash
   key :_keywords,         Array
   key :source_count,      Integer, :default => 0
 
