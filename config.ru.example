@@ -1,6 +1,7 @@
 ENV['RACK_ENV'] = "development"
 require 'app'
 map("/")              { run DataCatalog::Root }
+map("/catalogs")      { run DataCatalog::Catalogs }
 map("/categories")    { run DataCatalog::Categories }
 map("/checkup")       { run DataCatalog::Checkup }
 map("/comments")      { run DataCatalog::Comments }
