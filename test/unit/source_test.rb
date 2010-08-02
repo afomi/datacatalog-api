@@ -563,4 +563,19 @@ class SourceUnitTest < ModelTestCase
     end
   end
 
+  context "scoring" do
+    before do
+      @source = Source.new({
+        :title       => "Migratory Bird Flyways - Continental United States",
+        :url         => "http://www.data.gov/details/12",
+        :source_type => "dataset",
+      })
+    end
+
+    test "nil if unsaved" do
+      assert_equal nil, @source.score
+    end
+
+  end
+
 end

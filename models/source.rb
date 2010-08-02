@@ -34,6 +34,7 @@ class Source
   key :raw,                 Hash
   key :versions,            Hash
   key :_keywords,           Array
+  key :score,               Integer
   timestamps!
 
   # == Indices
