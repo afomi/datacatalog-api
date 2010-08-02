@@ -167,6 +167,11 @@ class Source
   def set_jurisdiction
     self.jurisdiction = calculate_jurisdiction
   end
+  
+  before_save :update_score
+  def update_score
+    self.score = calculate_score
+  end
 
   # == Callbacks : source_count
 
@@ -205,6 +210,33 @@ class Source
     end
     return nil unless current_org.top_level
     current_org
+  end
+  
+  SCORED_FIELDS = [
+    :title,
+    :description,
+    :source_type,
+    :url,
+    :documentation_url,
+    :license,
+    :license_url,
+    :catalog_name,
+    :catalog_url,
+    :released,
+    :period_start,
+    :period_end,
+    :frequency,
+  ]
+
+  def calculate_score
+    score = 0
+    SCORED_FIELDS.each do |field|
+      value = self[field]
+      if value && !value.empty?
+        score += 1
+      end
+    end
+    score
   end
 
   protected
