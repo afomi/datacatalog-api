@@ -1,7 +1,7 @@
 require 'digest/sha1'
 
 class User
-  
+
   include MongoMapper::Document
 
   class InconsistentState < RuntimeError; end
@@ -52,7 +52,7 @@ class User
 
   def valet_api_keys
     api_keys.select { |k| k.key_type == "valet" }.map(&:api_key)
-  end  
+  end
 
   def role
     if admin then "admin"
@@ -83,5 +83,5 @@ class User
     self.api_keys << key
     self.save!
   end
-  
+
 end

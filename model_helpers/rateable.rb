@@ -1,5 +1,5 @@
 module Ratable
-  
+
   def self.included(other_module)
     other_module.class_eval do
       key :rating_stats, Hash, :default => {

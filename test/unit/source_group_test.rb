@@ -21,19 +21,19 @@ class SourceGroupUnitTest < ModelTestCase
       assert_include "can't be empty", @source_group.errors.errors[:title]
     end
   end
-  
+
   context "SourceGroup" do
     before do
       @valid_params = {
         :title => "2005 Toxics Release Inventory"
       }
     end
-    
+
     context "correct params" do
       before do
         @source_group = SourceGroup.new(@valid_params)
       end
-      
+
       use "valid source_group"
     end
 
@@ -41,7 +41,7 @@ class SourceGroupUnitTest < ModelTestCase
       before do
         @source_group = SourceGroup.new(@valid_params.merge(:title => ""))
       end
-      
+
       use "invalid source_group"
       use "source_group.title can't be empty"
     end
@@ -110,13 +110,13 @@ class SourceGroupUnitTest < ModelTestCase
         test "prevent duplicate slugs" do
           params = @valid_params.merge(:title => "Common")
           @source_group = SourceGroup.create(params)
-        
+
           source_group_2 = SourceGroup.create!(params)
           assert_equal "common-2", source_group_2.slug
-        
+
           source_group_3 = SourceGroup.create!(params)
           assert_equal "common-3", source_group_3.slug
-          
+
           source_group_2.destroy
           source_group_3.destroy
         end
@@ -199,7 +199,7 @@ class SourceGroupUnitTest < ModelTestCase
       @source_group.destroy
       @sources.each { |x| x.destroy }
     end
-    
+
     test "correct titles" do
       states = %w(Texas Utah Virginia)
       expected_titles = states.map do |state|
@@ -210,13 +210,13 @@ class SourceGroupUnitTest < ModelTestCase
         assert_include expected_title, titles
       end
     end
-    
+
     test "sources point to source_group" do
       @sources.each do |source|
         assert_equal @source_group, source.source_group
       end
     end
-    
+
   end
 
 end

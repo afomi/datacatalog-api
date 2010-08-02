@@ -8,7 +8,7 @@ class SearchEvent
   key :created_at, Time
 
   # == Indices
-  
+
   ensure_index :words
   ensure_index :created_at
 

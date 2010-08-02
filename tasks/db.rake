@@ -1,13 +1,13 @@
 namespace :db do
-  
+
   ADMIN_NAME = "Primary Admin"
   ADMIN_EMAIL = "admin@nationaldatacatalog.com"
-  
+
   def verbosely_drop_database
     db_name = Config.drop_database
     puts "Dropped database: #{db_name}."
   end
-  
+
   def verbosely_create_user(params, phrase="user")
     api_key = params.delete("primary_api_key")
     user = User.create!(params)
@@ -29,7 +29,7 @@ namespace :db do
     puts "Created organization:"
     verbosely_display_organizations([organization])
   end
-  
+
   def verbosely_display_users(users)
     users.each do |user|
       puts "  * name  : #{user.name}"
@@ -47,7 +47,7 @@ namespace :db do
       puts "    id    : #{organization.id}"
     end
   end
-  
+
   desc "Create the primary admin user if not present"
   task :ensure_admin => ["environment:models"] do
     users = User.all(:conditions => {
@@ -66,7 +66,7 @@ namespace :db do
       }, "admin user")
     end
   end
-  
+
   desc "Create default users and organizations as needed"
   task :ensure_defaults => [:ensure_default_users, :ensure_default_organizations]
 
@@ -109,7 +109,7 @@ namespace :db do
       puts "No default organizations specified in organizations.yml"
     end
   end
-  
+
   desc 'Drop database for current environment (development unless RACK_ENV is set)'
   task :reset do
     verbosely_drop_database
@@ -130,5 +130,5 @@ namespace :db do
       verbosely_drop_database
     end
   end
-  
+
 end

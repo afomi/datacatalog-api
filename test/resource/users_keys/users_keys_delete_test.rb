@@ -37,7 +37,7 @@ class UsersKeysDeleteTest < RequestTestCase
     @user.save!
     @api_key_count = @user.api_keys.length
   end
-  
+
   after do
     @user.destroy
   end
@@ -48,7 +48,7 @@ class UsersKeysDeleteTest < RequestTestCase
       assert_include "cannot_delete_primary_api_key", parsed_response_body["errors"]
     end
   end
-  
+
   shared "API key deleted from database" do
     test "API key should be deleted in database" do
       raise "@n must be defined" unless @n
@@ -65,18 +65,18 @@ class UsersKeysDeleteTest < RequestTestCase
           delete "/#{@user.id}/keys/#{@keys[n].id}",
             :api_key => @user.api_keys[n].api_key
         end
-  
+
         use "return 409 Conflict"
         use "return error about attempt to delete primary API key"
         use "unchanged api_key count"
       end
-  
+
       context "admin API key : delete /:id/keys/:id" do
         before do
           delete "/#{@user.id}/keys/#{@keys[n].id}",
             :api_key => @admin_user.primary_api_key
         end
-      
+
         use "return 409 Conflict"
         use "return error about attempt to delete primary API key"
         use "unchanged api_key count"
@@ -92,7 +92,7 @@ class UsersKeysDeleteTest < RequestTestCase
             :api_key => @user.api_keys[n].api_key
           @n = n
         end
-  
+
         use "return 204 No Content"
         use "decremented api_key count"
         use "API key deleted from database"
@@ -104,12 +104,12 @@ class UsersKeysDeleteTest < RequestTestCase
             :api_key => @admin_user.primary_api_key
           @n = n
         end
-          
+
         use "return 204 No Content"
         use "decremented api_key count"
         use "API key deleted from database"
       end
     end
   end
-  
+
 end

@@ -11,7 +11,7 @@ class SourcesPutTest < RequestTestCase
     })
     @source_count = Source.count
   end
-  
+
   after :all do
     @source.destroy
   end
@@ -61,10 +61,10 @@ class SourcesPutTest < RequestTestCase
           :url     => "http://data.gov/updated"
         }
       end
-      
+
       use "successful PUT to sources"
     end
-    
+
     context "#{role} API key : post / with 1 custom field" do
       before do
         put "/#{@source.id}", {
@@ -76,9 +76,9 @@ class SourcesPutTest < RequestTestCase
           "custom[0][value]"       => "HR-57"
         }
       end
-    
+
       use "successful PUT to sources"
-    
+
       test "custom field should be correct in database" do
         source = Source.find_by_id!(@source.id)
         assert_equal "custom 1",      source.custom["0"]["label"]
@@ -87,7 +87,7 @@ class SourcesPutTest < RequestTestCase
         assert_equal "HR-57",         source.custom["0"]["value"]
       end
     end
-    
+
     context "#{role} API key : post / adding 2 custom fields" do
       before do
         put "/#{@source.id}", {
@@ -103,16 +103,16 @@ class SourcesPutTest < RequestTestCase
           "custom[1][value]"       => "100"
         }
       end
-    
+
       use "successful PUT to sources"
-    
+
       test "should have 2 custom fields" do
         source = Source.find_by_id!(@source.id)
         assert_equal 2, source.custom.length
         assert_include "0", source.custom
         assert_include "1", source.custom
       end
-      
+
       test "custom field 0 should be correct in database" do
         source = Source.find_by_id!(@source.id)
         assert_equal "custom 1",      source.custom["0"]["label"]
@@ -120,7 +120,7 @@ class SourcesPutTest < RequestTestCase
         assert_equal "string",        source.custom["0"]["type"]
         assert_equal "HR-57",         source.custom["0"]["value"]
       end
-    
+
       test "custom field 1 should be correct in database" do
         source = Source.find_by_id!(@source.id)
         assert_equal "custom 2",      source.custom["1"]["label"]
@@ -129,7 +129,7 @@ class SourcesPutTest < RequestTestCase
         assert_equal "100",           source.custom["1"]["value"]
       end
     end
-    
+
     context "#{role} API key : post / changing 1 custom field" do
       before do
         create_source_with_three_custom_fields
@@ -138,7 +138,7 @@ class SourcesPutTest < RequestTestCase
           "custom[1][value]" => "333"
         }
       end
-    
+
       test "should have 3 custom fields" do
         source = Source.find_by_id!(@source.id)
         assert_equal 3, source.custom.length
@@ -146,7 +146,7 @@ class SourcesPutTest < RequestTestCase
           assert_include n.to_s, source.custom
         end
       end
-    
+
       test "custom field 0 should be correct in database" do
         source = Source.find_by_id!(@source.id)
         assert_equal "custom 0",      source.custom["0"]["label"]
@@ -154,7 +154,7 @@ class SourcesPutTest < RequestTestCase
         assert_equal "string",        source.custom["0"]["type"]
         assert_equal "HR-57",         source.custom["0"]["value"]
       end
-    
+
       test "custom field 1 should be correct in database" do
         source = Source.find_by_id!(@source.id)
         assert_equal "custom 1",      source.custom["1"]["label"]
@@ -162,7 +162,7 @@ class SourcesPutTest < RequestTestCase
         assert_equal "integer",       source.custom["1"]["type"]
         assert_equal "333",           source.custom["1"]["value"]
       end
-    
+
       test "custom field 2 should be correct in database" do
         source = Source.find_by_id!(@source.id)
         assert_equal "custom 2",      source.custom["2"]["label"]
@@ -171,7 +171,7 @@ class SourcesPutTest < RequestTestCase
         assert_equal "2009-09-28",    source.custom["2"]["value"]
       end
     end
-  
+
     context "#{role} API key : post / removing a custom field" do
       before do
         create_source_with_three_custom_fields
@@ -180,7 +180,7 @@ class SourcesPutTest < RequestTestCase
           "custom[1]" => nil,
         }
       end
-      
+
       test "should have 3 custom fields" do
         source = Source.find_by_id!(@source.id)
         assert_equal 3, source.custom.length
@@ -188,7 +188,7 @@ class SourcesPutTest < RequestTestCase
         assert_include "1", source.custom
         assert_include "2", source.custom
       end
-    
+
       test "custom field 0 should be correct in database" do
         source = Source.find_by_id!(@source.id)
         assert_equal "custom 0",      source.custom["0"]["label"]
@@ -201,7 +201,7 @@ class SourcesPutTest < RequestTestCase
         source = Source.find_by_id!(@source.id)
         assert_equal nil, source.custom[1]
       end
-    
+
       test "custom field 2 should be correct in database" do
         source = Source.find_by_id!(@source.id)
         assert_equal "custom 2",      source.custom["2"]["label"]

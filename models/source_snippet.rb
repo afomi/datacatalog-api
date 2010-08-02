@@ -1,8 +1,8 @@
 # A lightweight version of Source, used for embedding
 class SourceSnippet
-  
+
   include MongoMapper::EmbeddedDocument
-  
+
   key :title,           String
   key :slug,            String
   key :description,     String
@@ -12,11 +12,11 @@ class SourceSnippet
   key :organization_id, ObjectId
 
   # == Associations
-  
+
   belongs_to :organization
 
   # == Class Methods
-  
+
   # Create a new snippet based on a Source
   def self.new_from_source(source)
     self.new({
@@ -28,7 +28,7 @@ class SourceSnippet
       :organization_id => source.organization_id,
     })
   end
-  
+
   # == Various Instance Methods
 
 end

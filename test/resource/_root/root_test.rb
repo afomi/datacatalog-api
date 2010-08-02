@@ -11,17 +11,17 @@ class RootResourceTest < RequestTestCase
     test "body has name" do
       assert_equal "National Data Catalog API", parsed_response_body["name"]
     end
-    
+
     test "body has correct version" do
       assert_equal "0.4.11", parsed_response_body["version"]
     end
-    
+
     test "body has list of resources" do
       assert_include "resource_directory", parsed_response_body
       expected = { "href" => "/resources" }
       assert_equal expected, parsed_response_body["resource_directory"]
     end
-    
+
     test "body contains only the expected keys" do
       assert_equal [], parsed_response_body.keys - %w(
         creator
@@ -34,7 +34,7 @@ class RootResourceTest < RequestTestCase
       )
     end
   end
-  
+
   context "get /" do
     context "anonymous" do
       before :all do

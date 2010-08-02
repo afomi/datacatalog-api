@@ -42,7 +42,7 @@ For getting started quickly, we recommend using [Firefox](http://getfirefox.com)
 To view general meta data about the API:
 
     GET http://api.nationaldatacatalog.com/
-    
+
 To view available resources for anonymous access:
 
     GET http://api.nationaldatacatalog.com/resources

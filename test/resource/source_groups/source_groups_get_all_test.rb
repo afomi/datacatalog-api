@@ -9,7 +9,7 @@ class SourceGroupsGetAllTest < RequestTestCase
       before do
         get "/", :api_key => @normal_user.primary_api_key
       end
-    
+
       use "return 200 Ok"
       use "return an empty list of members"
     end
@@ -23,17 +23,17 @@ class SourceGroupsGetAllTest < RequestTestCase
         })
       end
     end
-  
+
     context "normal API key : get /" do
       before do
         get "/", :api_key => @normal_user.primary_api_key
         @members = parsed_response_body['members']
       end
-    
+
       test "body should have 3 top level elements" do
         assert_equal 3, @members.length
       end
-    
+
       test "body should have correct text" do
         actual = (0 ... 3).map { |n| @members[n]["title"] }
         3.times { |n| assert_include "Source Group #{n}", actual }

@@ -4,7 +4,7 @@ module DataCatalog
     include Resource
 
     model Rating
-    
+
     # == Permissions
 
     roles Roles
@@ -31,7 +31,7 @@ module DataCatalog
       action.params["user_id"] = action.current_user.id
     end
   end
-    
+
   Ratings.build
 
 end

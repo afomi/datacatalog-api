@@ -7,7 +7,7 @@ class RequestTestCase
 
       # TODO: the following line is probably what I want:
       # assert_equal "", last_response.body
-      
+
       # TODO: this line is the old way
       # assert_equal "null", last_response.body
     end
@@ -18,7 +18,7 @@ class RequestTestCase
       assert_equal [], parsed_response_body
     end
   end
-  
+
   shared "return an empty list of members" do
     test "members should return []" do
       assert_equal [], parsed_response_body['members']
@@ -29,7 +29,7 @@ class RequestTestCase
     use "return timestamps in body"
     use "return id in body"
   end
-  
+
   shared "return timestamps in body" do
     test "body should have created_at" do
       assert_include "created_at", parsed_response_body
@@ -39,13 +39,13 @@ class RequestTestCase
       assert_include "updated_at", parsed_response_body
     end
   end
-  
+
   shared "return id in body" do
     test "body should have correctly formatted id" do
       assert_include "id", parsed_response_body
       assert_equal 0, (/^[0-9a-fA-F]{24}$/ =~ parsed_response_body["id"])
     end
-    
+
     test "body should not have _id" do
       assert_not_include "_id", parsed_response_body
     end

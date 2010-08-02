@@ -12,11 +12,11 @@ class SourceGroupsGetFilterTest < RequestTestCase
         })
       end
     end
-    
+
     after do
       @source_groups.each { |x| x.destroy }
     end
-    
+
     context "normal API key : get / where text is 'Document 2'" do
       before do
         get "/",
@@ -24,7 +24,7 @@ class SourceGroupsGetFilterTest < RequestTestCase
           :filter  => "title:'Source Group 2'"
         @members = parsed_response_body['members']
       end
-    
+
       test "body should have 1 top level elements" do
         assert_equal 1, @members.length
       end

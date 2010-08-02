@@ -5,7 +5,7 @@ class RequestTestCase
       assert_equal @importer_count + 1, Importer.count
     end
   end
-  
+
   shared "unchanged importer count" do
     test "should not change importer count" do
       assert_equal @importer_count, Importer.count
@@ -17,5 +17,5 @@ class RequestTestCase
       assert_equal @importer_count - 1, Importer.count
     end
   end
-  
+
 end

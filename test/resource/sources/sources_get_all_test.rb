@@ -8,7 +8,7 @@ class SourcesGetAllTest < RequestTestCase
     use "return 200 Ok"
     use "return an empty list of members"
   end
-  
+
   shared "successful GET of 3 sources" do
     test "body should have 3 top level elements" do
       assert_equal 3, @members.length
@@ -79,7 +79,7 @@ class SourcesGetAllTest < RequestTestCase
         )
       end
     end
-    
+
     after do
       @sources.each { |s| s.destroy }
     end

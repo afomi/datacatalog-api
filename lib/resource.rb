@@ -1,14 +1,14 @@
 require 'uri'
 
 module DataCatalog
-    
+
   module Resource
-    
+
     def self.included(includee)
       includee.instance_eval do
         include SinatraResource::Resource
       end
-      
+
       includee.helpers do
 
         attr_accessor :current_user
@@ -37,7 +37,7 @@ module DataCatalog
             "errors" => ["invalid_api_key"]
           })
         end
-        
+
         # Callback from SinatraResource
         def log_event(event, params)
           case event
@@ -66,7 +66,7 @@ module DataCatalog
         def lookup_api_key
           @api_key ||= params.delete("api_key")
         end
-        
+
         # Is +user+ the owner of +document+?
         #
         # First, checks to see if +user+ and +document+ are the same. After
@@ -105,5 +105,5 @@ module DataCatalog
     end
 
   end
-  
+
 end

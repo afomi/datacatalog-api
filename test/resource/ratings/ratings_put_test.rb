@@ -19,7 +19,7 @@ class RatingsPutTest < RequestTestCase
     @rating_copy = @rating.dup
     @rating_count = Rating.count
   end
-  
+
   after :all do
     @rating.destroy
     @source.destroy
@@ -33,12 +33,12 @@ class RatingsPutTest < RequestTestCase
         :text    => "New Rating"
       }
     end
-    
+
     use "return 401 because the API key is unauthorized"
     use "unchanged rating count"
     use "rating unchanged"
   end
-  
+
   context "owner API key : put /:id" do
     before do
       put "/#{@rating.id}", {
@@ -46,10 +46,10 @@ class RatingsPutTest < RequestTestCase
         :text    => "New Rating"
       }
     end
-    
+
     use "return 200 Ok"
     use "unchanged rating count"
-  
+
     test "text should be updated in database" do
       rating = Rating.find_by_id!(@rating.id)
       assert_equal "New Rating", rating.text

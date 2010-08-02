@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_resource_helper')
 class UsersFavoritesPutTest < RequestTestCase
 
   def app; DataCatalog::Users end
-  
+
   before do
     @user = create_user_with_primary_key
     @old_source = create_source(
@@ -31,7 +31,7 @@ class UsersFavoritesPutTest < RequestTestCase
         :api_key   => @normal_user.primary_api_key,
         :source_id => @updated_source.id
     end
-    
+
     use "return 401 because the API key is unauthorized"
   end
 
@@ -41,10 +41,10 @@ class UsersFavoritesPutTest < RequestTestCase
         :api_key   => @user.primary_api_key,
         :source_id => @updated_source.id
     end
-    
+
     use "return 200 Ok"
     doc_properties %w(source source_id id created_at updated_at)
-    
+
     test "values should be correct" do
       expected = {
         "href"  => "/sources/#{@updated_source.id}",
@@ -53,5 +53,5 @@ class UsersFavoritesPutTest < RequestTestCase
       assert_equal expected, parsed_response_body['source']
     end
   end
-  
+
 end

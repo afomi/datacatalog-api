@@ -7,7 +7,7 @@ class DownloadsPostTest < RequestTestCase
   before do
     @download_count = Download.count
   end
-  
+
   %(curator).each do |role|
     context "#{role} API key : post / with correct params" do
       before do
@@ -29,7 +29,7 @@ class DownloadsPostTest < RequestTestCase
         new_uri = "http://localhost:4567/downloads/" + parsed_response_body["id"]
         assert_equal new_uri, last_response.headers["Location"]
       end
-      
+
       test "body should have correct fields" do
         r = parsed_response_body
         assert_equal "http://example.gov/data/7", r["url"]

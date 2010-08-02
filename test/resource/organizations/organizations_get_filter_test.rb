@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_resource_helper')
 class OrganizationsGetFilterTest < RequestTestCase
 
   def app; DataCatalog::Organizations end
-  
+
   context "6 organizations" do
     before do
       @user = create_user_with_primary_key
@@ -14,7 +14,7 @@ class OrganizationsGetFilterTest < RequestTestCase
         )
       end
     end
-    
+
     after do
       @organizations.each { |x| x.destroy }
       @user.destroy
@@ -27,9 +27,9 @@ class OrganizationsGetFilterTest < RequestTestCase
           :filter  => 'name="organization 3"'
         @members = parsed_response_body['members']
       end
-      
+
       use "return 200 Ok"
-    
+
       test "body should have correct elements" do
         assert_equal 2, @members.length
         @members.each do |resource|

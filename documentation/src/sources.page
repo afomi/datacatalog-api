@@ -74,7 +74,7 @@ Get all sources:
 Get one source:
 
     GET http://nationaldatacatalog.com/sources/{source_id}
-    
+
 Create a new source:
 
     POST http://nationaldatacatalog.com/sources
@@ -82,7 +82,7 @@ Create a new source:
 Update an existing source:
 
     PUT http://nationaldatacatalog.com/sources/{source_id}
-    
+
 Delete an existing source:
 
     DELETE http://nationaldatacatalog.com/sources/{source_id}?api_key={api_key}

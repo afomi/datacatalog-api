@@ -9,7 +9,7 @@ test:
   mongo_hostname: localhost
   mongo_database: natdatcat_test
   api_key_salt: "000000000000000000000000000000000000000000000000000000000"
-  
+
 production:
   base_uri: http://localhost:3000/
   mongo_hostname: localhost

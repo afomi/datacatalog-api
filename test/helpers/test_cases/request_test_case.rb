@@ -10,6 +10,7 @@ class RequestTestCase < Test::Unit::TestCase
   before :all do
     [
       Categorization,
+      Catalog,
       Category,
       Comment,
       Document,
@@ -28,7 +29,7 @@ class RequestTestCase < Test::Unit::TestCase
     @curator_user = create_curator_user
     @admin_user = create_admin_user
   end
-  
+
   def primary_api_key_for(role)
     instance_variable_get("@#{role}_user").primary_api_key
   end

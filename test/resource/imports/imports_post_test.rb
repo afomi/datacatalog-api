@@ -24,25 +24,25 @@ class ImportsPostTest < RequestTestCase
         :finished_at => @finished_at.to_s,
       }
     end
-    
+
     after do
       @importer.destroy
     end
-    
+
     use "return 201 Created"
 
     use "incremented import count"
-      
+
     test "location header should point to new resource" do
       assert_include "Location", last_response.headers
       new_uri = "http://localhost:4567/imports/" + parsed_response_body["id"]
       assert_equal new_uri, last_response.headers["Location"]
     end
-    
+
     test "body should have correct status" do
       assert_equal "succeeded", parsed_response_body["status"]
     end
-    
+
     test "timestamps should be correct in database" do
       import = Import.find_by_id!(parsed_response_body["id"])
       assert_equal_times @started_at, import.started_at

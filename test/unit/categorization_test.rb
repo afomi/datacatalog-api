@@ -7,11 +7,11 @@ class CategorizationUnitTest < ModelTestCase
       [Categorization, Category, Source].each { |m| m.destroy_all }
       @source = create_source
     end
-    
+
     after do
       @source.destroy
     end
-  
+
     context "with no Categorizations" do
       test "#categorizations should be empty" do
         assert @source.categorizations.empty?
@@ -30,14 +30,14 @@ class CategorizationUnitTest < ModelTestCase
           )
         end
       end
-    
+
       test "Source#categorizations should be correct" do
         categorizations = @source.categorizations
         categorizations.each do |categorization|
           assert_include categorization, @categorizations
         end
       end
-    
+
       test "Source#categories should be correct" do
         categories = @source.categories
         @categories.each do |category|
@@ -52,5 +52,5 @@ class CategorizationUnitTest < ModelTestCase
       end
     end
   end
-  
+
 end

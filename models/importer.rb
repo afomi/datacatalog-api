@@ -10,9 +10,9 @@ class Importer
   # == Indices
 
   # == Associations
-  
+
   many :imports
-  
+
   protected
 
   # == Validations

@@ -21,7 +21,7 @@ class Comment
   belongs_to :user
   belongs_to :parent, :foreign_key => :parent_id, :class_name => 'Comment'
   many :ratings
-  
+
   protected
 
   # == Validations

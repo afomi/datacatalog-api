@@ -13,7 +13,7 @@ class FavoritesPutTest < RequestTestCase
     )
     @favorite_count = Favorite.count
   end
-  
+
   after do
     @favorite.destroy
     @source.destroy
@@ -28,7 +28,7 @@ class FavoritesPutTest < RequestTestCase
         :source_id => @new_source.id
       }
     end
-    
+
     use "return 200 Ok"
     use "unchanged favorite count"
 

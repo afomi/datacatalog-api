@@ -5,7 +5,7 @@ class RequestTestCase
       assert_equal @document_count + 1, Document.count
     end
   end
-  
+
   shared "unchanged document count" do
     test "should not change document count" do
       assert_equal @document_count, Document.count
@@ -17,5 +17,5 @@ class RequestTestCase
       assert_equal @document_count - 1, Document.count
     end
   end
-  
+
 end

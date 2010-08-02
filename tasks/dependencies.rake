@@ -15,7 +15,7 @@ DEPENDENCIES = {
 }
 
 namespace :dependencies do
-  
+
   desc 'Check gem dependencies'
   task :check do
     missing = missing_dependencies(true)
@@ -26,9 +26,9 @@ namespace :dependencies do
       end
       abort
     end
-    
+
   end
-  
+
   desc 'Install gem dependencies'
   task :install do
     missing_dependencies.each do |name, reqs|
@@ -37,7 +37,7 @@ namespace :dependencies do
       system(c)
     end
   end
-  
+
   def missing_dependencies(verbose=false)
     missing = {}
     DEPENDENCIES.each do |name, version_reqs|
@@ -50,7 +50,7 @@ namespace :dependencies do
     end
     missing
   end
-  
+
   # Note:
   # RubyGems does not support:
   # gem install sinatra_resource -v ">= 0.2, < 0.3"
@@ -62,5 +62,5 @@ namespace :dependencies do
       base
     end
   end
-  
+
 end

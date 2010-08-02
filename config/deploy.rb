@@ -27,17 +27,17 @@ namespace :deploy do
   task :start do ; end
   task :stop do ; end
   task :migrate do; end
-  
+
   desc "Restart the server"
   task :restart, :roles => :app, :except => { :no_release => true } do
     run "touch #{File.join current_path, 'tmp', 'restart.txt'}"
   end
-  
+
   desc "Get shared files into position"
   task :after_update_code, :roles => [:web, :app] do
     run "webgen -d #{release_path}/documentation"
     run "ln -nfs #{release_path}/documentation/out #{shared_path}/docs"
-    
+
     run "ln -nfs #{shared_path}/config.ru #{release_path}/config.ru"
     run "ln -nfs #{shared_path}/config/config.yml #{release_path}/config/config.yml"
     run "ln -nfs #{shared_path}/config/users.yml #{release_path}/config/users.yml"

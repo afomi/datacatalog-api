@@ -16,12 +16,12 @@ class DocumentsGetFilterTest < RequestTestCase
         )
       end
     end
-    
+
     after do
       @documents.each { |x| x.destroy }
       @sources.each { |x| x.destroy }
     end
-    
+
     context "normal API key : get / where text is 'Document 2'" do
       before do
         get "/",
@@ -29,7 +29,7 @@ class DocumentsGetFilterTest < RequestTestCase
           :filter  => "text:'Document 2'"
         @members = parsed_response_body['members']
       end
-    
+
       test "body should have 2 top level elements" do
         assert_equal 2, @members.length
       end

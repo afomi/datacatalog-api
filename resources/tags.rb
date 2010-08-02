@@ -21,7 +21,7 @@ module DataCatalog
     property :user_id
 
   end
-  
+
   Tags.build
 
 end

@@ -25,7 +25,7 @@ module DataCatalog
     # == Callbacks
 
   end
-  
+
   Downloads.build
 
 end

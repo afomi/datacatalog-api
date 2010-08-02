@@ -38,7 +38,7 @@ class ReportUnitTest < ModelTestCase
         @report.errors.errors[:status]
     end
   end
-  
+
   context "Report" do
     before do
       @user = create_user
@@ -48,25 +48,25 @@ class ReportUnitTest < ModelTestCase
         :status    => "new",
       }
     end
-    
+
     after do
       @user.destroy
     end
-    
+
     context "missing text" do
       before do
         @report = Report.new(@valid_params.merge(:text => ""))
       end
-      
+
       use "invalid report"
       use "report.text can't be empty"
     end
-    
+
     context "missing user_id" do
       before do
         @report = Report.new(@valid_params.merge(:user_id => nil))
       end
-      
+
       use "invalid report"
       use "report.user_id can't be empty"
     end
@@ -75,7 +75,7 @@ class ReportUnitTest < ModelTestCase
       before do
         @report = Report.new(@valid_params.merge(:status => ""))
       end
-      
+
       use "invalid report"
       use "report.status must be valid"
     end
@@ -84,7 +84,7 @@ class ReportUnitTest < ModelTestCase
       before do
         @report = Report.new(@valid_params)
       end
-      
+
       use "valid report"
     end
   end

@@ -12,31 +12,31 @@ class FavoritesGetOneTest < RequestTestCase
       :user_id   => @user.id
     )
   end
-  
+
   after do
     @favorite.destroy
     @source.destroy
     @user.destroy
   end
-  
+
   context "non owner API key" do
     before do
       get "/#{@favorite.id}", :api_key => @normal_user.primary_api_key
     end
-  
+
     use "return 401 because the API key is unauthorized"
   end
-  
+
   context "owner API key : get /:id" do
     before do
       get "/#{@favorite.id}", :api_key => @user.primary_api_key
     end
 
     use "return 200 Ok"
-    
+
     doc_properties %w(source source_id user user_id
       id created_at updated_at)
-    
+
     test "should have correct values" do
       assert_equal @source.id.to_s, parsed_response_body['source_id']
       assert_equal @user.id.to_s, parsed_response_body['user_id']

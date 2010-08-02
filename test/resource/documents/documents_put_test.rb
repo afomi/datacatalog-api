@@ -12,12 +12,12 @@ class DocumentsPutTest < RequestTestCase
     )
     @document_count = Document.count
   end
-  
+
   after :all do
     @document.destroy
     @source.destroy
   end
-  
+
   context "basic API key : put /:id with correct param" do
     before :all do
       put "/#{@document.id}", {
@@ -27,9 +27,9 @@ class DocumentsPutTest < RequestTestCase
       # Since an update (PUT) automatically creates a new version, this
       # code has to be in a before :all block.
     end
-    
+
     use "return 200 Ok"
-    
+
     # Updating a document creates a new version.
     # (Yes, this differs from the usual pattern for *_put_test.rb files.)
     use "incremented document count"
@@ -40,7 +40,7 @@ class DocumentsPutTest < RequestTestCase
       assert_equal "New Document", document.text
       assert_equal @source.id, document.source_id
     end
-    
+
     doc_properties %w(
       text
       source_id
@@ -51,7 +51,7 @@ class DocumentsPutTest < RequestTestCase
       updated_at
       created_at
     )
-    
+
     test "previous version should be correct" do
       document = Document.find_by_id!(@document.id)
       # TODO: use reload in the future
@@ -59,7 +59,7 @@ class DocumentsPutTest < RequestTestCase
       assert_equal "Original Document", previous_document.text
       assert_equal @source.id, previous_document.source_id
     end
-    
+
   end
 
 end

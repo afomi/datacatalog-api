@@ -5,7 +5,7 @@ class RequestTestCase
       assert_equal @favorite_count + 1, Favorite.count
     end
   end
-  
+
   shared "unchanged favorite count" do
     test "should not change favorite count" do
       assert_equal @favorite_count, Favorite.count
@@ -17,5 +17,5 @@ class RequestTestCase
       assert_equal @favorite_count - 1, Favorite.count
     end
   end
-  
+
 end

@@ -12,7 +12,7 @@ class ReportsGetOneTest < RequestTestCase
       :status    => 'new'
     )
   end
-  
+
   after do
     @report.destroy
     @user.destroy
@@ -22,9 +22,9 @@ class ReportsGetOneTest < RequestTestCase
     before do
       get "/#{@report.id}", :api_key => @curator_user.primary_api_key
     end
-    
+
     use "return 200 Ok"
-  
+
     test "body should have correct text" do
       assert_equal "Report A", parsed_response_body["text"]
     end
@@ -40,5 +40,5 @@ class ReportsGetOneTest < RequestTestCase
       user_id
     )
   end
-  
+
 end

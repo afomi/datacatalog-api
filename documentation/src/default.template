@@ -38,6 +38,6 @@
         <p>Last updated: <%= Time.now.utc.strftime("%Y-%m-%d %H:%M:%S") %> UTC</p>
       </div>
     </div>
-    
+
   </body>
 </html>

@@ -13,7 +13,7 @@ class Download
   key :size,      Hash
   key :source_id, ObjectId
   timestamps!
-  
+
   # == Indices
 
   # == Associations
@@ -43,10 +43,10 @@ class Download
     h['number'] = Try.to_i_or_f(size['number']) if size['number']
     self.size = h
   end
-  
+
   SIZE_KEYS = %w(bytes number unit)
   UNIT_VALUES = %w(B KB MB TB PB EB)
-  
+
   validate :validate_size
   def validate_size
     return if size.empty?
@@ -60,7 +60,7 @@ class Download
 
     expect_integer_or_float(number, :size, :number)
     expect_integer_or_float(bytes, :size, :bytes)
-    
+
     unless UNIT_VALUES.include?(unit)
       errors.add(:size, "unit must be one of: #{UNIT_VALUES.join(' ')}")
     end

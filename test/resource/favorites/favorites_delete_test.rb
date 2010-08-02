@@ -13,7 +13,7 @@ class FavoritesDeleteTest < RequestTestCase
     )
     @favorite_count = Favorite.count
   end
-  
+
   after do
     @source.destroy
     @user.destroy
@@ -23,16 +23,16 @@ class FavoritesDeleteTest < RequestTestCase
     before do
       delete "/#{@favorite.id}", :api_key => @normal_user.primary_api_key
     end
-  
+
     use "return 401 because the API key is unauthorized"
     use "unchanged favorite count"
   end
-  
+
   context "curator API key : delete /:id" do
     before do
       delete "/#{@favorite.id}", :api_key => @curator_user.primary_api_key
     end
-    
+
     use "return 401 because the API key is unauthorized"
     use "unchanged favorite count"
   end
@@ -41,10 +41,10 @@ class FavoritesDeleteTest < RequestTestCase
     before do
       delete "/#{@favorite.id}", :api_key => @user.primary_api_key
     end
-    
+
     use "return 204 No Content"
     use "decremented favorite count"
-    
+
     test "favorite should be deleted in database" do
       assert_equal nil, Favorite.find_by_id(@favorite.id)
     end

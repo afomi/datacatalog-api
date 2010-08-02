@@ -9,7 +9,7 @@ class ReportsGetAllTest < RequestTestCase
       before do
         get "/", :api_key => @curator_user.primary_api_key
       end
-    
+
       use "return 200 Ok"
       use "return an empty list of members"
     end
@@ -26,7 +26,7 @@ class ReportsGetAllTest < RequestTestCase
         )
       end
     end
-    
+
     after do
       @reports.each { |x| x.destroy }
       @user.destroy

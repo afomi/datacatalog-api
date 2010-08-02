@@ -18,7 +18,7 @@ class RatingsDeleteTest < RequestTestCase
     )
     @rating_count = Rating.count
   end
-  
+
   after do
     @rating.destroy
     @user.destroy
@@ -29,16 +29,16 @@ class RatingsDeleteTest < RequestTestCase
     before do
       delete "/#{@rating.id}", :api_key => @normal_user.primary_api_key
     end
-  
+
     use "return 401 because the API key is unauthorized"
     use "unchanged rating count"
   end
-  
+
   context "curator API key : delete /:id" do
     before do
       delete "/#{@rating.id}", :api_key => @curator_user.primary_api_key
     end
-    
+
     use "return 401 because the API key is unauthorized"
     use "unchanged rating count"
   end
@@ -47,10 +47,10 @@ class RatingsDeleteTest < RequestTestCase
     before do
       delete "/#{@rating.id}", :api_key => @user.primary_api_key
     end
-  
+
     use "return 204 No Content"
     use "decremented rating count"
-  
+
     test "rating should be deleted in database" do
       assert_equal nil, Rating.find_by_id(@rating.id)
     end

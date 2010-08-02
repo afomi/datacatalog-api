@@ -17,7 +17,7 @@ class RatingsGetOneTest < RequestTestCase
       :source_id => @source.id
     )
   end
-  
+
   after do
     @rating.destroy
     @source.destroy
@@ -28,7 +28,7 @@ class RatingsGetOneTest < RequestTestCase
     before do
       get "/#{@rating.id}", :api_key => @normal_user.primary_api_key
     end
-    
+
     use "return 401 because the API key is unauthorized"
   end
 
@@ -36,9 +36,9 @@ class RatingsGetOneTest < RequestTestCase
     before do
       get "/#{@rating.id}", :api_key => @user.primary_api_key
     end
-    
+
     use "return 200 Ok"
-  
+
     test "body should have correct text" do
       assert_equal "Rating A", parsed_response_body["text"]
     end

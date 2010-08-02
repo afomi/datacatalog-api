@@ -12,7 +12,7 @@ class Note
   key :source_id, ObjectId
   key :user_id,   ObjectId
   timestamps!
-  
+
   # == Indices
 
   # == Associations

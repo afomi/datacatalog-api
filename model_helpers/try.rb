@@ -1,5 +1,5 @@
 class Try
-  
+
   def self.to_i_or_f(x)
     if x.nil?
       nil
@@ -40,5 +40,5 @@ class Try
       false
     end
  end
-  
+
 end

@@ -17,7 +17,7 @@ class SourcesDeleteTest < RequestTestCase
       before do
         delete "/#{@source.id}", :api_key => primary_api_key_for(role)
       end
-    
+
       use "return 204 No Content"
       use "decremented source count"
 
@@ -26,5 +26,5 @@ class SourcesDeleteTest < RequestTestCase
       end
     end
   end
-  
+
 end

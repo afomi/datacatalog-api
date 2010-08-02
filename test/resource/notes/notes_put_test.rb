@@ -12,7 +12,7 @@ class NotesPutTest < RequestTestCase
     )
     @note_count = Note.count
   end
-  
+
   after do
     @note.destroy
     @source.destroy
@@ -26,10 +26,10 @@ class NotesPutTest < RequestTestCase
           :text    => "New Note"
         }
       end
-      
+
       use "return 200 Ok"
       use "unchanged note count"
-      
+
       doc_properties %w(text user_id source_id id updated_at created_at)
 
       test "text should be updated in database" do

@@ -1,8 +1,8 @@
 module DataCatalog
-  
+
   class Comments < Base
     include Resource
-    
+
     model Comment
 
     # == Permissions
@@ -22,7 +22,7 @@ module DataCatalog
     property :parent_id
     property :user_id,      :w => :nobody
     property :rating_stats, :w => :nobody
-    
+
     # == Callbacks
 
     callback :before_create do |action|
@@ -31,7 +31,7 @@ module DataCatalog
     end
 
   end
-  
+
   Comments.build
 
 end

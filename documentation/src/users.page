@@ -56,7 +56,7 @@ The `User` resource responds to standard CRUD operations, according to the permi
 Get all users:
 
     GET http://nationaldatacatalog.com/users
-    
+
 Get all users named John:
 
     GET http://nationaldatacatalog.com/users?first_name=John
@@ -64,7 +64,7 @@ Get all users named John:
 Get one user:
 
     GET http://nationaldatacatalog.com/users/{user_id}
-    
+
 Create a new user:
 
     POST http://nationaldatacatalog.com/users
@@ -72,7 +72,7 @@ Create a new user:
 Update an existing user:
 
     PUT http://nationaldatacatalog.com/users/{user_id}
-    
+
 Delete an existing user:
 
     DELETE http://nationaldatacatalog.com/users/{user_id}

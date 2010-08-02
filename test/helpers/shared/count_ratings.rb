@@ -5,7 +5,7 @@ class RequestTestCase
       assert_equal @rating_count + 1, Rating.count
     end
   end
-  
+
   shared "unchanged rating count" do
     test "should not change rating count" do
       assert_equal @rating_count, Rating.count
@@ -17,7 +17,7 @@ class RequestTestCase
       assert_equal @rating_count - 1, Rating.count
     end
   end
-  
+
   shared "rating unchanged" do
     test "should not change rating in database" do
       # Worked in MongoMapper 0.7.x
@@ -32,5 +32,5 @@ class RequestTestCase
       assert_equal @rating_copy.text,       original.text
     end
   end
-  
+
 end

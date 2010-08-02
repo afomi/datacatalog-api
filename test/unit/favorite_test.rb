@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_unit_helper')
 
 class FavoriteUnitTest < ModelTestCase
-  
+
   shared "valid favorite" do
     test "should be valid" do
       assert_equal true, @favorite.valid?
@@ -13,7 +13,7 @@ class FavoriteUnitTest < ModelTestCase
       assert_equal false, @favorite.valid?
     end
   end
-  
+
   shared "favorite.user_id can't be empty" do
     test "should have empty error on user_id" do
       @favorite.valid?
@@ -21,7 +21,7 @@ class FavoriteUnitTest < ModelTestCase
       assert_include "can't be empty", @favorite.errors.errors[:user_id]
     end
   end
-  
+
   shared "favorite.user_id must be valid" do
     test "should have invalid error on user_id" do
       @favorite.valid?
@@ -47,7 +47,7 @@ class FavoriteUnitTest < ModelTestCase
   end
 
   # - - - - - - - - - -
-  
+
   context "Favorite : source" do
     before do
       @user = create_normal_user
@@ -57,17 +57,17 @@ class FavoriteUnitTest < ModelTestCase
         :user_id   => @user.id,
       }
     end
-    
+
     after do
       @source.destroy
       @user.destroy
     end
-    
+
     context "correct params" do
       before do
         @favorite = Favorite.new(@valid_params)
       end
-      
+
       use "valid favorite"
     end
 
@@ -77,7 +77,7 @@ class FavoriteUnitTest < ModelTestCase
           :user_id => get_fake_mongo_object_id
         ))
       end
-  
+
       use "invalid favorite"
       use "favorite.user_id must be valid"
     end
@@ -88,7 +88,7 @@ class FavoriteUnitTest < ModelTestCase
           :user_id => nil
         ))
       end
-      
+
       use "invalid favorite"
       use "favorite.user_id can't be empty"
     end
@@ -99,7 +99,7 @@ class FavoriteUnitTest < ModelTestCase
           :source_id => get_fake_mongo_object_id
         ))
       end
-  
+
       use "invalid favorite"
       use "favorite.source_id must be valid"
     end
@@ -108,10 +108,10 @@ class FavoriteUnitTest < ModelTestCase
       before do
         @favorite = Favorite.new(@valid_params.merge(:source_id => nil))
       end
-      
+
       use "invalid favorite"
       use "favorite.source_id can't be empty"
     end
   end
-  
+
 end

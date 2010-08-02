@@ -1,8 +1,8 @@
 module DataCatalog
-  
+
   class SourceGroups < Base
     include Resource
-    
+
     model SourceGroup
 
     # == Permissions
@@ -24,7 +24,7 @@ module DataCatalog
     # == Callbacks
 
   end
-  
+
   SourceGroups.build
 
 end

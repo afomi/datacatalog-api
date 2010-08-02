@@ -33,7 +33,7 @@ class UsersKeysPutTest < RequestTestCase
 
     @api_key_count = @user.api_keys.length
   end
-  
+
   after :all do
     @user.destroy
   end
@@ -102,28 +102,28 @@ class UsersKeysPutTest < RequestTestCase
     use "unchanged created_at in database"
     use "unchanged purpose in database"
     use "return errors hash saying key_type has invalid value"
-  
+
     test "return help_text saying you can't change a primary key's key_type" do
       assert_include "valid values for key_type are 'application' or 'valet'", parsed_response_body["help_text"]
     end
   end
-  
+
   shared "attempted PUT users_keys with invalid change to key_type" do
     use "return 400 Bad Request"
     use "unchanged api_key count"
     use "unchanged created_at in database"
     use "unchanged key_type in database"
     use "return errors hash saying key_type has invalid value"
-  
+
     test "return help_text saying you can't change a primary key's key_type" do
       assert_include "cannot change the key_type of a primary key", parsed_response_body["help_text"]
     end
   end
-  
+
   shared "attempted PUT users_keys with :id without params" do
     use "return 400 Bad Request"
     use "unchanged api_key count"
-  
+
     test "body should say 'no_params'" do
       assert_include "no_params", parsed_response_body["errors"]
     end
@@ -168,16 +168,16 @@ class UsersKeysPutTest < RequestTestCase
           }
           @n = n
         end
-      
+
         use "successful PUT users_keys : update purpose"
       end
     end
   end
-  
+
   # ------------------------------------
   # Tests that apply to primary key only
   # ------------------------------------
-  
+
   (0 .. 0).each do |n|
     context "owner API key : put /:id/keys/:id : changing primary to application not ok" do
       before do
@@ -188,10 +188,10 @@ class UsersKeysPutTest < RequestTestCase
         }
         @n = n
       end
-  
+
       use "attempted PUT users_keys with invalid change to key_type"
     end
-  
+
     context "owner API key : put /:id/keys/:id : changing primary to valet not ok" do
       before do
         @original_created_at = @user.api_keys[n].created_at.dup
@@ -201,15 +201,15 @@ class UsersKeysPutTest < RequestTestCase
         }
         @n = n
       end
-  
+
       use "attempted PUT users_keys with invalid change to key_type"
     end
   end
-  
+
   # -----------------------------------
   # Tests that apply to valet keys only
   # -----------------------------------
-  
+
   (1 .. 2).each do |n|
     context "owner API key : put /:id/keys/:id : invalid key_type" do
       before do
@@ -220,20 +220,20 @@ class UsersKeysPutTest < RequestTestCase
         }
         @n = n
       end
-  
+
       use "attempted PUT users_keys with invalid key_type"
     end
-  
+
     context "owner API key : put /:id/keys/:id without params" do
       before do
         put "/#{@user.id}/keys/#{@keys[n].id}", {
           :api_key => @user.primary_api_key
         }
       end
-  
+
       use "attempted PUT users_keys with :id without params"
     end
-  
+
     context "owner API key : put /:id/keys : update key_type" do
       before do
         @original_created_at = @user.api_keys[n].created_at.dup
@@ -243,10 +243,10 @@ class UsersKeysPutTest < RequestTestCase
         }
         @n = n
       end
-  
+
       use "successful PUT users_keys : update key_type to application"
     end
-  
+
     context "owner API key : put /:id/keys/:id : full update" do
       before do
         @original_created_at = @user.api_keys[n].created_at.dup
@@ -257,7 +257,7 @@ class UsersKeysPutTest < RequestTestCase
         }
         @n = n
       end
-  
+
       use "successful PUT users_keys : full update"
     end
   end

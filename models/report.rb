@@ -19,7 +19,7 @@ class Report
   # == Associations
 
   belongs_to :user
-  
+
   protected
 
   # == Validations

@@ -11,7 +11,7 @@ class OrganizationsGetOneTest < RequestTestCase
       :user_id   => @user.id
     )
   end
-  
+
   after do
     @organization.destroy
     @user.destroy
@@ -21,15 +21,15 @@ class OrganizationsGetOneTest < RequestTestCase
     before do
       get "/#{@organization.id}", :api_key => @normal_user.primary_api_key
     end
-    
+
     use "return 200 Ok"
-      
+
     test "body should have correct values" do
       actual = parsed_response_body
       assert_equal "Organization A", actual["name"]
       assert_equal @user.id.to_s, actual["user_id"]
     end
-    
+
     context "with parentage" do
       before do
         @jurisdiction = create_organization(
@@ -41,7 +41,7 @@ class OrganizationsGetOneTest < RequestTestCase
         @organization.save!
         get "/#{@organization.id}", :api_key => @normal_user.primary_api_key
       end
-    
+
       test "parent_id should be set" do
         assert_equal parsed_response_body['parent_id'], @jurisdiction.id.to_s
       end
@@ -62,7 +62,7 @@ class OrganizationsGetOneTest < RequestTestCase
         assert_equal actual["slug"], "us-federal-government"
       end
     end
-    
+
     doc_properties %w(
       name
       names

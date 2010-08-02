@@ -5,7 +5,7 @@ class RequestTestCase
       assert_equal @comment_count + 1, Comment.count
     end
   end
-  
+
   shared "unchanged comment count" do
     test "should not change comment count" do
       assert_equal @comment_count, Comment.count
@@ -17,5 +17,5 @@ class RequestTestCase
       assert_equal @comment_count - 1, Comment.count
     end
   end
-  
+
 end

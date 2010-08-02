@@ -8,7 +8,7 @@ class FavoritesPostTest < RequestTestCase
     @source = create_source
     @favorite_count = Favorite.count
   end
-  
+
   after do
     @source.destroy
   end
@@ -19,7 +19,7 @@ class FavoritesPostTest < RequestTestCase
         :api_key   => BAD_API_KEY,
         :source_id => @source.id
     end
-    
+
     use "return 401 because the API key is invalid"
     use "unchanged favorite count"
   end

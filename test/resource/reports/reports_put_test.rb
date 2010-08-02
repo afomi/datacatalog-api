@@ -13,7 +13,7 @@ class ReportsPutTest < RequestTestCase
     )
     @report_count = Report.count
   end
-  
+
   after do
     @report.destroy
     @user.destroy
@@ -26,7 +26,7 @@ class ReportsPutTest < RequestTestCase
         :user_id => @admin_user.id
       }
     end
-    
+
     test "body should say 'created_at' is an invalid param" do
       assert_include "errors", parsed_response_body
       assert_include "invalid_params", parsed_response_body["errors"]
@@ -41,7 +41,7 @@ class ReportsPutTest < RequestTestCase
         :text    => "New Report"
       }
     end
-    
+
     use "return 200 Ok"
     use "unchanged report count"
 

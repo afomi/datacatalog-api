@@ -1,5 +1,5 @@
 class ApiKey
-  
+
   include MongoMapper::EmbeddedDocument
 
   # == Attributes
@@ -14,10 +14,10 @@ class ApiKey
   # == Associations
 
   # == Validations
-  
+
   # TODO: add api_key
   # TODO: add key_type
-  
+
   # == Class Methods
 
   # == Various Instance Methods
@@ -28,7 +28,7 @@ class ApiKey
       write_attribute('created_at', Time.now.utc)
     end
   end
-  
+
   def user
     _root_document
   end

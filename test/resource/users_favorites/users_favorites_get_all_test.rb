@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_resource_helper')
 class UsersFavoritesGetAllTest < RequestTestCase
 
   def app; DataCatalog::Users end
-  
+
   before :all do
     @user = create_user_with_primary_key
     @sources = 5.times.map do |i|
@@ -30,7 +30,7 @@ class UsersFavoritesGetAllTest < RequestTestCase
       get "/#{@user.id}/favorites",
         :api_key => @normal_user.primary_api_key
     end
-    
+
     use "return 200 Ok"
     use "return an empty list of members"
     # This does not seem intuitive. However, it is consistent with:
@@ -44,10 +44,10 @@ class UsersFavoritesGetAllTest < RequestTestCase
         :api_key => @user.primary_api_key
       @members = parsed_response_body['members']
     end
-    
+
     use "return 200 Ok"
     members_properties %w(source source_id id created_at updated_at)
-    
+
     test "values should be correct" do
       assert_equal 3, @members.length
       expected = ["Source 0", "Source 1", "Source 2"]
@@ -55,5 +55,5 @@ class UsersFavoritesGetAllTest < RequestTestCase
       assert_equal expected, actual
     end
   end
-  
+
 end

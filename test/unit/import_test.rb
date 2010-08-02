@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_unit_helper')
 
 class ImportUnitTest < ModelTestCase
-  
+
   shared "valid Import" do
     test "should be valid" do
       assert_equal true, @import.valid?
@@ -48,7 +48,7 @@ class ImportUnitTest < ModelTestCase
   end
 
   # - - - - - - - - - -
-  
+
   context "Import : succeeded" do
     before do
       finish = Time.now
@@ -62,23 +62,23 @@ class ImportUnitTest < ModelTestCase
         :status      => 'succeeded',
       }
     end
-    
+
     after do
       @importer.destroy
     end
-    
+
     context "correct params" do
       before do
         @import = Import.new(@valid_params)
       end
-      
+
       use "valid Import"
-      
+
       test "calculate correct duration" do
         @import.valid? # triggers before|after_validation callbacks
         assert_equal 30, @import.duration
       end
-      
+
       test "point to associated importer" do
         assert_equal @importer, @import.importer
       end
@@ -88,7 +88,7 @@ class ImportUnitTest < ModelTestCase
       before do
         @import = Import.new(@valid_params.merge(:importer_id => nil))
       end
-      
+
       use "invalid Import"
       use "import.importer_id can't be empty"
     end
@@ -97,7 +97,7 @@ class ImportUnitTest < ModelTestCase
       before do
         @import = Import.new(@valid_params.merge(:started_at => nil))
       end
-      
+
       use "invalid Import"
       use "import.started_at can't be empty"
     end
@@ -106,16 +106,16 @@ class ImportUnitTest < ModelTestCase
       before do
         @import = Import.new(@valid_params.merge(:finished_at => nil))
       end
-      
+
       use "invalid Import"
       use "import.finished_at can't be empty"
     end
-    
+
     context "invalid status" do
       before do
         @import = Import.new(@valid_params.merge(:status => ""))
       end
-      
+
       use "invalid Import"
       use "import.status must be valid"
     end
@@ -137,12 +137,12 @@ class ImportUnitTest < ModelTestCase
     after do
       @importer.destroy
     end
-      
+
     context "correct params" do
       before do
         @import = Import.new(@valid_params)
       end
-      
+
       use "valid Import"
     end
   end

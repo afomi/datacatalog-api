@@ -17,7 +17,7 @@ class DocumentsDeleteTest < RequestTestCase
       before do
         delete "/#{@document.id}", :api_key => primary_api_key_for(role)
       end
-    
+
       use "return 204 No Content"
       use "decremented document count"
 

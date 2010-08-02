@@ -19,7 +19,7 @@ class CategoriesPutTest < RequestTestCase
         :name    => "New Category"
       }
     end
-    
+
     use "return 200 Ok"
     use "unchanged category count"
 

@@ -14,7 +14,7 @@ class CommentsPutTest < RequestTestCase
     )
     @comment_count = Comment.count
   end
-  
+
   after do
     @comment.destroy
     @source.destroy
@@ -28,7 +28,7 @@ class CommentsPutTest < RequestTestCase
         :user_id => @admin_user.id
       }
     end
-    
+
     test "body should say 'created_at' is an invalid param" do
       assert_include "errors", parsed_response_body
       assert_include "invalid_params", parsed_response_body["errors"]
@@ -43,7 +43,7 @@ class CommentsPutTest < RequestTestCase
         :text    => "New Comment"
       }
     end
-    
+
     use "return 200 Ok"
     use "unchanged comment count"
 

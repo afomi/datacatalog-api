@@ -23,19 +23,19 @@ class CategoryUnitTest < ModelTestCase
   end
 
   # - - - - - - - - - -
-  
+
   context "Category" do
     before do
       @valid_params = {
         :name => "Science & Technology"
       }
     end
-    
+
     context "correct params" do
       before do
         @category = Category.new(@valid_params)
       end
-      
+
       use "valid category"
     end
 
@@ -43,7 +43,7 @@ class CategoryUnitTest < ModelTestCase
       before do
         @category = Category.new(@valid_params.merge(:name => ""))
       end
-      
+
       use "invalid category"
       use "category.name can't be empty"
     end

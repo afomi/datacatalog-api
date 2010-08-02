@@ -18,15 +18,15 @@ module DataCatalog
     permission :create => :basic # perhaps should be :owner_of_parent
     permission :update => :owner
     permission :delete => :owner
-    
+
     # == Properties
 
     property :api_key
     property :key_type
     property :purpose
-    
+
     # == Callbacks
-    
+
     callback :before_destroy do |action, api_key, user|
       if api_key.key_type == 'primary'
         action.error(409, action.convert({
@@ -34,7 +34,7 @@ module DataCatalog
         }))
       end
     end
-    
+
     VALID_KEY_TYPES = %w(application valet)
 
     # Note: Needed because MongoMapper does not support validations on
@@ -88,7 +88,7 @@ module DataCatalog
     end
 
   end
-  
+
   UsersKeys.build
 
 end

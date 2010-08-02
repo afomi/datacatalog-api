@@ -23,7 +23,7 @@ class RatingsPostTest < RequestTestCase
       assert_equal new_uri, last_response.headers["Location"]
     end
   end
-  
+
   context "basic API key : post / to create a source rating" do
     before do
       post "/", {
@@ -34,9 +34,9 @@ class RatingsPostTest < RequestTestCase
         :value     => 5
       }
     end
-    
+
     use "successful POST to ratings"
-    
+
     test "body should have correct values" do
       r = parsed_response_body
       assert_equal @source.id.to_s, r['source_id']
@@ -51,7 +51,7 @@ class RatingsPostTest < RequestTestCase
       assert_equal 5, rating.value
     end
   end
-  
+
   context "basic API key : post / to create a comment rating" do
     before do
       post "/", {
@@ -61,15 +61,15 @@ class RatingsPostTest < RequestTestCase
         :value      => 1
       }
     end
-    
+
     use "successful POST to ratings"
-    
+
     test "body should have correct text" do
       r = parsed_response_body
       assert_equal @comment.id.to_s, r['comment_id']
       assert_equal 1, r['value']
     end
-    
+
     test "text should be correct in database" do
       rating = Rating.find_by_id!(parsed_response_body["id"])
       assert_equal @comment.id, rating.comment_id

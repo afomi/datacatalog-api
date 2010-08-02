@@ -1,5 +1,5 @@
 class Slug
-  
+
   # Convert +text+ into a slug appropriate for +document+.
   def self.make(text, document, scope = {})
     slug = prefix = make_prefix(text, document)

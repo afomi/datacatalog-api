@@ -3,14 +3,14 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_resource_helper')
 class SourcesGetFilterTest < RequestTestCase
 
   def app; DataCatalog::Sources end
-  
+
   def assert_shared_attributes(element)
     assert_include "created_at", element
     assert_include "updated_at", element
     assert_include "id", element
     assert_not_include "_id", element
   end
-  
+
   shared "successful GET of sources where url is source #3'" do
     test "body should have 1 top level elements" do
       assert_equal 1, @members.length
@@ -33,11 +33,11 @@ class SourcesGetFilterTest < RequestTestCase
         )
       end
     end
-    
+
     after do
       @sources.each { |x| x.destroy }
     end
-    
+
     %w(normal).each do |role|
       context "#{role} API key : get / where url is source #3" do
         before do

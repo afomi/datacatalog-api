@@ -11,7 +11,7 @@ class SourcesGetOneTest < RequestTestCase
       :url   => "http://data.gov/original"
     )
   end
-  
+
   after do
     @source.destroy
   end
@@ -22,7 +22,7 @@ class SourcesGetOneTest < RequestTestCase
     test "body should have correct text" do
       assert_equal "http://data.gov/original", parsed_response_body["url"]
     end
-    
+
     doc_properties %w(
       catalog_name
       catalog_url
@@ -81,14 +81,14 @@ class SourcesGetOneTest < RequestTestCase
         end
         get "/#{@source.id}", :api_key => primary_api_key_for(role)
       end
-      
+
       after do
         @categorizations.each { |x| x.destroy }
         @categories.each { |x| x.destroy }
       end
-      
+
       use "successful GET source with :id"
-      
+
       test "body should have correct categories" do
         actual = parsed_response_body["categories"]
         @categories.each do |category|
@@ -100,7 +100,7 @@ class SourcesGetOneTest < RequestTestCase
         end
       end
     end
-    
+
     context "#{role} API key : 1 jurisdiction : get /:id" do
       before do
         @jurisdiction = create_organization(
@@ -118,12 +118,12 @@ class SourcesGetOneTest < RequestTestCase
         @source.save!
         get "/#{@source.id}", :api_key => primary_api_key_for(role)
       end
-      
+
       after do
         @organization.destroy
         @jurisdiction.destroy
       end
-      
+
       use "successful GET source with :id"
 
       test "body should have correct organization" do
@@ -135,7 +135,7 @@ class SourcesGetOneTest < RequestTestCase
         }
         assert_equal expected, actual
       end
-      
+
       test "body should have correct organization_id" do
         assert_equal @organization.id.to_s, parsed_response_body["organization_id"]
       end
@@ -178,18 +178,18 @@ class SourcesGetOneTest < RequestTestCase
             })
           end
         end
-      
+
         get "/#{@source.id}", :api_key => primary_api_key_for(role)
       end
-      
+
       after do
         Timecop.return
         @ratings.each { |x| x.destroy }
         @comments.each { |x| x.destroy }
       end
-      
+
       use "successful GET source with :id"
-      
+
       test "body should have correct comments" do
         actual = parsed_response_body["comments"]
         @comments.each do |comment|
@@ -212,7 +212,7 @@ class SourcesGetOneTest < RequestTestCase
         end
       end
     end
-      
+
     context "#{role} API key : 2 documents : get /:id" do
       before do
         @documents = [
@@ -227,13 +227,13 @@ class SourcesGetOneTest < RequestTestCase
         ]
         get "/#{@source.id}", :api_key => primary_api_key_for(role)
       end
-      
+
       after do
         @documents.each { |x| x.destroy }
       end
-      
+
       use "successful GET source with :id"
-      
+
       test "body should have correct documents" do
         actual = parsed_response_body["documents"]
         @documents.each do |document|
@@ -249,7 +249,7 @@ class SourcesGetOneTest < RequestTestCase
         end
       end
     end
-      
+
     context "#{role} API key : 2 notes : get /:id" do
       before do
         @notes = [
@@ -264,13 +264,13 @@ class SourcesGetOneTest < RequestTestCase
         ]
         get "/#{@source.id}", :api_key => primary_api_key_for(role)
       end
-      
+
       after do
         @notes.each { |x| x.destroy }
       end
-      
+
       use "successful GET source with :id"
-      
+
       test "body should have correct notes" do
         actual = parsed_response_body["notes"]
         @notes.each do |note|
@@ -286,7 +286,7 @@ class SourcesGetOneTest < RequestTestCase
         end
       end
     end
-    
+
     context "#{role} API key : 2 ratings : get /:id" do
       before do
         @source_ratings = [
@@ -316,27 +316,27 @@ class SourcesGetOneTest < RequestTestCase
         ]
         get "/#{@source.id}", :api_key => primary_api_key_for(role)
       end
-      
+
       after do
         @comment_ratings.each { |x| x.destroy }
         @comment.destroy
         @source_ratings.each { |x| x.destroy }
       end
-      
+
       use "successful GET source with :id"
-      
+
       test "body should have correct ratings total" do
         assert_equal 6, parsed_response_body["rating_stats"]["total"]
       end
-      
+
       test "body should have correct ratings count" do
         assert_equal 2, parsed_response_body["rating_stats"]["count"]
       end
-      
+
       test "body should have correct ratings average" do
         assert_equal 3.0, parsed_response_body["rating_stats"]["average"]
       end
-      
+
       test "body should have correct ratings" do
         actual = parsed_response_body["ratings"]
         assert_equal 2, actual.length
@@ -353,7 +353,7 @@ class SourcesGetOneTest < RequestTestCase
           assert_include expected, actual
         end
       end
-    
+
       context "#{role} API key : 2 downloads : get /:id" do
         before do
           @downloads = [
@@ -370,13 +370,13 @@ class SourcesGetOneTest < RequestTestCase
           ]
           get "/#{@source.id}", :api_key => primary_api_key_for(role)
         end
-    
+
         after do
           @downloads.each { |x| x.destroy }
         end
-    
+
         use "successful GET source with :id"
-    
+
         test "body should have correct downloads" do
           actual = parsed_response_body["downloads"]
           @downloads.each do |download|
@@ -391,7 +391,7 @@ class SourcesGetOneTest < RequestTestCase
           end
         end
       end
-    
+
     end
 
   end

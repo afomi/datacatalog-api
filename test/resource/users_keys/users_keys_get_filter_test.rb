@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_resource_helper')
 class UsersKeysGetFilterTest < RequestTestCase
 
   def app; DataCatalog::Users end
-  
+
   shared "successful GET of users_keys where key_type is valet" do
     test "body should have 2 top level elements" do
       assert_equal 2, @members.length
@@ -53,11 +53,11 @@ class UsersKeysGetFilterTest < RequestTestCase
           :api_key  => @normal_user.primary_api_key,
           :filter   => "key_type=valet"
       end
-    
+
       use "return 200 Ok"
       use "return an empty list of members"
     end
-    
+
     context "owner API key : get / where key_type is valet'" do
       before do
         get "/#{@user.id}/keys",
@@ -65,7 +65,7 @@ class UsersKeysGetFilterTest < RequestTestCase
           :filter   => "key_type=valet"
         @members = parsed_response_body['members']
       end
-    
+
       use "successful GET of users_keys where key_type is valet"
     end
 
@@ -76,7 +76,7 @@ class UsersKeysGetFilterTest < RequestTestCase
           :filter   => "key_type=valet"
         @members = parsed_response_body['members']
       end
-    
+
       use "successful GET of users_keys where key_type is valet"
     end
   end

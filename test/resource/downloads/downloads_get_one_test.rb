@@ -12,18 +12,18 @@ class DownloadsGetOneTest < RequestTestCase
       :source_id => @source.id
     )
   end
-  
+
   after do
     @download.destroy
     @source.destroy
   end
-  
+
   %w(normal).each do |role|
     context "#{role} API key : get /:id" do
       before do
         get "/#{@download.id}", :api_key => primary_api_key_for(role)
       end
-  
+
       use "return 200 Ok"
 
       test "body should have correct values" do

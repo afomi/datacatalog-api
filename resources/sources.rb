@@ -2,9 +2,9 @@ module DataCatalog
 
   class Sources < Base
     include Resource
-  
+
     model Source
-    
+
     # == Permissions
 
     roles Roles
@@ -39,7 +39,7 @@ module DataCatalog
     property :updates_per_year do |source|
       Frequency.new(source.frequency).per_year
     end
-    
+
     property :categories do |source|
       source.categorizations.map do |categorization|
         {
@@ -54,7 +54,7 @@ module DataCatalog
         nested_comment(comment)
       end
     end
-    
+
     property :documents do |source|
       source.documents.map do |document|
         {
@@ -67,7 +67,7 @@ module DataCatalog
         }
       end
     end
-    
+
     property :favorite_count do |source|
       source.favorites.length
     end
@@ -84,15 +84,15 @@ module DataCatalog
         }
       end
     end
-    
+
     property :organization do |source|
       nested_organization(source, source.organization_id)
     end
-    
+
     property :jurisdiction do |source|
       nested_organization(source, source.jurisdiction_id)
     end
-    
+
     property :ratings do |source|
       source.ratings.map do |rating|
         {
@@ -125,7 +125,7 @@ module DataCatalog
     callback :before_create do |action|
       action.validate_custom_before_create(action.params["custom"])
     end
-    
+
     callback :before_update do |action, source|
       custom = action.params["custom"]
       action.validate_custom_before_update(custom)
@@ -133,7 +133,7 @@ module DataCatalog
     end
 
     CUSTOM_ATTRIBUTES = %w(label description type value)
-    
+
     def validate_custom_before_create(custom)
       return if custom.nil?
       custom.length.times do |i|
@@ -176,15 +176,15 @@ module DataCatalog
         right.nil? ? nil : left.merge(right)
       end
     end
-    
+
     def self.missing_custom_attrs(hash)
       CUSTOM_ATTRIBUTES - hash.keys
     end
-    
+
     def self.invalid_custom_attrs(hash)
       hash.keys - CUSTOM_ATTRIBUTES
     end
-    
+
     def self.nested_comment(comment)
       parent = if comment.parent_id
         {
@@ -217,7 +217,7 @@ module DataCatalog
     end
 
   end
-  
+
   Sources.build
 
 end

@@ -7,7 +7,7 @@ class UserUnitTest < ModelTestCase
       assert_equal 40, @user.primary_api_key.length
     end
   end
-  
+
   shared "well formed application API keys" do
     test "application API keys should be 40 characters long" do
       @user.application_api_keys.each do |api_key|
@@ -15,7 +15,7 @@ class UserUnitTest < ModelTestCase
       end
     end
   end
-  
+
   shared "well formed valet API keys" do
     test "valet API keys should be 40 characters long" do
       @user.valet_api_keys.each do |api_key|
@@ -25,24 +25,24 @@ class UserUnitTest < ModelTestCase
   end
 
   # - - - - - - - - - -
-  
+
   context "creating a user" do
     before do
       @user = create_user
     end
-    
+
     test "should save email" do
       assert_equal "data.mangler@inter.net", @user.email
     end
   end
 
   # - - - - - - - - - -
-  
+
   context "creating a user with an API key" do
     before do
       @user = create_user_with_primary_key
     end
-    
+
     use "well formed primary API key"
   end
 
@@ -61,37 +61,37 @@ class UserUnitTest < ModelTestCase
     use "well formed primary API key"
     use "well formed application API keys"
     use "well formed valet API keys"
-    
+
     test "#primary_api_key works properly" do
       expected = @user.api_keys.select { |k| k.key_type == "primary" }[0].api_key
       actual = @user.primary_api_key
       assert_equal expected, actual
     end
-    
+
     test "should have 6 API keys" do
       assert_equal 6, @user.api_keys.length
     end
-    
+
     test "should have 2 application API keys" do
       assert_equal 2, @user.application_api_keys.length
     end
-    
+
     test "should have 3 valet API keys" do
       assert_equal 3, @user.valet_api_keys.length
     end
-    
+
     test "find_by_api_key should work on all keys" do
       @user.api_keys.map { |x| x.api_key }.each do |key|
         assert_equal @user, User.find_by_api_key(key)
       end
     end
   end
-  
+
   context "creating 2 users with API keys" do
     before do
       @users = [create_user_with_primary_key, create_user_with_primary_key]
     end
-    
+
     test "API keys should be unique" do
       assert_not_equal @users[0].primary_api_key, @users[1].primary_api_key
     end
@@ -108,7 +108,7 @@ class UserUnitTest < ModelTestCase
         @api_keys[x] = user.generate_api_key
       end
     end
-    
+
     test "all API keys should be unique" do
       hash = {}
       @api_keys.each do |api_key|
@@ -120,5 +120,5 @@ class UserUnitTest < ModelTestCase
       assert true
     end
   end
-  
+
 end

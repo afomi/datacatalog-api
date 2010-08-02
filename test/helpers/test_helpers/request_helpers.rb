@@ -7,7 +7,7 @@ module RequestHelpers
   def self.included(includee)
     includee.extend(ClassMethods)
   end
-  
+
   module ClassMethods
 
     def doc_properties(correct)
@@ -23,7 +23,7 @@ module RequestHelpers
         end
       end
     end
-    
+
     def members_properties(correct)
       test "document members should only have correct attributes" do
         parsed_response_body['members'].each do |parsed|

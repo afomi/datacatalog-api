@@ -9,7 +9,7 @@ task :test => %w(
 )
 
 namespace :test do
-  
+
   desc "Run unit tests"
   Rake::TestTask.new(:unit) do |t|
     t.test_files = FileList["test/unit/*_test.rb"]

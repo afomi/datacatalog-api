@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_resource_helper')
 class UsersGetFilterTest < RequestTestCase
 
   def app; DataCatalog::Users end
-  
+
   shared "successful GET of users where name is 'User 2'" do
     test "body should have 1 top level elements" do
       assert_equal 1, @members.length
@@ -33,7 +33,7 @@ class UsersGetFilterTest < RequestTestCase
           :filter  => "name='User 2'"
         @members = parsed_response_body['members']
       end
-      
+
       use "successful GET of users where name is 'User 2'"
 
       test "each element should not expose sensitive values" do
@@ -52,7 +52,7 @@ class UsersGetFilterTest < RequestTestCase
           :filter  => "name='User 2'"
         @members = parsed_response_body['members']
       end
-    
+
       use "successful GET of users where name is 'User 2'"
 
       test "each element should expose all values" do

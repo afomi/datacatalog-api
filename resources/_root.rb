@@ -2,7 +2,7 @@ module DataCatalog
 
   class Root < Base
     include Resource
-    
+
     META = {
       "name"    => "National Data Catalog API",
       "version" => "0.4.11",
@@ -36,5 +36,5 @@ module DataCatalog
     end
 
   end
-  
+
 end

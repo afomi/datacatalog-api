@@ -5,7 +5,7 @@ class RequestTestCase
       assert_equal @note_count + 1, Note.count
     end
   end
-  
+
   shared "unchanged note count" do
     test "should not change note count" do
       assert_equal @note_count, Note.count
@@ -17,5 +17,5 @@ class RequestTestCase
       assert_equal @note_count - 1, Note.count
     end
   end
-  
+
 end

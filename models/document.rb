@@ -19,14 +19,14 @@ class Document
   # == Indices
 
   # == Associations
-  
+
   belongs_to :source
   belongs_to :user
-  
+
   protected
 
   # == Validations
-  
+
   validates_presence_of :text
   validates_presence_of :source_id
   validates_presence_of :user_id
@@ -40,7 +40,7 @@ class Document
   # == Class Methods
 
   # == Various Instance Methods
-  
+
   public
 
   # Creates a new Document version based on +self+.

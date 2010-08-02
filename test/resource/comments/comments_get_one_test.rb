@@ -13,7 +13,7 @@ class CommentsGetOneTest < RequestTestCase
       :source_id => @source.id
     )
   end
-  
+
   after do
     @comment.destroy
     @source.destroy
@@ -24,9 +24,9 @@ class CommentsGetOneTest < RequestTestCase
     before do
       get "/#{@comment.id}", :api_key => @normal_user.primary_api_key
     end
-    
+
     use "return 200 Ok"
-  
+
     test "body should have correct text" do
       assert_equal "Comment A", parsed_response_body["text"]
       assert_include "rating_stats", parsed_response_body
@@ -44,5 +44,5 @@ class CommentsGetOneTest < RequestTestCase
       user_id
     )
   end
-  
+
 end

@@ -5,7 +5,7 @@ class RequestTestCase
       assert_equal @report_count + 1, Report.count
     end
   end
-  
+
   shared "unchanged report count" do
     test "should not change report count" do
       assert_equal @report_count, Report.count
@@ -17,5 +17,5 @@ class RequestTestCase
       assert_equal @report_count - 1, Report.count
     end
   end
-  
+
 end

@@ -10,11 +10,11 @@ class SourceGroupsPutTest < RequestTestCase
     })
     @source_group_count = SourceGroup.count
   end
-  
+
   after do
     @source_group.destroy
   end
-  
+
   context "basic API key : put /:id with correct param" do
     before do
       put "/#{@source_group.id}", {
@@ -22,7 +22,7 @@ class SourceGroupsPutTest < RequestTestCase
         :title   => "New Source Group"
       }
     end
-    
+
     use "return 200 Ok"
     use "unchanged source group count"
 
@@ -31,7 +31,7 @@ class SourceGroupsPutTest < RequestTestCase
       # TODO: use reload in the future
       assert_equal "New Source Group", source_group.title
     end
-    
+
     doc_properties %w(
       title
       slug
@@ -40,7 +40,7 @@ class SourceGroupsPutTest < RequestTestCase
       updated_at
       created_at
     )
-    
+
   end
 
 end

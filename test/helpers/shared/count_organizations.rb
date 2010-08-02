@@ -5,7 +5,7 @@ class RequestTestCase
       assert_equal @organization_count + 1, Organization.count
     end
   end
-  
+
   shared "unchanged organization count" do
     test "should not change organization count" do
       assert_equal @organization_count, Organization.count
@@ -17,5 +17,5 @@ class RequestTestCase
       assert_equal @organization_count - 1, Organization.count
     end
   end
-  
+
 end

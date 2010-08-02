@@ -9,7 +9,7 @@ class TagsGetAllTest < RequestTestCase
       before do
         get "/", :api_key => @normal_user.primary_api_key
       end
-    
+
       use "return 200 Ok"
       use "return an empty list of members"
     end
@@ -21,11 +21,11 @@ class TagsGetAllTest < RequestTestCase
         create_tag(:text => "Tag #{n}")
       end
     end
-    
+
     after do
       @tags.each { |x| x.destroy }
     end
-    
+
     context "normal API key : get /" do
       before do
         get "/", :api_key => @normal_user.primary_api_key

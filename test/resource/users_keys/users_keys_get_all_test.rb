@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_resource_helper')
 class UsersKeysGetAllTest < RequestTestCase
 
   def app; DataCatalog::Users end
-  
+
   before do
     @user = create_user(
       :name    => "Example User",
@@ -30,7 +30,7 @@ class UsersKeysGetAllTest < RequestTestCase
     @user.api_keys = @keys
     @user.save!
   end
-  
+
   after do
     @user.destroy
   end
@@ -49,16 +49,16 @@ class UsersKeysGetAllTest < RequestTestCase
       # 2. UsersKeys having `permission :list => :basic`
     end
   end
-  
+
   context "admin API key : get /:id/keys" do
     before do
       get "/#{@user.id}/keys",
         :api_key => @admin_user.primary_api_key
       @members = parsed_response_body['members']
     end
-    
+
     use "return 200 Ok"
-    
+
     test "body should have 3 top level elements" do
       assert_equal 3, @members.length
     end
@@ -74,5 +74,5 @@ class UsersKeysGetAllTest < RequestTestCase
       end
     end
   end
-  
+
 end

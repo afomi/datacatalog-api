@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_unit_helper')
 
 class ImporterUnitTest < ModelTestCase
-  
+
   shared "valid Importer" do
     test "should be valid" do
       assert_equal true, @importer.valid?
@@ -23,22 +23,22 @@ class ImporterUnitTest < ModelTestCase
   end
 
   # - - - - - - - - - -
-  
+
   context "Importer : source" do
     before do
       @valid_params = {
         :name        => "data.gov",
       }
     end
-    
+
     after do
     end
-    
+
     context "correct params" do
       before do
         @importer = Importer.new(@valid_params)
       end
-      
+
       use "valid Importer"
     end
 
@@ -46,10 +46,10 @@ class ImporterUnitTest < ModelTestCase
       before do
         @importer = Importer.new(@valid_params.merge(:name => nil))
       end
-      
+
       use "invalid Importer"
       use "importer.name can't be empty"
     end
   end
-  
+
 end

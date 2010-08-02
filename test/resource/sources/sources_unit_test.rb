@@ -16,14 +16,14 @@ class SourcesUnitTest < RequestTestCase
         :parent_id => @parent_comment.id
       )
     end
-  
+
     after do
       @parent_comment.destroy
       @child_comment.destroy
       @source.destroy
       @user.destroy
     end
-  
+
     test "parent comment should be correct" do
       actual = DataCatalog::Sources.nested_comment(@parent_comment)
       assert_properties %w(rating_stats href text user parent created_at), actual
@@ -50,13 +50,13 @@ class SourcesUnitTest < RequestTestCase
         :organization_id => @organization.id
       )
     end
-  
+
     after do
       @source.destroy
       @organization.destroy
       @user.destroy
     end
-  
+
     test "nested organization should be correct" do
       actual = DataCatalog::Sources.nested_organization(@source, @source.organization_id)
       assert_properties %w(href name slug), actual

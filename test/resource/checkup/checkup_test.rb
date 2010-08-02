@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_resource_helper')
 
 class CheckupTest < RequestTestCase
-  
+
   def app
     DataCatalog::Checkup
   end
@@ -41,7 +41,7 @@ class CheckupTest < RequestTestCase
     end
   end
 
-  
+
   context "anonymous : get /" do
     before do
       get '/'
@@ -50,26 +50,26 @@ class CheckupTest < RequestTestCase
     use "return 200 OK"
     use "anonymous"
     use "no API key"
-    
+
     test "should not have a user" do
       assert_not_include "user", parsed_response_body
     end
   end
-  
+
   context "incorrect API key : get /" do
     before do
       get '/', :api_key => BAD_API_KEY
     end
-  
+
     use "return 200 OK"
     use "invalid API key"
   end
-  
+
   context "normal API key : get /" do
     before do
       get '/', :api_key => @normal_user.primary_api_key
     end
-    
+
     use "return 200 OK"
     use "not anonymous"
     use "valid API key"
@@ -82,16 +82,16 @@ class CheckupTest < RequestTestCase
       assert_equal expected, parsed_response_body["user"]
     end
   end
-  
+
   context "curator API key : get /" do
     before do
       get '/', :api_key => @curator_user.primary_api_key
     end
-    
+
     use "return 200 OK"
     use "not anonymous"
     use "valid API key"
-  
+
     test "should indicate curator permissions" do
       assert_include "curator", parsed_response_body
       assert_equal true, parsed_response_body["curator"]
@@ -105,16 +105,16 @@ class CheckupTest < RequestTestCase
       assert_equal expected, parsed_response_body["user"]
     end
   end
-  
+
   context "admin API key : get /" do
     before do
       get '/', :api_key => @admin_user.primary_api_key
     end
-    
+
     use "return 200 OK"
     use "not anonymous"
     use "valid API key"
-  
+
     test "should indicate admin permissions" do
       assert_include "admin", parsed_response_body
       assert_equal true, parsed_response_body["admin"]

@@ -28,7 +28,7 @@ class UsersPostTest < RequestTestCase
       new_user_uri = "http://localhost:4567/users/" + parsed_response_body["id"]
       assert_equal new_user_uri, last_response.headers["Location"]
     end
-    
+
     test "body should have correct name" do
       assert_equal "John Doe", parsed_response_body["name"]
     end
@@ -36,16 +36,16 @@ class UsersPostTest < RequestTestCase
     test "body should have correct email" do
       assert_equal "john.doe@email.com", parsed_response_body["email"]
     end
-    
+
     test "body should have primary API key, 40 characters long" do
       assert_equal 40, parsed_response_body["primary_api_key"].length
     end
-    
+
     test "body should have API key different from admin key" do
       assert_not_equal @admin_user.primary_api_key,
         parsed_response_body["primary_api_key"]
     end
-    
+
     test "name should be correct in database" do
       user = User.find_by_id!(parsed_response_body["id"])
       assert_equal "John Doe", user.name
@@ -56,7 +56,7 @@ class UsersPostTest < RequestTestCase
       assert_equal "john.doe@email.com", user.email
     end
   end
-  
+
   context "owner API key : post / with correct params" do
     before do
       post '/', {
@@ -65,11 +65,11 @@ class UsersPostTest < RequestTestCase
         :email   => "john.doe@email.com",
       }
     end
-  
+
     # A normal user cannot create a new user account
     use "return 401 because the API key is unauthorized"
     use "unchanged user count"
-  end  
+  end
 
   context "curator API key : post / with correct params" do
     before do
@@ -79,12 +79,12 @@ class UsersPostTest < RequestTestCase
         :email     => "john.doe@email.com",
       }
     end
-    
+
     # A curator user cannot create a new user account
     use "return 401 because the API key is unauthorized"
     use "unchanged user count"
   end
-  
+
   context "admin API key : post / with correct params" do
     before do
       post '/', {
@@ -93,7 +93,7 @@ class UsersPostTest < RequestTestCase
         :email     => "john.doe@email.com",
       }
     end
-  
+
     use "successful POST user"
   end
 

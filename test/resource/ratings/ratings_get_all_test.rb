@@ -3,13 +3,13 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_resource_helper')
 class RatingsGetAllTest < RequestTestCase
 
   def app; DataCatalog::Ratings end
-  
+
   context "0 ratings" do
     context "normal API key : get /" do
       before do
         get "/", :api_key => @normal_user.primary_api_key
       end
-    
+
       use "return 200 Ok"
       use "return an empty list of members"
     end
@@ -18,7 +18,7 @@ class RatingsGetAllTest < RequestTestCase
   context "7 ratings" do
     before do
       @user = create_user_with_primary_key
-      
+
       @a_sources = 5.times.map do |i|
         create_source(
           :title => "Data Source A#{i}",
@@ -55,7 +55,7 @@ class RatingsGetAllTest < RequestTestCase
         )
       end
     end
-    
+
     after do
       @b_ratings.each { |x| x.destroy }
       @b_comments.each { |x| x.destroy }
@@ -66,25 +66,25 @@ class RatingsGetAllTest < RequestTestCase
 
       @user.destroy
     end
-    
+
     context "basic API key : get /" do
       before do
         get "/", :api_key => @normal_user.primary_api_key
       end
-      
+
       use "return an empty list of members"
     end
-  
+
     context "owner API key : get /" do
       before do
         get "/", :api_key => @user.primary_api_key
         @members = parsed_response_body['members']
       end
-    
+
       test "body should have 7 top level elements" do
         assert_equal 7, @members.length
       end
-      
+
       members_properties %w(
         comment_id
         created_at
@@ -97,7 +97,7 @@ class RatingsGetAllTest < RequestTestCase
         user_id
         value
       ) 
-      
+
       test "correct values for each item" do
         source_ratings = []
         comment_ratings = []

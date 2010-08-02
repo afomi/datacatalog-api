@@ -14,7 +14,7 @@ namespace :environment do
     puts "Loading application environment..."
     require File.dirname(__FILE__) + '/app'
   end
-  
+
   task :models do
     puts "Loading models..."
     Config.setup_mongomapper

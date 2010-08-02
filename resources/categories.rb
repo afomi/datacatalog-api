@@ -2,7 +2,7 @@ module DataCatalog
 
   class Categories < Base
     include Resource
-    
+
     model Category
 
     # == Permissions
@@ -25,7 +25,7 @@ module DataCatalog
     end
 
   end
-  
+
   Categories.build
 
 end

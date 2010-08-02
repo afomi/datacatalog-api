@@ -10,16 +10,16 @@ class RatingAggregatesUnitTest < ModelTestCase
         :url   => "http://www.data.gov/details/858"
       )
     end
-    
+
     after do
       @source.destroy
       @user.destroy
     end
-    
+
     test "ratings total is 0" do
       assert_equal 0, @source.rating_stats[:total]
     end
-  
+
     test "ratings count is 0" do
       assert_equal 0, @source.rating_stats[:count]
     end
@@ -78,11 +78,11 @@ class RatingAggregatesUnitTest < ModelTestCase
           @rating.destroy
           @source = Source.find_by_id!(@source.id)
         end
-      
+
         test "updates ratings total" do
           assert_equal 0, @source.rating_stats[:total]
         end
-    
+
         test "does not change ratings count" do
           assert_equal 0, @source.rating_stats[:count]
         end
@@ -93,7 +93,7 @@ class RatingAggregatesUnitTest < ModelTestCase
       end
     end
   end
-  
+
   context "Rating about a Comment" do
     before do
       @user = create_normal_user
@@ -111,7 +111,7 @@ class RatingAggregatesUnitTest < ModelTestCase
     test "ratings total is 0" do
       assert_equal 0, @comment.rating_stats[:total]
     end
-  
+
     test "ratings count is 0" do
       assert_equal 0, @comment.rating_stats[:count]
     end
@@ -129,11 +129,11 @@ class RatingAggregatesUnitTest < ModelTestCase
         )
         @comment = Comment.find_by_id!(@comment.id)
       end
-  
+
       test "updates ratings total" do
         assert_equal 1, @comment.rating_stats[:total]
       end
-  
+
       test "increases ratings count" do
         assert_equal 1, @comment.rating_stats[:count]
       end
@@ -141,7 +141,7 @@ class RatingAggregatesUnitTest < ModelTestCase
       test "updates ratings average" do
         assert_equal 1.0, @comment.rating_stats[:average]
       end
-    
+
       context "updated Rating" do
         before do
           @rating.value = 0
@@ -167,11 +167,11 @@ class RatingAggregatesUnitTest < ModelTestCase
           @rating.destroy
           @comment = Comment.find_by_id!(@comment.id)
         end
-      
+
         test "updates ratings total" do
           assert_equal 0, @comment.rating_stats[:total]
         end
-    
+
         test "does not change ratings count" do
           assert_equal 0, @comment.rating_stats[:count]
         end

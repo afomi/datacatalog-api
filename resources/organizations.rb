@@ -15,7 +15,7 @@ module DataCatalog
     permission :delete => :curator
 
     # == Properties
-    
+
     property :name
     property :names
     property :acronym
@@ -33,7 +33,7 @@ module DataCatalog
     property :custom
     property :raw,              :w => :admin
     property :user_id,          :w => :nobody
-    
+
     property :parent do |organization|
       if organization.parent_id
         if parent = organization.parent

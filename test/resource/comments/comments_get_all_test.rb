@@ -9,7 +9,7 @@ class CommentsGetAllTest < RequestTestCase
       before do
         get "/", :api_key => @normal_user.primary_api_key
       end
-    
+
       use "return 200 Ok"
       use "return an empty list of members"
     end
@@ -27,7 +27,7 @@ class CommentsGetAllTest < RequestTestCase
         )
       end
     end
-    
+
     after do
       @comments.each { |x| x.destroy }
       @source.destroy

@@ -3,14 +3,14 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_resource_helper')
 class RatingsGetFilterTest < RequestTestCase
 
   def app; DataCatalog::Ratings end
-  
+
   shared "successful GET of ratings where value is 2" do
     use "return 200 Ok"
-    
+
     test "body should have 1 top level element" do
       assert_equal 1, @members.length
     end
-    
+
     members_properties %w(kind comment_id source_id user_id text
       value previous_value id created_at updated_at) 
 
@@ -130,10 +130,10 @@ class RatingsGetFilterTest < RequestTestCase
           :filter  => "value = 2"
         @members = parsed_response_body['members']
       end
-    
+
       use "successful GET of ratings where value is 2"
     end
-    
+
     context "owner API key : get / with value greater than or equal to 4" do
       before do
         get "/",
@@ -141,10 +141,10 @@ class RatingsGetFilterTest < RequestTestCase
           :filter  => "value >= 4"
         @members = parsed_response_body['members']
       end
-    
+
       use "successful GET of ratings with value greater than or equal to 4"
     end
-    
+
     context "owner API key : get / with value greater than 3" do
       before do
         get "/",
@@ -152,7 +152,7 @@ class RatingsGetFilterTest < RequestTestCase
           :filter  => "value > 3"
         @members = parsed_response_body['members']
       end
-    
+
       use "successful GET of ratings with value greater than or equal to 4"
     end
 
@@ -163,10 +163,10 @@ class RatingsGetFilterTest < RequestTestCase
           :filter  => "value < 4"
         @members = parsed_response_body['members']
       end
-    
+
       use "successful GET of ratings with value less than 4"
     end
-    
+
     context "owner API key : get / with value less than or equal to 3" do
       before do
         get "/",
@@ -174,7 +174,7 @@ class RatingsGetFilterTest < RequestTestCase
           :filter  => "value <= 3"
         @members = parsed_response_body['members']
       end
-    
+
       use "successful GET of ratings with value less than 4"
     end
   end

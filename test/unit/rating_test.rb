@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_unit_helper')
 
 class RatingUnitTest < ModelTestCase
-  
+
   shared "valid rating" do
     test "should be valid" do
       assert_equal true, @rating.valid?
@@ -13,7 +13,7 @@ class RatingUnitTest < ModelTestCase
       assert_equal false, @rating.valid?
     end
   end
-  
+
   shared "rating.user_id can't be empty" do
     test "should have error on user_id" do
       @rating.valid?
@@ -45,7 +45,7 @@ class RatingUnitTest < ModelTestCase
       assert_include "must be 0 or 1", @rating.errors.errors[:value]
     end
   end
-  
+
   shared "rating.value not between 1 and 5" do
     test "value should be between 1 and 5" do
       @rating.valid?
@@ -53,7 +53,7 @@ class RatingUnitTest < ModelTestCase
       assert_include "must be between 1 and 5", @rating.errors.errors[:value]
     end
   end
-  
+
   shared "rating.text must be empty" do
     test "text should be empty" do
       @rating.valid?
@@ -61,7 +61,7 @@ class RatingUnitTest < ModelTestCase
       assert_include "must be empty", @rating.errors.errors[:text]
     end
   end
-  
+
   context "Rating : source" do
     before do
       @user = create_normal_user
@@ -77,12 +77,12 @@ class RatingUnitTest < ModelTestCase
         :source_id => @source.id
       }
     end
-    
+
     context "correct params" do
       before do
         @rating = Rating.new(@valid_params)
       end
-      
+
       use "valid rating"
     end
 
@@ -90,7 +90,7 @@ class RatingUnitTest < ModelTestCase
       before do
         @rating = Rating.new(@valid_params.merge(:value => 6))
       end
-  
+
       use "invalid rating"
       use "rating.value not between 1 and 5"
     end
@@ -99,7 +99,7 @@ class RatingUnitTest < ModelTestCase
       before do
         @rating = Rating.new(@valid_params.merge(:user_id => nil))
       end
-      
+
       use "invalid rating"
       use "rating.user_id can't be empty"
     end
@@ -108,12 +108,12 @@ class RatingUnitTest < ModelTestCase
       before do
         @rating = Rating.new(@valid_params.merge(:source_id => nil))
       end
-      
+
       use "invalid rating"
       use "rating.source_id can't be empty"
     end
   end
-  
+
   context "Rating : comment" do
     before do
       @user = create_normal_user
@@ -133,47 +133,47 @@ class RatingUnitTest < ModelTestCase
         :comment_id => @comment.id
       }
     end
-    
+
     context "correct params" do
       before do
         @rating = Rating.new(@valid_params)
       end
-  
+
       use "valid rating"
     end
-  
+
     context "invalid value" do
       before do
         @rating = Rating.new(@valid_params.merge(:value => 2))
       end
-  
+
       use "invalid rating"
       use "rating.value not between 0 and 1"
     end
-  
+
     context "missing user_id" do
       before do
         @rating = Rating.new(@valid_params.merge(:user_id => nil))
       end
-  
+
       use "invalid rating"
       use "rating.user_id can't be empty"
     end
-  
+
     context "missing comment_id" do
       before do
         @rating = Rating.new(@valid_params.merge(:comment_id => nil))
       end
-      
+
       use "invalid rating"
       use "rating.comment_id can't be empty"
     end
-    
+
     context "extra param : text" do
       before do
         @rating = Rating.new(@valid_params.merge(:text => "explanation"))
       end
-      
+
       use "invalid rating"
       use "rating.text must be empty"
     end

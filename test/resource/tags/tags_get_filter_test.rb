@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_resource_helper')
 class TagsGetFilterTest < RequestTestCase
 
   def app; DataCatalog::Tags end
-  
+
   shared "successful GET of tags where text is 'tag 1'" do
     test "body should have 2 top level elements" do
       assert_equal 2, @members.length
@@ -31,7 +31,7 @@ class TagsGetFilterTest < RequestTestCase
         )
       end
     end
-    
+
     after do
       @tags.each { |x| x.destroy }
     end
@@ -43,7 +43,7 @@ class TagsGetFilterTest < RequestTestCase
           :filter  => "text='tag 1'"
         @members = parsed_response_body['members']
       end
-    
+
       use "successful GET of tags where text is 'tag 1'"
     end
   end

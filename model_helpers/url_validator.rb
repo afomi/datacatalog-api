@@ -1,5 +1,5 @@
 module UrlValidator
-  
+
   def validate_url
     return if url.blank?
     uri = URI.parse(url)
@@ -12,5 +12,5 @@ module UrlValidator
   rescue URI::InvalidURIError => e
     errors.add(:url, "Invalid URI: #{e})")
   end
-  
+
 end

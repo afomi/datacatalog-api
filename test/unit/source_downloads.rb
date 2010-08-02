@@ -1,17 +1,17 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_unit_helper')
 
 class SourceDownloadsUnitTest < ModelTestCase
-  
+
   context "source with no downloads" do
     before do
       @source = create_source
     end
-    
+
     test "#downloads should return []" do
       assert_equal [], @source.downloads
     end
   end
-  
+
   context "source with 3 downloads" do
     before do
       @user = create_normal_user
@@ -25,27 +25,27 @@ class SourceDownloadsUnitTest < ModelTestCase
         )
       end
     end
-    
+
     after do
       @downloads.each { |x| x.destroy }
       @source.destroy
       @user.destroy
     end
-    
+
     test "#downloads should return 3 objects" do
       assert_equal 3, @source.downloads.length
     end
-    
+
     3.times do |n|
       test "#downloads should include value of #{n}" do
         assert_include "http://opendata.gov/data/#{n}", @source.downloads.map(&:url)
       end
-      
+
       test "finding id for #{n} should succeed" do
         assert_equal @downloads[n], @source.downloads.first(:_id => @downloads[n].id)
       end
     end
-    
+
     test "find with fake_id should not raise exception" do
       assert_equal nil, @source.downloads.first(:_id => get_fake_mongo_object_id)
     end

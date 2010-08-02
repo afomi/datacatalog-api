@@ -9,14 +9,14 @@ class CategoriesGetOneTest < RequestTestCase
       :name => "Category A"
     )
   end
-  
+
   after do
     @category.destroy
   end
 
   shared "successful GET category with :id" do
     use "return 200 Ok"
-  
+
     test "body should have correct text" do
       assert_equal "Category A", parsed_response_body["name"]
     end
@@ -35,10 +35,10 @@ class CategoriesGetOneTest < RequestTestCase
       before do
         get "/#{@category.id}", :api_key => primary_api_key_for(role)
       end
-      
+
       use "successful GET category with :id"
     end
-    
+
     context "#{role} API key : 2 categorizations : get /:id" do
       before do
         @sources = [
@@ -59,9 +59,9 @@ class CategoriesGetOneTest < RequestTestCase
         end
         get "/#{@category.id}", :api_key => primary_api_key_for(role)
       end
-    
+
       use "successful GET category with :id"
-      
+
       test "body should have correct source_ids" do
         actual = parsed_response_body["source_ids"]
         expected = @sources.map { |source| source.id.to_s }

@@ -1,7 +1,7 @@
 module Test
   module Unit
     module Assertions
-      
+
       TIME_GRANULARITY = 0.999 # seconds
       MONGODB_TIME_GRANULARITY = 0.001 # seconds
       JSON_TIME_GRANULARITY = 1.0 # seconds
@@ -17,7 +17,7 @@ module Test
             TIME_GRANULARITY, full_message)
         end
       end
-      
+
       # ---
 
       def assert_equal_mongo_times(expected, actual, message = nil)

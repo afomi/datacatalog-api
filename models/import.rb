@@ -12,15 +12,15 @@ class Import
   timestamps!
 
   # == Indices
-  
+
   ensure_index :importer_id
   ensure_index :finished_at
   ensure_index :duration
 
   # == Associations
-  
+
   belongs_to :importer
-  
+
   protected
 
   # == Validations
@@ -39,13 +39,13 @@ class Import
       errors.add(:status, "must be one of: #{STATUS_TYPES.join(', ')}")
     end
   end
-  
+
   def completed_import?
     COMPLETED_STATUS_TYPES.include?(status)
   end
-  
+
   # == Callbacks
-  
+
   after_validation :update_duration
   def update_duration
     if started_at && finished_at

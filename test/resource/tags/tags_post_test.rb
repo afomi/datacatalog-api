@@ -15,21 +15,21 @@ class TagsPostTest < RequestTestCase
         :text    => "Tag A",
       }
     end
-    
+
     use "return 201 Created"
     use "return timestamps and id in body" 
     use "incremented tag count"
-      
+
     test "location header should point to new resource" do
       assert_include "Location", last_response.headers
       new_uri = "http://localhost:4567/tags/" + parsed_response_body["id"]
       assert_equal new_uri, last_response.headers["Location"]
     end
-    
+
     test "body should have correct text" do
       assert_equal "Tag A", parsed_response_body["text"]
     end
-    
+
     test "text should be correct in database" do
       tag = Tag.find_by_id!(parsed_response_body["id"])
       assert_equal "Tag A", tag.text

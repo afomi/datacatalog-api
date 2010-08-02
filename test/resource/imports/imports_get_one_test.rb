@@ -12,7 +12,7 @@ class ImportsGetOneTest < RequestTestCase
       :importer_id => @importer.id
     })
   end
-  
+
   after do
     @import.destroy
     @importer.destroy
@@ -24,7 +24,7 @@ class ImportsGetOneTest < RequestTestCase
     end
 
     use "return 200 Ok"
-  
+
     test "body should have correct text" do
       assert_equal @importer.id.to_s, parsed_response_body["importer_id"]
     end

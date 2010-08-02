@@ -18,18 +18,18 @@ module DataCatalog
     permission :create => :basic
     permission :update => :owner
     permission :delete => :owner
-    
+
     # == Properties
-    
+
     property :source_id
-    
+
     property :source do |favorite|
       {
         "href"  => "/sources/#{favorite.source_id}",
         "title" => favorite.source.title,
       }
     end
-    
+
     # == Callbacks
 
     callback :before_create do |action, user|
@@ -40,9 +40,9 @@ module DataCatalog
       end
       action.params["user_id"] = action.current_user.id
     end
-    
+
   end
-  
+
   UsersFavorites.build
 
 end

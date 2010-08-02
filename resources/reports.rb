@@ -1,8 +1,8 @@
 module DataCatalog
-  
+
   class Reports < Base
     include Resource
-    
+
     model Report
 
     # == Permissions
@@ -30,7 +30,7 @@ module DataCatalog
     end
 
   end
-  
+
   Reports.build
 
 end

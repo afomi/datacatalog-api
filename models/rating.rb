@@ -46,14 +46,14 @@ class Rating
     else errors.add(:kind, "is invalid")
     end
   end
-  
+
   def comment_validation
     errors.add(:comment_id, "can't be empty") if comment_id.blank?
     errors.add(:comment_id, "must be valid") if comment.nil?
     errors.add(:value, "must be 0 or 1") unless value == 0 || value == 1
     errors.add(:text, "must be empty") unless text.blank?
   end
-  
+
   def source_validation
     errors.add(:source_id, "can't be empty") if source_id.blank?
     errors.add(:source_id, "must be valid") if source.nil?
@@ -73,13 +73,13 @@ class Rating
     doc.rating_stats[:average] = total.to_f / count
     doc.save!
   end
-  
+
   before_update :stats_before_update
   def stats_before_update
     rating_from_db = Rating.find_by_id(self.id)
     self.previous_value = rating_from_db.value if rating_from_db
   end
-  
+
   after_update :stats_after_update
   def stats_after_update
     doc = self.find_rated_document!
@@ -89,7 +89,7 @@ class Rating
     doc.rating_stats[:average] = total.to_f / count
     doc.save
   end
-  
+
   after_destroy :stats_after_destroy
   def stats_after_destroy
     doc = self.find_rated_document
@@ -111,7 +111,7 @@ class Rating
     else raise "Invalid kind of rating"
     end
   end
-  
+
   def find_rated_document!
     doc = find_rated_document
     raise Error, "Associated #{self.kind} not found" if doc.nil?

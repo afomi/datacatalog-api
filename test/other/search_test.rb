@@ -25,19 +25,19 @@ class SearchUnitTest < Test::Unit::TestCase
         Search.tokens("The earth has an axial tilt of 23.439 degrees.")
     end
   end
-  
+
   test "tokenize" do
     assert_equal %w(aerospace defense systems),
       Search.tokenize(["aerospace defense", "defense systems"])
   end
-  
+
   test "unstop" do
     assert_equal %w(big brown fox jumped),
       Search.unstop(%w(the big brown fox jumped))
     assert_equal %w(big brown fox hairy gorilla),
       Search.unstop(%w(the big brown fox and the hairy gorilla))
   end
-  
+
   context "process" do
     test "simple" do
       assert_equal %w(aerospace defense systems),
@@ -49,5 +49,5 @@ class SearchUnitTest < Test::Unit::TestCase
         Search.process(["The earth has an axial tilt of 23.439 degrees."])
     end
   end
-  
+
 end

@@ -8,7 +8,7 @@ class TagsPutTest < RequestTestCase
     @tag = create_tag(:text => "Original Tag")
     @tag_count = Tag.count
   end
-  
+
   after do
     @tag.destroy
   end
@@ -20,7 +20,7 @@ class TagsPutTest < RequestTestCase
         :text    => "New Tag"
       }
     end
-    
+
     use "return 200 Ok"
     use "unchanged tag count"
 

@@ -2,7 +2,7 @@ module DataCatalog
 
   class Checkup < Base
     include Resource
-    
+
     get '/?' do
       hash = case lookup_role
       when nil

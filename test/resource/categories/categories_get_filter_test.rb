@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_resource_helper')
 class CategoriesGetFilterTest < RequestTestCase
 
   def app; DataCatalog::Categories end
-  
+
   shared "successful GET of categories where text is 'Category 3'" do
     test "body should have 2 top level elements" do
       assert_equal 2, @members.length
@@ -23,7 +23,7 @@ class CategoriesGetFilterTest < RequestTestCase
         create_category(:name => "Category #{(n % 3) + 1}")
       end
     end
-    
+
     after do
       @categories.each { |x| x.destroy }
     end
@@ -36,7 +36,7 @@ class CategoriesGetFilterTest < RequestTestCase
         }
         @members = parsed_response_body['members']
       end
-    
+
       use "successful GET of categories where text is 'Category 3'"
     end
   end

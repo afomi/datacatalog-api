@@ -9,7 +9,7 @@ class OrganizationsGetAllTest < RequestTestCase
       before do
         get "/", :api_key => @normal_user.primary_api_key
       end
-    
+
       use "return 200 Ok"
       use "return an empty list of members"
     end
@@ -24,11 +24,11 @@ class OrganizationsGetAllTest < RequestTestCase
         )
       end
     end
-    
+
     after do
       @organizations.each { |x| x.destroy }
     end
-    
+
     context "normal API key : get /" do
       before do
         get "/", :api_key => @normal_user.primary_api_key
@@ -43,7 +43,7 @@ class OrganizationsGetAllTest < RequestTestCase
         actual = (0 ... 3).map { |n| @members[n]["name"] }
         3.times { |n| assert_include "Organization #{n}", actual }
       end
-      
+
       members_properties %w(
         name
         names

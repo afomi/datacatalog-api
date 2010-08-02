@@ -14,7 +14,7 @@ class SourceGroupsDeleteTest < RequestTestCase
       before do
         delete "/#{@source_group.id}", :api_key => primary_api_key_for(role)
       end
-    
+
       use "return 204 No Content"
       use "decremented source_group count"
 

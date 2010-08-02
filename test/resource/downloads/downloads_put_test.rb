@@ -13,7 +13,7 @@ class DownloadsPutTest < RequestTestCase
     )
     @download_count = Download.count
   end
-  
+
   after do
     @download.destroy
     @source.destroy
@@ -28,7 +28,7 @@ class DownloadsPutTest < RequestTestCase
           :source_id => @new_source.id
         }
       end
-    
+
       use "return 200 Ok"
       use "unchanged download count"
 

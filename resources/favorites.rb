@@ -18,14 +18,14 @@ module DataCatalog
 
     property :source_id
     property :user_id, :w => :nobody
-    
+
     property :source do |favorite|
       {
         "href"  => "/sources/#{favorite.source_id}",
         "title" => favorite.source.title,
       }
     end
-    
+
     property :user do |favorite|
       {
         "href" => "/users/#{favorite.user_id}",
@@ -41,7 +41,7 @@ module DataCatalog
     end
 
   end
-  
+
   Favorites.build
 
 end

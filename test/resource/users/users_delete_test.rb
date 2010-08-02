@@ -9,7 +9,7 @@ class UsersDeleteTest < RequestTestCase
     @user.add_api_key!({ :key_type => "primary" })
     @user_count = User.count
   end
-  
+
   shared "attempted DELETE user with :fake_id" do
     use "return 404 Not Found"
     use "return an empty response body"
@@ -29,7 +29,7 @@ class UsersDeleteTest < RequestTestCase
     before do
       delete "/#{@user.id}", :api_key => @curator_user.primary_api_key
     end
-    
+
     use "return 401 because the API key is unauthorized"
     use "unchanged user count"
   end
@@ -38,7 +38,7 @@ class UsersDeleteTest < RequestTestCase
     before do
       delete "/#{@user.id}", :api_key => @user.primary_api_key
     end
-    
+
     use "successful DELETE user with :id"
   end
 
@@ -46,7 +46,7 @@ class UsersDeleteTest < RequestTestCase
     before do
       delete "/#{@user.id}", :api_key => @admin_user.primary_api_key
     end
-    
+
     use "successful DELETE user with :id"
   end
 

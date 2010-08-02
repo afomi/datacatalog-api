@@ -13,7 +13,7 @@ class ReportsDeleteTest < RequestTestCase
     )
     @report_count = Report.count
   end
-  
+
   after do
     @user.destroy
   end
@@ -23,7 +23,7 @@ class ReportsDeleteTest < RequestTestCase
       before do
         delete "/#{@report.id}", :api_key => primary_api_key_for(role)
       end
-    
+
       use "return 204 No Content"
       use "decremented report count"
 

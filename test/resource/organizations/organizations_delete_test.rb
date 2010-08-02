@@ -24,7 +24,7 @@ class OrganizationsDeleteTest < RequestTestCase
     before do
       delete "/#{@organization.id}", :api_key => @curator_user.primary_api_key
     end
-    
+
     use "return 204 No Content"
     use "decremented organization count"
 

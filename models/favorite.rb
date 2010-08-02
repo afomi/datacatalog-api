@@ -7,7 +7,7 @@ class Favorite
   key :source_id, ObjectId
   key :user_id,   ObjectId
   timestamps!
-  
+
   # == Indices
 
   # == Associations
@@ -16,7 +16,7 @@ class Favorite
   belongs_to :user
 
   protected
-  
+
   # == Validations
 
   validates_presence_of :source_id

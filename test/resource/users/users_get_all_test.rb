@@ -13,7 +13,7 @@ class UsersGetAllTest < RequestTestCase
       end
     end
   end
-  
+
   shared "hide private attributes for other users" do
     test "each element should hide private attributes" do
       @members.each do |element|
@@ -71,7 +71,7 @@ class UsersGetAllTest < RequestTestCase
       (3 ... 6).each { |n| assert_include "User #{n}", actual }
     end
   end
-  
+
   shared "have 3 unique API keys" do
     test "elements should have different API keys" do
       keys = (0 ... 3).map { |n| @members[n]["primary_api_key"] }
@@ -85,20 +85,20 @@ class UsersGetAllTest < RequestTestCase
       assert_equal 6, keys.uniq.length
     end
   end
-  
+
   context "anonymous : get /" do
     before do
       get "/"
     end
-    
+
     use "return 401 because the API key is missing"
   end
-  
+
   context "incorrect API key : get /" do
     before do
       get "/", :api_key => BAD_API_KEY
     end
-    
+
     use "return 401 because the API key is invalid"
   end
 
@@ -108,11 +108,11 @@ class UsersGetAllTest < RequestTestCase
         get "/", :api_key => @normal_user.primary_api_key
         @members = parsed_response_body['members']
       end
-    
+
       use "show all 3 users"
       use "hide private attributes for other users"
     end
-  
+
     context "admin API key : get /" do
       before do
         get "/", :api_key => @admin_user.primary_api_key
@@ -131,7 +131,7 @@ class UsersGetAllTest < RequestTestCase
       end
     end
   end
-  
+
   context "3 added users" do
     before :all do
       @users = []
@@ -142,27 +142,27 @@ class UsersGetAllTest < RequestTestCase
         )
       end
     end
-    
+
     after :all do
       @users.each { |user| user.destroy }
     end
-  
+
     context "normal API key : get /" do
       before do
         get "/", :api_key => @normal_user.primary_api_key
         @members = parsed_response_body['members']
       end
-      
+
       use "show all 6 users"
       use "hide private attributes for other users"
     end
-  
+
     context "admin API key : get /" do
       before do
         get "/", :api_key => @admin_user.primary_api_key
         @members = parsed_response_body['members']
       end
-  
+
       use "show all 6 users"
       use "have 6 unique API keys"
       use "show private attributes for each user"

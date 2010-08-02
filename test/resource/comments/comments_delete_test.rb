@@ -14,7 +14,7 @@ class CommentsDeleteTest < RequestTestCase
     )
     @comment_count = Comment.count
   end
-  
+
   after do
     @source.destroy
     @user.destroy
@@ -25,7 +25,7 @@ class CommentsDeleteTest < RequestTestCase
       before do
         delete "/#{@comment.id}", :api_key => primary_api_key_for(role)
       end
-    
+
       use "return 204 No Content"
       use "decremented comment count"
 

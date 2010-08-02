@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_unit_helper')
 
 class SourceOrganizationUnitTest < ModelTestCase
-  
+
   context "source with no organization" do
     before do
       @source = Source.new(
@@ -9,12 +9,12 @@ class SourceOrganizationUnitTest < ModelTestCase
         :url   => "http://www.data.gov/details/90"
       )
     end
-    
+
     test "#organization should be nil" do
       assert @source.organization.nil?
     end
   end
-  
+
   context "source with an organization" do
     before do
       @organization = create_organization(
@@ -28,16 +28,16 @@ class SourceOrganizationUnitTest < ModelTestCase
       )
       @organization = @organization.reload
     end
-    
+
     test "#organization should return the organization" do
       assert_equal @organization, @source.organization
     end
-    
+
     test "#sources and @source_count should be correct" do
       assert_equal [@source], @organization.sources
       assert_equal 1, @organization.source_count
     end
-    
+
     context "adding another organization" do
       before do
         @source_2 = create_source(
@@ -47,7 +47,7 @@ class SourceOrganizationUnitTest < ModelTestCase
         )
         @organization = @organization.reload
       end
-    
+
       test "#sources and @source_count should be correct" do
         assert_equal 2, @organization.source_count
         # assert_include @source_2, @organization.sources
@@ -57,7 +57,7 @@ class SourceOrganizationUnitTest < ModelTestCase
         }.length)
       end
     end
-    
+
     context "changing the organization's source" do
       before do
         @organization_2 = create_organization(
@@ -69,7 +69,7 @@ class SourceOrganizationUnitTest < ModelTestCase
         @organization = @organization.reload
         @organization_2 = @organization_2.reload
       end
-    
+
       test "#sources and @source_count should be correct (a)" do
         assert_equal [], @organization.sources
         assert_equal 0, @organization.source_count
@@ -77,19 +77,19 @@ class SourceOrganizationUnitTest < ModelTestCase
         assert_equal 1, @organization_2.source_count
       end
     end
-    
+
     context "removing the source" do
       before do
         @source.destroy
         @organization = @organization.reload
       end
-    
+
       test "#sources and @source_count should be correct" do
         assert_equal [], @organization.sources
         assert_equal 0, @organization.source_count
       end
     end
-    
+
   end
-  
+
 end

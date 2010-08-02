@@ -23,14 +23,14 @@ class SourceGroup
   many :source_snippets
 
   # == Almost-Associations
-  
+
   # An expensive calculation, avoid using if possible.
   def sources
     source_snippets.map do |source_snippet|
       Source.first(:_id => source_snippet.source_id)
     end
   end
-  
+
   # Convenience method that automatically generates SourceSnippets and
   # points the Source back to the SourceGroup.
   def sources=(sources)
@@ -41,7 +41,7 @@ class SourceGroup
       source.source_group = self
     end
   end
-  
+
   protected
 
   # == Validations
@@ -55,27 +55,27 @@ class SourceGroup
     :allow_nil => true
 
   # == Callbacks
-  
+
   before_validation :handle_blank_slug
   def handle_blank_slug
     self.slug = nil if self.slug.blank?
   end
-  
+
   before_create :generate_slug
   def generate_slug
     return unless slug.blank?
     return if title.blank?
     self.slug = Slug.make(title, self)
   end
-  
+
   before_save :update_keywords
   def update_keywords
     self._keywords = DataCatalog::Search.process([title, description])
   end
-  
+
   # == Class Methods
 
   # == Various Instance Methods
 
-  
+
 end

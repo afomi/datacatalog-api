@@ -5,7 +5,7 @@ class RequestTestCase
       assert_equal @category_count + 1, Category.count
     end
   end
-  
+
   shared "unchanged category count" do
     test "should not change category count" do
       assert_equal @category_count, Category.count
@@ -17,5 +17,5 @@ class RequestTestCase
       assert_equal @category_count - 1, Category.count
     end
   end
-  
+
 end

@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_resource_helper')
 class CommentsGetFilterTest < RequestTestCase
 
   def app; DataCatalog::Comments end
-  
+
   context "6 comments" do
     before do
       @user = create_user
@@ -19,7 +19,7 @@ class CommentsGetFilterTest < RequestTestCase
         )
       end
     end
-    
+
     after do
       @comments.each { |x| x.destroy }
       @sources.each { |x| x.destroy }
@@ -33,7 +33,7 @@ class CommentsGetFilterTest < RequestTestCase
           :filter  => %(text="comment 1")
         @members = parsed_response_body['members']
       end
-    
+
       test "body should have 2 top level elements" do
         assert_equal 2, @members.length
       end

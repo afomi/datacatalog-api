@@ -53,7 +53,7 @@ class CommentUnitTest < ModelTestCase
       assert_include "must be valid", @comment.errors.errors[:parent_id]
     end
   end
-  
+
   context "Comment" do
     before do
       @user = create_user
@@ -64,17 +64,17 @@ class CommentUnitTest < ModelTestCase
         :source_id => @source.id
       }
     end
-    
+
     after do
       @source.destroy
       @user.destroy
     end
-    
+
     context "missing text" do
       before do
         @comment = Comment.new(@valid_params.merge(:text => ""))
       end
-      
+
       use "invalid comment"
       use "comment.text can't be empty"
     end
@@ -83,39 +83,39 @@ class CommentUnitTest < ModelTestCase
       before do
         @comment = Comment.new(@valid_params.merge(:user_id => nil))
       end
-      
+
       use "invalid comment"
       use "comment.user_id can't be empty"
     end
-    
+
     context "missing source_id" do
       before do
         @comment = Comment.new(@valid_params.merge(:source_id => nil))
       end
-      
+
       use "invalid comment"
       use "comment.source_id can't be empty"
     end
-    
+
     context "invalid parent_id" do
       before do
         @comment = Comment.new(@valid_params.merge(
           :parent_id => get_fake_mongo_object_id
         ))
       end
-    
+
       use "invalid comment"
       use "comment.parent_id must be valid"
     end
-    
+
     context "correct params" do
       before do
         @comment = Comment.new(@valid_params)
       end
-      
+
       use "valid comment"
     end
-    
+
     context "with parent comment" do
       before do
         @user = create_user
@@ -128,14 +128,14 @@ class CommentUnitTest < ModelTestCase
           :parent_id => @parent_comment.id
         ))
       end
-      
+
       after do
         @comment.destroy
         @parent_comment.destroy
         @source.destroy
         @user.destroy
       end
-      
+
       test "association" do
         assert_equal @parent_comment.id, @comment.parent_id
         assert_equal @parent_comment, @comment.parent

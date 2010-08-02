@@ -5,7 +5,7 @@ class RequestTestCase
       assert_equal @download_count + 1, Download.count
     end
   end
-  
+
   shared "unchanged download count" do
     test "should not change download count" do
       assert_equal @download_count, Download.count
@@ -17,5 +17,5 @@ class RequestTestCase
       assert_equal @download_count - 1, Download.count
     end
   end
-  
+
 end

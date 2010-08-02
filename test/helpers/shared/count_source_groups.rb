@@ -5,7 +5,7 @@ class RequestTestCase
       assert_equal @source_group_count + 1, SourceGroup.count
     end
   end
-  
+
   shared "unchanged source group count" do
     test "should not change source group count" do
       assert_equal @source_group_count, SourceGroup.count
@@ -17,5 +17,5 @@ class RequestTestCase
       assert_equal @source_group_count - 1, SourceGroup.count
     end
   end
-  
+
 end

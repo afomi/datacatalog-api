@@ -47,7 +47,7 @@ class SourceUnitTest < ModelTestCase
       assert_include "URI scheme must be http, https, or ftp", @source.errors.errors[:url]
     end
   end
-  
+
   shared "source.frequency is invalid" do
     test "should have error on frequency" do
       @source.valid?
@@ -80,41 +80,41 @@ class SourceUnitTest < ModelTestCase
         :source_type => "dataset",
       }
     end
-  
+
     context "correct params" do
       before do
         @source = Source.new(@valid_params)
       end
-  
+
       use "valid source"
     end
-    
+
     context "source_type" do
       context "missing" do
         before do
           @source = Source.new(@valid_params.merge(:source_type => ""))
         end
-  
+
         use "invalid source"
         use "source.source_type must be correct"
       end
-      
+
       context "invalid" do
         before do
           @source = Source.new(@valid_params.merge(:source_type => "foobar"))
         end
-  
+
         use "invalid source"
         use "source.source_type must be correct"
       end
     end
-    
+
     context "slug" do
       context "new" do
         before do
           @source = Source.new(@valid_params)
         end
-        
+
         after do
           @source.destroy
         end
@@ -123,36 +123,36 @@ class SourceUnitTest < ModelTestCase
           assert_equal true, @source.valid?
           assert_equal nil, @source.slug
         end
-      
+
         test "on save, set based on title" do
           assert_equal true, @source.save
           assert_equal "migratory-bird-flyways-continental-united-states", @source.slug
         end
       end
-      
+
       context "create" do
         before do
           @source = Source.create(@valid_params)
         end
-        
+
         after do
           @source.destroy
         end
-        
+
         test "set based on title" do
           assert_equal "migratory-bird-flyways-continental-united-states", @source.slug
         end
       end
-      
+
       context "update" do
         before do
           @source = Source.new(@valid_params)
         end
-        
+
         after do
           @source.destroy
         end
-        
+
         test "unchanged after multiple saves" do
           @source.save
           assert_equal "migratory-bird-flyways-continental-united-states", @source.slug
@@ -169,41 +169,41 @@ class SourceUnitTest < ModelTestCase
           expected = { :slug => ["has already been taken"] }
           assert_equal expected, @new_source.errors.errors
         end
-        
+
         test "prevent duplicate slugs" do
           params = @valid_params.merge(:title => "Common")
           @source = Source.create(params)
-        
+
           source_2 = Source.create!(params)
           assert_equal "common-2", source_2.slug
-        
+
           source_3 = Source.create!(params)
           assert_equal "common-3", source_3.slug
-          
+
           source_2.destroy
           source_3.destroy
         end
       end
     end
-  
+
     context "frequency" do
       INVALID_FREQUENCIES = %w(
         biweekly
         bimonthly
       )
-  
+
       INVALID_FREQUENCIES.each do |term|
         context "#{term} frequency" do
           before do
             @source = Source.new(@valid_params.merge(
               :frequency => term))
           end
-  
+
           use "invalid source"
           use "source.frequency is invalid"
         end
       end
-  
+
       VALID_FREQUENCIES = %w(
         weekly
         monthly
@@ -213,19 +213,19 @@ class SourceUnitTest < ModelTestCase
         yearly
         unknown
       )
-  
+
       VALID_FREQUENCIES.each do |term|
         context "#{term} frequency" do
           before do
             @source = Source.new(@valid_params.merge(
               :frequency => term))
           end
-  
+
           use "valid source"
         end
       end
     end
-  
+
     context "period" do
       context "period_start without period_end" do
         before do
@@ -237,10 +237,10 @@ class SourceUnitTest < ModelTestCase
             }
           ))
         end
-        
+
         use "invalid source"
       end
-  
+
       context "period_end without period_start" do
         before do
           @source = Source.new(@valid_params.merge(
@@ -251,10 +251,10 @@ class SourceUnitTest < ModelTestCase
             }
           ))
         end
-        
+
         use "invalid source"
       end
-  
+
       context "period_end before period_start" do
         before do
           @source = Source.new(@valid_params.merge(
@@ -270,10 +270,10 @@ class SourceUnitTest < ModelTestCase
             }
           ))
         end
-        
+
         use "invalid source"
       end
-  
+
       context "period_start before period_end" do
         before do
           @source = Source.new(@valid_params.merge(
@@ -289,10 +289,10 @@ class SourceUnitTest < ModelTestCase
             }
           ))
         end
-  
+
         use "valid source"
       end
-    
+
       # TODO: See Pivotal Ticket #2732426
       # context "period with strings" do
       #   before do
@@ -305,86 +305,86 @@ class SourceUnitTest < ModelTestCase
       #   use "invalid source"
       # end
     end
-  
+
     context "url" do
       context "missing" do
         before do
           @source = Source.new(@valid_params.merge(:url => ""))
         end
-  
+
         use "invalid source"
         use "source.url can't be empty"
       end
-  
+
       context "http with port" do
         before do
           @source = Source.new(@valid_params.merge(
             :url => "http://www.data.gov:80/details/12"))
         end
-  
+
         use "valid source"
       end
-  
+
       context "ftp" do
         before do
           @source = Source.new(@valid_params.merge(
             :url => "ftp://data.gov/12"))
         end
-  
+
         use "valid source"
       end
-  
+
       context "https" do
         before do
           @source = Source.new(@valid_params.merge(
             :url => "https://sekret.com/1999"))
         end
-  
+
         use "valid source"
       end
-  
+
       context "relative" do
         before do
           @source = Source.new(@valid_params.merge(
            :url => "/source/1999"))
         end
-  
+
         use "invalid source"
         use "source.url must be absolute"
       end
-      
+
       context "wacky" do
         before do
           @source = Source.new(@valid_params.merge(
             :url => "wacky://sekret.com/1999"))
         end
-  
+
         use "invalid source"
         use "source.url must be http, https, or ftp"
       end
     end
-  
+
     context "released" do
       context "missing" do
         before do
           @source = Source.new(@valid_params.merge(:released => ''))
         end
-  
+
         use "valid source"
-        
+
         test "should have empty hash for released" do
           @source.valid?
           assert_equal({}, @source.released)
         end
       end
-  
+
       context "too large of a year" do
         before do
           @source = Source.new(@valid_params.merge(
             :released => { :year => "2050" }
           ))
         end
-        
+
         test "should have error on released" do
           @source.valid?
           assert_include :released, @source.errors.errors
@@ -392,14 +392,14 @@ class SourceUnitTest < ModelTestCase
           assert_include "year must be between 1900 and 2010", actual
         end
       end
-  
+
       context "noninteger month" do
         before do
           @source = Source.new(@valid_params.merge(
             :released => { :month => "February" }
           ))
         end
-        
+
         test "should have errors on released" do
           @source.valid?
           assert_include :released, @source.errors.errors
@@ -408,14 +408,14 @@ class SourceUnitTest < ModelTestCase
           assert_include "month must be between 1 and 12", actual
         end
       end
-  
+
       context "too large of a day" do
         before do
           @source = Source.new(@valid_params.merge(
             :released => { :day => 32 }
           ))
         end
-        
+
         test "should have errors on released" do
           @source.valid?
           assert_include :released, @source.errors.errors
@@ -423,28 +423,28 @@ class SourceUnitTest < ModelTestCase
           assert_include "day must be between 1 and 31", actual
         end
       end
-      
+
       test "year only" do
         @source = Source.new(@valid_params.merge(
           :released => { :year => 2008 }
         ))
         assert_equal true, @source.valid?
       end
-  
+
       test "year, month only" do
         @source = Source.new(@valid_params.merge(
           :released => { :year => 2008, :month => 4 }
         ))
         assert_equal true, @source.valid?
       end
-  
+
       test "year, month, day only" do
         @source = Source.new(@valid_params.merge(
           :released => { :year => 2008, :month => 4, :day => 5 }
         ))
         assert_equal true, @source.valid?
       end
-  
+
       test "month only" do
         @source = Source.new(@valid_params.merge(
           :released => { :month => 5 }
@@ -453,7 +453,7 @@ class SourceUnitTest < ModelTestCase
         actual = @source.errors.errors[:released]
         assert_include "year required if month is present", actual
       end
-  
+
       test "day only" do
         @source = Source.new(@valid_params.merge(
           :released => { :day => 12 }
@@ -465,7 +465,7 @@ class SourceUnitTest < ModelTestCase
       end
     end
   end
-  
+
   context "timestamps" do
     before do
       @doc = create_source(
@@ -479,23 +479,23 @@ class SourceUnitTest < ModelTestCase
       @updated = fields(@doc)
       Timecop.return
     end
-    
+
     after do
       @doc.destroy
     end
-  
+
     test "should have updated url" do
       assert_equal "http://updated.gov", @updated[:url]
     end
-  
+
     test "should have an unchanged created_at" do
       assert_equal_mongo_times @original[:created_at], @updated[:created_at]
     end
-  
+
     test "body should have an updated updated_at" do
       assert_different_mongo_times @original[:updated_at], @updated[:updated_at]
     end
-    
+
     test "body should have an unchanged _id" do
       assert_equal @original[:id], @updated[:id]
     end
@@ -509,7 +509,7 @@ class SourceUnitTest < ModelTestCase
       }
     end
   end
-  
+
   context "keywords" do
     context "no organization" do
       before do
@@ -519,7 +519,7 @@ class SourceUnitTest < ModelTestCase
           :description => "This data set contains campaign contributions for the year 2008."
         )
       end
-    
+
       test "correct keywords" do
         assert_equal %w(
           2008
@@ -530,7 +530,7 @@ class SourceUnitTest < ModelTestCase
         ), @source._keywords.sort
       end
     end
-    
+
     context "with organization" do
       before do
         @organization = create_organization({
@@ -546,7 +546,7 @@ class SourceUnitTest < ModelTestCase
           :organization_id => @organization.id,
         })
       end
-    
+
       test "correct keywords" do
         assert_equal %w(
           2008
@@ -562,5 +562,5 @@ class SourceUnitTest < ModelTestCase
       end
     end
   end
-    
+
 end

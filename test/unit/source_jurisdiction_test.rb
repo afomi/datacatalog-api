@@ -14,21 +14,21 @@ class SourceJurisdictionUnitTest < ModelTestCase
         :organization => @organization
       )
     end
-    
+
     test "#calculate_jurisdiction should be nil" do
       assert @source.calculate_jurisdiction.nil?
     end
-    
+
     test "before save, #jurisdiction should be nil" do
       assert @source.calculate_jurisdiction.nil?
     end
-    
+
     test "after save, #jurisdiction should be nil" do
       @source.save
       assert @source.jurisdiction.nil?
     end
   end
-  
+
   context "source with a jurisdiction" do
     before do
       @jurisdiction = create_organization(
@@ -51,7 +51,7 @@ class SourceJurisdictionUnitTest < ModelTestCase
       assert_equal @jurisdiction, @source.jurisdiction
     end
   end
-  
+
   context "source with a jurisdiction" do
     before do
       @jurisdiction = create_organization(
@@ -83,7 +83,7 @@ class SourceJurisdictionUnitTest < ModelTestCase
       @source.save
       assert_equal @jurisdiction, @source.jurisdiction
     end
-    
+
     test "updating organization should update jurisdiction" do
       @new_jurisdiction = create_organization(
         :name      => "State of Arizona",
@@ -132,5 +132,5 @@ class SourceJurisdictionUnitTest < ModelTestCase
     end
   end
 
-  
+
 end

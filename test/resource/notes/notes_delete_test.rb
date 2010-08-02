@@ -11,7 +11,7 @@ class NotesDeleteTest < RequestTestCase
     )
     @note_count = Note.count
   end
-  
+
   after do
     @source.destroy
   end
@@ -21,16 +21,16 @@ class NotesDeleteTest < RequestTestCase
       user = create_user_with_primary_key
       delete "/#{@note.id}", :api_key => user.primary_api_key
     end
-  
+
     use "return 401 because the API key is unauthorized"
     use "unchanged note count"
   end
-  
+
   context "curator API key : delete /:id" do
     before do
       delete "/#{@note.id}", :api_key => @curator_user.primary_api_key
     end
-    
+
     use "return 401 because the API key is unauthorized"
     use "unchanged note count"
   end
@@ -39,10 +39,10 @@ class NotesDeleteTest < RequestTestCase
     before do
       delete "/#{@note.id}", :api_key => @normal_user.primary_api_key
     end
-    
+
     use "return 204 No Content"
     use "decremented note count"
-    
+
     test "note should be deleted in database" do
       assert_equal nil, Note.find_by_id(@note.id)
     end

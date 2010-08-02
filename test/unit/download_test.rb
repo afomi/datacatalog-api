@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_unit_helper')
 
 class DownloadUnitTest < ModelTestCase
-  
+
   shared "valid download" do
     test "should be valid" do
       assert_equal true, @download.valid?
@@ -47,7 +47,7 @@ class DownloadUnitTest < ModelTestCase
   end
 
   # - - - - - - - - - -
-  
+
   context "Download : source" do
     before do
       @source = create_source
@@ -57,16 +57,16 @@ class DownloadUnitTest < ModelTestCase
         :source_id => @source.id,
       }
     end
-    
+
     after do
       @source.destroy
     end
-    
+
     context "correct params" do
       before do
         @download = Download.new(@valid_params)
       end
-      
+
       use "valid download"
     end
 
@@ -76,7 +76,7 @@ class DownloadUnitTest < ModelTestCase
           :source_id => get_fake_mongo_object_id
         ))
       end
-      
+
       use "invalid download"
       use "download.source_id must be valid"
     end
@@ -85,11 +85,11 @@ class DownloadUnitTest < ModelTestCase
       before do
         @download = Download.new(@valid_params.merge(:source_id => nil))
       end
-      
+
       use "invalid download"
       use "download.source_id can't be empty"
     end
-    
+
     context "correct size" do
       before do
         @download = Download.new(
@@ -102,7 +102,7 @@ class DownloadUnitTest < ModelTestCase
           })
         )
       end
-      
+
       use "valid download"
     end
 
@@ -118,7 +118,7 @@ class DownloadUnitTest < ModelTestCase
           })
         )
       end
-      
+
       use "invalid download"
 
       test "should have error on size" do
@@ -141,7 +141,7 @@ class DownloadUnitTest < ModelTestCase
           })
         )
       end
-      
+
       use "invalid download"
 
       test "should have error on size" do
@@ -164,7 +164,7 @@ class DownloadUnitTest < ModelTestCase
           })
         )
       end
-      
+
       use "invalid download"
 
       test "should have error on size" do
@@ -174,7 +174,7 @@ class DownloadUnitTest < ModelTestCase
           @download.errors.errors[:size]
       end
     end
-    
+
   end
-  
+
 end

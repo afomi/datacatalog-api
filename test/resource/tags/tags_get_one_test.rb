@@ -7,7 +7,7 @@ class TagsGetOneTest < RequestTestCase
   before do
     @tag = create_tag(:text => "Tag A")
   end
-  
+
   after do
     @tag.destroy
   end
@@ -16,9 +16,9 @@ class TagsGetOneTest < RequestTestCase
     before do
       get "/#{@tag.id}", :api_key => @normal_user.primary_api_key
     end
-    
+
     use "return 200 Ok"
-  
+
     test "body should have correct text" do
       assert_equal "Tag A", parsed_response_body["text"]
     end

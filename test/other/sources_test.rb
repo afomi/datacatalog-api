@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_resource_helper')
 
 class SourcesUnitTest < Test::Unit::TestCase
-  
+
   context "merge_custom_fields" do
     before do
       @old = {
@@ -19,7 +19,7 @@ class SourcesUnitTest < Test::Unit::TestCase
         }
       }
     end
-  
+
     test "modifying an attribute should work" do
       actual = ::DataCatalog::Sources.merge_custom_fields(@old,
         { "1" => { "value" => "quux" } })
@@ -57,5 +57,5 @@ class SourcesUnitTest < Test::Unit::TestCase
       assert_equal %w(la_bel val_ue), invalid.sort
     end
   end
-  
+
 end

@@ -45,12 +45,12 @@ class SourcesGetSearchTest < RequestTestCase
   after do
     @sources.each { |x| x.destroy } if @sources
   end
-  
+
   context "search=arrest" do
     before do
       @search_params = { :search => "arrest" }
     end
-  
+
     %w(normal).each do |role|
       context "#{role} : get /" do
         before do
@@ -64,12 +64,12 @@ class SourcesGetSearchTest < RequestTestCase
         test "body should have 1 source" do
           assert_equal 1, @members.length
         end
-      
+
         test "body should have correct source" do
           assert_equal %{2007 Crime in the United States},
             @members[0]['title']
         end
-      
+
         members_properties %w(
           catalog_name
           catalog_url
@@ -115,12 +115,12 @@ class SourcesGetSearchTest < RequestTestCase
       end
     end
   end
-  
+
   context "search=quotations" do
     before do
       @search_params = { :search => "quotations" }
     end
-  
+
     %w(normal).each do |role|
       context "#{role} : get /" do
         before do
@@ -129,7 +129,7 @@ class SourcesGetSearchTest < RequestTestCase
         end
 
         use "return 200 Ok"
-      
+
         test "body should have correct sources" do
           titles = @members.map { |x| x['title'] }
           assert_equal 2, titles.length

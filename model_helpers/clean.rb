@@ -1,5 +1,5 @@
 class Clean
-  
+
   def self.kronos_hash(x)
     h = x
     %w(year month day).each do |part|

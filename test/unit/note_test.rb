@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_unit_helper')
 
 class NoteUnitTest < ModelTestCase
-  
+
   shared "valid note" do
     test "should be valid" do
       assert_equal true, @note.valid?
@@ -21,7 +21,7 @@ class NoteUnitTest < ModelTestCase
       assert_include "must be empty", @note.errors.errors[:text]
     end
   end
-  
+
   shared "note.user_id can't be empty" do
     test "should have empty error on user_id" do
       @note.valid?
@@ -29,7 +29,7 @@ class NoteUnitTest < ModelTestCase
       assert_include "can't be empty", @note.errors.errors[:user_id]
     end
   end
-  
+
   shared "note.user_id must be valid" do
     test "should have invalid error on user_id" do
       @note.valid?
@@ -55,7 +55,7 @@ class NoteUnitTest < ModelTestCase
   end
 
   # - - - - - - - - - -
-  
+
   context "Note : source" do
     before do
       @user = create_normal_user
@@ -66,17 +66,17 @@ class NoteUnitTest < ModelTestCase
         :user_id   => @user.id,
       }
     end
-    
+
     after do
       @source.destroy
       @user.destroy
     end
-    
+
     context "correct params" do
       before do
         @note = Note.new(@valid_params)
       end
-      
+
       use "valid note"
     end
 
@@ -86,7 +86,7 @@ class NoteUnitTest < ModelTestCase
           :user_id => get_fake_mongo_object_id
         ))
       end
-  
+
       use "invalid note"
       use "note.user_id must be valid"
     end
@@ -97,7 +97,7 @@ class NoteUnitTest < ModelTestCase
           :user_id => nil
         ))
       end
-      
+
       use "invalid note"
       use "note.user_id can't be empty"
     end
@@ -108,7 +108,7 @@ class NoteUnitTest < ModelTestCase
           :source_id => get_fake_mongo_object_id
         ))
       end
-  
+
       use "invalid note"
       use "note.source_id must be valid"
     end
@@ -117,10 +117,10 @@ class NoteUnitTest < ModelTestCase
       before do
         @note = Note.new(@valid_params.merge(:source_id => nil))
       end
-      
+
       use "invalid note"
       use "note.source_id can't be empty"
     end
   end
-  
+
 end

@@ -1,5 +1,5 @@
 module DataCatalog
-  
+
   class Documents < Base
     include Resource
 
@@ -15,7 +15,7 @@ module DataCatalog
     permission :delete => :curator
 
     # == Properties
-    
+
     property :text
     property :source_id
     property :user_id,     :w => :nobody
@@ -28,7 +28,7 @@ module DataCatalog
       raise "expecting current_user" unless action.current_user
       action.params["user_id"] = action.current_user.id
     end
-    
+
     callback :before_update do |action, document|
       copy = document.create_new_version!
       action.params["previous_id"] = copy.id
@@ -39,7 +39,7 @@ module DataCatalog
     end
 
   end
-  
+
   Documents.build
 
 end

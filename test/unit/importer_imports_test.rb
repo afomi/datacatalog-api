@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_unit_helper')
 
 class ImporterImportsUnitTest < ModelTestCase
-  
+
   context "Importer.create" do
     before do
       @importer = create_importer({
@@ -16,7 +16,7 @@ class ImporterImportsUnitTest < ModelTestCase
         })
       ]
     end
-    
+
     after do
       @imports.each do |import|
         import.destroy
@@ -28,7 +28,7 @@ class ImporterImportsUnitTest < ModelTestCase
         assert import.valid?
       end
     end
-    
+
     test "importer.imports should be correct" do
       imports = @importer.imports.all
       assert_equal 2, imports.length
@@ -38,5 +38,5 @@ class ImporterImportsUnitTest < ModelTestCase
     end
 
   end
-  
+
 end

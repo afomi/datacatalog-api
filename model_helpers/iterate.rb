@@ -1,5 +1,5 @@
 class Iterate
-  
+
   def self.starting_at(n)
     loop do
       yield n

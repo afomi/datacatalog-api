@@ -8,7 +8,7 @@ class CategoriesDeleteTest < RequestTestCase
     @category = create_category(:name => "Original Category")
     @category_count = Category.count
   end
-  
+
   # - - - - - - - - - -
 
   shared "successful DELETE category with :id" do
@@ -25,7 +25,7 @@ class CategoriesDeleteTest < RequestTestCase
       before do
         delete "/#{@category.id}", :api_key => primary_api_key_for(role)
       end
-    
+
       use "successful DELETE category with :id"
     end
   end
