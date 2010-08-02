@@ -28,7 +28,7 @@ class SourcesGetFilterTest < RequestTestCase
     before do
       @sources = 3.times.map do |n|
         create_source(
-          :title => "Source #{n + 1}", 
+          :title => "Source #{n + 1}",
           :url   => "http://data.gov/sources/#{n + 1}"
         )
       end

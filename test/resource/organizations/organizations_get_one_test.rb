@@ -35,7 +35,7 @@ class OrganizationsGetOneTest < RequestTestCase
         @jurisdiction = create_organization(
             :name      => "US Federal Government",
             :org_type  => "governmental",
-            :top_level => true 
+            :top_level => true
         )
         @organization.parent_id = @jurisdiction.id
         @organization.save!

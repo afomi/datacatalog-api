@@ -18,7 +18,7 @@ class UsersFavoritesDeleteTest < RequestTestCase
   after do
     @favorite.destroy
     @source.destroy
-    @user.destroy 
+    @user.destroy
   end
 
   context "basic : delete /:id/favorites/:id" do

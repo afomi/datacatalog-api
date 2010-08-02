@@ -47,7 +47,7 @@ class SourceGroupUnitTest < ModelTestCase
     end
 
     context "slug" do
-      context "new" do 
+      context "new" do
         before do
           @source_group = SourceGroup.new(@valid_params)
         end

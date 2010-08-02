@@ -12,7 +12,7 @@ class RatingsGetFilterTest < RequestTestCase
     end
 
     members_properties %w(kind comment_id source_id user_id text
-      value previous_value id created_at updated_at) 
+      value previous_value id created_at updated_at)
 
     test "each element should be correct" do
       @members.each do |element|
@@ -32,7 +32,7 @@ class RatingsGetFilterTest < RequestTestCase
     end
 
     members_properties %w(kind comment_id source_id user_id text
-      value previous_value id created_at updated_at) 
+      value previous_value id created_at updated_at)
 
     test "each element should be correct" do
       @members.each do |element|
@@ -52,7 +52,7 @@ class RatingsGetFilterTest < RequestTestCase
     end
 
     members_properties %w(kind comment_id source_id user_id text
-      value previous_value id created_at updated_at) 
+      value previous_value id created_at updated_at)
 
     test "each element should be correct" do
       @members.each do |element|

@@ -301,7 +301,7 @@ class SourceUnitTest < ModelTestCase
       #       :period_end   => "2011"
       #     ))
       #   end
-      # 
+      #
       #   use "invalid source"
       # end
     end

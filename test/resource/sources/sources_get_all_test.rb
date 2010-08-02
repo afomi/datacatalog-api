@@ -71,7 +71,7 @@ class SourcesGetAllTest < RequestTestCase
     before do
       @sources = 3.times.map do |n|
         create_source(
-          :title => "Source #{n}", 
+          :title => "Source #{n}",
           :url   => "http://data.gov/sources/#{n}",
           :slug  => "source-#{n}",
           :source_type  => "dataset"

@@ -201,7 +201,7 @@ class Source
     return nil unless current_org
     until current_org.top_level || current_org.parent.nil?
       current_org = current_org.parent
-    end 
+    end
     return nil unless current_org.top_level
     current_org
   end

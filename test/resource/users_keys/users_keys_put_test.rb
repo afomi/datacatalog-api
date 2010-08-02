@@ -37,7 +37,7 @@ class UsersKeysPutTest < RequestTestCase
   after :all do
     @user.destroy
   end
- 
+
   def lookup_user_and_api_key
     raise "@n must be defined" unless @n
     user = User.find_by_id!(@user.id)
@@ -53,28 +53,28 @@ class UsersKeysPutTest < RequestTestCase
       assert_equal_json_times @original_created_at, user.api_keys[@n].created_at
     end
   end
- 
+
   shared "unchanged purpose in database" do
     test "purpose should be unchanged in database" do
       user, api_key = lookup_user_and_api_key
       assert_equal @keys[@n].purpose, api_key.purpose
     end
   end
- 
+
   shared "updated purpose in database" do
     test "purpose should be updated in database" do
       user, api_key = lookup_user_and_api_key
       assert_equal "Updated purpose", api_key.purpose
     end
   end
- 
+
   shared "unchanged key_type in database" do
     test "key_type should be unchanged in database" do
       user, api_key = lookup_user_and_api_key
       assert_equal @keys[@n].key_type, api_key.key_type
     end
   end
- 
+
   shared "key_type in database is primary" do
     test "key_type should be 'primary' in database" do
       user, api_key = lookup_user_and_api_key
@@ -136,7 +136,7 @@ class UsersKeysPutTest < RequestTestCase
     use "updated purpose in database"
     use "unchanged key_type in database"
   end
- 
+
   shared "successful PUT users_keys : update key_type to application" do
     use "return 200 Ok"
     use "unchanged api_key count"
@@ -144,7 +144,7 @@ class UsersKeysPutTest < RequestTestCase
     use "unchanged purpose in database"
     use "key_type in database is application"
   end
- 
+
   shared "successful PUT users_keys : full update" do
     use "return 200 Ok"
     use "unchanged api_key count"
@@ -152,11 +152,11 @@ class UsersKeysPutTest < RequestTestCase
     use "updated purpose in database"
     use "key_type in database is application"
   end
- 
+
   # -----------------------------
   # Tests that apply for all keys
   # -----------------------------
- 
+
   3.times do |n|
     context "API key #{n}" do
       context "owner API key : put /:id/keys/:id : update purpose" do

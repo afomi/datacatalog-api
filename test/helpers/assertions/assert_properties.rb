@@ -10,7 +10,7 @@ module Test
               actual.keys, property)
             assert_block(m1) { actual.include?(property) }
 
-            extras = actual.keys - expected 
+            extras = actual.keys - expected
             m2 = build_message(message,
               "<?> not expected to have these extra keys\n<?>.\n",
               actual.keys, extras)

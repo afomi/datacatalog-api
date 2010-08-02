@@ -105,7 +105,7 @@ class SourcesGetOneTest < RequestTestCase
         @jurisdiction = create_organization(
           :name      => "US Federal Government",
           :org_type  => "governmental",
-          :top_level => true 
+          :top_level => true
         )
         @organization = create_organization(
           :name      => "Department of Commerce",

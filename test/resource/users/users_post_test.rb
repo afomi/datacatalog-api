@@ -20,7 +20,7 @@ class UsersPostTest < RequestTestCase
 
   shared "successful POST user" do
     use "return 201 Created"
-    use "return timestamps and id in body" 
+    use "return timestamps and id in body"
     use "incremented user count"
 
     test "location header should point to new resource" do

@@ -21,7 +21,7 @@ class DownloadsPostTest < RequestTestCase
       end
 
       use "return 201 Created"
-      use "return timestamps and id in body" 
+      use "return timestamps and id in body"
       use "incremented download count"
 
       test "location header should point to new resource" do

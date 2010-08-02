@@ -77,7 +77,7 @@ The National Data Catalog API is designed to be a Resource-Oriented Architecture
     * 500 Internal Server Error
     * 503 Service Unavailable
 
-4. You can navigate the API by following links (hypermedia). This matches up with the fourth constraint of [REST's four interface constraints](http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm#sec_5_1_5) by [Roy Fielding](http://roy.gbiv.com/): "identification of resources; manipulation of resources through representations; self-descriptive messages; and, hypermedia as the engine of application state." Put another way, this is what [Joe Gregorio calls Hypertext Navigation](http://www.xml.com/pub/a/2005/04/06/restful.html) (as opposed to URI Construction). 
+4. You can navigate the API by following links (hypermedia). This matches up with the fourth constraint of [REST's four interface constraints](http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm#sec_5_1_5) by [Roy Fielding](http://roy.gbiv.com/): "identification of resources; manipulation of resources through representations; self-descriptive messages; and, hypermedia as the engine of application state." Put another way, this is what [Joe Gregorio calls Hypertext Navigation](http://www.xml.com/pub/a/2005/04/06/restful.html) (as opposed to URI Construction).
 
 ## Join Our Community
 

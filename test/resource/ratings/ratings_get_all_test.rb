@@ -96,7 +96,7 @@ class RatingsGetAllTest < RequestTestCase
         updated_at
         user_id
         value
-      ) 
+      )
 
       test "correct values for each item" do
         source_ratings = []

@@ -114,7 +114,7 @@ class UserUnitTest < ModelTestCase
       @api_keys.each do |api_key|
         if hash[api_key]
           flunk "A duplicate API key was generated: #{api_key}"
-        end 
+        end
         hash[api_key] = true
       end
       assert true

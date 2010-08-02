@@ -34,7 +34,7 @@ class SourceJurisdictionUnitTest < ModelTestCase
       @jurisdiction = create_organization(
         :name      => "US Federal Government",
         :org_type  => "governmental",
-        :top_level => true 
+        :top_level => true
       )
       @organization = create_organization(
         :name      => "Department of Commerce",
@@ -57,7 +57,7 @@ class SourceJurisdictionUnitTest < ModelTestCase
       @jurisdiction = create_organization(
         :name      => "US Federal Government",
         :org_type  => "governmental",
-        :top_level => true 
+        :top_level => true
       )
       @organization = create_organization(
         :name      => "Department of Commerce",
@@ -88,7 +88,7 @@ class SourceJurisdictionUnitTest < ModelTestCase
       @new_jurisdiction = create_organization(
         :name      => "State of Arizona",
         :org_type  => "governmental",
-        :top_level => true 
+        :top_level => true
       )
       @new_organization = create_organization(
         :name      => "Department of Deserts",
@@ -106,7 +106,7 @@ class SourceJurisdictionUnitTest < ModelTestCase
       @california = create_organization(
         :name      => "State of California",
         :org_type  => "governmental",
-        :top_level => true 
+        :top_level => true
       )
       @san_francisco = create_organization(
         :name      => "City of San Francisco",

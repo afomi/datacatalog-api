@@ -152,7 +152,7 @@ module DataCatalog
         end
       end
       unless errors == []
-        error 400, { "errors" => errors }.to_json 
+        error 400, { "errors" => errors }.to_json
       end
     end
 

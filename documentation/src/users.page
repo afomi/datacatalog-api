@@ -33,7 +33,7 @@ http://api.nationaldatacatalog.com/users
     created_at            R     Time     Automatic timestamp on creation
     updated_at            R     Time     Automatic timestamp on update
 
-*Notes*: 
+*Notes*:
 * R denotes read-only fields
 * W denotes required fields when writing (creating or updating)
 

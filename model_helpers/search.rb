@@ -63,7 +63,7 @@ module DataCatalog
       or
       set
       that
-      the 
+      the
       this
       to
       was
