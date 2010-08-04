@@ -173,6 +173,17 @@ class Source
     self.score = calculate_score
   end
 
+  before_update :save_previous
+  def save_previous
+    @previous_source = Source.first(:_id => self.id)
+  end
+
+  after_update :restore_previous
+  def restore_previous
+    adjust_source_count(@previous_source, -1) if @previous_source
+    adjust_source_count(self, 1)
+  end
+
   # == Callbacks : source_count
 
   after_create :increment_source_count
@@ -183,17 +194,6 @@ class Source
   after_destroy :decrement_source_count
   def decrement_source_count
     adjust_source_count(self, -1)
-  end
-
-  before_update :save_previous
-  def save_previous
-    @previous_source = Source.first(:_id => self.id)
-  end
-
-  after_update :restore_previous
-  def restore_previous
-    adjust_source_count(@previous_source, -1) if @previous_source
-    adjust_source_count(self, 1)
   end
 
   # == Class Methods
