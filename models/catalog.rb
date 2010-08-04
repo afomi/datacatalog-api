@@ -8,6 +8,12 @@ class Catalog
 
   key :title,         String
   key :url,           String
+  key :score_stats,   Hash, :default => {
+    'total'   => nil,
+    'count'   => 0,
+    'average' => nil
+  }
+
   timestamps!
 
   # == Indices
