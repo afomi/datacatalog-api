@@ -27,11 +27,18 @@ http://api.nationaldatacatalog.com/organizations
     home_url      String   curator       Organization home page (e.g. http://energy.gov)
     catalog_name  String   curator       Name of originating catalog (e.g. "NYC Data Mine")
     catalog_url   String   curator       URL of originating catalog (e.g. "http://www.nyc.gov/html/datamine")
+    broken_links  Hash     curator       (see below)
     interest      Integer  curator       subjective measure of interest
     top_level     Boolean  curator       is this organization a top level jurisdiction?
     custom        Hash     admin         custom parameters
     raw           Hash     admin         raw data (usually from the original import)
     user_id       String   nobody        the user that created this entity in the API
+
+### broken_links
+
+This key holds the number of broken links for the source and a timestamp. For example:
+
+    { :count => 3, :updated_at => "2010-07-01" },
 
 ### interest
 
@@ -47,7 +54,7 @@ Set `top_level` to true to let an organization be used as a highlighted grouping
 
 Why is top_level needed? Couldn't the API just test for `parent_id == nil`? Not really. Consider this example pertaining to San Francisco. San Francisco (a city) should have California (a state) as an ancestor, since cities get their charters from states and are subject to their laws. However, the user interface still wants to present San Francisco as a top-level grouping, so it needs to be able to figure this out.
 
-## Access Privileges
+## Permissions
 
     Permission   Who
     ----------   ---

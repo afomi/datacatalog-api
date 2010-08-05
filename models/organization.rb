@@ -14,6 +14,7 @@ class Organization
   key :home_url,          String
   key :catalog_name,      String
   key :catalog_url,       String
+  key :broken_links,      Hash
   key :user_id,           ObjectId
   key :parent_id,         ObjectId
   key :top_parent_id,     ObjectId

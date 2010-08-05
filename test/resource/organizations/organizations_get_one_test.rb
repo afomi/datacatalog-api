@@ -64,6 +64,7 @@ class OrganizationsGetOneTest < RequestTestCase
     end
 
     doc_properties %w(
+      broken_links
       name
       names
       acronym

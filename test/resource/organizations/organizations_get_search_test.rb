@@ -65,6 +65,7 @@ class OrganizationsGetSearchTest < RequestTestCase
         end
 
         members_properties %w(
+          broken_links
           name
           names
           acronym
