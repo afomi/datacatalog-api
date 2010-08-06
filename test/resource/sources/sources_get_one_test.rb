@@ -24,6 +24,7 @@ class SourcesGetOneTest < RequestTestCase
     end
 
     doc_properties %w(
+      broken_links
       catalog_name
       catalog_url
       categories
@@ -37,13 +38,13 @@ class SourcesGetOneTest < RequestTestCase
       favorite_count
       frequency
       id
+      jurisdiction
+      jurisdiction_id
       license
       license_url
       notes
       organization
       organization_id
-      jurisdiction
-      jurisdiction_id
       period_end
       period_start
       ratings

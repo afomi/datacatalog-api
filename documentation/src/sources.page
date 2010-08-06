@@ -29,6 +29,7 @@ http://api.nationaldatacatalog.com/sources
     period_start             Date Hash  Beginning date for source's applicability
     period_end               Date Hash  End date for source's applicability
     frequency                String     How often the data source is released
+    broken_links             Hash       (see below)
     organization_id          String     Organization that published this source.
     ratings            R     Array      Embedded collection of Rating objects
     rating_stats       R     Hash       Contains total, count, and average.
@@ -50,6 +51,12 @@ Valid values for frequency include:
     one-time / other / unknown
 
 A complete, up-to-date list can be found in [frequency.rb in the frequency gem](http://github.com/djsun/frequency/blob/master/lib/frequency.rb).
+
+### broken_links
+
+This key holds the number of broken links for the source and a timestamp. For example:
+
+    { :count => 3, :updated_at => "2010-07-01" },
 
 ## Permissions
 

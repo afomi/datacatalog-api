@@ -26,6 +26,7 @@ class Source
   key :period_start,        Hash
   key :period_end,          Hash
   key :frequency,           String
+  key :broken_links,        Hash
   key :organization_id,     ObjectId
   key :jurisdiction_id,     ObjectId
   key :source_group_id,     ObjectId

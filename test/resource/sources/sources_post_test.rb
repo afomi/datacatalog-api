@@ -33,6 +33,7 @@ class SourcesPostTest < RequestTestCase
     end
 
     doc_properties %w(
+      broken_links
       catalog_name
       catalog_url
       categories
@@ -46,13 +47,13 @@ class SourcesPostTest < RequestTestCase
       favorite_count
       frequency
       id
+      jurisdiction
+      jurisdiction_id
       license
       license_url
       notes
       organization
       organization_id
-      jurisdiction
-      jurisdiction_id
       period_end
       period_start
       ratings

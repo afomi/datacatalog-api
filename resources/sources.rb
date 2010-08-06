@@ -30,6 +30,7 @@ module DataCatalog
     property :period_start
     property :period_end
     property :frequency
+    property :broken_links
     property :organization_id
     property :jurisdiction_id,  :w => :nobody
     property :custom,           :w => :curator
