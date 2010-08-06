@@ -21,7 +21,7 @@ class DocumentsDeleteTest < RequestTestCase
       use "return 204 No Content"
       use "decremented document count"
 
-      test "source should be deleted in database" do
+      test "document should be deleted in database" do
         assert_equal nil, Document.find_by_id(@document.id)
       end
     end

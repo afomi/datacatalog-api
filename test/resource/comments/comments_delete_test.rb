@@ -29,7 +29,7 @@ class CommentsDeleteTest < RequestTestCase
       use "return 204 No Content"
       use "decremented comment count"
 
-      test "source should be deleted in database" do
+      test "comment should be deleted in database" do
         assert_equal nil, Comment.find_by_id(@comment.id)
       end
     end

@@ -27,7 +27,7 @@ class ReportsDeleteTest < RequestTestCase
       use "return 204 No Content"
       use "decremented report count"
 
-      test "source should be deleted in database" do
+      test "report should be deleted in database" do
         assert_equal nil, Report.find_by_id(@report.id)
       end
     end
