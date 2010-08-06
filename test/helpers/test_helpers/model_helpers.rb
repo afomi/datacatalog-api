@@ -52,7 +52,7 @@ module ModelHelpers
 
   # == Factories
 
-  def create_broken_link
+  def create_broken_link(custom={})
     create_model!(Broken Link, custom, {
       :field           => "documentation_url",
       :destination_url => "http://broken-link.gov/1002",
