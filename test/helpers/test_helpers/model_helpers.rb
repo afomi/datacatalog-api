@@ -52,6 +52,16 @@ module ModelHelpers
 
   # == Factories
 
+  def create_broken_link
+    create_model!(Broken Link, custom, {
+      :field           => "documentation_url",
+      :destination_url => "http://broken-link.gov/1002",
+      :status          => 404,
+      :last_checked    => Time.parse('2010-07-22'),
+      :broken_since    => Time.parse('2010-07-15'),
+    })
+  end
+
   def create_catalog(custom={})
     create_model!(Catalog, custom, {
       :title => "Big Government Data Catalog",
