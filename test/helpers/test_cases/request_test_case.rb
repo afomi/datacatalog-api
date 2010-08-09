@@ -9,6 +9,7 @@ class RequestTestCase < Test::Unit::TestCase
 
   before :all do
     [
+      BrokenLink,
       Categorization,
       Catalog,
       Category,

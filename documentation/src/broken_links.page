@@ -1,0 +1,64 @@
+---
+title: BrokenLinks
+in_menu: true
+---
+
+# BrokenLinks
+
+The `BrokenLinks` resource represents a broken link, either from a Source or an Organization.
+
+## Base URL
+
+http://api.nationaldatacatalog.com/broken_links
+
+## Schema
+
+    Field            Type      Writable By   Description
+    -----            ----      -----------   -----------
+    source_id        ObjectId  Curator       if applicable
+    organization_id  ObjectId  Curator       if applicable
+    field            String    Curator       corresponding metadata field
+    destination_url  String    Curator       the URL that is broken
+    status           Integer   Curator       HTTP status code (e.g. 404)
+    created_at       Time      Curator       time of original breakage
+    updated_at       Time      Curator       time of last check
+
+### source\_id or organization\_id
+
+Either source\_id or organization\_id is required. It is invalid to set both.
+
+## Permissions
+
+    Permission   Who
+    ----------   ---
+    List         basic
+    Create       basic
+    Read         curator
+    Update       curator
+    Delete       curator
+
+## API Calls
+
+A normal user can read sources, while curators and admins can perform full CRUD on sources.
+
+*Note*: You will need to add `api_key={api_key}` to the examples below.
+
+Get all broken_links:
+
+    GET http://api.nationaldatacatalog.com/broken_links
+
+Get one broken_link:
+
+    GET http://api.nationaldatacatalog.com/broken_links/{broken_link_id}
+
+Create a new broken_link:
+
+    POST http://api.nationaldatacatalog.com/broken_links
+
+Update an existing broken_link:
+
+    PUT http://api.nationaldatacatalog.com/broken_links/{broken_link_id}
+
+Delete an existing source:
+
+    DELETE http://nationaldatacatalog.com/broken_links/{broken_link_id}
