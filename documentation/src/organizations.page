@@ -70,22 +70,22 @@ A normal user can read sources, while curators and admins can perform full CRUD 
 
 *Note*: You will need to add `api_key={api_key}` to the examples below.
 
-Get all sources:
+Get all organizations:
 
-    GET http://api.nationaldatacatalog.com/sources
+    GET http://api.nationaldatacatalog.com/organizations
 
-Get one source:
+Get one organization:
 
-    GET http://api.nationaldatacatalog.com/sources/{source_id}
+    GET http://api.nationaldatacatalog.com/organizations/{organization_id}
 
-Create a new source:
+Create a new organization:
 
-    POST http://api.nationaldatacatalog.com/sources
+    POST http://api.nationaldatacatalog.com/organizations
 
-Update an existing source:
+Update an existing organization:
 
-    PUT http://api.nationaldatacatalog.com/sources/{source_id}
+    PUT http://api.nationaldatacatalog.com/organizations/{organization_id}
 
-Delete an existing source:
+Delete an existing organization:
 
-    DELETE http://nationaldatacatalog.com/sources/{source_id}
+    DELETE http://nationaldatacatalog.com/organizations/{organization_id}
