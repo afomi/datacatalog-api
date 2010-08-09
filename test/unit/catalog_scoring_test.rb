@@ -19,7 +19,7 @@ class CatalogScoringUnitTest < ModelTestCase
       }
       assert_equal expected, @catalog.score_stats
     end
-    
+
     test "#add_score should work" do
       @catalog.add_score(10)
       stats = @catalog.score_stats
@@ -73,7 +73,7 @@ class CatalogScoringUnitTest < ModelTestCase
   end
 
   context "catalog with 1 source" do
-    before :all do
+    before do
       @catalog = create_catalog
       @source = create_source({
         :title       => "2009 Wallet Card",
@@ -85,22 +85,71 @@ class CatalogScoringUnitTest < ModelTestCase
       })
       @catalog.reload
     end
-
-    after :all do
+  
+    after do
       @source.destroy
       @catalog.destroy
     end
-
+  
     test "#score_stats should return correct count" do
       assert_equal 1, @catalog.score_stats['count']
     end
-
+  
     test "#score_stats should return correct average" do
       assert_equal 4, @catalog.score_stats['average']
     end
-
+  
     test "#score_stats should contain proper keys" do
       assert_properties %w(total count average), @catalog.score_stats
+    end
+  end
+
+  context "catalog with 2 sources" do
+    before do
+      @catalog = create_catalog
+      @sources = [
+        create_source({
+          :title       => "2009 Wallet Card",
+          :url         => "http://www.data.gov/tools/468",
+          :source_type => "interactive",
+          :frequency   => "annually",
+          :catalog_id  => @catalog.id
+        }),
+        create_source({
+          :title       => "2008 Data Compendium",
+          :url         => "http://www.data.gov/tools/470",
+          :source_type => "interactive",
+          :frequency   => "annually",
+          :catalog_id  => @catalog.id
+        }),
+      ]
+      @catalog.reload
+    end
+
+    after do
+      @sources.each { |source| source.destroy unless source.destroyed? }
+      @catalog.destroy
+    end
+
+    test "#score_stats should return correct values" do
+      stats = @catalog.score_stats
+      assert_equal 2, stats['count']
+      assert_equal 4, stats['average']
+    end
+
+    test "after deleting 1 source, #score_stats should be correct" do
+      @sources[0].destroy
+      @catalog.reload
+      stats = @catalog.score_stats
+      assert_equal 1, stats['count']
+      assert_equal 4, stats['average']
+    end
+
+    test "after deleting 2 sources, #score_stats should be correct" do
+      @sources.each { |source| source.destroy }
+      @catalog.reload
+      assert_equal 0, @catalog.score_stats['count']
+      assert_equal nil, @catalog.score_stats['average']
     end
   end
 

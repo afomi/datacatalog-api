@@ -173,6 +173,7 @@ class Source
   def score_on_creation
     self.score = calculate_score
     if catalog
+      catalog.reload # Might be unnecessary, but adds symmetry.
       catalog.add_score(score)
       catalog.save!
     end
@@ -183,6 +184,7 @@ class Source
     old_score = score
     self.score = calculate_score
     if catalog
+      catalog.reload # Might be unnecessary, but adds symmetry.
       catalog.update_score(score, old_score)
       catalog.save!
     end
@@ -191,6 +193,7 @@ class Source
   before_destroy :score_on_destroy
   def score_on_destroy
     if catalog
+      catalog.reload # Not elegant-looking but needed.
       catalog.remove_score(score)
       catalog.save!
     end

@@ -50,12 +50,12 @@ class Catalog
   end
 
   def remove_score(score)
-    unless score_stats['total'] && score_stats['count'] &&
-      score_stats['count'] > 0
-      raise DataCatalog::Error, "Cannot remove a score since there are none"
+    ss = score_stats
+    unless ss['total'] && ss['count'] && ss['count'] > 0
+      raise DataCatalog::Error, "internal error"
     end
-    total = score_stats['total'] - score
-    count = score_stats['count'] - 1
+    total = ss['total'] - score
+    count = ss['count'] - 1
     self.score_stats = {
       'total'   => count > 0 ? total : nil,
       'count'   => count,
