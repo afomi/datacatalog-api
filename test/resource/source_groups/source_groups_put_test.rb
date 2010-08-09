@@ -27,9 +27,8 @@ class SourceGroupsPutTest < RequestTestCase
     use "unchanged source group count"
 
     test "source group in database should be correct" do
-      source_group = SourceGroup.find_by_id!(@source_group.id)
-      # TODO: use reload in the future
-      assert_equal "New Source Group", source_group.title
+      @source_group.reload
+      assert_equal "New Source Group", @source_group.title
     end
 
     doc_properties %w(

@@ -35,10 +35,9 @@ class DocumentsPutTest < RequestTestCase
     use "incremented document count"
 
     test "document in database should be correct" do
-      document = Document.find_by_id!(@document.id)
-      # TODO: use reload in the future
-      assert_equal "New Document", document.text
-      assert_equal @source.id, document.source_id
+      @document.reload
+      assert_equal "New Document", @document.text
+      assert_equal @source.id, @document.source_id
     end
 
     doc_properties %w(
@@ -53,9 +52,8 @@ class DocumentsPutTest < RequestTestCase
     )
 
     test "previous version should be correct" do
-      document = Document.find_by_id!(@document.id)
-      # TODO: use reload in the future
-      previous_document = Document.find_by_id!(document.previous_id)
+      @document.reload
+      previous_document = Document.find_by_id!(@document.previous_id)
       assert_equal "Original Document", previous_document.text
       assert_equal @source.id, previous_document.source_id
     end

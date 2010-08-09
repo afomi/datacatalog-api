@@ -46,7 +46,6 @@ class OrganizationsPostTest < RequestTestCase
 
     test "values should be correct in database" do
       organization = Organization.find_by_id!(parsed_response_body["id"])
-      # TODO: use reload
       @valid_params.each do |key, value|
         assert_equal value, organization[key]
       end
