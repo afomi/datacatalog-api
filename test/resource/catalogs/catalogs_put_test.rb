@@ -30,7 +30,7 @@ class CatalogsPutTest < RequestTestCase
     use "unchanged catalog title in database"
   end
 
-  context "owner API key : put /:id" do
+  context "normal API key : put /:id" do
     before do
       put "/#{@catalog.id}",
         :api_key => @normal_user.primary_api_key,

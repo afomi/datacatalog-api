@@ -36,7 +36,7 @@ class OrganizationsPutTest < RequestTestCase
     use "unchanged organization name in database"
   end
 
-  context "owner API key : put /:id" do
+  context "normal API key : put /:id" do
     before do
       put "/#{@organization.id}",
         :api_key => @normal_user.primary_api_key,
