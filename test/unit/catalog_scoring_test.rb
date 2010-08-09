@@ -100,8 +100,7 @@ class CatalogScoringUnitTest < ModelTestCase
     end
 
     test "#score_stats should contain proper keys" do
-      assert_properties %w(total count average),
-        @catalog.score_stats
+      assert_properties %w(total count average), @catalog.score_stats
     end
   end
 
