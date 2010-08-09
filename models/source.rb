@@ -169,11 +169,6 @@ class Source
     self.jurisdiction = calculate_jurisdiction
   end
   
-  # before_save :update_score
-  # def update_score
-  #   self.score = calculate_score
-  # end
-  
   before_create :score_on_creation
   def score_on_creation
     self.score = calculate_score
