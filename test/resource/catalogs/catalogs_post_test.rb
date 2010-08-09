@@ -22,6 +22,25 @@ class CatalogsPostTest < RequestTestCase
     use "return 401 because the API key is unauthorized"
   end
 
+  context "curator API key : post /:id with invalid param" do
+    before do
+      post "/", {
+        :api_key     => @curator_user.primary_api_key,
+        :score_stats => {
+          'total'    => nil,
+          'count'    => 0,
+          'average'  => nil
+        }
+      }.merge(@valid_params)
+    end
+
+    test "body should say 'score_stats' is an invalid param" do
+      assert_include "errors", parsed_response_body
+      assert_include "invalid_params", parsed_response_body["errors"]
+      assert_include "score_stats", parsed_response_body["errors"]["invalid_params"]
+    end
+  end
+
   context "curator API key : post /" do
     before do
       post "/", {
