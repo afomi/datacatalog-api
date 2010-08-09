@@ -169,9 +169,36 @@ class Source
     self.jurisdiction = calculate_jurisdiction
   end
   
-  before_save :update_score
-  def update_score
+  # before_save :update_score
+  # def update_score
+  #   self.score = calculate_score
+  # end
+  
+  before_create :score_on_creation
+  def score_on_creation
     self.score = calculate_score
+    if catalog
+      catalog.add_score(score)
+      catalog.save!
+    end
+  end
+  
+  before_update :score_on_update
+  def score_on_update
+    old_score = score
+    self.score = calculate_score
+    if catalog
+      catalog.update_score(score, old_score)
+      catalog.save!
+    end
+  end
+  
+  before_destroy :score_on_destroy
+  def score_on_destroy
+    if catalog
+      catalog.remove_score(score)
+      catalog.save!
+    end
   end
 
   before_update :save_previous
