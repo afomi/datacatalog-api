@@ -18,6 +18,7 @@ module DataCatalog
 
     property :title
     property :url
+    property :score_stats, :w => :nobody
 
     property :sources do |catalog|
       catalog.sources.map do |source|

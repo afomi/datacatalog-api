@@ -24,6 +24,7 @@ class CatalogsGetAllTest < RequestTestCase
     members_properties %w(
       created_at
       id
+      score_stats
       sources
       title
       updated_at
