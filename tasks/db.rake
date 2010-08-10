@@ -29,6 +29,12 @@ namespace :db do
     puts "Created organization:"
     verbosely_display_organizations([organization])
   end
+  
+  def verbosely_create_category(params)
+    category = Category.create!(params)
+    puts "Created category:"
+    verbosely_display_categories([category])
+  end
 
   def verbosely_display_users(users)
     users.each do |user|
@@ -45,6 +51,13 @@ namespace :db do
     organizations.each do |organization|
       puts "  * name  : #{organization.name}"
       puts "    id    : #{organization.id}"
+    end
+  end
+  
+  def verbosely_display_categories(categories)
+    categories.each do |category|
+      puts "  * name  : #{category.name}"
+      puts "    id    : #{category.id}"
     end
   end
 
@@ -107,6 +120,26 @@ namespace :db do
       end
     else
       puts "No default organizations specified in organizations.yml"
+    end
+  end
+  
+  desc "Create default categories if not present"
+  task :ensure_default_categories => ["environment:models"] do
+    default_categories = Config.default_categories
+    if default_categories && default_categories.length > 0
+      default_categories.each do |default_category|
+        existing_category = Category.first(:conditions => {
+          :name => default_category["name"]
+        })
+        if existing_category
+          puts "Found category:"
+          verbosely_display_categories([existing_category])
+        else
+          verbosely_create_category(default_category)
+        end
+      end
+    else
+      puts "No default categories specified in categories.yml"
     end
   end
 

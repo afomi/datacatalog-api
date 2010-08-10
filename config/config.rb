@@ -79,5 +79,14 @@ module Config
       @default_organizations = YAML.load_file(file)
     end
   end
+  
+  def self.default_categories
+    if @default_categories
+      @default_categories
+    else
+      file = File.join(File.dirname(__FILE__), "categories.yml")
+      @default_categories = YAML.load_file(file)
+    end
+  end
 
 end
