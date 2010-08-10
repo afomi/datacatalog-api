@@ -15,16 +15,27 @@ module DataCatalog
     ]
 
     BASIC_MEMBERS = [
+      { "href" => "/catalogs" },
       { "href" => "/categories" },
       { "href" => "/comments" },
       { "href" => "/documents" },
+      { "href" => "/downloads" },
+      { "href" => "/favorites" },
+      { "href" => "/importers" },
+      { "href" => "/imports" },
       { "href" => "/notes" },
       { "href" => "/organizations" },
       { "href" => "/ratings" },
       { "href" => "/sources" },
+      { "href" => "/source_groups" },
       { "href" => "/tags" },
       { "href" => "/users" },
     ] + ANONYMOUS_MEMBERS
+    
+    CURATOR_MEMBERS = [
+      { "href" => "/broken_links" },
+      { "href" => "/reports" },
+    ] + BASIC_MEMBERS
 
     get '/?' do
       members = case lookup_role
@@ -32,8 +43,10 @@ module DataCatalog
         invalid_api_key!
       when :anonymous
         ANONYMOUS_MEMBERS
-      when :basic, :curator, :admin
+      when :basic
         BASIC_MEMBERS
+      when :curator, :admin
+        CURATOR_MEMBERS
       else
         raise Error, "unexpected role"
       end
