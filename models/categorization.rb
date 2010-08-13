@@ -16,7 +16,16 @@ class Categorization
   belongs_to :category
 
   # == Validations
-
+  
+  validates_presence_of :source_id
+  validates_presence_of :category_id
+  
+  validate :general_validation
+  def general_validation
+    errors.add(:source_id, "must be valid") if source.nil?
+    errors.add(:category_id, "must be valid") if category.nil?
+  end
+  
   # == Class Methods
 
   # == Various Instance Methods
