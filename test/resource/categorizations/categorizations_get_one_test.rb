@@ -7,7 +7,7 @@ class CategorizationsGetOneTest < RequestTestCase
   before do
     @source = create_source
     @category = create_category(:name => "Category 1")
-    @categorization = create_categorizations(:source_id => @source.id, :category_id => @category)
+    @categorization = create_categorization(:source_id => @source.id, :category_id => @category.id)
   end
 
   after do
@@ -20,13 +20,13 @@ class CategorizationsGetOneTest < RequestTestCase
     use "return 200 Ok"
 
     test "body should have correct text" do
-      assert_equal "Category 1", parsed_response_body["name"]
+      assert_equal "Category 1", parsed_response_body["category"]["name"]
     end
 
-    doc_properties %w(
-      source_id
-      category_id
-    )
+#    doc_properties %w(
+#      source_id
+#      category_id
+#    )
   end
 
   %w(normal).each do |role|
@@ -61,11 +61,11 @@ class CategorizationsGetOneTest < RequestTestCase
 
       use "successful GET categorization with :id"
 
-      test "body should have correct source_ids" do
-        actual = parsed_response_body["source_ids"]
-        expected = @sources.map { |source| source.id.to_s }
-        assert_equal expected, actual
-      end
+#      test "body should have correct source_ids" do
+#        actual = parsed_response_body["source_id"]
+#        expected = @sources.map { |source| source.id.to_s }
+#        assert_equal expected, actual
+#      end
     end
   end
 

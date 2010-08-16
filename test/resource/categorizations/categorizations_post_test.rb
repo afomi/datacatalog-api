@@ -7,7 +7,7 @@ class CategorizationsPostTest < RequestTestCase
   before do
     @source = create_source
     @category = create_category(:name => "Category 1")
-    @categorization = create_categorizations(:source_id => @source.id, :category_id => @category)
+    @categorization = create_categorization(:source_id => @source.id, :category_id => @category.id)
     @categorization_count = Categorization.count
   end
 
@@ -15,8 +15,8 @@ class CategorizationsPostTest < RequestTestCase
     before do
       post "/", {
         :api_key => @curator_user.primary_api_key,
-        :source_id => @source_id,
-        :category_id => @category_id
+        :source_id => @source.id,
+        :category_id => @category.id
       }
     end
 
@@ -30,8 +30,8 @@ class CategorizationsPostTest < RequestTestCase
     end
 
     test "body should have correct text" do
-      assert_equal @source.id, parsed_response_body["source_id"]
-      assert_equal @category.id, parsed_response_body["category_id"]
+      assert_equal @source.id.to_s, parsed_response_body["source_id"]
+      assert_equal @category.id.to_s, parsed_response_body["category_id"]
     end
 
 #    test "name should be correct in database" do

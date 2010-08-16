@@ -16,18 +16,21 @@ class CategorizationsPutTest < RequestTestCase
     before do
       put "/#{@categorization.id}", {
         :api_key => @curator_user.primary_api_key,
-        :source_id => @source_id,
-        :category_id => @category_id
+        :source_id => @source.id,
+        :category_id => @category.id
       }
     end
 
     use "return 200 Ok"
     use "unchanged categorization count"
 
-#    test "field should be updated in database" do
-#      category = Category.find_by_id!(@categorization.id)
-#      assert_equal "New Category", category.name
-#    end
+    test "field should be updated in database" do
+      @category.name = "New Category"
+      @category.save
+      
+      category = Category.find_by_id!(@categorization.category_id)
+      assert_equal "New Category", category.name
+    end
   end
 
 end
