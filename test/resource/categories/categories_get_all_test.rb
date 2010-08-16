@@ -18,7 +18,7 @@ class CategoriesGetAllTest < RequestTestCase
   context "3 categories" do
     before do
       @categories = 3.times.map do |n|
-        create_category(:name => "Category #{n}")
+        create_category(:name => "Category-#{n}")
       end
     end
 
@@ -38,7 +38,7 @@ class CategoriesGetAllTest < RequestTestCase
 
       test "body should have correct text" do
         actual = (0 ... 3).map { |n| @members[n]["name"] }
-        3.times { |n| assert_include "Category #{n}", actual }
+        3.times { |n| assert_include "Category-#{n}", actual }
       end
 
       test "each element should have correct attributes" do
