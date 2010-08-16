@@ -71,8 +71,8 @@ module ModelHelpers
 
   def create_category(custom={})
     create_model!(Category, custom, {
-      :source_id   => get_fake_mongo_object_id,
-      :category_id => get_fake_mongo_object_id,
+      :source_id => get_fake_mongo_object_id,
+      :name      => "Category",
     })
   end
 
