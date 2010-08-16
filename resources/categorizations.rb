@@ -10,9 +10,9 @@ module DataCatalog
     roles Roles
     permission :list   => :basic
     permission :read   => :basic
-    permission :create => :basic
-    permission :update => :owner
-    permission :delete => :owner
+    permission :create => :curator
+    permission :update => :curator
+    permission :delete => :curator
 
     # == Properties
 
