@@ -81,7 +81,7 @@ namespace :db do
   end
 
   desc "Create default users and organizations as needed"
-  task :ensure_defaults => [:ensure_default_users, :ensure_default_organizations]
+  task :ensure_defaults => [:ensure_default_users, :ensure_default_organizations, :ensure_default_categories]
 
   desc "Create default users if not present"
   task :ensure_default_users => ["environment:models"] do
