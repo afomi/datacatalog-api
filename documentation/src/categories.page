@@ -1,0 +1,10 @@
+---
+title: Categories
+in_menu: true
+--
+
+Categories are a loosely defined, controlled vocabulary, defined by curators. A categorization is a link between a category and a particular source.
+
+## Base URL
+
+http://api.nationaldatacatalog.com/categories

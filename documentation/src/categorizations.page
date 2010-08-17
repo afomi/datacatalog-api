@@ -1,0 +1,13 @@
+---
+title: Categorizations
+in_menu: true
+--
+
+# Categorizations
+
+Categorizations represent the join between each 'Source' and a curator-defined
+'Category'.
+
+## Base URL
+
+http://api.nationaldatacatalog.com/categories
