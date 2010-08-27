@@ -3,8 +3,17 @@ title: Categories
 in_menu: true
 --
 
-Categories are a loosely defined, controlled vocabulary, defined by curators. A categorization is a link between a category and a particular source.
+Categories are a loosely defined, controlled vocabulary defined by the curators,
+and there will be only one or two (or maybe, three) assigned to each 'Source'.
+Each instance of a Category that is assigned to a Source is called a Categorization.
+
+The two axiis for categories are 1) Topic and 2) Level of Government. For example,
+"Environment" and "Crime" can be categories, and so are "Federal" and "Washington DC".
+
+Categories are meant to be hierarchical. For example, there can be a "Economy" category
+with "Labor" underneath it as a sub-category. The "Browse" feature of the site will rely heavily on categories.
 
 ## Base URL
 
 http://api.nationaldatacatalog.com/categories
+ 

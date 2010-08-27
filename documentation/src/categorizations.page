@@ -5,8 +5,8 @@ in_menu: true
 
 # Categorizations
 
-Categorizations represent the join between each 'Source' and a curator-defined
-'Category'.
+Categorizations represent the join between each Source and a curator-defined
+Category.
 
 ## Base URL
 

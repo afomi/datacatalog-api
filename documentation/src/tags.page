@@ -4,3 +4,8 @@ in_menu: true
 --
 
 Tags are open-ended, uncontrolled, user-defined labels on sources.
+
+Similar to Delicious.com, any user can add a Tag to a Source. 
+Tags are not hierarchical, and there can be many tags assigned to each Source.
+They are intended as a social feature, that users can use to group sources in
+ways that make sense to them. 
